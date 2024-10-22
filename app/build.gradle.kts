@@ -3,12 +3,10 @@ plugins {
     id("mint.convention.androidApplication")
     id("mint.convention.application.compose")
     alias(libs.plugins.kotlinGradlePlugin)
+    alias(libs.plugins.ktorfitPlugin)
 }
 
 android {
-    kotlinOptions {
-        jvmTarget = "21"
-    }
     namespace = "me.sanao1006.mint"
     dependencies {
         api(libs.circuit.codegen.annotations)
@@ -18,9 +16,6 @@ android {
         implementation(libs.bundles.ktor)
         ksp(libs.ktorfitKsp)
     }
-}
-dependencies {
-    implementation(libs.androidx.core.ktx)
 }
 
 ksp {

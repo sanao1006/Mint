@@ -46,7 +46,7 @@ gradlePlugin {
         }
         register("androidLibrary") {
             id = "mint.convention.androidLibrary"
-            implementationClass = "me.sanao1006.mint.convention.AndroidALibraryPlugin"
+            implementationClass = "me.sanao1006.mint.convention.AndroidLibraryPlugin"
         }
         register("applicationCompose"){
             id = "mint.convention.application.compose"
