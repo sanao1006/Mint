@@ -1,7 +1,6 @@
 package me.sanao1006.mint.convention
 
 import com.android.build.api.dsl.LibraryExtension
-import de.jensklingenberg.ktorfit.gradle.KtorfitGradleConfiguration
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -29,6 +28,7 @@ class AndroidKtorPlugin : Plugin<Project> {
                 implementation(libs.library("ktor.client.encoding"))
                 implementation(libs.library("ktor.client.logging"))
                 implementation(libs.library("ktorfit.lib"))
+                ksp(libs.library("ktorfitKsp"))
             }
         }
     }

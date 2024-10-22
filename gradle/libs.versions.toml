@@ -76,6 +76,19 @@ circuit-runtime = { module = "com.slack.circuit:circuit-runtime", version.ref = 
 circuit-codegen-annotations = { module = "com.slack.circuit:circuit-codegen-annotations", version.ref = "circuit" }
 circuit-codegen = { module = "com.slack.circuit:circuit-codegen", version.ref = "circuit" }
 
+ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
+ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-client-encoding = { module = "io.ktor:ktor-client-encoding", version.ref = "ktor" }
+ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+ktorfit-lib = { module = "de.jensklingenberg.ktorfit:ktorfit-lib", version.ref = "ktorfit" }
+ktorfit-converters-response = { module = "de.jensklingenberg.ktorfit:ktorfit-converters-response", version.ref = "ktorfit" }
+ktorfit-converters-flow = { module = "de.jensklingenberg.ktorfit:ktorfit-converters-flow", version.ref = "ktorfit" }
+ktorfitKsp = { module = "de.jensklingenberg.ktorfit:ktorfit-ksp", version.ref = "ktorfit" }
+
+
 [plugins]
 androidApplicationGradlePlugin = { id = "com.android.application", version.ref = "agp" }
 androidGradleLibraryPlugin = { id = "com.android.library", version.ref = "agp" }
@@ -95,4 +108,27 @@ plugins = [
     "kspGradlePlugin",
     "kotlinxSerializationGradlePlugin",
     "ktorfitGradlePlugin"
+]
+
+circuit = [
+    "circuit-foundation",
+    "circuit-overlay",
+    "circuitx-overlay",
+    "circuitx-gesture-navigation",
+    "circuitx-effects",
+    "circuit-retained",
+    "circuit-runtime"
+]
+
+ktor = [
+    "ktor-client-android",
+    "ktor-client-content-negotiation",
+    "ktor-client-core",
+    "ktor-serialization-kotlinx-json",
+    "ktor-client-encoding",
+    "ktor-client-logging",
+    "ktor-client-okhttp",
+    "ktorfit-lib",
+    "ktorfit-converters-response",
+    "ktorfit-converters-flow"
 ]

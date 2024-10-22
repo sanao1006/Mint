@@ -6,17 +6,17 @@ plugins {
 }
 
 android {
+    kotlinOptions {
+        jvmTarget = "21"
+    }
     namespace = "me.sanao1006.mint"
     dependencies {
         api(libs.circuit.codegen.annotations)
-        implementation(libs.circuit.foundation)
-        implementation(libs.circuit.runtime)
-        implementation(libs.circuit.overlay)
-        implementation(libs.circuitx.overlay)
-        implementation(libs.circuitx.gesture.navigation)
-        implementation(libs.circuit.retained)
-        implementation(libs.circuitx.effects)
+        implementation(libs.bundles.circuit)
         ksp(libs.circuit.codegen)
+
+        implementation(libs.bundles.ktor)
+        ksp(libs.ktorfitKsp)
     }
 }
 dependencies {
