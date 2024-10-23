@@ -1,3 +1,5 @@
+import me.sanao1006.mint.convention.implementation
+
 plugins {
     alias(libs.plugins.kspPlugin)
     id("mint.convention.androidApplication")
@@ -16,6 +18,14 @@ android {
 
         implementation(libs.bundles.ktor)
         ksp(libs.ktorfitKsp)
+
+        implementation(libs.kotlinx.coroutines.core)
+        implementation(libs.kotlinx.coroutines.android)
+
+        testImplementation(libs.junit)
+        androidTestImplementation(libs.androidx.junit)
+        androidTestImplementation(libs.androidx.espresso.core)
+        androidTestImplementation(libs.androidx.ui.test.junit4)
     }
 }
 

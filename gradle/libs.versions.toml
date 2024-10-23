@@ -29,9 +29,7 @@ androidxTest = "1.6.2"
 composeStableMarker = "1.0.4"
 circuit = "0.24.0"
 hilt = "2.52"
-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
-hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
-hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
+kotlinxCoroutines = "1.9.0"
 
 [libraries]
 androidGradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
@@ -95,6 +93,9 @@ ktorfitKsp = { module = "de.jensklingenberg.ktorfit:ktorfit-ksp", version.ref = 
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
+
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 
 [plugins]
 androidApplicationGradlePlugin = { id = "com.android.application", version.ref = "agp" }
