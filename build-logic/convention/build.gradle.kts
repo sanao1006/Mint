@@ -68,5 +68,9 @@ gradlePlugin {
             id = "mint.convention.hilt"
             implementationClass = "me.sanao1006.mint.convention.AndroidHiltPlugin"
         }
+        register("androidFeature") {
+            id = "mint.convention.androidFeature"
+            implementationClass = "me.sanao1006.mint.convention.AndroidFeaturePlugin"
+        }
     }
 }
