@@ -4,8 +4,7 @@ plugins {
     alias(libs.plugins.kspPlugin)
     id("mint.convention.androidApplication")
     id("mint.convention.application.compose")
-    alias(libs.plugins.kotlinGradlePlugin)
-    alias(libs.plugins.ktorfitPlugin)
+    id("mint.convention.ktorPlugin")
     id("mint.convention.hilt")
 }
 
@@ -25,7 +24,6 @@ android {
         testImplementation(libs.junit)
         androidTestImplementation(libs.androidx.junit)
         androidTestImplementation(libs.androidx.espresso.core)
-        androidTestImplementation(libs.androidx.ui.test.junit4)
     }
 }
 
