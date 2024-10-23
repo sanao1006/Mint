@@ -3,7 +3,7 @@ agp = "8.7.1"
 androidMinSdk = "29"
 androidTargetSdk = "34"
 androidCompileSdk = "34"
-kotlin = "2.0.20"
+kotlin = "2.0.21"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -28,6 +28,10 @@ androidxStartup = "1.1.1"
 androidxTest = "1.6.2"
 composeStableMarker = "1.0.4"
 circuit = "0.24.0"
+hilt = "2.52"
+hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
 
 [libraries]
 androidGradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
@@ -88,6 +92,9 @@ ktorfit-converters-response = { module = "de.jensklingenberg.ktorfit:ktorfit-con
 ktorfit-converters-flow = { module = "de.jensklingenberg.ktorfit:ktorfit-converters-flow", version.ref = "ktorfit" }
 ktorfitKsp = { module = "de.jensklingenberg.ktorfit:ktorfit-ksp", version.ref = "ktorfit" }
 
+hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
 
 [plugins]
 androidApplicationGradlePlugin = { id = "com.android.application", version.ref = "agp" }
@@ -100,6 +107,8 @@ kspPlugin = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-plugin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ktorfitPlugin = { id = "de.jensklingenberg.ktorfit", version.ref = "ktorfit" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+
 
 [bundles]
 plugins = [

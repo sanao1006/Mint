@@ -4,6 +4,7 @@ plugins {
     id("mint.convention.application.compose")
     alias(libs.plugins.kotlinGradlePlugin)
     alias(libs.plugins.ktorfitPlugin)
+    id("mint.convention.hilt")
 }
 
 android {

@@ -6,4 +6,7 @@ plugins {
     alias(libs.plugins.kotlinGradlePlugin) apply false
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.kotlinJvm) apply false
+    alias(libs.plugins.kspPlugin) apply false
+    alias(libs.plugins.hilt) apply false
+    alias(libs.plugins.ktorfitPlugin) apply false
 }

@@ -35,7 +35,6 @@ internal fun Project.configureAndroidCompose(
             implementation(libs.library("${androidxCompose}constraintlayout"))
             implementation(libs.library("androidx.activity.compose"))
             implementation(libs.library("androidx.navigation.compose"))
-            implementation(libs.library("androidx.hilt.navigation.compose"))
             implementation(libs.library("androidx.core.ktx"))
             implementation(libs.library("androidx.lifecycle.runtimeCompose"))
             implementation(libs.library("androidx.lifecycle.viewModelCompose"))

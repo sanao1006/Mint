@@ -64,5 +64,9 @@ gradlePlugin {
             id = "mint.convention.ktorPlugin"
             implementationClass = "me.sanao1006.mint.convention.AndroidKtorPlugin"
         }
+        register("hilt") {
+            id = "mint.convention.hilt"
+            implementationClass = "me.sanao1006.mint.convention.AndroidHiltPlugin"
+        }
     }
 }
