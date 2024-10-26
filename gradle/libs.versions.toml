@@ -77,6 +77,7 @@ circuit-retained = { module = "com.slack.circuit:circuit-retained", version.ref 
 circuit-runtime = { module = "com.slack.circuit:circuit-runtime", version.ref = "circuit" }
 circuit-codegen-annotations = { module = "com.slack.circuit:circuit-codegen-annotations", version.ref = "circuit" }
 circuit-codegen = { module = "com.slack.circuit:circuit-codegen", version.ref = "circuit" }
+circuitx-android = { module = "com.slack.circuit:circuitx-android", version.ref = "circuit" }
 
 ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
@@ -128,7 +129,8 @@ circuit = [
     "circuitx-gesture-navigation",
     "circuitx-effects",
     "circuit-retained",
-    "circuit-runtime"
+    "circuit-runtime",
+    "circuitx-android"
 ]
 
 ktor = [
