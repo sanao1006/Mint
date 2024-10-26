@@ -6,7 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.slack.circuit.backstack.rememberSaveableBackStack
 import com.slack.circuit.foundation.Circuit
@@ -34,13 +36,17 @@ class MainActivity : ComponentActivity() {
                 val circuitNavigator = rememberCircuitNavigator(backstack)
                 val navigator = rememberAndroidScreenAwareNavigator(circuitNavigator, this)
 
-                CircuitCompositionLocals(circuit) {
-                    ContentWithOverlays {
-                        NavigableCircuitContent(
-                            navigator = navigator,
-                            backStack = backstack,
-                            circuit = circuit
-                        )
+                CompositionLocalProvider(
+                    LocalContext provides this,
+                ) {
+                    CircuitCompositionLocals(circuit) {
+                        ContentWithOverlays {
+                            NavigableCircuitContent(
+                                navigator = navigator,
+                                backStack = backstack,
+                                circuit = circuit
+                            )
+                        }
                     }
                 }
             }
