@@ -22,4 +22,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Mint"
 include(":app")
- 
+include("feature:login")
