@@ -1,5 +1,6 @@
 package me.sanao1006.feature.login
 
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
@@ -35,6 +37,7 @@ data object LoginScreen : Screen {
 
     sealed class Event : CircuitUiEvent {
         data class OnTextChanged(val text: String) : Event()
+        data class OnButtonClicked(val context: Context) : Event()
     }
 }
 
@@ -67,9 +70,10 @@ private fun LoginContent(state: LoginScreen.State) {
             onValueChange = { state.eventSick(LoginScreen.Event.OnTextChanged(it)) }
         )
         Spacer(modifier = Modifier.padding(8.dp))
+        val context = LocalContext.current
         Button(
             modifier = Modifier.fillMaxWidth(),
-            onClick = {}
+            onClick = { state.eventSick(LoginScreen.Event.OnButtonClicked(context)) }
         ) {
             Text("OK")
         }
