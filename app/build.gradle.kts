@@ -11,6 +11,7 @@ plugins {
 android {
     namespace = "me.sanao1006.mint"
     dependencies {
+        implementation(libs.timber)
         api(libs.circuit.codegen.annotations)
         implementation(libs.bundles.circuit)
         ksp(libs.circuit.codegen)
@@ -24,6 +25,9 @@ android {
         testImplementation(libs.junit)
         androidTestImplementation(libs.androidx.junit)
         androidTestImplementation(libs.androidx.espresso.core)
+
+        implementation(projects.feature.login)
+        implementation(projects.core.network)
     }
 }
 

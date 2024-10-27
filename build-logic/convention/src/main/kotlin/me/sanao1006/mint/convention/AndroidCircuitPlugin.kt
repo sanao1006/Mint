@@ -24,6 +24,7 @@ class AndroidCircuitPlugin : Plugin<Project> {
                 implementation(libs.library("circuitx.gesture.navigation"))
                 implementation(libs.library("circuit.retained"))
                 implementation(libs.library("circuitx.effects"))
+                ksp(libs.library("circuit.codegen"))
             }
         }
         extensions.configure<KspExtension> {

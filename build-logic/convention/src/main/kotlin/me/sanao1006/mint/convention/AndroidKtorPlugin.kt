@@ -20,6 +20,8 @@ class AndroidKtorPlugin : Plugin<Project> {
             implementation(libs.library("ktor.client.encoding"))
             implementation(libs.library("ktor.client.logging"))
             implementation(libs.library("ktorfit.lib"))
+            implementation(libs.library("ktorfit.converters.response"))
+            implementation(libs.library("ktorfit.converters.flow"))
             ksp(libs.library("ktorfitKsp"))
         }
     }

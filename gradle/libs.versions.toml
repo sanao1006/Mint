@@ -30,6 +30,7 @@ composeStableMarker = "1.0.4"
 circuit = "0.24.0"
 hilt = "2.52"
 kotlinxCoroutines = "1.9.0"
+timber = "5.0.1"
 
 [libraries]
 androidGradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
@@ -77,6 +78,7 @@ circuit-retained = { module = "com.slack.circuit:circuit-retained", version.ref 
 circuit-runtime = { module = "com.slack.circuit:circuit-runtime", version.ref = "circuit" }
 circuit-codegen-annotations = { module = "com.slack.circuit:circuit-codegen-annotations", version.ref = "circuit" }
 circuit-codegen = { module = "com.slack.circuit:circuit-codegen", version.ref = "circuit" }
+circuitx-android = { module = "com.slack.circuit:circuitx-android", version.ref = "circuit" }
 
 ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
@@ -96,6 +98,8 @@ hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testi
 
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
+
+timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 [plugins]
 androidApplicationGradlePlugin = { id = "com.android.application", version.ref = "agp" }
@@ -128,7 +132,8 @@ circuit = [
     "circuitx-gesture-navigation",
     "circuitx-effects",
     "circuit-retained",
-    "circuit-runtime"
+    "circuit-runtime",
+    "circuitx-android"
 ]
 
 ktor = [
