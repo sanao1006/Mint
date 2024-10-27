@@ -1,6 +1,5 @@
 package me.sanao1006.core.network.di
 
-import android.util.Log
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,11 +12,15 @@ import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import timber.log.Timber
 import javax.inject.Singleton
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.DurationUnit
@@ -43,22 +46,25 @@ object NetworkModule {
         install(Logging) {
             logger = object : Logger {
                 override fun log(message: String) {
-                    Log.d("MintHttpRequest", message)
+                    Timber.tag("MintHttpRequest").d(message)
                 }
             }
             level = LogLevel.ALL
 
         }
+        defaultRequest {
+            contentType(ContentType.Application.Json)
+        }
     }
 
     @Provides
     @Singleton
-    fun provideKtorfit(): Ktorfit {
+    fun provideKtorfit(httpClient: HttpClient): Ktorfit {
         return Ktorfit.Builder()
-            .baseUrl("https://swapi.dev/api/")
+            .httpClient(httpClient)
             .converterFactories(
                 FlowConverterFactory(),
-                ResponseConverterFactory()
+                ResponseConverterFactory(),
             )
             .build()
     }
