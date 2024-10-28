@@ -25,5 +25,6 @@ include(":app")
 include("feature:login")
 include(
     "core:network",
-    ":core:data"
+    ":core:data",
+    "core:model"
 )
