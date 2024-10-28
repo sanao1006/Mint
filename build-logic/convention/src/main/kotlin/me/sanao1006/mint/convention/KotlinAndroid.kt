@@ -27,5 +27,6 @@ internal fun Project.configureKotlinAndroid(
         implementation(libs.library("timber"))
         implementation(libs.library("arrow.core"))
         implementation(libs.library("arrow.fx.coroutines"))
+        implementation(libs.library("kotlinx.serialization.json"))
     }
 }

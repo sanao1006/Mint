@@ -32,6 +32,7 @@ hilt = "2.52"
 kotlinxCoroutines = "1.9.0"
 timber = "5.0.1"
 arrow = "1.2.4"
+kotlinxSerialization = "1.7.3"
 
 [libraries]
 androidGradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
@@ -103,6 +104,7 @@ kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutine
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 arrow-core = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
 arrow-fx-coroutines = { module = "io.arrow-kt:arrow-fx-coroutines", version.ref = "arrow" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 
 [plugins]
 androidApplicationGradlePlugin = { id = "com.android.application", version.ref = "agp" }
@@ -110,13 +112,12 @@ androidGradleLibraryPlugin = { id = "com.android.library", version.ref = "agp" }
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "composePlugin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinGradlePlugin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-kotlinxSerializationGradlePlugin = { id = "plugin.serialization", version.ref = "kotlin" }
+kotlinxSerializationGradlePlugin = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kspPlugin = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-plugin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ktorfitPlugin = { id = "de.jensklingenberg.ktorfit", version.ref = "ktorfit" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
-
 
 [bundles]
 plugins = [
