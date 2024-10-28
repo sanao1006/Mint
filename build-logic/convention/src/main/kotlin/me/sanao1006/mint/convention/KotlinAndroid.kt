@@ -25,5 +25,7 @@ internal fun Project.configureKotlinAndroid(
 
     dependencies {
         implementation(libs.library("timber"))
+        implementation(libs.library("arrow.core"))
+        implementation(libs.library("arrow.fx.coroutines"))
     }
 }
