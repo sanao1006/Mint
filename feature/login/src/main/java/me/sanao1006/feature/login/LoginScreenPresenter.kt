@@ -11,16 +11,20 @@ import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.presenter.Presenter
 import dagger.hilt.components.SingletonComponent
+import me.sanao1006.core.network.api.MiauthRepository
 import javax.inject.Inject
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 @CircuitInject(LoginScreen::class, SingletonComponent::class)
-class LoginScreenPresenter @Inject constructor() : Presenter<LoginScreen.State> {
+class LoginScreenPresenter @Inject constructor(
+    private val miauthRepository: MiauthRepository
+) : Presenter<LoginScreen.State> {
     @OptIn(ExperimentalUuidApi::class)
     @Composable
     override fun present(): LoginScreen.State {
         var domain by rememberRetained { mutableStateOf("") }
+        var authState by rememberRetained { mutableStateOf(AuthStateType.FIXED) }
         return LoginScreen.State(
             domain = domain
         ) { event ->
@@ -35,6 +39,7 @@ class LoginScreenPresenter @Inject constructor() : Presenter<LoginScreen.State> 
                         url = "${domain}/miauth/$session?name=Mint&permission=read:account,write:account",
                         context = event.context
                     )
+                    authState = AuthStateType.WAITING
                 }
             }
         }
@@ -53,3 +58,5 @@ private fun openUrlInChrome(url: String, context: Context) {
         context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
     }
 }
+
+enum class AuthStateType { FIXED, WAITING, SUCCESS }
