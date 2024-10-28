@@ -32,7 +32,7 @@ data object LoginScreen : Screen {
     data class State(
         val domain: String = "",
         val error: String = "",
-        val eventSick: (Event) -> Unit
+        val eventSink: (Event) -> Unit
     ) : CircuitUiState
 
     sealed class Event : CircuitUiEvent {
@@ -67,13 +67,13 @@ private fun LoginContent(state: LoginScreen.State) {
         Spacer(modifier = Modifier.padding(8.dp))
         TextField(
             value = state.domain,
-            onValueChange = { state.eventSick(LoginScreen.Event.OnTextChanged(it)) }
+            onValueChange = { state.eventSink(LoginScreen.Event.OnTextChanged(it)) }
         )
         Spacer(modifier = Modifier.padding(8.dp))
         val context = LocalContext.current
         Button(
             modifier = Modifier.fillMaxWidth(),
-            onClick = { state.eventSick(LoginScreen.Event.OnButtonClicked(context)) }
+            onClick = { state.eventSink(LoginScreen.Event.OnButtonClicked(context)) }
         ) {
             Text("OK")
         }
@@ -86,7 +86,7 @@ fun PreviewLoginScreenUi() {
     LoginScreenUi(
         state = LoginScreen.State(
             domain = "example.com",
-            eventSick = {}
+            eventSink = {}
         ),
         modifier = Modifier
     )
