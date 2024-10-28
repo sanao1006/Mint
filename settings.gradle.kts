@@ -23,4 +23,7 @@ dependencyResolutionManagement {
 rootProject.name = "Mint"
 include(":app")
 include("feature:login")
-include("core:network")
+include(
+    "core:network",
+    ":core:data"
+)
