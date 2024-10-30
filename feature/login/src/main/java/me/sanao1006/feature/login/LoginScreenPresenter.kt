@@ -1,8 +1,10 @@
 package me.sanao1006.feature.login
 
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -48,14 +50,28 @@ class LoginScreenPresenter @Inject constructor(
 
 
 private fun openUrlInChrome(url: String, context: Context) {
+    // URLのバリデーションチェック
+    if (url.isBlank() || !android.util.Patterns.WEB_URL.matcher(url).matches()) {
+        Toast.makeText(context, "Invalid Url", Toast.LENGTH_SHORT).show()
+        return
+    }
+
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
         setPackage("com.android.chrome")
     }
 
-    if (intent.resolveActivity(context.packageManager) != null) {
-        context.startActivity(intent)
-    } else {
-        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+    try {
+        // Check if the Chrome browser is installed
+        if (intent.resolveActivity(context.packageManager) != null) {
+            context.startActivity(intent)
+        } else {
+            // Chrome browser is not installed, open in other browser
+            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+        }
+    } catch (e: ActivityNotFoundException) {
+        Toast.makeText(context, "Browser not found", Toast.LENGTH_SHORT).show()
+    } catch (e: Exception) {
+        Toast.makeText(context, "Failed to open the url", Toast.LENGTH_SHORT).show()
     }
 }
 
