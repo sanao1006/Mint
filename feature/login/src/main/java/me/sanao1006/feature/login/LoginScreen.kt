@@ -67,6 +67,7 @@ private fun LoginContent(state: LoginScreen.State) {
         Spacer(modifier = Modifier.padding(8.dp))
         TextField(
             value = state.domain,
+            maxLines = 1,
             onValueChange = { state.eventSink(LoginScreen.Event.OnTextChanged(it)) }
         )
         Spacer(modifier = Modifier.padding(8.dp))
