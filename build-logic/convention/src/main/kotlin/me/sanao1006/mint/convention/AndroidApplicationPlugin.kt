@@ -32,7 +32,13 @@ class AndroidApplicationPlugin : Plugin<Project> {
                         }
                     }
                     buildTypes {
+                        getByName("debug") {
+                            isMinifyEnabled = false
+                            applicationIdSuffix = ".debug"
+                            buildConfigField("boolean", "DEBUG", "true")
+                        }
                         getByName("release") {
+                            applicationIdSuffix = ".release"
                             isMinifyEnabled = false
                             proguardFiles(
                                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -48,6 +54,9 @@ class AndroidApplicationPlugin : Plugin<Project> {
                         unitTests {
                             isIncludeAndroidResources = true
                         }
+                    }
+                    buildFeatures {
+                        buildConfig = true
                     }
                 }
             }
