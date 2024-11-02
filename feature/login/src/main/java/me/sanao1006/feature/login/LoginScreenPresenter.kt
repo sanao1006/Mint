@@ -8,11 +8,13 @@ import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.presenter.Presenter
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.launch
 import me.sanao1006.core.network.api.MiauthRepository
 import javax.inject.Inject
 import kotlin.uuid.ExperimentalUuidApi
@@ -27,6 +29,7 @@ class LoginScreenPresenter @Inject constructor(
     override fun present(): LoginScreen.State {
         var domain by rememberRetained { mutableStateOf("") }
         var authState by rememberRetained { mutableStateOf(AuthStateType.FIXED) }
+        val scope = rememberCoroutineScope()
         return LoginScreen.State(
             domain = domain
         ) { event ->
@@ -36,18 +39,18 @@ class LoginScreenPresenter @Inject constructor(
                 }
 
                 is LoginScreen.Event.OnButtonClicked -> {
-                    val session = Uuid.random().toString()
-                    openUrlInChrome(
-                        url = "${domain}/miauth/$session?name=Mint&permission=read:account,write:account",
-                        context = event.context
-                    )
-                    authState = AuthStateType.WAITING
+                    scope.launch {
+                        val session = Uuid.random().toString()
+                        openUrlInChrome(
+                            url = "${domain}/miauth/$session?name=Mint&permission=read:account,write:account&callback=myapp://auth-callback",
+                            context = event.context
+                        )
+                    }
                 }
             }
         }
     }
 }
-
 
 private fun openUrlInChrome(url: String, context: Context) {
     // URLのバリデーションチェック
