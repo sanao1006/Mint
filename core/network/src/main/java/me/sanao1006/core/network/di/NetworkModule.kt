@@ -1,5 +1,6 @@
 package me.sanao1006.core.network.di
 
+import android.util.Log
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,7 +23,6 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import me.sanao1006.core.network.api.MiauthRepository
 import me.sanao1006.core.network.api.createMiauthRepository
-import timber.log.Timber
 import javax.inject.Singleton
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.DurationUnit
@@ -48,7 +48,7 @@ object NetworkModule {
         install(Logging) {
             logger = object : Logger {
                 override fun log(message: String) {
-                    Timber.tag("MintHttpRequest").d(message)
+                    Log.d("MintHttpRequest", message)
                 }
             }
             level = LogLevel.ALL
