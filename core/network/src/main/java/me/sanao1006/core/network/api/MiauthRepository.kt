@@ -7,6 +7,8 @@ import me.sanao1006.core.model.AppCreateRequestBody
 import me.sanao1006.core.model.AppCreateResponse
 import me.sanao1006.core.model.AuthSessionGenerateRequestBody
 import me.sanao1006.core.model.AuthSessionGenerateResponse
+import me.sanao1006.core.model.AuthSessionUserKeyRequestBody
+import me.sanao1006.core.model.AuthSessionUserKeyResponse
 
 interface MiauthRepository {
     @POST("api/miauth/{session}/check")
@@ -21,4 +23,9 @@ interface MiauthRepository {
     suspend fun authSessionGenerate(
         @Body authSessionGenerateRequestBody: AuthSessionGenerateRequestBody
     ): AuthSessionGenerateResponse
+
+    @POST("api/auth/session/userkey")
+    suspend fun authSessionUserKey(
+        @Body authSessionUserKeyRequestBody: AuthSessionUserKeyRequestBody
+    ): AuthSessionUserKeyResponse
 }
