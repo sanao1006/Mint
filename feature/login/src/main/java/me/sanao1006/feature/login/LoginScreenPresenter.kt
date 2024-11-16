@@ -19,8 +19,10 @@ import de.jensklingenberg.ktorfit.converter.ResponseConverterFactory
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.launch
 import me.sanao1006.core.model.AppCreateRequestBody
+import me.sanao1006.core.model.AuthSessionGenerateRequestBody
 import me.sanao1006.core.network.api.MiauthRepository
 import me.sanao1006.core.network.api.createMiauthRepository
+import timber.log.Timber
 import javax.inject.Inject
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -55,13 +57,19 @@ class LoginScreenPresenter @Inject constructor(
                             ).build()
                             .createMiauthRepository()
                     event.scope.launch {
-                        ktorfitClient.createApp(
+                        val appCreate = ktorfitClient.createApp(
                             appCreateRequestBody = AppCreateRequestBody(
                                 name = "Mint",
                                 description = "Mint",
                                 permission = listOf(),
                             )
                         )
+                        val token = ktorfitClient.authSessionGenerate(
+                            authSessionGenerateRequestBody = AuthSessionGenerateRequestBody(
+                                appSecret = appCreate.secret
+                            )
+                        )
+                        Timber.tag("ray").d("token: $token")
                     }
                     authState = AuthStateType.WAITING
                 }

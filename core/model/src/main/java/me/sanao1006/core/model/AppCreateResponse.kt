@@ -6,8 +6,8 @@ import kotlinx.serialization.Serializable
 data class AppCreateResponse(
     val id: String,
     val name: String,
-    val description: String,
+    val description: String? = null,
     val callbackUrl: String?,
-    val permission: String,
+    val permission: List<String>,
     val secret: String
 )
