@@ -9,6 +9,7 @@ android {
     dependencies {
         implementation(projects.core.network)
         implementation(projects.core.model)
+        implementation(projects.core.dataStore)
 
         testImplementation(libs.junit)
         androidTestImplementation(libs.androidx.junit)

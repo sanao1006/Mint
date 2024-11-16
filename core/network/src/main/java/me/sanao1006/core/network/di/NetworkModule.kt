@@ -61,9 +61,17 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideKtorfit(httpClient: HttpClient): Ktorfit {
+    fun provideKtorfit(
+        httpClient: HttpClient,
+        baseUrlModule: BaseUrlModule
+    ): Ktorfit {
         return Ktorfit.Builder()
             .httpClient(httpClient)
+            .let {
+                baseUrlModule.getBaseUrl()?.let { baseUrl ->
+                    it.baseUrl(baseUrl)
+                } ?: it
+            }
             .converterFactories(
                 FlowConverterFactory(),
                 ResponseConverterFactory(),

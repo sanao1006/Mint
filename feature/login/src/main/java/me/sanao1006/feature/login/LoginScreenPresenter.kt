@@ -23,6 +23,7 @@ import me.sanao1006.core.model.AuthSessionGenerateRequestBody
 import me.sanao1006.core.model.AuthSessionUserKeyRequestBody
 import me.sanao1006.core.network.api.MiauthRepository
 import me.sanao1006.core.network.api.createMiauthRepository
+import me.sanao1006.datastore.DataStoreRepository
 import java.security.MessageDigest
 import javax.inject.Inject
 import kotlin.uuid.ExperimentalUuidApi
@@ -30,7 +31,8 @@ import kotlin.uuid.ExperimentalUuidApi
 @CircuitInject(LoginScreen::class, SingletonComponent::class)
 class LoginScreenPresenter @Inject constructor(
     private val miauthRepository: MiauthRepository,
-    private val httpClient: HttpClient
+    private val httpClient: HttpClient,
+    private val dataStoreRepository: DataStoreRepository
 ) : Presenter<LoginScreen.State> {
     @OptIn(ExperimentalUuidApi::class)
     @Composable
@@ -94,6 +96,8 @@ class LoginScreenPresenter @Inject constructor(
                             )
                         )
                         val accessToken = (authSessionResponse.accessToken + secret).toSHA256()
+                        dataStoreRepository.saveAccessToken(accessToken)
+                        dataStoreRepository.saveBaseUrl(domain)
                     }
                 }
             }

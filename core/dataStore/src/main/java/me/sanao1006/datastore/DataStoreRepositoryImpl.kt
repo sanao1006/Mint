@@ -20,4 +20,14 @@ class DataStoreRepositoryImpl @Inject constructor(
     override suspend fun getAccessToken(): String? {
         return dataStore.data.first()[PreferenceKeys.ACCESS_TOKEN]
     }
+
+    override suspend fun saveBaseUrl(baseUrl: String) {
+        dataStore.edit { preferences ->
+            preferences[PreferenceKeys.BASE_URL] = baseUrl
+        }
+    }
+
+    override suspend fun getBaseUrl(): String? {
+        return dataStore.data.first()[PreferenceKeys.BASE_URL]
+    }
 }
