@@ -22,7 +22,6 @@ import me.sanao1006.core.model.AppCreateRequestBody
 import me.sanao1006.core.model.AuthSessionGenerateRequestBody
 import me.sanao1006.core.network.api.MiauthRepository
 import me.sanao1006.core.network.api.createMiauthRepository
-import timber.log.Timber
 import javax.inject.Inject
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -62,14 +61,15 @@ class LoginScreenPresenter @Inject constructor(
                                 name = "Mint",
                                 description = "Mint",
                                 permission = listOf(),
+                                callbackUrl = "myapp://auth-callback"
                             )
                         )
-                        val token = ktorfitClient.authSessionGenerate(
+                        val sessionResponse = ktorfitClient.authSessionGenerate(
                             authSessionGenerateRequestBody = AuthSessionGenerateRequestBody(
                                 appSecret = appCreate.secret
                             )
                         )
-                        Timber.tag("ray").d("token: $token")
+                        openUrlInChrome(url = sessionResponse.url, context = event.context)
                     }
                     authState = AuthStateType.WAITING
                 }

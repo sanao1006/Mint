@@ -1,5 +1,6 @@
 package me.sanao1006.feature.login
 
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
@@ -38,7 +40,7 @@ data object LoginScreen : Screen {
 
     sealed class Event : CircuitUiEvent {
         data class OnTextChanged(val text: String) : Event()
-        data class OnButtonClicked(val scope: CoroutineScope) : Event()
+        data class OnButtonClicked(val scope: CoroutineScope, val context: Context) : Event()
         data class OnAuthButtonClicked(val scope: CoroutineScope) : Event()
     }
 }
@@ -63,6 +65,7 @@ private fun LoginContent(state: LoginScreen.State) {
         verticalArrangement = Arrangement.Top
     ) {
         val scope = rememberCoroutineScope()
+        val context = LocalContext.current
         Text(
             text = "Enter domain",
             style = MaterialTheme.typography.headlineMedium
@@ -76,7 +79,14 @@ private fun LoginContent(state: LoginScreen.State) {
         Spacer(modifier = Modifier.padding(8.dp))
         Button(
             modifier = Modifier.fillMaxWidth(),
-            onClick = { state.eventSink(LoginScreen.Event.OnButtonClicked(scope)) }
+            onClick = {
+                state.eventSink(
+                    LoginScreen.Event.OnButtonClicked(
+                        scope = scope,
+                        context = context
+                    )
+                )
+            }
         ) {
             Text("OK")
         }
