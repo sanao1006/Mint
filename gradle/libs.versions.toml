@@ -33,6 +33,7 @@ kotlinxCoroutines = "1.9.0"
 timber = "5.0.1"
 arrow = "1.2.4"
 kotlinxSerialization = "1.7.3"
+dataStore = "1.1.1"
 
 [libraries]
 androidGradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
@@ -105,6 +106,8 @@ timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 arrow-core = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
 arrow-fx-coroutines = { module = "io.arrow-kt:arrow-fx-coroutines", version.ref = "arrow" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
+
+dataStore = { module = "androidx.datastore:datastore-preferences", version.ref = "dataStore" }
 
 [plugins]
 androidApplicationGradlePlugin = { id = "com.android.application", version.ref = "agp" }

@@ -26,5 +26,6 @@ include("feature:login")
 include(
     "core:network",
     ":core:data",
-    "core:model"
+    "core:model",
+    "core:dataStore"
 )
