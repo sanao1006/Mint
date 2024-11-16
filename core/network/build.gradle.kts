@@ -3,3 +3,7 @@ plugins {
     id("mint.convention.ktorPlugin")
     id("mint.convention.hilt")
 }
+
+dependencies {
+    implementation(projects.core.model)
+}
