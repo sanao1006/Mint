@@ -20,11 +20,12 @@ import io.ktor.client.HttpClient
 import kotlinx.coroutines.launch
 import me.sanao1006.core.model.AppCreateRequestBody
 import me.sanao1006.core.model.AuthSessionGenerateRequestBody
+import me.sanao1006.core.model.AuthSessionUserKeyRequestBody
 import me.sanao1006.core.network.api.MiauthRepository
 import me.sanao1006.core.network.api.createMiauthRepository
+import java.security.MessageDigest
 import javax.inject.Inject
 import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
 
 @CircuitInject(LoginScreen::class, SingletonComponent::class)
 class LoginScreenPresenter @Inject constructor(
@@ -35,7 +36,8 @@ class LoginScreenPresenter @Inject constructor(
     @Composable
     override fun present(): LoginScreen.State {
         var domain by rememberRetained { mutableStateOf("") }
-        val session by rememberRetained { mutableStateOf(Uuid.random().toString()) }
+        var secret by rememberRetained { mutableStateOf("") }
+        var token by rememberRetained { mutableStateOf("") }
         var authState by rememberRetained { mutableStateOf(AuthStateType.FIXED) }
         val ktorfit = Ktorfit.Builder()
         return LoginScreen.State(
@@ -64,11 +66,13 @@ class LoginScreenPresenter @Inject constructor(
                                 callbackUrl = "myapp://auth-callback"
                             )
                         )
+                        secret = appCreate.secret
                         val sessionResponse = ktorfitClient.authSessionGenerate(
                             authSessionGenerateRequestBody = AuthSessionGenerateRequestBody(
                                 appSecret = appCreate.secret
                             )
                         )
+                        token = sessionResponse.token
                         openUrlInChrome(url = sessionResponse.url, context = event.context)
                     }
                     authState = AuthStateType.WAITING
@@ -83,12 +87,23 @@ class LoginScreenPresenter @Inject constructor(
                                     ResponseConverterFactory()
                                 ).build()
                                 .createMiauthRepository()
-                        ktorfitClient.miauth(session)
+                        val authSessionResponse = ktorfitClient.authSessionUserKey(
+                            authSessionUserKeyRequestBody = AuthSessionUserKeyRequestBody(
+                                appSecret = secret,
+                                token = token
+                            )
+                        )
+                        val accessToken = (authSessionResponse.accessToken + secret).toSHA256()
                     }
                 }
             }
         }
     }
+}
+
+private fun String.toSHA256(): String {
+    val bytes = MessageDigest.getInstance("SHA-256").digest(this.toByteArray())
+    return bytes.fold("", { str, it -> str + "%02x".format(it) })
 }
 
 private fun openUrlInChrome(url: String, context: Context) {
