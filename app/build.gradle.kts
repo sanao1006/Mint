@@ -27,7 +27,9 @@ android {
         androidTestImplementation(libs.androidx.espresso.core)
 
         implementation(projects.feature.login)
+        implementation(projects.feature.home)
         implementation(projects.core.network)
+        implementation(projects.core.dataStore)
     }
 }
 
