@@ -1,4 +1,4 @@
-package me.sanao1006.core.model
+package me.sanao1006.core.model.auth
 
 object PermissionKeys {
     const val READ_ACCOUNT = "read:account"

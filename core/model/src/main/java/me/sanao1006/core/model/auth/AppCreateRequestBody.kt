@@ -1,4 +1,4 @@
-package me.sanao1006.core.model
+package me.sanao1006.core.model.auth
 
 import kotlinx.serialization.Serializable
 
