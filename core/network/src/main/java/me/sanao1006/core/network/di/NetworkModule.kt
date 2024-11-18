@@ -20,10 +20,6 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
-import me.sanao1006.core.network.api.MiauthRepository
-import me.sanao1006.core.network.api.NotesRepository
-import me.sanao1006.core.network.api.createMiauthRepository
-import me.sanao1006.core.network.api.createNotesRepository
 import timber.log.Timber
 import javax.inject.Singleton
 import kotlin.time.Duration.Companion.seconds
@@ -79,21 +75,5 @@ object NetworkModule {
                 ResponseConverterFactory(),
             )
             .build()
-    }
-
-    @Provides
-    @Singleton
-    fun provideMiauthRepository(
-        ktorfit: Ktorfit
-    ): MiauthRepository {
-        return ktorfit.createMiauthRepository()
-    }
-
-    @Provides
-    @Singleton
-    fun provideNotesRepository(
-        ktorfit: Ktorfit
-    ): NotesRepository {
-        return ktorfit.createNotesRepository()
     }
 }

@@ -1,4 +1,4 @@
-package me.sanao1006.core.network.api
+package me.sanao1006.core.data.repository
 
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.POST

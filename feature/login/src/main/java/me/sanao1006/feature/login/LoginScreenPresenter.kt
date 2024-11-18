@@ -18,11 +18,11 @@ import de.jensklingenberg.ktorfit.converter.FlowConverterFactory
 import de.jensklingenberg.ktorfit.converter.ResponseConverterFactory
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.launch
+import me.sanao1006.core.data.repository.createMiauthRepository
 import me.sanao1006.core.model.AppCreateRequestBody
 import me.sanao1006.core.model.AuthSessionGenerateRequestBody
 import me.sanao1006.core.model.AuthSessionUserKeyRequestBody
 import me.sanao1006.core.model.PermissionKeys
-import me.sanao1006.core.network.api.createMiauthRepository
 import me.sanao1006.datastore.DataStoreRepository
 import java.security.MessageDigest
 import javax.inject.Inject
