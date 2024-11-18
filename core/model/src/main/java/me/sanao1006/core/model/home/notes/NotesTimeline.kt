@@ -55,7 +55,7 @@ data class NotesTimeline(
     @SerialName("tags")
     val tags: List<String> = listOf(),
     @SerialName("text")
-    val text: String = "",
+    val text: String? = null,
     @SerialName("uri")
     val uri: String = "",
     @SerialName("url")
@@ -72,7 +72,7 @@ data class NotesTimeline(
     fun toTimelineUiState(): TimelineUiState {
         return TimelineUiState(
             user = user,
-            text = text
+            text = text.orEmpty()
         )
     }
 }
