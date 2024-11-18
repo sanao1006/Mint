@@ -21,6 +21,7 @@ import kotlinx.coroutines.launch
 import me.sanao1006.core.model.AppCreateRequestBody
 import me.sanao1006.core.model.AuthSessionGenerateRequestBody
 import me.sanao1006.core.model.AuthSessionUserKeyRequestBody
+import me.sanao1006.core.model.PermissionKeys
 import me.sanao1006.core.network.api.createMiauthRepository
 import me.sanao1006.datastore.DataStoreRepository
 import java.security.MessageDigest
@@ -64,7 +65,7 @@ class LoginScreenPresenter @Inject constructor(
                             appCreateRequestBody = AppCreateRequestBody(
                                 name = "Mint",
                                 description = "Mint",
-                                permission = listOf(),
+                                permission = PermissionKeys.getAllPermissions(),
                                 callbackUrl = "myapp://auth-callback"
                             )
                         )
