@@ -11,13 +11,13 @@ data class User(
     @SerialName("avatarDecorations")
     val avatarDecorations: List<AvatarDecoration> = listOf(),
     @SerialName("avatarUrl")
-    val avatarUrl: String = "",
+    val avatarUrl: String? = null,
     @SerialName("badgeRoles")
     val badgeRoles: List<BadgeRole> = listOf(),
     @SerialName("emojis")
     val emojis: Emojis = Emojis(),
     @SerialName("host")
-    val host: String = "",
+    val host: String? = null,
     @SerialName("id")
     val id: String = "",
     @SerialName("instance")
@@ -29,7 +29,7 @@ data class User(
     @SerialName("name")
     val name: String? = null,
     @SerialName("onlineStatus")
-    val onlineStatus: String = "",
+    val onlineStatus: String? = null,
     @SerialName("username")
     val username: String = ""
 )
