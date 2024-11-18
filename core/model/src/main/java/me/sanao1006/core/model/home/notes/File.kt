@@ -7,15 +7,15 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class File(
     @SerialName("blurhash")
-    val blurhash: String = "",
+    val blurhash: String? = null,
     @SerialName("comment")
-    val comment: String = "",
+    val comment: String? = null,
     @SerialName("createdAt")
     val createdAt: String = "",
     @SerialName("folder")
     val folder: Folder? = Folder(),
     @SerialName("folderId")
-    val folderId: String = "",
+    val folderId: String? = null,
     @SerialName("id")
     val id: String = "",
     @SerialName("isSensitive")
@@ -29,7 +29,7 @@ data class File(
     @SerialName("size")
     val size: Int = 0,
     @SerialName("thumbnailUrl")
-    val thumbnailUrl: String = "",
+    val thumbnailUrl: String? = null,
     @SerialName("type")
     val type: String = "",
     @SerialName("url")
@@ -37,5 +37,5 @@ data class File(
     @SerialName("user")
     val user: User? = User(),
     @SerialName("userId")
-    val userId: String = ""
+    val userId: String? = null
 )
