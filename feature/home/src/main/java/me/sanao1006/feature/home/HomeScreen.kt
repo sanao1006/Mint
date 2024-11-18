@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -25,6 +24,10 @@ import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.Screen
+import compose.icons.TablerIcons
+import compose.icons.tablericons.Home
+import compose.icons.tablericons.Planet
+import compose.icons.tablericons.World
 import dagger.hilt.components.SingletonComponent
 import kotlinx.parcelize.Parcelize
 import me.sanao1006.core.model.home.notes.TimelineUiState
@@ -56,14 +59,15 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
                             IconButton(onClick = {}) {
-                                Icon(imageVector = Icons.Default.Home, "")
+                                Icon(imageVector = TablerIcons.Home, "")
                             }
 
                             IconButton(onClick = {}) {
-                                Icon(imageVector = Icons.Default.Home, "")
+                                Icon(imageVector = TablerIcons.World, "")
                             }
+
                             IconButton(onClick = {}) {
-                                Icon(imageVector = Icons.Default.Home, "")
+                                Icon(imageVector = TablerIcons.Planet, "")
                             }
                         }
                     },

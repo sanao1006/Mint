@@ -39,6 +39,7 @@ internal fun Project.configureAndroidCompose(
             implementation(libs.library("androidx.lifecycle.runtimeCompose"))
             implementation(libs.library("androidx.lifecycle.viewModelCompose"))
             implementation(libs.library("androidx.lifecycle.runtime.ktx"))
+            implementation(libs.library("compose.icons"))
 
             debugImplementation(libs.library("${androidxCompose}ui.tooling"))
             debugImplementation(libs.library("${androidxCompose}ui.test.manifest"))
