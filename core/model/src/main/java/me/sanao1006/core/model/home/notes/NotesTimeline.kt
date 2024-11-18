@@ -31,7 +31,7 @@ data class NotesTimeline(
     @SerialName("mentions")
     val mentions: List<String> = listOf(),
     @SerialName("myReaction")
-    val myReaction: MyReaction? = MyReaction(),
+    val myReaction: String? = null,
     @SerialName("poll")
     val poll: Poll? = Poll(),
     @SerialName("reactionAcceptance")
