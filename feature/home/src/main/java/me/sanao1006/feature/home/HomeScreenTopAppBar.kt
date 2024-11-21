@@ -14,8 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import compose.icons.TablerIcons
+import compose.icons.tablericons.Atom2
 import compose.icons.tablericons.Home
-import compose.icons.tablericons.Planet
 import compose.icons.tablericons.World
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,15 +35,15 @@ fun HomeScreenTopAppBar(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 IconButton(onClick = onHomeClick) {
-                    Icon(imageVector = TablerIcons.Home, "")
+                    Icon(imageVector = TablerIcons.Home, "Home")
                 }
 
                 IconButton(onClick = onSocialClick) {
-                    Icon(imageVector = TablerIcons.World, "")
+                    Icon(imageVector = TablerIcons.World, "Social")
                 }
 
                 IconButton(onClick = onGlobalClick) {
-                    Icon(imageVector = TablerIcons.Planet, "")
+                    Icon(imageVector = TablerIcons.Atom2, "Global")
                 }
             }
         },
