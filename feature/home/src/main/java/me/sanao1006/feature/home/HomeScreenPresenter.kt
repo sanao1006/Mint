@@ -1,10 +1,12 @@
 package me.sanao1006.feature.home
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import com.slack.circuit.codegen.annotations.CircuitInject
+import com.slack.circuit.retained.collectAsRetainedState
 import com.slack.circuit.runtime.presenter.Presenter
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.flow.Flow
+import me.sanao1006.core.model.home.notes.TimelineUiState
 import me.sanao1006.feature.home.domain.FlowNotesTimelineUseCase
 import javax.inject.Inject
 
@@ -12,9 +14,11 @@ import javax.inject.Inject
 class HomeScreenPresenter @Inject constructor(
     private val flowNotesTimelineUseCase: FlowNotesTimelineUseCase
 ) : Presenter<HomeScreen.State> {
+    private val timelineFlow: Flow<List<TimelineUiState>> = flowNotesTimelineUseCase()
+
     @Composable
     override fun present(): HomeScreen.State {
-        val timelineUiState = flowNotesTimelineUseCase().collectAsState(initial = emptyList()).value
+        val timelineUiState = timelineFlow.collectAsRetainedState(emptyList()).value
         return HomeScreen.State(
             uiState = timelineUiState,
             eventSink = {}
