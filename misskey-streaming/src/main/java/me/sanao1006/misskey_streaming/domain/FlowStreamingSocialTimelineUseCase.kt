@@ -10,8 +10,6 @@ import me.sanao1006.misskey_streaming.model.StreamingRequestBody
 import me.sanao1006.misskey_streaming.model.StreamingResponse
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
 
 @Singleton
 class FlowStreamingSocialTimelineUseCase @Inject constructor(
@@ -20,8 +18,8 @@ class FlowStreamingSocialTimelineUseCase @Inject constructor(
 ) {
     val iFlow = dataStoreRepository.flowAccessToken()
 
-    @OptIn(ExperimentalCoroutinesApi::class, ExperimentalUuidApi::class)
-    operator fun invoke(): Flow<StreamingResponse> {
+    @OptIn(ExperimentalCoroutinesApi::class)
+    operator fun invoke(id: String): Flow<StreamingResponse> {
         return iFlow.flatMapLatest { i ->
             streamingRepository.connectStreamingChannel(
                 i = i,
@@ -29,7 +27,7 @@ class FlowStreamingSocialTimelineUseCase @Inject constructor(
                     type = "channel",
                     body = Body(
                         channel = "hybridTimeline",
-                        id = Uuid.random().toString(),
+                        id = id,
                     )
                 )
             )
