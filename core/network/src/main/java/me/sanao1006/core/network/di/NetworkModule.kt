@@ -20,6 +20,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import me.sanao1006.core.model.NormalApi
 import timber.log.Timber
 import javax.inject.Singleton
 import kotlin.time.Duration.Companion.seconds
@@ -59,6 +60,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
+    @NormalApi
     fun provideKtorfit(
         httpClient: HttpClient,
         baseUrlModule: BaseUrlModule
