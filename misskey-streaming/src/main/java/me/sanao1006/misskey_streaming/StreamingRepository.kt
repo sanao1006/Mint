@@ -13,4 +13,10 @@ interface StreamingRepository {
         @Query("i") i: String,
         @Body requestBody: StreamingRequestBody
     ): Flow<StreamingResponse>
+
+    @POST("streaming")
+    suspend fun disconnectStreamingChannel(
+        @Query("i") i: String,
+        @Body requestBody: StreamingRequestBody
+    ): Flow<StreamingResponse>
 }
