@@ -23,7 +23,7 @@ class FlowStreamingSocialTimelineUseCase @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class, ExperimentalUuidApi::class)
     operator fun invoke(): Flow<StreamingResponse> {
         return iFlow.flatMapLatest { i ->
-            streamingRepository.connectSocialTimeline(
+            streamingRepository.connectStreamingChannel(
                 i = i,
                 requestBody = StreamingRequestBody(
                     type = "channel",

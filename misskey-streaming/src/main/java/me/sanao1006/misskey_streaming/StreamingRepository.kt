@@ -9,7 +9,7 @@ import me.sanao1006.misskey_streaming.model.StreamingResponse
 
 interface StreamingRepository {
     @POST("streaming")
-    fun connectSocialTimeline(
+    fun connectStreamingChannel(
         @Query("i") i: String,
         @Body requestBody: StreamingRequestBody
     ): Flow<StreamingResponse>
