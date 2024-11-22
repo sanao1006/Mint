@@ -32,3 +32,4 @@ include(
     "core:model",
     "core:dataStore"
 )
+include(":misskey-streaming")
