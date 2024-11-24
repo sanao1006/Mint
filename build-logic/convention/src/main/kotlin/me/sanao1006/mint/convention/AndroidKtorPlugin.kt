@@ -19,6 +19,8 @@ class AndroidKtorPlugin : Plugin<Project> {
             implementation(libs.library("ktor.serialization.kotlinx.json"))
             implementation(libs.library("ktor.client.encoding"))
             implementation(libs.library("ktor.client.logging"))
+            implementation(libs.library("ktor.websockets"))
+            implementation(libs.library("ktor.client.cio"))
             implementation(libs.library("ktorfit.lib"))
             implementation(libs.library("ktorfit.converters.response"))
             implementation(libs.library("ktorfit.converters.flow"))
