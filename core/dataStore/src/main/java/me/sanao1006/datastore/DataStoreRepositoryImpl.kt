@@ -29,6 +29,12 @@ class DataStoreRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun flowBaseUrl(): Flow<String> {
+        return dataStore.data.map { preferences ->
+            preferences[PreferenceKeys.BASE_URL] ?: ""
+        }
+    }
+
     override suspend fun saveBaseUrl(baseUrl: String) {
         dataStore.edit { preferences ->
             preferences[PreferenceKeys.BASE_URL] = baseUrl

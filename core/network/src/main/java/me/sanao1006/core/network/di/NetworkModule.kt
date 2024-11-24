@@ -32,6 +32,7 @@ import kotlin.time.DurationUnit
 object NetworkModule {
     @Provides
     @Singleton
+    @NormalApi
     fun provideHttpClient(
         json: Json
     ): HttpClient = HttpClient(OkHttp) {
@@ -60,8 +61,8 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    @NormalApi
     fun provideKtorfit(
+        @NormalApi
         httpClient: HttpClient,
         baseUrlModule: BaseUrlModule
     ): Ktorfit {

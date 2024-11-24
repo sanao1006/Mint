@@ -19,6 +19,7 @@ import de.jensklingenberg.ktorfit.converter.ResponseConverterFactory
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.launch
 import me.sanao1006.core.data.repository.createMiauthRepository
+import me.sanao1006.core.model.NormalApi
 import me.sanao1006.core.model.auth.AppCreateRequestBody
 import me.sanao1006.core.model.auth.AuthSessionGenerateRequestBody
 import me.sanao1006.core.model.auth.AuthSessionUserKeyRequestBody
@@ -29,6 +30,7 @@ import javax.inject.Inject
 
 @CircuitInject(LoginScreen::class, SingletonComponent::class)
 class LoginScreenPresenter @Inject constructor(
+    @NormalApi
     private val httpClient: HttpClient,
     private val dataStoreRepository: DataStoreRepository
 ) : Presenter<LoginScreen.State> {

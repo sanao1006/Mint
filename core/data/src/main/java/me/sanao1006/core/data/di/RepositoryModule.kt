@@ -9,7 +9,6 @@ import me.sanao1006.core.data.repository.MiauthRepository
 import me.sanao1006.core.data.repository.NotesRepository
 import me.sanao1006.core.data.repository.createMiauthRepository
 import me.sanao1006.core.data.repository.createNotesRepository
-import me.sanao1006.core.model.NormalApi
 import javax.inject.Singleton
 
 @Module
@@ -18,7 +17,6 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideMiauthRepository(
-        @NormalApi
         ktorfit: Ktorfit
     ): MiauthRepository {
         return ktorfit.createMiauthRepository()
@@ -27,7 +25,6 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideNotesRepository(
-        @NormalApi
         ktorfit: Ktorfit
     ): NotesRepository {
         return ktorfit.createNotesRepository()
