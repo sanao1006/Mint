@@ -9,7 +9,7 @@ import me.sanao1006.core.model.home.notes.NotesTimeline
 interface NotesRepository {
 
     @POST("api/notes/timeline")
-    fun getNotesTimeline(
+    fun flowNotesTimeline(
         @Body notesTimeLineRequestBody: NotesTimeLineRequestBody
     ): Flow<List<NotesTimeline>>
 }

@@ -17,7 +17,7 @@ class FlowNotesTimelineUseCase @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     operator fun invoke(): Flow<List<TimelineUiState>> {
         return dataStoreRepository.flowAccessToken().flatMapLatest {
-            notesRepository.getNotesTimeline(
+            notesRepository.flowNotesTimeline(
                 notesTimeLineRequestBody = NotesTimeLineRequestBody(i = it)
             )
         }.map { notesTimeline ->
