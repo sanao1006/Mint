@@ -1,10 +1,11 @@
 package me.sanao1006.feature.home
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.retained.collectAsRetainedState
 import com.slack.circuit.runtime.presenter.Presenter
@@ -34,11 +35,9 @@ class HomeScreenPresenter @Inject constructor(
         val streaming: State<StreamingResponse> =
             websocketRepositoryFlow.collectAsRetainedState(StreamingResponse())
 
-        DisposableEffect(Unit) {
-            onDispose {
-                scope.launch {
-                    websocketRepository.close()
-                }
+        LifecycleEventEffect(event = Lifecycle.Event.ON_PAUSE) {
+            scope.launch {
+                websocketRepository.close()
             }
         }
 
