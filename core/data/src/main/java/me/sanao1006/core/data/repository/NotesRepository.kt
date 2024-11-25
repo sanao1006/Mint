@@ -12,4 +12,9 @@ interface NotesRepository {
     fun flowNotesTimeline(
         @Body notesTimeLineRequestBody: NotesTimeLineRequestBody
     ): Flow<List<NotesTimeline>>
+
+    @POST("api/notes/hybrid-timeline")
+    suspend fun getNotesTimeline(
+        @Body notesTimeLineRequestBody: NotesTimeLineRequestBody
+    ): List<NotesTimeline>
 }
