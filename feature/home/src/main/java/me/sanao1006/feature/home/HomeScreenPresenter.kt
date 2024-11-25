@@ -1,8 +1,11 @@
 package me.sanao1006.feature.home
 
+import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
@@ -12,8 +15,10 @@ import com.slack.circuit.runtime.presenter.Presenter
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.jsonPrimitive
 import me.sanao1006.core.model.home.notes.TimelineUiState
-import me.sanao1006.feature.home.domain.FlowNotesTimelineUseCase
+import me.sanao1006.feature.home.domain.GetNotesTimelineUseCase
 import me.sanao1006.misskey_streaming.StreamingChannel
 import me.sanao1006.misskey_streaming.WebsocketRepository
 import me.sanao1006.misskey_streaming.model.StreamingResponse
@@ -21,17 +26,20 @@ import javax.inject.Inject
 
 @CircuitInject(HomeScreen::class, SingletonComponent::class)
 class HomeScreenPresenter @Inject constructor(
-    private val flowNotesTimelineUseCase: FlowNotesTimelineUseCase,
-    private val websocketRepository: WebsocketRepository
+    private val websocketRepository: WebsocketRepository,
+    private val getNotesTimelineUseCase: GetNotesTimelineUseCase
 ) : Presenter<HomeScreen.State> {
-    private val timelineFlow: Flow<List<TimelineUiState>> = flowNotesTimelineUseCase()
     private val websocketRepositoryFlow: Flow<StreamingResponse> =
         websocketRepository.getSessionStream()
 
+    @SuppressLint("ProduceStateDoesNotAssignValue")
     @Composable
     override fun present(): HomeScreen.State {
-        val timelineUiState = timelineFlow.collectAsRetainedState(emptyList()).value
         val scope = rememberCoroutineScope()
+        val timelineUiState by produceState<List<TimelineUiState>>(emptyList()) {
+            value = getNotesTimelineUseCase()
+        }
+
         val streaming: State<StreamingResponse> =
             websocketRepositoryFlow.collectAsRetainedState(StreamingResponse())
 
@@ -45,8 +53,22 @@ class HomeScreenPresenter @Inject constructor(
             websocketRepository.sendAction(streamingChannel = StreamingChannel.SOCIAL)
         }
 
+        val combinedList: List<TimelineUiState> by produceState(
+            emptyList(),
+            timelineUiState,
+            streaming.value
+        ) {
+            val stbody = streaming.value.body.body
+            value = listOf(
+                TimelineUiState(
+                    text = stbody?.get("text")?.jsonPrimitive?.content ?: "",
+                    user = Json.decodeFromString(stbody?.get("user")?.toString() ?: "{}"),
+                )
+            ) + timelineUiState
+        }
+
         return HomeScreen.State(
-            uiState = timelineUiState,
+            uiState = combinedList,
             eventSink = {}
         )
     }
