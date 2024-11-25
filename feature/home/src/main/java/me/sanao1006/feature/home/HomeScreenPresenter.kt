@@ -18,6 +18,7 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonPrimitive
 import me.sanao1006.core.model.home.notes.TimelineUiState
+import me.sanao1006.core.model.home.notes.User
 import me.sanao1006.feature.home.domain.GetNotesTimelineUseCase
 import me.sanao1006.misskey_streaming.StreamingChannel
 import me.sanao1006.misskey_streaming.WebsocketRepository
@@ -27,7 +28,8 @@ import javax.inject.Inject
 @CircuitInject(HomeScreen::class, SingletonComponent::class)
 class HomeScreenPresenter @Inject constructor(
     private val websocketRepository: WebsocketRepository,
-    private val getNotesTimelineUseCase: GetNotesTimelineUseCase
+    private val getNotesTimelineUseCase: GetNotesTimelineUseCase,
+    private val json: Json
 ) : Presenter<HomeScreen.State> {
     private val websocketRepositoryFlow: Flow<StreamingResponse> =
         websocketRepository.getSessionStream()
@@ -58,11 +60,15 @@ class HomeScreenPresenter @Inject constructor(
             timelineUiState,
             streaming.value
         ) {
-            val stbody = streaming.value.body.body
+            val text = streaming.value.body.body?.get("text")?.jsonPrimitive?.content ?: ""
+            val user = json.decodeFromString<User>(
+                streaming.value.body.body?.get("user")?.toString() ?: "{}"
+            )
+
             value = listOf(
                 TimelineUiState(
-                    text = stbody?.get("text")?.jsonPrimitive?.content ?: "",
-                    user = Json.decodeFromString(stbody?.get("user")?.toString() ?: "{}"),
+                    text = text,
+                    user = user,
                 )
             ) + timelineUiState
         }
