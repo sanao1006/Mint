@@ -12,6 +12,7 @@ class AndroidKtorPlugin : Plugin<Project> {
         }
 
         dependencies {
+            implementation(libs.library("ktor.client.auth"))
             implementation(libs.library("ktor.client.android"))
             implementation(libs.library("ktor.client.okhttp"))
             implementation(libs.library("ktor.client.core"))
