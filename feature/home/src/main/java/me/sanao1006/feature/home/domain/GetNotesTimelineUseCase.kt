@@ -13,7 +13,8 @@ class GetNotesTimelineUseCase @Inject constructor(
     suspend operator fun invoke(): List<TimelineUiState> {
         val response = notesRepository.getNotesTimeline(
             notesTimeLineRequestBody = NotesTimeLineRequestBody(
-                i = dataStoreRepository.getAccessToken() ?: ""
+                i = dataStoreRepository.getAccessToken() ?: "",
+                limit = 20
             )
         )
         return response.map { it.toTimelineUiState() }
