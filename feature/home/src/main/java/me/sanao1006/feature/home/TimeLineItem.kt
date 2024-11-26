@@ -13,10 +13,12 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import coil3.compose.rememberAsyncImagePainter
@@ -43,14 +45,32 @@ fun TimeLineItem(
                 contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = timelineUiState.user?.name ?: "",
-                style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight.SemiBold
-            )
+            Row(verticalAlignment = Alignment.Bottom) {
+                Text(
+                    text = timelineUiState.user?.name ?: timelineUiState.user?.username ?: "",
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                val username =
+                    timelineUiState.user?.username?.takeIf { it.isNotBlank() }?.let { "@$it" } ?: ""
+                val host =
+                    timelineUiState.user?.host?.takeIf { it.isNotBlank() }?.let { "@$it" } ?: ""
+
+                if (username.isNotEmpty() && host.isNotEmpty()) {
+                    Text(
+                        text = "$username$host",
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
         }
         Spacer(modifier = Modifier.height(2.dp))
-        Text(text = timelineUiState.text ?: "")
+        Text(text = timelineUiState.text)
     }
 }
 
