@@ -42,7 +42,7 @@ data object HomeScreen : Screen {
 @Composable
 fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
     Box(modifier = modifier.fillMaxSize()) {
-        val pagerState = rememberPagerState(initialPage = 0) { 3 }
+        val pagerState = rememberPagerState(initialPage = 1) { 3 }
         val scope = rememberCoroutineScope()
         Scaffold(
             topBar = {
