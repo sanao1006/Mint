@@ -23,7 +23,7 @@ interface NotesRepository {
         @Body notesTimeLineRequestBody: NotesTimeLineRequestBody
     ): List<NotesTimeline>
 
-    @POST("api/notes/hybrid-timeline")
+    @POST("api/notes/global-timeline")
     suspend fun getNotesGlobalTimeline(
         @Body notesTimeLineRequestBody: NotesTimeLineRequestBody
     ): List<NotesTimeline>

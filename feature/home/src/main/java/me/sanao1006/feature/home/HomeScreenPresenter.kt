@@ -5,12 +5,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.retained.collectAsRetainedState
+import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.presenter.Presenter
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.Flow
@@ -39,8 +42,9 @@ class HomeScreenPresenter @Inject constructor(
     @Composable
     override fun present(): HomeScreen.State {
         val scope = rememberCoroutineScope()
-        val timelineUiState by produceState<List<TimelineUiState>>(emptyList()) {
-            value = getNotesTimelineUseCase(timelineType = TimelineType.SOCIAL)
+        var timelineType by rememberRetained { mutableStateOf(TimelineType.SOCIAL) }
+        val timelineUiState by produceState<List<TimelineUiState>>(emptyList(), timelineType) {
+            value = getNotesTimelineUseCase(timelineType = timelineType)
         }
 
         val streaming: State<StreamingResponse> =
@@ -78,8 +82,21 @@ class HomeScreenPresenter @Inject constructor(
         }
 
         return HomeScreen.State(
-            uiState = combinedList,
-            eventSink = {}
-        )
+            uiState = combinedList
+        ) { event ->
+            when (event) {
+                HomeScreen.Event.OnLocalTimelineClicked -> {
+                    timelineType = TimelineType.LOCAL
+                }
+
+                HomeScreen.Event.OnSocialTimelineClicked -> {
+                    timelineType = TimelineType.SOCIAL
+                }
+
+                HomeScreen.Event.OnGlobalTimelineClicked -> {
+                    timelineType = TimelineType.GLOBAL
+                }
+            }
+        }
     }
 }

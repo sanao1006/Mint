@@ -33,7 +33,9 @@ data object HomeScreen : Screen {
     ) : CircuitUiState
 
     sealed class Event : CircuitUiEvent {
-        data object OnButtonClicked : Event()
+        data object OnLocalTimelineClicked : Event()
+        data object OnSocialTimelineClicked : Event()
+        data object OnGlobalTimelineClicked : Event()
     }
 }
 
@@ -50,16 +52,19 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
                     onNavigationIconClick = {},
                     onHomeClick = {
                         scope.launch {
+                            state.eventSink(HomeScreen.Event.OnLocalTimelineClicked)
                             pagerState.animateScrollToPage(0)
                         }
                     },
                     onSocialClick = {
                         scope.launch {
+                            state.eventSink(HomeScreen.Event.OnSocialTimelineClicked)
                             pagerState.animateScrollToPage(1)
                         }
                     },
                     onGlobalClick = {
                         scope.launch {
+                            state.eventSink(HomeScreen.Event.OnGlobalTimelineClicked)
                             pagerState.animateScrollToPage(2)
                         }
                     }
