@@ -65,12 +65,15 @@ class HomeScreenPresenter @Inject constructor(
                 streaming.value.body.body?.get("user")?.toString() ?: "{}"
             )
 
-            value = listOf(
+            val mutableList = mutableListOf<TimelineUiState>(
                 TimelineUiState(
                     text = text,
                     user = user,
                 )
-            ) + timelineUiState
+            )
+            mutableList.addAll(timelineUiState)
+
+            value = mutableList.toList()
         }
 
         return HomeScreen.State(
