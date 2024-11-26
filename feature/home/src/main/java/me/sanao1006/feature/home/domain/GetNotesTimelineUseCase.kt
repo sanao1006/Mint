@@ -10,13 +10,39 @@ class GetNotesTimelineUseCase @Inject constructor(
     private val notesRepository: NotesRepository,
     private val dataStoreRepository: DataStoreRepository
 ) {
-    suspend operator fun invoke(): List<TimelineUiState> {
-        val response = notesRepository.getNotesTimeline(
-            notesTimeLineRequestBody = NotesTimeLineRequestBody(
-                i = dataStoreRepository.getAccessToken() ?: "",
-                limit = 20
+    suspend operator fun invoke(timelineType: TimelineType): List<TimelineUiState> {
+        val response = when (timelineType) {
+            TimelineType.LOCAL -> notesRepository.getNotesLocalTimeline(
+                notesTimeLineRequestBody = NotesTimeLineRequestBody(
+                    i = dataStoreRepository.getAccessToken() ?: "",
+                    limit = LIMIT
+                )
             )
-        )
+
+            TimelineType.SOCIAL -> notesRepository.getNotesHybridTimeline(
+                notesTimeLineRequestBody = NotesTimeLineRequestBody(
+                    i = dataStoreRepository.getAccessToken() ?: "",
+                    limit = LIMIT
+                )
+            )
+
+            TimelineType.GLOBAL -> notesRepository.getNotesGlobalTimeline(
+                notesTimeLineRequestBody = NotesTimeLineRequestBody(
+                    i = dataStoreRepository.getAccessToken() ?: "",
+                    limit = LIMIT
+                )
+            )
+        }
         return response.map { it.toTimelineUiState() }
     }
+
+    companion object {
+        private const val LIMIT = 20
+    }
+}
+
+enum class TimelineType {
+    LOCAL,
+    SOCIAL,
+    GLOBAL
 }

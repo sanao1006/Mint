@@ -20,6 +20,7 @@ import kotlinx.serialization.json.jsonPrimitive
 import me.sanao1006.core.model.home.notes.TimelineUiState
 import me.sanao1006.core.model.home.notes.User
 import me.sanao1006.feature.home.domain.GetNotesTimelineUseCase
+import me.sanao1006.feature.home.domain.TimelineType
 import me.sanao1006.misskey_streaming.StreamingChannel
 import me.sanao1006.misskey_streaming.WebsocketRepository
 import me.sanao1006.misskey_streaming.model.StreamingResponse
@@ -39,7 +40,7 @@ class HomeScreenPresenter @Inject constructor(
     override fun present(): HomeScreen.State {
         val scope = rememberCoroutineScope()
         val timelineUiState by produceState<List<TimelineUiState>>(emptyList()) {
-            value = getNotesTimelineUseCase()
+            value = getNotesTimelineUseCase(timelineType = TimelineType.SOCIAL)
         }
 
         val streaming: State<StreamingResponse> =
