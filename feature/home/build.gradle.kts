@@ -13,6 +13,7 @@ android {
         implementation(projects.core.model)
         implementation(projects.core.dataStore)
         implementation(projects.core.data)
+        implementation(projects.core.designsystem)
         implementation(projects.misskeyStreaming)
 
         testImplementation(libs.junit)
