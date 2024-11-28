@@ -1,4 +1,4 @@
-package me.sanao1006.mint.ui.theme
+package me.sanao1006.core.designsystem
 
 import androidx.compose.ui.graphics.Color
 

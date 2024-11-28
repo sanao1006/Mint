@@ -30,6 +30,7 @@ include(
     "core:network",
     ":core:data",
     "core:model",
-    "core:dataStore"
+    "core:dataStore",
+    "core:designsystem"
 )
 include(":misskey-streaming")
