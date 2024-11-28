@@ -19,6 +19,7 @@ import com.slack.circuit.foundation.NavigableCircuitContent
 import com.slack.circuit.foundation.rememberCircuitNavigator
 import com.slack.circuit.overlay.ContentWithOverlays
 import com.slack.circuitx.android.rememberAndroidScreenAwareNavigator
+import com.slack.circuitx.gesturenavigation.GestureNavigationDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import me.sanao1006.feature.home.HomeScreen
 import me.sanao1006.feature.login.LoginScreen
@@ -60,7 +61,10 @@ class MainActivity : ComponentActivity() {
                                     NavigableCircuitContent(
                                         navigator = navigator,
                                         backStack = backstack,
-                                        circuit = circuit
+                                        circuit = circuit,
+                                        decoration = GestureNavigationDecoration {
+                                            navigator.pop()
+                                        }
                                     )
                                 }
                             }

@@ -42,6 +42,7 @@ data object HomeScreen : Screen {
         data object OnLocalTimelineClicked : Event()
         data object OnSocialTimelineClicked : Event()
         data object OnGlobalTimelineClicked : Event()
+        data object OnNoteCreateClicked : Event()
     }
 }
 
@@ -77,7 +78,7 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
                 )
             },
             floatingActionButton = {
-                FloatingActionButton(onClick = {}) {
+                FloatingActionButton(onClick = { state.eventSink(HomeScreen.Event.OnNoteCreateClicked) }) {
                     Icon(imageVector = TablerIcons.Plus, "")
                 }
             }

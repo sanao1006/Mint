@@ -14,7 +14,11 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.retained.collectAsRetainedState
 import com.slack.circuit.retained.rememberRetained
+import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -24,13 +28,13 @@ import me.sanao1006.core.model.home.notes.TimelineUiState
 import me.sanao1006.core.model.home.notes.User
 import me.sanao1006.feature.home.domain.GetNotesTimelineUseCase
 import me.sanao1006.feature.home.domain.TimelineType
+import me.sanao1006.feature.note.NoteScreen
 import me.sanao1006.misskey_streaming.StreamingChannel
 import me.sanao1006.misskey_streaming.WebsocketRepository
 import me.sanao1006.misskey_streaming.model.StreamingResponse
-import javax.inject.Inject
 
-@CircuitInject(HomeScreen::class, SingletonComponent::class)
-class HomeScreenPresenter @Inject constructor(
+class HomeScreenPresenter @AssistedInject constructor(
+    @Assisted private val navigator: Navigator,
     private val websocketRepository: WebsocketRepository,
     private val getNotesTimelineUseCase: GetNotesTimelineUseCase,
     private val json: Json
@@ -96,7 +100,18 @@ class HomeScreenPresenter @Inject constructor(
                 HomeScreen.Event.OnGlobalTimelineClicked -> {
                     timelineType = TimelineType.GLOBAL
                 }
+
+                HomeScreen.Event.OnNoteCreateClicked -> {
+                    navigator.goTo(NoteScreen)
+                }
             }
         }
     }
+
+}
+
+@CircuitInject(HomeScreen::class, SingletonComponent::class)
+@AssistedFactory
+interface Factory {
+    fun create(navigator: Navigator): HomeScreenPresenter
 }
