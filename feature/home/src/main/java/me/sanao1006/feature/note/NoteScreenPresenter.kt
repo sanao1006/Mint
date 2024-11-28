@@ -6,12 +6,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.retained.rememberRetained
+import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Inject
 
-@CircuitInject(NoteScreen::class, SingletonComponent::class)
-class NoteScreenPresenter @Inject constructor() : Presenter<NoteScreen.State> {
+class NoteScreenPresenter @AssistedInject constructor(
+    @Assisted private val navigator: Navigator
+) : Presenter<NoteScreen.State> {
     @Composable
     override fun present(): NoteScreen.State {
         var uiState by rememberRetained { mutableStateOf(NoteScreenUiState("")) }
@@ -23,6 +27,10 @@ class NoteScreenPresenter @Inject constructor() : Presenter<NoteScreen.State> {
                     uiState = uiState.copy(noteText = it.text)
                 }
 
+                is NoteScreen.Event.OnBackClicked -> {
+                    navigator.pop()
+                }
+
                 else -> {}
             }
         }
@@ -32,3 +40,9 @@ class NoteScreenPresenter @Inject constructor() : Presenter<NoteScreen.State> {
 data class NoteScreenUiState(
     val noteText: String
 )
+
+@CircuitInject(NoteScreen::class, SingletonComponent::class)
+@AssistedFactory
+interface NoteScreenFactory {
+    fun create(navigator: Navigator): NoteScreenPresenter
+}
