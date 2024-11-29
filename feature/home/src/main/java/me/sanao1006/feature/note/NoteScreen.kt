@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -13,6 +14,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.Screen
@@ -32,6 +34,7 @@ data object NoteScreen : Screen {
     sealed class Event : CircuitUiState {
         data object OnBackClicked : Event()
         data class OnNoteTextChanged(val text: String) : Event()
+        data object OnNotePostClicked : Event()
     }
 }
 
@@ -50,6 +53,14 @@ fun NoteScreenUi(state: NoteScreen.State, modifier: Modifier) {
                                     imageVector = TablerIcons.ArrowLeft,
                                     contentDescription = "Back"
                                 )
+                            }
+                        },
+                        actions = {
+                            FilledTonalButton(
+                                modifier = Modifier.padding(horizontal = 8.dp),
+                                onClick = { state.eventSink(NoteScreen.Event.OnNotePostClicked) }
+                            ) {
+                                Text("Post")
                             }
                         },
                         title = {}

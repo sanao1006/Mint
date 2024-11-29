@@ -31,6 +31,12 @@ class NoteScreenPresenter @AssistedInject constructor(
                     navigator.pop()
                 }
 
+                is NoteScreen.Event.OnNotePostClicked -> {
+                    // Post note
+
+                    navigator.pop()
+                }
+
                 else -> {}
             }
         }
