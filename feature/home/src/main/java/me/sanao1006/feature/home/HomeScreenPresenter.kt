@@ -112,6 +112,6 @@ class HomeScreenPresenter @AssistedInject constructor(
 
 @CircuitInject(HomeScreen::class, SingletonComponent::class)
 @AssistedFactory
-interface Factory {
+fun interface Factory {
     fun create(navigator: Navigator): HomeScreenPresenter
 }

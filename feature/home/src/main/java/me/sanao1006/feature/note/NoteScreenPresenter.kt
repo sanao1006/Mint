@@ -49,6 +49,6 @@ data class NoteScreenUiState(
 
 @CircuitInject(NoteScreen::class, SingletonComponent::class)
 @AssistedFactory
-interface NoteScreenFactory {
+fun interface NoteScreenFactory {
     fun create(navigator: Navigator): NoteScreenPresenter
 }
