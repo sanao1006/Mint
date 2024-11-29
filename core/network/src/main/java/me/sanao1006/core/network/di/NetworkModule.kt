@@ -16,11 +16,14 @@ import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.request.headers
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import me.sanao1006.core.model.NormalApi
+import me.sanao1006.datastore.DataStoreRepository
 import timber.log.Timber
 import javax.inject.Singleton
 import kotlin.time.Duration.Companion.seconds
@@ -34,7 +37,8 @@ object NetworkModule {
     @Singleton
     @NormalApi
     fun provideHttpClient(
-        json: Json
+        json: Json,
+        dataStoreRepository: DataStoreRepository
     ): HttpClient = HttpClient(OkHttp) {
         install(ContentNegotiation) { json(json) }
         install(HttpTimeout) {
@@ -56,6 +60,12 @@ object NetworkModule {
         }
         defaultRequest {
             contentType(ContentType.Application.Json)
+            headers {
+                runBlocking {
+                    val token = dataStoreRepository.getAccessToken() ?: return@runBlocking
+                    append("Authorization", "Bearer $token")
+                }
+            }
         }
     }
 

@@ -4,7 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class NotesTimeLineRequestBody(
-    val i: String,
     val limit: Int = 10,
     val sinceId: String = "",
     val untilId: String = "",
