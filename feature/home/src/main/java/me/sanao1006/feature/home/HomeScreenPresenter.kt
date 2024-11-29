@@ -74,12 +74,15 @@ class HomeScreenPresenter @AssistedInject constructor(
                 streaming.value.body.body?.get("user")?.toString() ?: "{}"
             )
 
-            val mutableList = mutableListOf<TimelineUiState>(
-                TimelineUiState(
-                    text = text,
-                    user = user,
+            val mutableList = mutableListOf<TimelineUiState>()
+            if (text.isNotEmpty() && user != User()) {
+                mutableList.add(
+                    TimelineUiState(
+                        user = user,
+                        text = text
+                    )
                 )
-            )
+            }
             mutableList.addAll(timelineUiState)
 
             value = mutableList.toList()
