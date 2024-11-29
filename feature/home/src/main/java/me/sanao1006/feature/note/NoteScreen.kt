@@ -51,21 +51,40 @@ fun NoteScreenUi(state: NoteScreen.State, modifier: Modifier) {
                     )
                 }
             ) {
-                TextField(
+                NoteScreenTextField(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(it)
                         .focusRequester(focusRequester),
-                    value = state.uiState.noteText,
-                    onValueChange = { state.eventSink(NoteScreen.Event.OnNoteTextChanged(it)) },
-                    placeholder = {
-                        Text(
-                            text = "Note",
-                            style = MaterialTheme.typography.headlineSmall
+                    text = state.uiState.noteText,
+                    onValueChange = { note ->
+                        state.eventSink(
+                            NoteScreen.Event.OnNoteTextChanged(
+                                note
+                            )
                         )
                     }
                 )
             }
         }
     }
+}
+
+@Composable
+private fun NoteScreenTextField(
+    modifier: Modifier = Modifier,
+    text: String,
+    onValueChange: (String) -> Unit
+) {
+    TextField(
+        modifier = modifier,
+        value = text,
+        onValueChange = onValueChange,
+        placeholder = {
+            Text(
+                text = "Note",
+                style = MaterialTheme.typography.headlineSmall
+            )
+        }
+    )
 }
