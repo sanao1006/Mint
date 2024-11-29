@@ -12,9 +12,14 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.launch
+import me.sanao1006.core.model.home.notes.ReactionAcceptance
+import me.sanao1006.core.model.home.notes.Visibility
+import me.sanao1006.feature.note.domain.CreateNotesUseCase
 
 class NoteScreenPresenter @AssistedInject constructor(
-    @Assisted private val navigator: Navigator
+    @Assisted private val navigator: Navigator,
+    private val createNotesUseCase: CreateNotesUseCase
 ) : Presenter<NoteScreen.State> {
     @Composable
     override fun present(): NoteScreen.State {
@@ -32,8 +37,13 @@ class NoteScreenPresenter @AssistedInject constructor(
                 }
 
                 is NoteScreen.Event.OnNotePostClicked -> {
-                    // Post note
-
+                    it.scope.launch {
+                        createNotesUseCase(
+                            text = uiState.noteText,
+                            visibility = uiState.visibility,
+                            reactionAcceptance = uiState.reactionAcceptance
+                        )
+                    }
                     navigator.pop()
                 }
 
@@ -44,7 +54,9 @@ class NoteScreenPresenter @AssistedInject constructor(
 }
 
 data class NoteScreenUiState(
-    val noteText: String
+    val noteText: String,
+    val visibility: Visibility = Visibility.PUBLIC,
+    val reactionAcceptance: ReactionAcceptance? = null
 )
 
 @CircuitInject(NoteScreen::class, SingletonComponent::class)

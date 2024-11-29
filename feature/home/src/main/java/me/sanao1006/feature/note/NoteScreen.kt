@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -17,6 +18,7 @@ import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.Screen
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.parcelize.Parcelize
 import me.sanao1006.core.designsystem.MintTheme
 
@@ -30,7 +32,7 @@ data object NoteScreen : Screen {
     sealed class Event : CircuitUiState {
         data object OnBackClicked : Event()
         data class OnNoteTextChanged(val text: String) : Event()
-        data object OnNotePostClicked : Event()
+        data class OnNotePostClicked(val scope: CoroutineScope) : Event()
     }
 }
 
@@ -38,6 +40,7 @@ data object NoteScreen : Screen {
 @Composable
 fun NoteScreenUi(state: NoteScreen.State, modifier: Modifier) {
     MintTheme {
+        val scope = rememberCoroutineScope()
         val focusRequester = rememberRetained { FocusRequester() }
         LaunchedEffect(Unit) {
             focusRequester.requestFocus()
@@ -47,7 +50,13 @@ fun NoteScreenUi(state: NoteScreen.State, modifier: Modifier) {
                 topBar = {
                     NoteScreenTopAppBar(
                         onBackClicked = { state.eventSink(NoteScreen.Event.OnBackClicked) },
-                        onNotePostClicked = { state.eventSink(NoteScreen.Event.OnNotePostClicked) }
+                        onNotePostClicked = {
+                            state.eventSink(
+                                NoteScreen.Event.OnNotePostClicked(
+                                    scope
+                                )
+                            )
+                        }
                     )
                 }
             ) {

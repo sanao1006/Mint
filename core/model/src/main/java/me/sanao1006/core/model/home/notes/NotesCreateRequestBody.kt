@@ -9,7 +9,7 @@ data class NotesCreateRequestBody(
     val visibleUserIds: List<String>? = null,
     val cw: String? = null,
     val localOnly: Boolean = false,
-    val reactionAcceptance: ReactionAcceptance,
+    val reactionAcceptance: ReactionAcceptance? = null,
     val noExtractMentions: Boolean = false,
     val noExtractHashtags: Boolean = false,
     val noExtractEmojis: Boolean = false,
