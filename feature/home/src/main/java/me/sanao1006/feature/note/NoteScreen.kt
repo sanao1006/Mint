@@ -13,9 +13,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
+import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.Screen
 import compose.icons.TablerIcons
@@ -43,6 +47,10 @@ data object NoteScreen : Screen {
 @Composable
 fun NoteScreenUi(state: NoteScreen.State, modifier: Modifier) {
     MintTheme {
+        val focusRequester = rememberRetained { FocusRequester() }
+        LaunchedEffect(Unit) {
+            focusRequester.requestFocus()
+        }
         Box(modifier = modifier.fillMaxSize()) {
             Scaffold(
                 topBar = {
@@ -70,7 +78,8 @@ fun NoteScreenUi(state: NoteScreen.State, modifier: Modifier) {
                 TextField(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(it),
+                        .padding(it)
+                        .focusRequester(focusRequester),
                     value = state.uiState.noteText,
                     onValueChange = { state.eventSink(NoteScreen.Event.OnNoteTextChanged(it)) },
                     placeholder = {
