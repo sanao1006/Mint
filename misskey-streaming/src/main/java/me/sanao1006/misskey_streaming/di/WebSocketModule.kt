@@ -34,7 +34,7 @@ object WebSocketModule {
     ): HttpClient = HttpClient(OkHttp) {
         install(WebSockets) {
             contentConverter = KotlinxWebsocketSerializationConverter(json)
-            pingInterval = 200.toDuration(DurationUnit.SECONDS)
+            pingInterval = 2.toDuration(DurationUnit.SECONDS)
 
         }
         install(Logging) {
