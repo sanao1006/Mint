@@ -41,6 +41,7 @@ class NoteScreenPresenter @AssistedInject constructor(
                         createNotesUseCase(
                             text = uiState.noteText,
                             visibility = uiState.visibility,
+                            localOnly = uiState.localOnly,
                             reactionAcceptance = uiState.reactionAcceptance
                         )
                     }

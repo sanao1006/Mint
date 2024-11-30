@@ -14,12 +14,14 @@ class CreateNotesUseCase @Inject constructor(
     suspend operator fun invoke(
         text: String,
         visibility: Visibility,
-        reactionAcceptance: ReactionAcceptance? = null
+        localOnly: Boolean,
+        reactionAcceptance: ReactionAcceptance?
     ) {
         notesRepository.createNotes(
             notesCreateRequestBody = NotesCreateRequestBody(
                 text = text,
                 visibility = visibility,
+                localOnly = localOnly,
                 reactionAcceptance = reactionAcceptance
             )
         )
