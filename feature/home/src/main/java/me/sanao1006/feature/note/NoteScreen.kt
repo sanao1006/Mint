@@ -3,6 +3,7 @@ package me.sanao1006.feature.note
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -45,7 +46,11 @@ fun NoteScreenUi(state: NoteScreen.State, modifier: Modifier) {
         LaunchedEffect(Unit) {
             focusRequester.requestFocus()
         }
-        Box(modifier = modifier.fillMaxSize()) {
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .safeDrawingPadding()
+        ) {
             Scaffold(
                 topBar = {
                     NoteScreenTopAppBar(
