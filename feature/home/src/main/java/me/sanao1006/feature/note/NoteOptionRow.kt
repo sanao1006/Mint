@@ -102,8 +102,13 @@ internal fun NoteOptionRow(
                     onDismiss = onBottomSheetOuterClicked,
                     content = { modelItems, _ ->
                         Column(
-                            modifier = Modifier.padding(16.dp),
-                            verticalArrangement = Arrangement.spacedBy(16.dp)
+                            modifier = Modifier.padding(
+                                top = 24.dp,
+                                end = 16.dp,
+                                bottom = 40.dp,
+                                start = 16.dp
+                            ),
+                            verticalArrangement = Arrangement.spacedBy(24.dp)
                         ) {
                             modelItems.forEach {
                                 Row(
