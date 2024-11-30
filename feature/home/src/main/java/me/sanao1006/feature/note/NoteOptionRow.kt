@@ -77,11 +77,18 @@ enum class ReactionAcceptanceItem(
     }
 }
 
+data class NoteOptionState(
+    val visibility: Visibility,
+    val localOnly: Boolean,
+    val reactionAcceptance: ReactionAcceptance?,
+)
+
 @ExperimentalMaterial3Api
 @Composable
 internal fun NoteOptionRow(
     isShowBottomSheet: Boolean,
     noteOptionContent: NoteOptionContent,
+    noteOptionState: NoteOptionState,
     modifier: Modifier = Modifier,
     onBottomSheetOuterClicked: () -> Unit,
     onIconClicked: (NoteOptionContent) -> Unit,
@@ -141,16 +148,31 @@ internal fun NoteOptionRow(
         horizontalArrangement = Arrangement.End,
         verticalAlignment = Alignment.CenterVertically
     ) {
+        val visibilityIcon = when (noteOptionState.visibility) {
+            Visibility.PUBLIC -> TablerIcons.World
+            Visibility.HOME -> TablerIcons.Home
+            Visibility.FOLLOWERS -> TablerIcons.Lock
+            Visibility.SPECIFIED -> TablerIcons.Mail
+        }
+        val localOnlyIcon =
+            if (noteOptionState.localOnly) TablerIcons.Rocket else TablerIcons.RocketOff
+        val reactionAcceptanceIcon = when (noteOptionState.reactionAcceptance) {
+            ReactionAcceptance.LIKE_ONLY -> TablerIcons.Heart
+            ReactionAcceptance.LIKE_ONLY_FOR_REMOTE -> TablerIcons.Heartbeat
+            ReactionAcceptance.NON_SENSITIVE_ONLY -> TablerIcons.Seo
+            null -> TablerIcons.Hearts
+        }
+        
         IconButton(onClick = { onIconClicked(NoteOptionContent.VISIBILITY) }) {
-            Icon(painter = painterResource(TablerIcons.World), "")
+            Icon(painter = painterResource(visibilityIcon), "")
         }
         Spacer(modifier = Modifier.width(4.dp))
         IconButton(onClick = { onIconClicked(NoteOptionContent.LOCAL_ONLY) }) {
-            Icon(painter = painterResource(TablerIcons.Rocket), "")
+            Icon(painter = painterResource(localOnlyIcon), "")
         }
         Spacer(modifier = Modifier.width(4.dp))
         IconButton(onClick = { onIconClicked(NoteOptionContent.REACTION_ACCEPTANCE) }) {
-            Icon(painter = painterResource(TablerIcons.Icons), "")
+            Icon(painter = painterResource(reactionAcceptanceIcon), "")
         }
         Spacer(modifier = Modifier.width(8.dp))
     }

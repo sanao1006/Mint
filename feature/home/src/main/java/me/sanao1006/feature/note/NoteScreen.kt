@@ -119,6 +119,11 @@ private fun NoteScreenContent(
         NoteOptionRow(
             isShowBottomSheet = state.uiState.isShowBottomSheet,
             noteOptionContent = state.uiState.noteOptionContent,
+            noteOptionState = NoteOptionState(
+                visibility = state.uiState.visibility,
+                localOnly = state.uiState.localOnly,
+                reactionAcceptance = state.uiState.reactionAcceptance
+            ),
             modifier = Modifier.imePadding(),
             onBottomSheetOuterClicked = { state.eventSink(NoteScreen.Event.OnHideBottomSheet) },
             onIconClicked = { state.eventSink(NoteScreen.Event.OnShowBottomSheet(it)) },
@@ -162,6 +167,11 @@ fun A() {
         NoteOptionRow(
             true,
             NoteOptionContent.VISIBILITY,
+            NoteOptionState(
+                Visibility.PUBLIC,
+                false,
+                ReactionAcceptance.LIKE_ONLY
+            ),
             Modifier,
             {},
             {},
