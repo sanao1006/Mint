@@ -9,9 +9,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import compose.icons.TablerIcons
-import compose.icons.tablericons.ArrowLeft
+import ir.alirezaivaz.tablericons.TablerIcons
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -25,7 +25,7 @@ fun NoteScreenTopAppBar(
         navigationIcon = {
             IconButton(onClick = onBackClicked) {
                 Icon(
-                    imageVector = TablerIcons.ArrowLeft,
+                    painter = painterResource(TablerIcons.ArrowLeft),
                     contentDescription = "Back"
                 )
             }

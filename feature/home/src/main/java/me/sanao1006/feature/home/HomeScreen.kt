@@ -18,14 +18,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.Screen
-import compose.icons.TablerIcons
-import compose.icons.tablericons.Plus
 import dagger.hilt.components.SingletonComponent
+import ir.alirezaivaz.tablericons.TablerIcons
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import me.sanao1006.core.model.home.notes.TimelineUiState
@@ -79,7 +79,7 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
             },
             floatingActionButton = {
                 FloatingActionButton(onClick = { state.eventSink(HomeScreen.Event.OnNoteCreateClicked) }) {
-                    Icon(imageVector = TablerIcons.Plus, "")
+                    Icon(painter = painterResource(TablerIcons.Plus), "")
                 }
             }
         ) { it ->
