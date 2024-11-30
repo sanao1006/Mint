@@ -47,6 +47,38 @@ class NoteScreenPresenter @AssistedInject constructor(
                     navigator.pop()
                 }
 
+                is NoteScreen.Event.OnVisibilityChanged -> {
+                    uiState = uiState.copy(
+                        isShowBottomSheet = false,
+                        visibility = it.visibility
+                    )
+                }
+
+                is NoteScreen.Event.OnLocalOnlyChanged -> {
+                    uiState = uiState.copy(
+                        isShowBottomSheet = false,
+                        localOnly = it.localOnly
+                    )
+                }
+
+                is NoteScreen.Event.OnReactionAcceptanceChanged -> {
+                    uiState = uiState.copy(
+                        isShowBottomSheet = false,
+                        reactionAcceptance = it.reactionAcceptance
+                    )
+                }
+
+                is NoteScreen.Event.OnShowBottomSheet -> {
+                    uiState = uiState.copy(
+                        isShowBottomSheet = true,
+                        noteOptionContent = it.optionContent
+                    )
+                }
+
+                is NoteScreen.Event.OnHideBottomSheet -> {
+                    uiState = uiState.copy(isShowBottomSheet = false)
+                }
+
                 else -> {}
             }
         }
@@ -56,7 +88,10 @@ class NoteScreenPresenter @AssistedInject constructor(
 data class NoteScreenUiState(
     val noteText: String,
     val visibility: Visibility = Visibility.PUBLIC,
-    val reactionAcceptance: ReactionAcceptance? = null
+    val localOnly: Boolean = false,
+    val reactionAcceptance: ReactionAcceptance? = null,
+    val isShowBottomSheet: Boolean = false,
+    val noteOptionContent: NoteOptionContent = NoteOptionContent.VISIBILITY
 )
 
 @CircuitInject(NoteScreen::class, SingletonComponent::class)
