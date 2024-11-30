@@ -16,22 +16,25 @@ import ir.alirezaivaz.tablericons.TablerIcons
 
 @Composable
 internal fun NoteOptionRow(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onVisibilityClicked: () -> Unit,
+    onLocalOnlyClicked: () -> Unit,
+    onReactionAcceptanceClicked: () -> Unit
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.End,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        IconButton(onClick = {}) {
+        IconButton(onClick = onVisibilityClicked) {
             Icon(painter = painterResource(TablerIcons.World), "")
         }
         Spacer(modifier = Modifier.width(4.dp))
-        IconButton(onClick = {}) {
+        IconButton(onClick = onLocalOnlyClicked) {
             Icon(painter = painterResource(TablerIcons.Rocket), "")
         }
         Spacer(modifier = Modifier.width(4.dp))
-        IconButton(onClick = {}) {
+        IconButton(onClick = onReactionAcceptanceClicked) {
             Icon(painter = painterResource(TablerIcons.Icons), "")
         }
         Spacer(modifier = Modifier.width(8.dp))

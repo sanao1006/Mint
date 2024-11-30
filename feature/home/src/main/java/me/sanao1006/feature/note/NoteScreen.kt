@@ -37,6 +37,9 @@ data object NoteScreen : Screen {
         data object OnBackClicked : Event()
         data class OnNoteTextChanged(val text: String) : Event()
         data class OnNotePostClicked(val scope: CoroutineScope) : Event()
+        data object OnVisibilityChanged : Event()
+        data object OnLocalOnlyChanged : Event()
+        data object OnReactionAcceptanceChanged : Event()
     }
 }
 
@@ -100,7 +103,12 @@ private fun NoteScreenContent(
                 )
             }
         )
-        NoteOptionRow(modifier = Modifier.imePadding())
+        NoteOptionRow(
+            modifier = Modifier.imePadding(),
+            onVisibilityClicked = {},
+            onLocalOnlyClicked = {},
+            onReactionAcceptanceClicked = {}
+        )
     }
 }
 
@@ -127,6 +135,11 @@ private fun NoteScreenTextField(
 @Composable
 fun A() {
     MintTheme {
-        NoteOptionRow()
+        NoteOptionRow(
+            Modifier,
+            {},
+            {},
+            {}
+        )
     }
 }
