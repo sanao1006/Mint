@@ -15,36 +15,15 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
-import com.slack.circuit.runtime.CircuitUiEvent
-import com.slack.circuit.runtime.CircuitUiState
-import com.slack.circuit.runtime.screen.Screen
 import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
 import kotlinx.coroutines.launch
-import kotlinx.parcelize.Parcelize
-import me.sanao1006.core.model.home.notes.TimelineUiState
-
-@Parcelize
-data object HomeScreen : Screen {
-    @Immutable
-    data class State(
-        val uiState: List<TimelineUiState?> = listOf(),
-        val eventSink: (Event) -> Unit
-    ) : CircuitUiState
-
-    sealed class Event : CircuitUiEvent {
-        data object OnLocalTimelineClicked : Event()
-        data object OnSocialTimelineClicked : Event()
-        data object OnGlobalTimelineClicked : Event()
-        data object OnNoteCreateClicked : Event()
-    }
-}
+import me.sanao1006.screens.HomeScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @CircuitInject(HomeScreen::class, SingletonComponent::class)

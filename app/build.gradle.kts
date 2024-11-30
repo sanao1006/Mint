@@ -31,6 +31,7 @@ android {
         implementation(projects.core.network)
         implementation(projects.core.dataStore)
         implementation(projects.core.designsystem)
+        implementation(projects.core.screens)
         implementation(projects.misskeyStreaming)
     }
 }

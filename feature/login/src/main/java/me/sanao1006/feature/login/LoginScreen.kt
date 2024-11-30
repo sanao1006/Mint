@@ -1,6 +1,5 @@
 package me.sanao1006.feature.login
 
-import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,7 +12,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,29 +19,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
-import com.slack.circuit.runtime.CircuitUiEvent
-import com.slack.circuit.runtime.CircuitUiState
-import com.slack.circuit.runtime.screen.Screen
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.parcelize.Parcelize
-
-@Parcelize
-data object LoginScreen : Screen {
-    @Immutable
-    data class State(
-        val domain: String = "",
-        val error: String = "",
-        val authState: AuthStateType = AuthStateType.FIXED,
-        val eventSink: (Event) -> Unit
-    ) : CircuitUiState
-
-    sealed class Event : CircuitUiEvent {
-        data class OnTextChanged(val text: String) : Event()
-        data class OnButtonClicked(val scope: CoroutineScope, val context: Context) : Event()
-        data class OnAuthButtonClicked(val scope: CoroutineScope) : Event()
-    }
-}
+import me.sanao1006.screens.AuthStateType
+import me.sanao1006.screens.LoginScreen
 
 @CircuitInject(LoginScreen::class, SingletonComponent::class)
 @Composable

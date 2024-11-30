@@ -25,6 +25,8 @@ import me.sanao1006.core.model.auth.AuthSessionGenerateRequestBody
 import me.sanao1006.core.model.auth.AuthSessionUserKeyRequestBody
 import me.sanao1006.core.model.auth.PermissionKeys
 import me.sanao1006.datastore.DataStoreRepository
+import me.sanao1006.screens.AuthStateType
+import me.sanao1006.screens.LoginScreen
 import java.security.MessageDigest
 import javax.inject.Inject
 
@@ -137,5 +139,3 @@ class LoginScreenPresenter @Inject constructor(
         }
     }
 }
-
-enum class AuthStateType { FIXED, WAITING, SUCCESS }

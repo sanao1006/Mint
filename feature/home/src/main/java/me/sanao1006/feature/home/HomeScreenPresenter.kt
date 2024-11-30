@@ -28,10 +28,11 @@ import me.sanao1006.core.model.home.notes.TimelineUiState
 import me.sanao1006.core.model.home.notes.User
 import me.sanao1006.feature.home.domain.GetNotesTimelineUseCase
 import me.sanao1006.feature.home.domain.TimelineType
-import me.sanao1006.feature.note.NoteScreen
 import me.sanao1006.misskey_streaming.StreamingChannel
 import me.sanao1006.misskey_streaming.WebsocketRepository
 import me.sanao1006.misskey_streaming.model.StreamingResponse
+import me.sanao1006.screens.HomeScreen
+import me.sanao1006.screens.NoteScreen
 
 class HomeScreenPresenter @AssistedInject constructor(
     @Assisted private val navigator: Navigator,

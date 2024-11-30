@@ -22,8 +22,8 @@ import com.slack.circuitx.android.rememberAndroidScreenAwareNavigator
 import com.slack.circuitx.gesturenavigation.GestureNavigationDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import me.sanao1006.core.designsystem.MintTheme
-import me.sanao1006.feature.home.HomeScreen
-import me.sanao1006.feature.login.LoginScreen
+import me.sanao1006.screens.HomeScreen
+import me.sanao1006.screens.LoginScreen
 import javax.inject.Inject
 
 @AndroidEntryPoint

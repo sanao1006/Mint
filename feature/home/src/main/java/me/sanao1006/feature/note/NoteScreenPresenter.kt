@@ -13,9 +13,9 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.launch
-import me.sanao1006.core.model.home.notes.ReactionAcceptance
-import me.sanao1006.core.model.home.notes.Visibility
+import me.sanao1006.core.model.home.notes.NoteScreenUiState
 import me.sanao1006.feature.note.domain.CreateNotesUseCase
+import me.sanao1006.screens.NoteScreen
 
 class NoteScreenPresenter @AssistedInject constructor(
     @Assisted private val navigator: Navigator,
@@ -85,15 +85,6 @@ class NoteScreenPresenter @AssistedInject constructor(
         }
     }
 }
-
-data class NoteScreenUiState(
-    val noteText: String,
-    val visibility: Visibility = Visibility.PUBLIC,
-    val localOnly: Boolean = false,
-    val reactionAcceptance: ReactionAcceptance? = null,
-    val isShowBottomSheet: Boolean = false,
-    val noteOptionContent: NoteOptionContent = NoteOptionContent.VISIBILITY
-)
 
 @CircuitInject(NoteScreen::class, SingletonComponent::class)
 @AssistedFactory

@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.slack.circuit.overlay.OverlayEffect
 import com.slack.circuitx.overlays.BottomSheetOverlay
 import ir.alirezaivaz.tablericons.TablerIcons
+import me.sanao1006.core.model.home.notes.NoteOptionContent
 import me.sanao1006.core.model.home.notes.ReactionAcceptance
 import me.sanao1006.core.model.home.notes.Visibility
 
