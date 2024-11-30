@@ -62,14 +62,18 @@ enum class ReactionAcceptanceItem(
     override val resId: Int,
     override val description: String
 ) : ModelSheetItem {
-    All(null, TablerIcons.Hearts, "All"),
+    All(null, TablerIcons.Icons, "All"),
     LikeOnly(ReactionAcceptance.LIKE_ONLY, TablerIcons.Heart, "Like Only"),
     LikeOnlyForRemote(
         ReactionAcceptance.LIKE_ONLY_FOR_REMOTE,
-        TablerIcons.Heartbeat,
+        TablerIcons.HeartDiscount,
         "Like Only For Remote"
     ),
-    NonSensitiveOnly(ReactionAcceptance.NON_SENSITIVE_ONLY, TablerIcons.Seo, "Non Sensitive Only");
+    NonSensitiveOnly(
+        ReactionAcceptance.NON_SENSITIVE_ONLY,
+        TablerIcons.MoodKid,
+        "Non Sensitive Only"
+    );
 
     companion object {
         fun getAllItems(): List<ReactionAcceptanceItem> =
@@ -158,11 +162,11 @@ internal fun NoteOptionRow(
             if (noteOptionState.localOnly) TablerIcons.Rocket else TablerIcons.RocketOff
         val reactionAcceptanceIcon = when (noteOptionState.reactionAcceptance) {
             ReactionAcceptance.LIKE_ONLY -> TablerIcons.Heart
-            ReactionAcceptance.LIKE_ONLY_FOR_REMOTE -> TablerIcons.Heartbeat
-            ReactionAcceptance.NON_SENSITIVE_ONLY -> TablerIcons.Seo
-            null -> TablerIcons.Hearts
+            ReactionAcceptance.LIKE_ONLY_FOR_REMOTE -> TablerIcons.HeartDiscount
+            ReactionAcceptance.NON_SENSITIVE_ONLY -> TablerIcons.MoodKid
+            null -> TablerIcons.Icons
         }
-        
+
         IconButton(onClick = { onIconClicked(NoteOptionContent.VISIBILITY) }) {
             Icon(painter = painterResource(visibilityIcon), "")
         }
