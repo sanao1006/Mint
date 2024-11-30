@@ -34,7 +34,7 @@ timber = "5.0.1"
 arrow = "1.2.4"
 kotlinxSerialization = "1.7.3"
 dataStore = "1.1.1"
-composeIcons = "1.1.1"
+tablericons = "1.13.1"
 coil = "3.0.3"
 
 [libraries]
@@ -113,7 +113,7 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 
 dataStore = { module = "androidx.datastore:datastore-preferences", version.ref = "dataStore" }
 
-compose-icons = { group = "br.com.devsrsouza.compose.icons", name = "tabler-icons", version.ref = "composeIcons" }
+tablerIcons = { group = "ir.alirezaivaz", name = "tablericons", version.ref = "tablericons" }
 
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }

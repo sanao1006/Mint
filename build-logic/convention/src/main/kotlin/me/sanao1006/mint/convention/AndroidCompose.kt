@@ -39,7 +39,7 @@ internal fun Project.configureAndroidCompose(
             implementation(libs.library("androidx.lifecycle.runtimeCompose"))
             implementation(libs.library("androidx.lifecycle.viewModelCompose"))
             implementation(libs.library("androidx.lifecycle.runtime.ktx"))
-            implementation(libs.library("compose.icons"))
+            implementation(libs.library("tablerIcons"))
             implementation(libs.library("coil.compose"))
             implementation(libs.library("coil.network.okhttp"))
 
