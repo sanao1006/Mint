@@ -45,7 +45,7 @@ class NoteScreenPresenter @AssistedInject constructor(
                             reactionAcceptance = uiState.reactionAcceptance
                         )
                     }
-                    navigator.pop()
+                    navigator.pop(result = NoteScreen.Result(true))
                 }
 
                 is NoteScreen.Event.OnVisibilityChanged -> {

@@ -1,6 +1,7 @@
 package me.sanao1006.screens
 
 import com.slack.circuit.runtime.CircuitUiState
+import com.slack.circuit.runtime.screen.PopResult
 import com.slack.circuit.runtime.screen.Screen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.parcelize.Parcelize
@@ -27,4 +28,7 @@ data object NoteScreen : Screen {
         data class OnReactionAcceptanceChanged(val reactionAcceptance: ReactionAcceptance?) :
             Event()
     }
+
+    @Parcelize
+    data class Result(val success: Boolean) : PopResult
 }

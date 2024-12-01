@@ -12,6 +12,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import com.slack.circuit.codegen.annotations.CircuitInject
+import com.slack.circuit.foundation.rememberAnsweringNavigator
 import com.slack.circuit.retained.collectAsRetainedState
 import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.Navigator
@@ -46,6 +47,11 @@ class HomeScreenPresenter @AssistedInject constructor(
     @SuppressLint("ProduceStateDoesNotAssignValue")
     @Composable
     override fun present(): HomeScreen.State {
+        var isSuccessCreateNote: Boolean? by rememberRetained { mutableStateOf(null) }
+        val nav = rememberAnsweringNavigator<NoteScreen.Result>(navigator) { result ->
+            isSuccessCreateNote = result.success
+        }
+
         val scope = rememberCoroutineScope()
         var timelineType by rememberRetained { mutableStateOf(TimelineType.SOCIAL) }
         val timelineUiState by produceState<List<TimelineUiState>>(emptyList(), timelineType) {
@@ -87,9 +93,21 @@ class HomeScreenPresenter @AssistedInject constructor(
         }
 
         return HomeScreen.State(
-            uiState = combinedList
+            uiState = combinedList,
+            navigator = navigator,
+            isSuccessCreateNote = isSuccessCreateNote
         ) { event ->
             when (event) {
+                is HomeScreen.Event.OnNoteCreated -> {
+                    isSuccessCreateNote?.let { flg ->
+                        event.scope.launch {
+                            event.snackbarHostState.showSnackbar(
+                                message = if (flg) "Your post has been created" else "Failed to create post"
+                            )
+                        }
+                    }
+                }
+
                 HomeScreen.Event.OnLocalTimelineClicked -> {
                     timelineType = TimelineType.LOCAL
                 }
@@ -103,7 +121,8 @@ class HomeScreenPresenter @AssistedInject constructor(
                 }
 
                 HomeScreen.Event.OnNoteCreateClicked -> {
-                    navigator.goTo(NoteScreen)
+                    nav.goTo(NoteScreen)
+//                    navigator.goTo(NoteScreen)
                 }
             }
         }

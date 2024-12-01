@@ -9,12 +9,16 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material.SnackbarHost
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -32,6 +36,10 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
     Box(modifier = modifier.fillMaxSize()) {
         val pagerState = rememberPagerState(initialPage = 1) { 3 }
         val scope = rememberCoroutineScope()
+        val snackbarHostState = remember { SnackbarHostState() }
+        LaunchedEffect(state.isSuccessCreateNote) {
+            state.eventSink(HomeScreen.Event.OnNoteCreated(snackbarHostState, scope))
+        }
         Scaffold(
             topBar = {
                 HomeScreenTopAppBar(
@@ -56,6 +64,7 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
                     }
                 )
             },
+            snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
             floatingActionButton = {
                 FloatingActionButton(onClick = { state.eventSink(HomeScreen.Event.OnNoteCreateClicked) }) {
                     Icon(painter = painterResource(TablerIcons.Plus), "")
