@@ -16,6 +16,7 @@ android {
         implementation(projects.core.designsystem)
         implementation(projects.misskeyStreaming)
         implementation(projects.core.screens)
+        implementation(projects.core.ui)
 
         testImplementation(libs.junit)
         androidTestImplementation(libs.androidx.junit)

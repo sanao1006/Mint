@@ -24,6 +24,7 @@ import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
 import kotlinx.coroutines.launch
+import me.sanao1006.core.ui.MainScreenBottomSheet
 import me.sanao1006.screens.HomeScreen
 
 @CircuitInject(HomeScreen::class, SingletonComponent::class)
@@ -99,6 +100,9 @@ private fun HomeScreenUiContent(
                 onSocialClick = onSocialClick,
                 onGlobalClick = onGlobalClick
             )
+        },
+        bottomBar = {
+            MainScreenBottomSheet()
         },
         snackbarHost = snackbarHostState,
         floatingActionButton = floatingActionButton

@@ -33,6 +33,7 @@ include(
     "core:model",
     "core:dataStore",
     "core:designsystem",
-    "core:screens"
+    "core:screens",
+    "core:ui"
 )
 include(":misskey-streaming")
