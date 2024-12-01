@@ -1,19 +1,16 @@
 package me.sanao1006.feature.home
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberDrawerState
@@ -23,7 +20,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
@@ -45,60 +41,76 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
         HomeScreenDrawer(
             drawerState = drawerState
         ) {
-            Scaffold(
-                topBar = {
-                    HomeScreenTopAppBar(
-                        onNavigationIconClick = {
-                            scope.launch {
-                                drawerState.apply {
-                                    if (isClosed) open() else close()
-                                }
-                            }
-                        },
-                        onHomeClick = {
-                            scope.launch {
-                                state.eventSink(HomeScreen.Event.OnLocalTimelineClicked)
-                                pagerState.animateScrollToPage(0)
-                            }
-                        },
-                        onSocialClick = {
-                            scope.launch {
-                                state.eventSink(HomeScreen.Event.OnSocialTimelineClicked)
-                                pagerState.animateScrollToPage(1)
-                            }
-                        },
-                        onGlobalClick = {
-                            scope.launch {
-                                state.eventSink(HomeScreen.Event.OnGlobalTimelineClicked)
-                                pagerState.animateScrollToPage(2)
-                            }
+            HomeScreenUiContent(
+                state = state,
+                pagerState = pagerState,
+                snackbarHostState = { SnackbarHost(hostState = snackbarHostState) },
+                onNavigationIconClick = {
+                    scope.launch {
+                        drawerState.apply {
+                            if (isClosed) open() else close()
                         }
-                    )
+                    }
                 },
-                snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-                floatingActionButton = {
+                onHomeClick = {
+                    scope.launch {
+                        state.eventSink(HomeScreen.Event.OnLocalTimelineClicked)
+                        pagerState.animateScrollToPage(0)
+                    }
+                },
+                onSocialClick = {
+                    scope.launch {
+                        state.eventSink(HomeScreen.Event.OnSocialTimelineClicked)
+                        pagerState.animateScrollToPage(1)
+                    }
+                },
+                onGlobalClick = {
+                    scope.launch {
+                        state.eventSink(HomeScreen.Event.OnGlobalTimelineClicked)
+                        pagerState.animateScrollToPage(2)
+                    }
+                },
+                onFloatingButtonClick = {
                     FloatingActionButton(onClick = { state.eventSink(HomeScreen.Event.OnNoteCreateClicked) }) {
                         Icon(painter = painterResource(TablerIcons.Plus), "")
                     }
                 }
-            ) { it ->
-                Column(modifier = Modifier.padding(it)) {
-                    HorizontalPager(
-                        state = pagerState
-                    ) { page ->
-                        LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                            items(state.uiState) {
-                                it?.let { timelineUiState ->
-                                    TimeLineItem(
-                                        modifier = Modifier.padding(bottom = 8.dp),
-                                        timelineUiState = timelineUiState
-                                    )
-                                    HorizontalDivider()
-                                }
-                            }
-                        }
-                    }
-                }
+            )
+        }
+    }
+}
+
+@Composable
+private fun HomeScreenUiContent(
+    state: HomeScreen.State,
+    pagerState: PagerState,
+    snackbarHostState: @Composable () -> Unit,
+    onNavigationIconClick: () -> Unit,
+    onHomeClick: () -> Unit,
+    onSocialClick: () -> Unit,
+    onGlobalClick: () -> Unit,
+    onFloatingButtonClick: @Composable () -> Unit
+) {
+    Scaffold(
+        topBar = {
+            HomeScreenTopAppBar(
+                onNavigationIconClick = onNavigationIconClick,
+                onHomeClick = onHomeClick,
+                onSocialClick = onSocialClick,
+                onGlobalClick = onGlobalClick
+            )
+        },
+        snackbarHost = snackbarHostState,
+        floatingActionButton = onFloatingButtonClick
+    ) {
+        Column(modifier = Modifier.padding(it)) {
+            HorizontalPager(
+                state = pagerState
+            ) { page ->
+                TimelineColumn(
+                    state = state,
+                    modifier = Modifier.fillMaxSize()
+                )
             }
         }
     }

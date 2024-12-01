@@ -1,6 +1,7 @@
 package me.sanao1006.feature.home
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,7 +10,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,9 +28,31 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.rememberAsyncImagePainter
 import me.sanao1006.core.model.home.notes.TimelineUiState
 import me.sanao1006.core.model.home.notes.User
+import me.sanao1006.screens.HomeScreen
 
 @Composable
-fun TimeLineItem(
+internal fun TimelineColumn(
+    modifier: Modifier = Modifier,
+    state: HomeScreen.State,
+) {
+    LazyColumn(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        items(state.uiState) {
+            it?.let { timelineUiState ->
+                TimeLineItem(
+                    modifier = Modifier.padding(bottom = 8.dp),
+                    timelineUiState = timelineUiState
+                )
+                HorizontalDivider()
+            }
+        }
+    }
+}
+
+@Composable
+private fun TimeLineItem(
     modifier: Modifier = Modifier,
     timelineUiState: TimelineUiState
 ) {
