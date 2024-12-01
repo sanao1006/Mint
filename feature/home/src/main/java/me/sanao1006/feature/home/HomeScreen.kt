@@ -26,6 +26,7 @@ import ir.alirezaivaz.tablericons.TablerIcons
 import kotlinx.coroutines.launch
 import me.sanao1006.core.ui.MainScreenBottomSheet
 import me.sanao1006.screens.HomeScreen
+import me.sanao1006.screens.MainScreenType
 
 @CircuitInject(HomeScreen::class, SingletonComponent::class)
 @Composable
@@ -102,7 +103,7 @@ private fun HomeScreenUiContent(
             )
         },
         bottomBar = {
-            MainScreenBottomSheet()
+            MainScreenBottomSheet(mainSheetType = MainScreenType.HOME)
         },
         snackbarHost = snackbarHostState,
         floatingActionButton = floatingActionButton
