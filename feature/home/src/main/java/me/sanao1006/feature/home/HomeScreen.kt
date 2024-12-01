@@ -70,7 +70,7 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
                         pagerState.animateScrollToPage(2)
                     }
                 },
-                onFloatingButtonClick = {
+                floatingActionButton = {
                     FloatingActionButton(onClick = { state.eventSink(HomeScreen.Event.OnNoteCreateClicked) }) {
                         Icon(painter = painterResource(TablerIcons.Plus), "")
                     }
@@ -89,7 +89,7 @@ private fun HomeScreenUiContent(
     onHomeClick: () -> Unit,
     onSocialClick: () -> Unit,
     onGlobalClick: () -> Unit,
-    onFloatingButtonClick: @Composable () -> Unit
+    floatingActionButton: @Composable () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -101,7 +101,7 @@ private fun HomeScreenUiContent(
             )
         },
         snackbarHost = snackbarHostState,
-        floatingActionButton = onFloatingButtonClick
+        floatingActionButton = floatingActionButton
     ) {
         Column(modifier = Modifier.padding(it)) {
             HorizontalPager(
