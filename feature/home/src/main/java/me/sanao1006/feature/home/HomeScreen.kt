@@ -11,11 +11,12 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -29,60 +30,71 @@ import ir.alirezaivaz.tablericons.TablerIcons
 import kotlinx.coroutines.launch
 import me.sanao1006.screens.HomeScreen
 
-@OptIn(ExperimentalMaterial3Api::class)
 @CircuitInject(HomeScreen::class, SingletonComponent::class)
 @Composable
 fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
     Box(modifier = modifier.fillMaxSize()) {
         val pagerState = rememberPagerState(initialPage = 1) { 3 }
         val scope = rememberCoroutineScope()
+        val drawerState = rememberDrawerState(DrawerValue.Closed)
         val snackbarHostState = remember { SnackbarHostState() }
         LaunchedEffect(state.isSuccessCreateNote) {
             state.eventSink(HomeScreen.Event.OnNoteCreated(snackbarHostState, scope))
         }
-        Scaffold(
-            topBar = {
-                HomeScreenTopAppBar(
-                    onNavigationIconClick = {},
-                    onHomeClick = {
-                        scope.launch {
-                            state.eventSink(HomeScreen.Event.OnLocalTimelineClicked)
-                            pagerState.animateScrollToPage(0)
+
+        HomeScreenDrawer(
+            drawerState = drawerState
+        ) {
+            Scaffold(
+                topBar = {
+                    HomeScreenTopAppBar(
+                        onNavigationIconClick = {
+                            scope.launch {
+                                drawerState.apply {
+                                    if (isClosed) open() else close()
+                                }
+                            }
+                        },
+                        onHomeClick = {
+                            scope.launch {
+                                state.eventSink(HomeScreen.Event.OnLocalTimelineClicked)
+                                pagerState.animateScrollToPage(0)
+                            }
+                        },
+                        onSocialClick = {
+                            scope.launch {
+                                state.eventSink(HomeScreen.Event.OnSocialTimelineClicked)
+                                pagerState.animateScrollToPage(1)
+                            }
+                        },
+                        onGlobalClick = {
+                            scope.launch {
+                                state.eventSink(HomeScreen.Event.OnGlobalTimelineClicked)
+                                pagerState.animateScrollToPage(2)
+                            }
                         }
-                    },
-                    onSocialClick = {
-                        scope.launch {
-                            state.eventSink(HomeScreen.Event.OnSocialTimelineClicked)
-                            pagerState.animateScrollToPage(1)
-                        }
-                    },
-                    onGlobalClick = {
-                        scope.launch {
-                            state.eventSink(HomeScreen.Event.OnGlobalTimelineClicked)
-                            pagerState.animateScrollToPage(2)
-                        }
+                    )
+                },
+                snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+                floatingActionButton = {
+                    FloatingActionButton(onClick = { state.eventSink(HomeScreen.Event.OnNoteCreateClicked) }) {
+                        Icon(painter = painterResource(TablerIcons.Plus), "")
                     }
-                )
-            },
-            snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-            floatingActionButton = {
-                FloatingActionButton(onClick = { state.eventSink(HomeScreen.Event.OnNoteCreateClicked) }) {
-                    Icon(painter = painterResource(TablerIcons.Plus), "")
                 }
-            }
-        ) { it ->
-            Column(modifier = Modifier.padding(it)) {
-                HorizontalPager(
-                    state = pagerState
-                ) { page ->
-                    LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                        items(state.uiState) {
-                            it?.let { timelineUiState ->
-                                TimeLineItem(
-                                    modifier = Modifier.padding(bottom = 8.dp),
-                                    timelineUiState = timelineUiState
-                                )
-                                HorizontalDivider()
+            ) { it ->
+                Column(modifier = Modifier.padding(it)) {
+                    HorizontalPager(
+                        state = pagerState
+                    ) { page ->
+                        LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                            items(state.uiState) {
+                                it?.let { timelineUiState ->
+                                    TimeLineItem(
+                                        modifier = Modifier.padding(bottom = 8.dp),
+                                        timelineUiState = timelineUiState
+                                    )
+                                    HorizontalDivider()
+                                }
                             }
                         }
                     }
