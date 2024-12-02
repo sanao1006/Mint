@@ -35,6 +35,6 @@ include(
     "core:designsystem",
     "core:screens",
     "core:ui",
-    "core:res-value"
+    "core:res-values"
 )
 include(":misskey-streaming")
