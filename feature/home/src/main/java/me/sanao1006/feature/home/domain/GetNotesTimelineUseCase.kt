@@ -1,7 +1,7 @@
 package me.sanao1006.feature.home.domain
 
 import me.sanao1006.core.data.repository.NotesRepository
-import me.sanao1006.core.model.home.notes.NotesTimeLineRequestBody
+import me.sanao1006.core.model.notes.NotesTimeLineRequestBody
 import javax.inject.Inject
 
 class GetNotesTimelineUseCase @Inject constructor(
