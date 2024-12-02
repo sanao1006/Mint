@@ -75,15 +75,11 @@ private fun NoteScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .weight(1f),
-            text = state.uiState.noteText,
-            onValueChange = { note ->
-                state.eventSink(
-                    NoteScreen.Event.OnNoteTextChanged(
-                        note
-                    )
-                )
-            }
-        )
+            text = state.uiState.noteText
+        ) { note ->
+            state.eventSink(NoteScreen.Event.OnNoteTextChanged(note))
+        }
+
         NoteOptionRow(
             isShowBottomSheet = state.uiState.isShowBottomSheet,
             noteOptionContent = state.uiState.noteOptionContent,
@@ -98,11 +94,7 @@ private fun NoteScreenContent(
             onVisibilityClicked = { state.eventSink(NoteScreen.Event.OnVisibilityChanged(it)) },
             onLocalOnlyClicked = { state.eventSink(NoteScreen.Event.OnLocalOnlyChanged(it)) },
             onReactionAcceptanceClicked = {
-                state.eventSink(
-                    NoteScreen.Event.OnReactionAcceptanceChanged(
-                        it
-                    )
-                )
+                state.eventSink(NoteScreen.Event.OnReactionAcceptanceChanged(it))
             }
         )
     }
