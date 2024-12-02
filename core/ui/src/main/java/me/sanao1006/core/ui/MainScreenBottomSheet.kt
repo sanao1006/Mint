@@ -35,4 +35,5 @@ private enum class BottomSheetType(
     HOME(MainScreenType.HOME, TablerIcons.Home, { }),
     SEARCH(MainScreenType.SEARCH, TablerIcons.Search, { }),
     NOTIFICATION(MainScreenType.NOTIFICATION, TablerIcons.Bell, { }),
+    INFO(MainScreenType.Info, TablerIcons.LayoutGridAdd, { })
 }

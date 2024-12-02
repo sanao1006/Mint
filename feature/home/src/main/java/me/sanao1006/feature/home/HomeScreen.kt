@@ -3,13 +3,16 @@ package me.sanao1006.feature.home
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -20,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
@@ -73,8 +77,12 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
                     }
                 },
                 floatingActionButton = {
-                    FloatingActionButton(onClick = { state.eventSink(HomeScreen.Event.OnNoteCreateClicked) }) {
-                        Icon(painter = painterResource(TablerIcons.Plus), "")
+                    FloatingActionButton(
+                        modifier = Modifier.offset(y = 42.dp),
+                        shape = CircleShape,
+                        onClick = { state.eventSink(HomeScreen.Event.OnNoteCreateClicked) }
+                    ) {
+                        Icon(painter = painterResource(TablerIcons.Pencil), "")
                     }
                 }
             )
@@ -106,6 +114,7 @@ private fun HomeScreenUiContent(
             MainScreenBottomSheet(mainSheetType = MainScreenType.HOME)
         },
         snackbarHost = snackbarHostState,
+        floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = floatingActionButton
     ) {
         Column(modifier = Modifier.padding(it)) {

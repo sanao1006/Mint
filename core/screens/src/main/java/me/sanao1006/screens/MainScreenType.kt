@@ -4,4 +4,5 @@ enum class MainScreenType {
     HOME,
     SEARCH,
     NOTIFICATION,
+    Info
 }
