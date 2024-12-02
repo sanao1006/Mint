@@ -10,7 +10,7 @@ import ir.alirezaivaz.tablericons.TablerIcons
 import me.sanao1006.screens.MainScreenType
 
 @Composable
-fun MainScreenBottomSheet(
+fun MainScreenBottomAppBar(
     mainSheetType: MainScreenType,
     modifier: Modifier = Modifier
 ) {
