@@ -14,7 +14,7 @@ class AndroidFeaturePlugin : Plugin<Project> {
             }
 
             dependencies {
-
+                add("implementation", project(":core:resValues"))
                 implementation(libs.library("kotlinx.coroutines.core"))
                 implementation(libs.library("kotlinx.coroutines.android"))
             }
