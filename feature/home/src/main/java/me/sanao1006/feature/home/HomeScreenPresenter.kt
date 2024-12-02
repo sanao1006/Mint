@@ -9,6 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import com.slack.circuit.codegen.annotations.CircuitInject
@@ -34,6 +35,7 @@ import me.sanao1006.misskey_streaming.WebsocketRepository
 import me.sanao1006.misskey_streaming.model.StreamingResponse
 import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.NoteScreen
+import me.snao1006.res_value.ResString
 
 class HomeScreenPresenter @AssistedInject constructor(
     @Assisted private val navigator: Navigator,
@@ -48,6 +50,7 @@ class HomeScreenPresenter @AssistedInject constructor(
     @Composable
     override fun present(): HomeScreen.State {
         var isSuccessCreateNote: Boolean? by rememberRetained { mutableStateOf(null) }
+        val context = LocalContext.current
         val nav = rememberAnsweringNavigator<NoteScreen.Result>(navigator) { result ->
             isSuccessCreateNote = result.success
         }
@@ -102,7 +105,11 @@ class HomeScreenPresenter @AssistedInject constructor(
                     isSuccessCreateNote?.let { flg ->
                         event.scope.launch {
                             event.snackbarHostState.showSnackbar(
-                                message = if (flg) "Your post has been created" else "Failed to create post"
+                                message = if (flg) {
+                                    context.getString(ResString.post_result_message_success)
+                                } else {
+                                    context.getString(ResString.post_result_message_failed)
+                                }
                             )
                         }
                     }

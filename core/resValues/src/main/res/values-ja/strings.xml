@@ -1,2 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="create_post">投稿！</string>
+    <string name="note_placeholder">どうしたんだい？</string>
+    <string name="enter_domain">ドメインを入力してください</string>
+    <string name="login_authentication">認証</string>
+    <string name="login_re_authentication">再認証</string>
+    <string name="login">ログインする！</string>
+    <string name="post_result_message_success">ノートを投稿しました</string>
+    <string name="post_result_message_failed">ノートの投稿に失敗したようです...</string>
+</resources>

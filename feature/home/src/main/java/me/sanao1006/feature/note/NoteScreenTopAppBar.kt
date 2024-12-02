@@ -10,8 +10,10 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ir.alirezaivaz.tablericons.TablerIcons
+import me.snao1006.res_value.ResString
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,7 +37,7 @@ fun NoteScreenTopAppBar(
                 modifier = Modifier.padding(horizontal = 8.dp),
                 onClick = onNotePostClicked
             ) {
-                Text("Post")
+                Text(stringResource(ResString.create_post))
             }
         },
         title = {}

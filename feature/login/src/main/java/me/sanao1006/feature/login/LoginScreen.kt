@@ -16,12 +16,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
 import me.sanao1006.screens.AuthStateType
 import me.sanao1006.screens.LoginScreen
+import me.snao1006.res_value.ResString
 
 @CircuitInject(LoginScreen::class, SingletonComponent::class)
 @Composable
@@ -45,7 +47,7 @@ private fun LoginContent(state: LoginScreen.State) {
         val scope = rememberCoroutineScope()
         val context = LocalContext.current
         Text(
-            text = "Enter domain",
+            text = stringResource(ResString.enter_domain),
             style = MaterialTheme.typography.headlineMedium
         )
         Spacer(modifier = Modifier.padding(8.dp))
@@ -66,7 +68,11 @@ private fun LoginContent(state: LoginScreen.State) {
                 )
             }
         ) {
-            Text("OK")
+            if (state.authState == AuthStateType.WAITING) {
+                Text(stringResource(ResString.login_re_authentication))
+            } else {
+                Text(stringResource(ResString.login_authentication))
+            }
         }
         if (state.authState == AuthStateType.WAITING) {
             Spacer(
@@ -79,7 +85,7 @@ private fun LoginContent(state: LoginScreen.State) {
                     .fillMaxWidth(),
                 onClick = { state.eventSink(LoginScreen.Event.OnAuthButtonClicked(scope)) }
             ) {
-                Text("Auth")
+                Text(stringResource(ResString.login))
             }
         }
     }

@@ -16,6 +16,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.retained.rememberRetained
@@ -25,6 +26,7 @@ import me.sanao1006.core.model.home.notes.NoteOptionContent
 import me.sanao1006.core.model.home.notes.ReactionAcceptance
 import me.sanao1006.core.model.home.notes.Visibility
 import me.sanao1006.screens.NoteScreen
+import me.snao1006.res_value.ResString
 
 @CircuitInject(NoteScreen::class, SingletonComponent::class)
 @Composable
@@ -121,7 +123,7 @@ private fun NoteScreenTextField(
         onValueChange = onValueChange,
         placeholder = {
             Text(
-                text = "Note",
+                text = stringResource(ResString.note_placeholder),
                 style = MaterialTheme.typography.headlineSmall
             )
         }
