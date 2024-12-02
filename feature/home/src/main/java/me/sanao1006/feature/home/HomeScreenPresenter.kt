@@ -26,8 +26,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonPrimitive
-import me.sanao1006.core.model.home.notes.TimelineUiState
-import me.sanao1006.core.model.home.notes.User
 import me.sanao1006.feature.home.domain.GetNotesTimelineUseCase
 import me.sanao1006.feature.home.domain.TimelineType
 import me.sanao1006.misskey_streaming.StreamingChannel
@@ -57,7 +55,10 @@ class HomeScreenPresenter @AssistedInject constructor(
 
         val scope = rememberCoroutineScope()
         var timelineType by rememberRetained { mutableStateOf(TimelineType.SOCIAL) }
-        val timelineUiState by produceState<List<TimelineUiState>>(emptyList(), timelineType) {
+        val timelineUiState by produceState<List<me.sanao1006.core.model.notes.TimelineUiState>>(
+            emptyList(),
+            timelineType
+        ) {
             value = getNotesTimelineUseCase(timelineType = timelineType)
         }
 
@@ -74,18 +75,18 @@ class HomeScreenPresenter @AssistedInject constructor(
             websocketRepository.sendAction(streamingChannel = StreamingChannel.SOCIAL)
         }
 
-        val combinedList: List<TimelineUiState> by produceState(
+        val combinedList: List<me.sanao1006.core.model.notes.TimelineUiState> by produceState(
             emptyList(),
             timelineUiState,
             streaming.value
         ) {
             val text = streaming.value.body.body?.get("text")?.jsonPrimitive?.content ?: ""
-            val user = json.decodeFromString<User>(
+            val user = json.decodeFromString<me.sanao1006.core.model.notes.User>(
                 streaming.value.body.body?.get("user")?.toString() ?: "{}"
             )
 
-            val mutableList = mutableListOf<TimelineUiState>(
-                TimelineUiState(
+            val mutableList = mutableListOf<me.sanao1006.core.model.notes.TimelineUiState>(
+                me.sanao1006.core.model.notes.TimelineUiState(
                     text = text,
                     user = user,
                 )

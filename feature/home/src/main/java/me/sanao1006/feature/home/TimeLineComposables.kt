@@ -26,8 +26,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import coil3.compose.rememberAsyncImagePainter
-import me.sanao1006.core.model.home.notes.TimelineUiState
-import me.sanao1006.core.model.home.notes.User
 import me.sanao1006.screens.HomeScreen
 
 @Composable
@@ -54,7 +52,7 @@ internal fun TimelineColumn(
 @Composable
 private fun TimeLineItem(
     modifier: Modifier = Modifier,
-    timelineUiState: TimelineUiState
+    timelineUiState: me.sanao1006.core.model.notes.TimelineUiState
 ) {
     Column(
         modifier = modifier
@@ -104,8 +102,8 @@ private fun TimeLineItem(
 @Composable
 fun PreviewTimeLineItem() {
     TimeLineItem(
-        timelineUiState = TimelineUiState(
-            user = User(
+        timelineUiState = me.sanao1006.core.model.notes.TimelineUiState(
+            user = me.sanao1006.core.model.notes.User(
                 name = "sanao1006",
                 avatarUrl = ""
             ),

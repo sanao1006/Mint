@@ -1,4 +1,4 @@
-package me.sanao1006.core.model.home.notes
+package me.sanao1006.core.model.notes
 
 
 import kotlinx.serialization.SerialName
@@ -13,7 +13,7 @@ data class File(
     @SerialName("createdAt")
     val createdAt: String = "",
     @SerialName("folder")
-    val folder: Folder? = Folder(),
+    val folder: me.sanao1006.core.model.notes.Folder? = me.sanao1006.core.model.notes.Folder(),
     @SerialName("folderId")
     val folderId: String? = null,
     @SerialName("id")
@@ -25,7 +25,7 @@ data class File(
     @SerialName("name")
     val name: String = "",
     @SerialName("properties")
-    val properties: Properties? = Properties(),
+    val properties: me.sanao1006.core.model.notes.Properties? = me.sanao1006.core.model.notes.Properties(),
     @SerialName("size")
     val size: Int = 0,
     @SerialName("thumbnailUrl")
@@ -35,7 +35,7 @@ data class File(
     @SerialName("url")
     val url: String = "",
     @SerialName("user")
-    val user: User? = User(),
+    val user: me.sanao1006.core.model.notes.User? = me.sanao1006.core.model.notes.User(),
     @SerialName("userId")
     val userId: String? = null
 )

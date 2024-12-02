@@ -8,13 +8,12 @@ import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.screen.Screen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.parcelize.Parcelize
-import me.sanao1006.core.model.home.notes.TimelineUiState
 
 @Parcelize
 data object HomeScreen : Screen {
     @Immutable
     data class State(
-        val uiState: List<TimelineUiState?> = listOf(),
+        val uiState: List<me.sanao1006.core.model.notes.TimelineUiState?> = listOf(),
         val navigator: Navigator,
         val isSuccessCreateNote: Boolean? = null,
         val eventSink: (Event) -> Unit,

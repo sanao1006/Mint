@@ -20,9 +20,6 @@ import androidx.compose.ui.unit.dp
 import com.slack.circuit.overlay.OverlayEffect
 import com.slack.circuitx.overlays.BottomSheetOverlay
 import ir.alirezaivaz.tablericons.TablerIcons
-import me.sanao1006.core.model.home.notes.NoteOptionContent
-import me.sanao1006.core.model.home.notes.ReactionAcceptance
-import me.sanao1006.core.model.home.notes.Visibility
 
 // 共通インターフェースの定義
 interface ModelSheetItem {
@@ -32,13 +29,13 @@ interface ModelSheetItem {
 
 // 各enumクラスでインターフェースを実装
 enum class VisibilityItem(
-    val value: Visibility,
+    val value: me.sanao1006.core.model.notes.Visibility,
     override val resId: Int,
     override val description: String
 ) : ModelSheetItem {
-    Public(Visibility.PUBLIC, TablerIcons.World, "Public"),
-    Home(Visibility.HOME, TablerIcons.Home, "Home"),
-    Followers(Visibility.FOLLOWERS, TablerIcons.Lock, "Followers");
+    Public(me.sanao1006.core.model.notes.Visibility.PUBLIC, TablerIcons.World, "Public"),
+    Home(me.sanao1006.core.model.notes.Visibility.HOME, TablerIcons.Home, "Home"),
+    Followers(me.sanao1006.core.model.notes.Visibility.FOLLOWERS, TablerIcons.Lock, "Followers");
 
     companion object {
         fun getAllItems(): List<VisibilityItem> = listOf(Public, Home, Followers)
@@ -59,19 +56,23 @@ enum class LocalOnlyItem(
 }
 
 enum class ReactionAcceptanceItem(
-    val value: ReactionAcceptance?,
+    val value: me.sanao1006.core.model.notes.ReactionAcceptance?,
     override val resId: Int,
     override val description: String
 ) : ModelSheetItem {
     All(null, TablerIcons.Icons, "All"),
-    LikeOnly(ReactionAcceptance.LIKE_ONLY, TablerIcons.Heart, "Like Only"),
+    LikeOnly(
+        me.sanao1006.core.model.notes.ReactionAcceptance.LIKE_ONLY,
+        TablerIcons.Heart,
+        "Like Only"
+    ),
     LikeOnlyForRemote(
-        ReactionAcceptance.LIKE_ONLY_FOR_REMOTE,
+        me.sanao1006.core.model.notes.ReactionAcceptance.LIKE_ONLY_FOR_REMOTE,
         TablerIcons.HeartDiscount,
         "Like Only For Remote"
     ),
     NonSensitiveOnly(
-        ReactionAcceptance.NON_SENSITIVE_ONLY,
+        me.sanao1006.core.model.notes.ReactionAcceptance.NON_SENSITIVE_ONLY,
         TablerIcons.MoodKid,
         "Non Sensitive Only"
     );
@@ -83,30 +84,30 @@ enum class ReactionAcceptanceItem(
 }
 
 data class NoteOptionState(
-    val visibility: Visibility,
+    val visibility: me.sanao1006.core.model.notes.Visibility,
     val localOnly: Boolean,
-    val reactionAcceptance: ReactionAcceptance?,
+    val reactionAcceptance: me.sanao1006.core.model.notes.ReactionAcceptance?,
 )
 
 @ExperimentalMaterial3Api
 @Composable
 internal fun NoteOptionRow(
     isShowBottomSheet: Boolean,
-    noteOptionContent: NoteOptionContent,
+    noteOptionContent: me.sanao1006.core.model.notes.NoteOptionContent,
     noteOptionState: NoteOptionState,
     modifier: Modifier = Modifier,
     onBottomSheetOuterClicked: () -> Unit,
-    onIconClicked: (NoteOptionContent) -> Unit,
-    onVisibilityClicked: (Visibility) -> Unit,
+    onIconClicked: (me.sanao1006.core.model.notes.NoteOptionContent) -> Unit,
+    onVisibilityClicked: (me.sanao1006.core.model.notes.Visibility) -> Unit,
     onLocalOnlyClicked: (Boolean) -> Unit,
-    onReactionAcceptanceClicked: (ReactionAcceptance?) -> Unit
+    onReactionAcceptanceClicked: (me.sanao1006.core.model.notes.ReactionAcceptance?) -> Unit
 ) {
     OverlayEffect(isShowBottomSheet) {
         if (isShowBottomSheet) {
             val model = when (noteOptionContent) {
-                NoteOptionContent.VISIBILITY -> VisibilityItem.getAllItems()
-                NoteOptionContent.LOCAL_ONLY -> LocalOnlyItem.getAllItems()
-                NoteOptionContent.REACTION_ACCEPTANCE -> ReactionAcceptanceItem.getAllItems()
+                me.sanao1006.core.model.notes.NoteOptionContent.VISIBILITY -> VisibilityItem.getAllItems()
+                me.sanao1006.core.model.notes.NoteOptionContent.LOCAL_ONLY -> LocalOnlyItem.getAllItems()
+                me.sanao1006.core.model.notes.NoteOptionContent.REACTION_ACCEPTANCE -> ReactionAcceptanceItem.getAllItems()
             }
             show(
                 BottomSheetOverlay(
@@ -154,29 +155,29 @@ internal fun NoteOptionRow(
         verticalAlignment = Alignment.CenterVertically
     ) {
         val visibilityIcon = when (noteOptionState.visibility) {
-            Visibility.PUBLIC -> TablerIcons.World
-            Visibility.HOME -> TablerIcons.Home
-            Visibility.FOLLOWERS -> TablerIcons.Lock
-            Visibility.SPECIFIED -> TablerIcons.Mail
+            me.sanao1006.core.model.notes.Visibility.PUBLIC -> TablerIcons.World
+            me.sanao1006.core.model.notes.Visibility.HOME -> TablerIcons.Home
+            me.sanao1006.core.model.notes.Visibility.FOLLOWERS -> TablerIcons.Lock
+            me.sanao1006.core.model.notes.Visibility.SPECIFIED -> TablerIcons.Mail
         }
         val localOnlyIcon =
             if (noteOptionState.localOnly) TablerIcons.Rocket else TablerIcons.RocketOff
         val reactionAcceptanceIcon = when (noteOptionState.reactionAcceptance) {
-            ReactionAcceptance.LIKE_ONLY -> TablerIcons.Heart
-            ReactionAcceptance.LIKE_ONLY_FOR_REMOTE -> TablerIcons.HeartDiscount
-            ReactionAcceptance.NON_SENSITIVE_ONLY -> TablerIcons.MoodKid
+            me.sanao1006.core.model.notes.ReactionAcceptance.LIKE_ONLY -> TablerIcons.Heart
+            me.sanao1006.core.model.notes.ReactionAcceptance.LIKE_ONLY_FOR_REMOTE -> TablerIcons.HeartDiscount
+            me.sanao1006.core.model.notes.ReactionAcceptance.NON_SENSITIVE_ONLY -> TablerIcons.MoodKid
             null -> TablerIcons.Icons
         }
 
-        IconButton(onClick = { onIconClicked(NoteOptionContent.VISIBILITY) }) {
+        IconButton(onClick = { onIconClicked(me.sanao1006.core.model.notes.NoteOptionContent.VISIBILITY) }) {
             Icon(painter = painterResource(visibilityIcon), "")
         }
         Spacer(modifier = Modifier.width(4.dp))
-        IconButton(onClick = { onIconClicked(NoteOptionContent.LOCAL_ONLY) }) {
+        IconButton(onClick = { onIconClicked(me.sanao1006.core.model.notes.NoteOptionContent.LOCAL_ONLY) }) {
             Icon(painter = painterResource(localOnlyIcon), "")
         }
         Spacer(modifier = Modifier.width(4.dp))
-        IconButton(onClick = { onIconClicked(NoteOptionContent.REACTION_ACCEPTANCE) }) {
+        IconButton(onClick = { onIconClicked(me.sanao1006.core.model.notes.NoteOptionContent.REACTION_ACCEPTANCE) }) {
             Icon(painter = painterResource(reactionAcceptanceIcon), "")
         }
         Spacer(modifier = Modifier.width(8.dp))

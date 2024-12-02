@@ -22,9 +22,6 @@ import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.retained.rememberRetained
 import dagger.hilt.components.SingletonComponent
 import me.sanao1006.core.designsystem.MintTheme
-import me.sanao1006.core.model.home.notes.NoteOptionContent
-import me.sanao1006.core.model.home.notes.ReactionAcceptance
-import me.sanao1006.core.model.home.notes.Visibility
 import me.sanao1006.screens.NoteScreen
 import me.snao1006.res_value.ResString
 
@@ -137,11 +134,11 @@ fun A() {
     MintTheme {
         NoteOptionRow(
             true,
-            NoteOptionContent.VISIBILITY,
+            me.sanao1006.core.model.notes.NoteOptionContent.VISIBILITY,
             NoteOptionState(
-                Visibility.PUBLIC,
+                me.sanao1006.core.model.notes.Visibility.PUBLIC,
                 false,
-                ReactionAcceptance.LIKE_ONLY
+                me.sanao1006.core.model.notes.ReactionAcceptance.LIKE_ONLY
             ),
             Modifier,
             {},

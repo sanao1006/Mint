@@ -1,4 +1,4 @@
-package me.sanao1006.core.model.home.notes
+package me.sanao1006.core.model.notes
 
 
 import kotlinx.serialization.SerialName
@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class NotesTimeline(
     @SerialName("channel")
-    val channel: Channel = Channel(),
+    val channel: me.sanao1006.core.model.notes.Channel = me.sanao1006.core.model.notes.Channel(),
     @SerialName("channelId")
     val channelId: String = "",
     @SerialName("clippedCount")
@@ -21,7 +21,7 @@ data class NotesTimeline(
     @SerialName("fileIds")
     val fileIds: List<String> = listOf(),
     @SerialName("files")
-    val files: List<File> = listOf(),
+    val files: List<me.sanao1006.core.model.notes.File> = listOf(),
     @SerialName("id")
     val id: String = "",
     @SerialName("isHidden")
@@ -33,15 +33,15 @@ data class NotesTimeline(
     @SerialName("myReaction")
     val myReaction: String? = null,
     @SerialName("poll")
-    val poll: Poll? = Poll(),
+    val poll: me.sanao1006.core.model.notes.Poll? = me.sanao1006.core.model.notes.Poll(),
     @SerialName("reactionAcceptance")
     val reactionAcceptance: String? = null,
     @SerialName("reactionAndUserPairCache")
     val reactionAndUserPairCache: List<String> = listOf(),
     @SerialName("reactions")
-    val reactions: Reactions? = Reactions(),
+    val reactions: me.sanao1006.core.model.notes.Reactions? = me.sanao1006.core.model.notes.Reactions(),
     @SerialName("renote")
-    val renote: Renote? = Renote(),
+    val renote: me.sanao1006.core.model.notes.Renote? = me.sanao1006.core.model.notes.Renote(),
     @SerialName("renoteCount")
     val renoteCount: Int = 0,
     @SerialName("renoteId")
@@ -49,7 +49,7 @@ data class NotesTimeline(
     @SerialName("repliesCount")
     val repliesCount: Int = 0,
     @SerialName("reply")
-    val reply: Reply? = Reply(),
+    val reply: me.sanao1006.core.model.notes.Reply? = me.sanao1006.core.model.notes.Reply(),
     @SerialName("replyId")
     val replyId: String? = null,
     @SerialName("tags")
@@ -61,7 +61,7 @@ data class NotesTimeline(
     @SerialName("url")
     val url: String = "",
     @SerialName("user")
-    val user: User? = User(),
+    val user: me.sanao1006.core.model.notes.User? = me.sanao1006.core.model.notes.User(),
     @SerialName("userId")
     val userId: String = "",
     @SerialName("visibility")
@@ -69,8 +69,8 @@ data class NotesTimeline(
     @SerialName("visibleUserIds")
     val visibleUserIds: List<String> = listOf()
 ) {
-    fun toTimelineUiState(): TimelineUiState {
-        return TimelineUiState(
+    fun toTimelineUiState(): me.sanao1006.core.model.notes.TimelineUiState {
+        return me.sanao1006.core.model.notes.TimelineUiState(
             user = user,
             text = text.orEmpty()
         )

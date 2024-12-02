@@ -5,15 +5,11 @@ import com.slack.circuit.runtime.screen.PopResult
 import com.slack.circuit.runtime.screen.Screen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.parcelize.Parcelize
-import me.sanao1006.core.model.home.notes.NoteOptionContent
-import me.sanao1006.core.model.home.notes.NoteScreenUiState
-import me.sanao1006.core.model.home.notes.ReactionAcceptance
-import me.sanao1006.core.model.home.notes.Visibility
 
 @Parcelize
 data object NoteScreen : Screen {
     data class State(
-        val uiState: NoteScreenUiState,
+        val uiState: me.sanao1006.core.model.notes.NoteScreenUiState,
         val eventSink: (Event) -> Unit
     ) : CircuitUiState
 
@@ -21,11 +17,15 @@ data object NoteScreen : Screen {
         data object OnBackClicked : Event()
         data class OnNoteTextChanged(val text: String) : Event()
         data class OnNotePostClicked(val scope: CoroutineScope) : Event()
-        data class OnShowBottomSheet(val optionContent: NoteOptionContent) : Event()
+        data class OnShowBottomSheet(val optionContent: me.sanao1006.core.model.notes.NoteOptionContent) :
+            Event()
+
         data object OnHideBottomSheet : Event()
-        data class OnVisibilityChanged(val visibility: Visibility) : Event()
+        data class OnVisibilityChanged(val visibility: me.sanao1006.core.model.notes.Visibility) :
+            Event()
+
         data class OnLocalOnlyChanged(val localOnly: Boolean) : Event()
-        data class OnReactionAcceptanceChanged(val reactionAcceptance: ReactionAcceptance?) :
+        data class OnReactionAcceptanceChanged(val reactionAcceptance: me.sanao1006.core.model.notes.ReactionAcceptance?) :
             Event()
     }
 

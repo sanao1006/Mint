@@ -1,9 +1,6 @@
 package me.sanao1006.feature.note.domain
 
 import me.sanao1006.core.data.repository.NotesRepository
-import me.sanao1006.core.model.home.notes.NotesCreateRequestBody
-import me.sanao1006.core.model.home.notes.ReactionAcceptance
-import me.sanao1006.core.model.home.notes.Visibility
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -13,12 +10,12 @@ class CreateNotesUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(
         text: String,
-        visibility: Visibility,
+        visibility: me.sanao1006.core.model.notes.Visibility,
         localOnly: Boolean,
-        reactionAcceptance: ReactionAcceptance?
+        reactionAcceptance: me.sanao1006.core.model.notes.ReactionAcceptance?
     ) {
         notesRepository.createNotes(
-            notesCreateRequestBody = NotesCreateRequestBody(
+            notesCreateRequestBody = me.sanao1006.core.model.notes.NotesCreateRequestBody(
                 text = text,
                 visibility = visibility,
                 localOnly = localOnly,

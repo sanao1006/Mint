@@ -13,7 +13,6 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.launch
-import me.sanao1006.core.model.home.notes.NoteScreenUiState
 import me.sanao1006.feature.note.domain.CreateNotesUseCase
 import me.sanao1006.screens.NoteScreen
 
@@ -23,7 +22,13 @@ class NoteScreenPresenter @AssistedInject constructor(
 ) : Presenter<NoteScreen.State> {
     @Composable
     override fun present(): NoteScreen.State {
-        var uiState by rememberRetained { mutableStateOf(NoteScreenUiState("")) }
+        var uiState by rememberRetained {
+            mutableStateOf(
+                me.sanao1006.core.model.notes.NoteScreenUiState(
+                    ""
+                )
+            )
+        }
         return NoteScreen.State(
             uiState = uiState
         ) {

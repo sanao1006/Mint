@@ -1,7 +1,7 @@
-package me.sanao1006.core.model.home.notes
+package me.sanao1006.core.model.notes
 
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-class Poll
+class Renote

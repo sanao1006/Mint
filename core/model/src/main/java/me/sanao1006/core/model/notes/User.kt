@@ -1,4 +1,4 @@
-package me.sanao1006.core.model.home.notes
+package me.sanao1006.core.model.notes
 
 
 import kotlinx.serialization.SerialName
@@ -9,19 +9,19 @@ data class User(
     @SerialName("avatarBlurhash")
     val avatarBlurhash: String? = null,
     @SerialName("avatarDecorations")
-    val avatarDecorations: List<AvatarDecoration> = listOf(),
+    val avatarDecorations: List<me.sanao1006.core.model.notes.AvatarDecoration> = listOf(),
     @SerialName("avatarUrl")
     val avatarUrl: String? = null,
     @SerialName("badgeRoles")
-    val badgeRoles: List<BadgeRole> = listOf(),
+    val badgeRoles: List<me.sanao1006.core.model.notes.BadgeRole> = listOf(),
     @SerialName("emojis")
-    val emojis: Emojis = Emojis(),
+    val emojis: me.sanao1006.core.model.notes.Emojis = me.sanao1006.core.model.notes.Emojis(),
     @SerialName("host")
     val host: String? = null,
     @SerialName("id")
     val id: String = "",
     @SerialName("instance")
-    val instance: Instance = Instance(),
+    val instance: me.sanao1006.core.model.notes.Instance = me.sanao1006.core.model.notes.Instance(),
     @SerialName("isBot")
     val isBot: Boolean = false,
     @SerialName("isCat")
