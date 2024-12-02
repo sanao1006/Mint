@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -37,9 +36,7 @@ fun NoteScreenUi(state: NoteScreen.State, modifier: Modifier) {
             focusRequester.requestFocus()
         }
         Box(
-            modifier = modifier
-                .fillMaxSize()
-                .safeDrawingPadding()
+            modifier = modifier.fillMaxSize()
         ) {
             Scaffold(
                 topBar = {
