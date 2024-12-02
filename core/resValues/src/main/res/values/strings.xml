@@ -8,4 +8,13 @@
     <string name="login">Login!</string>
     <string name="post_result_message_success">"Your post has been created"</string>
     <string name="post_result_message_failed">Sorry, Failed to create post</string>
+    <string name="bottom_sheet_visibility_item_description_public">Public</string>
+    <string name="bottom_sheet_visibility_item_description_home">Home</string>
+    <string name="bottom_sheet_visibility_item_description_followers">Followers</string>
+    <string name="bottom_sheet_local_only_item_description_local_only">Local Only</string>
+    <string name="bottom_sheet_local_only_item_description_not_local_only">Not Local Only</string>
+    <string name="bottom_sheet_reaction_acceptance_item_description_all">All</string>
+    <string name="bottom_sheet_reaction_acceptance_item_description_like_only">Like Only</string>
+    <string name="bottom_sheet_reaction_acceptance_item_description_like_only_for_remote">Like Only For Remote</string>
+    <string name="bottom_sheet_reaction_acceptance_item_description_not_sensitive_only">Non Sensitive Only</string>
 </resources>

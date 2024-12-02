@@ -8,4 +8,13 @@
     <string name="login">ログインする！</string>
     <string name="post_result_message_success">ノートを投稿しました</string>
     <string name="post_result_message_failed">ノートの投稿に失敗したようです...</string>
+    <string name="bottom_sheet_visibility_item_description_public">パブリック</string>
+    <string name="bottom_sheet_visibility_item_description_home">ホーム</string>
+    <string name="bottom_sheet_visibility_item_description_followers">フォロワー</string>
+    <string name="bottom_sheet_local_only_item_description_local_only">連合なし</string>
+    <string name="bottom_sheet_local_only_item_description_not_local_only">連合あり</string>
+    <string name="bottom_sheet_reaction_acceptance_item_description_all">全て</string>
+    <string name="bottom_sheet_reaction_acceptance_item_description_like_only">いいねのみ</string>
+    <string name="bottom_sheet_reaction_acceptance_item_description_like_only_for_remote">全て（リモートはいいねのみ）</string>
+    <string name="bottom_sheet_reaction_acceptance_item_description_not_sensitive_only">非センシティブのみ</string>
 </resources>

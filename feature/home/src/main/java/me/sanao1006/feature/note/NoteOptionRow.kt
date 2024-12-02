@@ -1,5 +1,6 @@
 package me.sanao1006.feature.note
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.slack.circuit.overlay.OverlayEffect
 import com.slack.circuitx.overlays.BottomSheetOverlay
@@ -23,20 +25,33 @@ import ir.alirezaivaz.tablericons.TablerIcons
 import me.sanao1006.core.model.notes.NoteOptionContent
 import me.sanao1006.core.model.notes.ReactionAcceptance
 import me.sanao1006.core.model.notes.Visibility
+import me.snao1006.res_value.ResString
 
 interface ModelSheetItem {
     val resId: Int
-    val description: String
+    val description: Int
 }
 
 enum class VisibilityItem(
     val value: Visibility,
     override val resId: Int,
-    override val description: String
+    @StringRes override val description: Int
 ) : ModelSheetItem {
-    Public(Visibility.PUBLIC, TablerIcons.World, "Public"),
-    Home(Visibility.HOME, TablerIcons.Home, "Home"),
-    Followers(Visibility.FOLLOWERS, TablerIcons.Lock, "Followers");
+    Public(
+        Visibility.PUBLIC,
+        TablerIcons.World,
+        ResString.bottom_sheet_visibility_item_description_public
+    ),
+    Home(
+        Visibility.HOME,
+        TablerIcons.Home,
+        ResString.bottom_sheet_visibility_item_description_home
+    ),
+    Followers(
+        Visibility.FOLLOWERS,
+        TablerIcons.Lock,
+        ResString.bottom_sheet_visibility_item_description_followers
+    );
 
     companion object {
         fun getAllItems(): List<VisibilityItem> = listOf(Public, Home, Followers)
@@ -46,10 +61,18 @@ enum class VisibilityItem(
 enum class LocalOnlyItem(
     val value: Boolean,
     override val resId: Int,
-    override val description: String
+    @StringRes override val description: Int
 ) : ModelSheetItem {
-    LocalOnly(true, TablerIcons.Rocket, "Local Only"),
-    NotLocalOnly(false, TablerIcons.RocketOff, "Not Local Only");
+    LocalOnly(
+        true,
+        TablerIcons.Rocket,
+        ResString.bottom_sheet_local_only_item_description_local_only
+    ),
+    NotLocalOnly(
+        false,
+        TablerIcons.RocketOff,
+        ResString.bottom_sheet_local_only_item_description_not_local_only
+    );
 
     companion object {
         fun getAllItems(): List<LocalOnlyItem> = listOf(LocalOnly, NotLocalOnly)
@@ -59,23 +82,23 @@ enum class LocalOnlyItem(
 enum class ReactionAcceptanceItem(
     val value: ReactionAcceptance?,
     override val resId: Int,
-    override val description: String
+    @StringRes override val description: Int
 ) : ModelSheetItem {
-    All(null, TablerIcons.Icons, "All"),
+    All(null, TablerIcons.Icons, ResString.bottom_sheet_reaction_acceptance_item_description_all),
     LikeOnly(
         ReactionAcceptance.LIKE_ONLY,
         TablerIcons.Heart,
-        "Like Only"
+        ResString.bottom_sheet_reaction_acceptance_item_description_like_only
     ),
     LikeOnlyForRemote(
         ReactionAcceptance.LIKE_ONLY_FOR_REMOTE,
         TablerIcons.HeartDiscount,
-        "Like Only For Remote"
+        ResString.bottom_sheet_reaction_acceptance_item_description_like_only_for_remote
     ),
     NonSensitiveOnly(
         ReactionAcceptance.NON_SENSITIVE_ONLY,
         TablerIcons.MoodKid,
-        "Non Sensitive Only"
+        ResString.bottom_sheet_reaction_acceptance_item_description_not_sensitive_only
     );
 
     companion object {
@@ -140,7 +163,7 @@ internal fun NoteOptionRow(
                                 ) {
                                     Icon(painter = painterResource(it.resId), "")
                                     Spacer(modifier = Modifier.width(8.dp))
-                                    Text(text = it.description)
+                                    Text(text = stringResource(it.description))
                                 }
                             }
                         }
