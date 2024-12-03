@@ -4,4 +4,5 @@
     <style name="Theme.Mint" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:windowSplashScreenBackground">@color/splash_background</item>
     </style>
+
 </resources>
