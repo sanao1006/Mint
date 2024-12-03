@@ -1,4 +1,4 @@
-package me.sanao1006.feature.home
+package me.sanao1006.core.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -26,10 +26,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import coil3.compose.rememberAsyncImagePainter
+import me.sanao1006.core.model.notes.TimelineUiState
+import me.sanao1006.core.model.notes.User
 import me.sanao1006.screens.HomeScreen
 
+
 @Composable
-internal fun TimelineColumn(
+fun TimelineColumn(
     modifier: Modifier = Modifier,
     state: HomeScreen.State,
 ) {
@@ -39,7 +42,7 @@ internal fun TimelineColumn(
     ) {
         items(state.uiState) {
             it?.let { timelineUiState ->
-                TimeLineItem(
+                TimelineItem(
                     modifier = Modifier.padding(bottom = 8.dp),
                     timelineUiState = timelineUiState
                 )
@@ -50,9 +53,9 @@ internal fun TimelineColumn(
 }
 
 @Composable
-private fun TimeLineItem(
+private fun TimelineItem(
     modifier: Modifier = Modifier,
-    timelineUiState: me.sanao1006.core.model.notes.TimelineUiState
+    timelineUiState: TimelineUiState
 ) {
     Column(
         modifier = modifier
@@ -101,9 +104,9 @@ private fun TimeLineItem(
 @PreviewLightDark
 @Composable
 fun PreviewTimeLineItem() {
-    TimeLineItem(
-        timelineUiState = me.sanao1006.core.model.notes.TimelineUiState(
-            user = me.sanao1006.core.model.notes.User(
+    TimelineItem(
+        timelineUiState = TimelineUiState(
+            user = User(
                 name = "sanao1006",
                 avatarUrl = ""
             ),

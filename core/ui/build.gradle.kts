@@ -6,4 +6,5 @@ plugins {
 
 dependencies {
     implementation(projects.core.screens)
+    implementation(projects.core.model)
 }
