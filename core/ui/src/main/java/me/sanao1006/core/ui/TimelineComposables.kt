@@ -14,6 +14,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,11 +23,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import coil3.compose.rememberAsyncImagePainter
+import ir.alirezaivaz.tablericons.TablerIcons
 import me.sanao1006.core.model.notes.TimelineUiState
 import me.sanao1006.core.model.notes.User
 import me.sanao1006.screens.HomeScreen
@@ -98,8 +102,48 @@ private fun TimelineItem(
         }
         Spacer(modifier = Modifier.height(2.dp))
         Text(text = timelineUiState.text)
+        Spacer(modifier = Modifier.height(8.dp))
+        TimelineActionRow(
+            modifier = Modifier.fillMaxWidth(),
+            onReplyClick = {},
+            onRepostClick = {},
+            onReactionClick = {}
+        ) {
+
+        }
     }
 }
+
+@Composable
+private fun TimelineActionRow(
+    modifier: Modifier = Modifier,
+    onReplyClick: () -> Unit,
+    onRepostClick: () -> Unit,
+    onReactionClick: () -> Unit,
+    onOptionClick: () -> Unit
+) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        IconButton(onClick = onReplyClick) {
+            Icon(painterResource(TablerIcons.MessageCirclePlus), "")
+        }
+
+        IconButton(onClick = onRepostClick) {
+            Icon(painterResource(TablerIcons.Repeat), "")
+        }
+
+        IconButton(onClick = onReactionClick) {
+            Icon(painterResource(TablerIcons.MoodPlus), "")
+        }
+
+        IconButton(onClick = onOptionClick) {
+            Icon(painterResource(TablerIcons.Dots), "")
+        }
+    }
+}
+
 
 @PreviewLightDark
 @Composable
