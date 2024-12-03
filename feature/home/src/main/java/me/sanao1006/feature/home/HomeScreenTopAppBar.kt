@@ -39,11 +39,11 @@ fun HomeScreenTopAppBar(
                 }
 
                 IconButton(onClick = onSocialClick) {
-                    Icon(painter = painterResource(TablerIcons.World), "Social")
+                    Icon(painter = painterResource(TablerIcons.Planet), "Social")
                 }
 
                 IconButton(onClick = onGlobalClick) {
-                    Icon(painter = painterResource(TablerIcons.Atom2), "Global")
+                    Icon(painter = painterResource(TablerIcons.Universe), "Global")
                 }
             }
         },
