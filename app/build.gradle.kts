@@ -21,7 +21,6 @@ android {
 
         implementation(libs.kotlinx.coroutines.core)
         implementation(libs.kotlinx.coroutines.android)
-        implementation(libs.androidx.splash.screen)
 
         testImplementation(libs.junit)
         androidTestImplementation(libs.androidx.junit)
