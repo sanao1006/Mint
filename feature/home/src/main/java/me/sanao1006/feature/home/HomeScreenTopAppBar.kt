@@ -15,10 +15,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import ir.alirezaivaz.tablericons.TablerIcons
+import me.sanao1006.core.ui.modifier.bottomBorder
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreenTopAppBar(
+internal fun HomeScreenTopAppBar(
+    topAppBarTimelineState: TopAppBarTimelineState,
     scrollBehavior: TopAppBarScrollBehavior,
     modifier: Modifier = Modifier,
     onNavigationIconClick: () -> Unit,
@@ -34,16 +36,30 @@ fun HomeScreenTopAppBar(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                IconButton(onClick = onHomeClick) {
-                    Icon(painter = painterResource(TablerIcons.Home), "Home")
-                }
-
-                IconButton(onClick = onSocialClick) {
-                    Icon(painter = painterResource(TablerIcons.Planet), "Social")
-                }
-
-                IconButton(onClick = onGlobalClick) {
-                    Icon(painter = painterResource(TablerIcons.Universe), "Global")
+                TopAppBarTimelineState.entries.forEach { state ->
+                    IconButton(
+                        modifier = Modifier.then(
+                            if (state == topAppBarTimelineState) Modifier.bottomBorder() else Modifier
+                        ),
+                        onClick = {
+                            when (state) {
+                                TopAppBarTimelineState.HOME -> onHomeClick()
+                                TopAppBarTimelineState.SOCIAL -> onSocialClick()
+                                TopAppBarTimelineState.GLOBAL -> onGlobalClick()
+                            }
+                        }
+                    ) {
+                        Icon(
+                            painter = painterResource(
+                                when (state) {
+                                    TopAppBarTimelineState.HOME -> TablerIcons.Home
+                                    TopAppBarTimelineState.SOCIAL -> TablerIcons.Planet
+                                    TopAppBarTimelineState.GLOBAL -> TablerIcons.Universe
+                                }
+                            ),
+                            contentDescription = state.name
+                        )
+                    }
                 }
             }
         },
@@ -55,11 +71,22 @@ fun HomeScreenTopAppBar(
     )
 }
 
+internal enum class TopAppBarTimelineState(val index: Int) {
+    HOME(0),
+    SOCIAL(1),
+    GLOBAL(2);
+
+    companion object {
+        fun get(index: Int): TopAppBarTimelineState = values().first { it.index == index }
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @PreviewLightDark
 @Composable
 fun PreviewHomeScreenTopAppBar() {
     HomeScreenTopAppBar(
+        topAppBarTimelineState = TopAppBarTimelineState.SOCIAL,
         scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
         onNavigationIconClick = {},
         onHomeClick = {},

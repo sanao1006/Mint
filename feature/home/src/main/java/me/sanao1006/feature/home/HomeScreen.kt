@@ -117,6 +117,7 @@ private fun HomeScreenUiContent(
         modifier = modifier,
         topBar = {
             HomeScreenTopAppBar(
+                topAppBarTimelineState = TopAppBarTimelineState.get(pagerState.currentPage),
                 scrollBehavior = scrollBehavior,
                 onNavigationIconClick = onNavigationIconClick,
                 onHomeClick = onHomeClick,
