@@ -3,6 +3,7 @@ plugins {
     id("mint.convention.ktorPlugin")
     id("mint.convention.hilt")
     id("mint.convention.circuit")
+    id("mint.convention.spotless")
 }
 
 dependencies {

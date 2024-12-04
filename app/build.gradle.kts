@@ -6,6 +6,7 @@ plugins {
     id("mint.convention.application.compose")
     id("mint.convention.ktorPlugin")
     id("mint.convention.hilt")
+    id("mint.convention.spotless")
 }
 
 android {
