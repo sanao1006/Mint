@@ -1,9 +1,9 @@
 package me.sanao1006.feature.home.domain
 
+import javax.inject.Inject
 import me.sanao1006.core.data.repository.NotesRepository
 import me.sanao1006.core.model.notes.NotesTimeLineRequestBody
 import me.sanao1006.core.model.notes.TimelineUiState
-import javax.inject.Inject
 
 class GetNotesTimelineUseCase @Inject constructor(
     private val notesRepository: NotesRepository

@@ -21,10 +21,10 @@ import com.slack.circuit.overlay.ContentWithOverlays
 import com.slack.circuitx.android.rememberAndroidScreenAwareNavigator
 import com.slack.circuitx.gesturenavigation.GestureNavigationDecoration
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import me.sanao1006.core.designsystem.MintTheme
 import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.LoginScreen
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
