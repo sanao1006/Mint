@@ -155,9 +155,8 @@ internal fun NoteOptionRow(
                                             when (it) {
                                                 is VisibilityItem -> onVisibilityClicked(it.value)
                                                 is LocalOnlyItem -> onLocalOnlyClicked(it.value)
-                                                is ReactionAcceptanceItem -> onReactionAcceptanceClicked(
-                                                    it.value
-                                                )
+                                                is ReactionAcceptanceItem ->
+                                                    onReactionAcceptanceClicked(it.value)
                                             }
                                         }
                                 ) {

@@ -39,7 +39,9 @@ internal fun HomeScreenTopAppBar(
                 TopAppBarTimelineState.entries.forEach { state ->
                     IconButton(
                         modifier = Modifier.then(
-                            if (state == topAppBarTimelineState) Modifier.bottomBorder() else Modifier
+                            if (state == topAppBarTimelineState) {
+                                Modifier.bottomBorder()
+                            } else Modifier
                         ),
                         onClick = {
                             when (state) {

@@ -19,8 +19,8 @@ class SpotlessPlugin : Plugin<Project> {
                         .userData(mapOf("android" to "true"))
                         .editorConfigOverride(
                             mapOf(
-                                "indent_size" to 2,
-                                "continuation_indent_size" to 2
+                                "indent_size" to 4,
+                                "continuation_indent_size" to 4
                             )
                         )
                 }
