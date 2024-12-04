@@ -48,15 +48,17 @@ gradlePlugin {
             id = "mint.convention.androidLibrary"
             implementationClass = "me.sanao1006.mint.convention.AndroidLibraryPlugin"
         }
-        register("applicationCompose"){
+        register("applicationCompose") {
             id = "mint.convention.application.compose"
-            implementationClass = "me.sanao1006.mint.convention.AndroidApplicationComposeConventionPlugin"
+            implementationClass =
+                "me.sanao1006.mint.convention.AndroidApplicationComposeConventionPlugin"
         }
-        register("compose"){
+        register("compose") {
             id = "mint.convention.library.compose"
-            implementationClass = "me.sanao1006.mint.convention.AndroidLibraryComposeConventionPlugin"
+            implementationClass =
+                "me.sanao1006.mint.convention.AndroidLibraryComposeConventionPlugin"
         }
-        register("circuit"){
+        register("circuit") {
             id = "mint.convention.circuit"
             implementationClass = "me.sanao1006.mint.convention.AndroidCircuitPlugin"
         }
@@ -71,6 +73,10 @@ gradlePlugin {
         register("androidFeature") {
             id = "mint.convention.androidFeature"
             implementationClass = "me.sanao1006.mint.convention.AndroidFeaturePlugin"
+        }
+        register("spotless") {
+            id = "mint.convention.spotless"
+            implementationClass = "me.sanao1006.mint.convention.SpotlessPlugin"
         }
     }
 }

@@ -3,6 +3,7 @@ plugins {
     id("mint.convention.library.compose")
     id("mint.convention.hilt")
     id("mint.convention.androidFeature")
+    id("mint.convention.spotless")
 }
 
 android {

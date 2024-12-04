@@ -10,4 +10,5 @@ plugins {
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.ktorfitPlugin) apply false
     alias(libs.plugins.kotlinxSerializationGradlePlugin) apply false
+    alias(libs.plugins.spotless) apply false
 }
