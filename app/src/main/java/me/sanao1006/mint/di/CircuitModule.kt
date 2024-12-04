@@ -26,7 +26,7 @@ internal abstract class CircuitModule {
 
         private fun Circuit.Builder.addFactories(
             presenterFactories: Set<Presenter.Factory>,
-            uiFactories: Set<Ui.Factory>,
+            uiFactories: Set<Ui.Factory>
         ) = apply {
             for (factory in presenterFactories) {
                 addPresenterFactory(factory)

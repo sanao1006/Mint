@@ -15,7 +15,7 @@ fun MainScreenBottomAppBar(
     modifier: Modifier = Modifier
 ) {
     NavigationBar(
-        modifier = modifier,
+        modifier = modifier
     ) {
         BottomSheetType.entries.forEach {
             NavigationBarItem(

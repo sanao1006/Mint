@@ -1,6 +1,5 @@
 package me.sanao1006.core.model.notes
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

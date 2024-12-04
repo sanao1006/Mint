@@ -34,11 +34,10 @@ import me.sanao1006.core.model.notes.TimelineUiState
 import me.sanao1006.core.model.notes.User
 import me.sanao1006.screens.HomeScreen
 
-
 @Composable
 fun TimelineColumn(
     modifier: Modifier = Modifier,
-    state: HomeScreen.State,
+    state: HomeScreen.State
 ) {
     LazyColumn(
         modifier = modifier,
@@ -109,7 +108,6 @@ private fun TimelineItem(
             onRepostClick = {},
             onReactionClick = {}
         ) {
-
         }
     }
 }
@@ -143,7 +141,6 @@ private fun TimelineActionRow(
         }
     }
 }
-
 
 @PreviewLightDark
 @Composable

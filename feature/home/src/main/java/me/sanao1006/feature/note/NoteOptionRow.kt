@@ -110,7 +110,7 @@ enum class ReactionAcceptanceItem(
 data class NoteOptionState(
     val visibility: Visibility,
     val localOnly: Boolean,
-    val reactionAcceptance: ReactionAcceptance?,
+    val reactionAcceptance: ReactionAcceptance?
 )
 
 @ExperimentalMaterial3Api
@@ -159,7 +159,7 @@ internal fun NoteOptionRow(
                                                     it.value
                                                 )
                                             }
-                                        },
+                                        }
                                 ) {
                                     Icon(painter = painterResource(it.resId), "")
                                     Spacer(modifier = Modifier.width(8.dp))

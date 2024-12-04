@@ -27,7 +27,9 @@ class ApiResponseConverterFactory : Converter.Factory {
                 override suspend fun convert(result: KtorfitResult): ApiResponse<*, *> {
                     return when (result) {
                         is KtorfitResult.Success -> {
-                            ApiResponse.success<Any, Nothing>(result.response.body(typeData.typeInfo))
+                            ApiResponse.success<Any, Nothing>(
+                                result.response.body(typeData.typeInfo)
+                            )
                         }
 
                         is KtorfitResult.Failure -> {

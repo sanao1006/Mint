@@ -16,7 +16,7 @@ data object HomeScreen : Screen {
         val uiState: List<me.sanao1006.core.model.notes.TimelineUiState?> = listOf(),
         val navigator: Navigator,
         val isSuccessCreateNote: Boolean? = null,
-        val eventSink: (Event) -> Unit,
+        val eventSink: (Event) -> Unit
     ) : CircuitUiState
 
     sealed class Event : CircuitUiEvent {

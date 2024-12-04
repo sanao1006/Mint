@@ -20,15 +20,14 @@ import io.ktor.client.request.headers
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
+import javax.inject.Singleton
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.DurationUnit
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import me.sanao1006.core.model.NormalApi
 import me.sanao1006.datastore.DataStoreRepository
 import timber.log.Timber
-import javax.inject.Singleton
-import kotlin.time.Duration.Companion.seconds
-import kotlin.time.DurationUnit
-
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -56,7 +55,6 @@ object NetworkModule {
                 }
             }
             level = LogLevel.ALL
-
         }
         defaultRequest {
             contentType(ContentType.Application.Json)
@@ -85,7 +83,7 @@ object NetworkModule {
             }
             .converterFactories(
                 FlowConverterFactory(),
-                ResponseConverterFactory(),
+                ResponseConverterFactory()
             )
             .build()
     }

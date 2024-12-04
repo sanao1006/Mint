@@ -55,7 +55,7 @@ fun NoteScreenUi(state: NoteScreen.State, modifier: Modifier) {
                     modifier = Modifier
                         .padding(it)
                         .focusRequester(focusRequester),
-                    state = state,
+                    state = state
                 )
             }
         }

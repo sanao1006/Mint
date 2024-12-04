@@ -88,7 +88,7 @@ class HomeScreenPresenter @AssistedInject constructor(
             val mutableList = mutableListOf<me.sanao1006.core.model.notes.TimelineUiState>(
                 me.sanao1006.core.model.notes.TimelineUiState(
                     text = text,
-                    user = user,
+                    user = user
                 )
             )
             mutableList.addAll(timelineUiState)
@@ -135,7 +135,6 @@ class HomeScreenPresenter @AssistedInject constructor(
             }
         }
     }
-
 }
 
 @CircuitInject(HomeScreen::class, SingletonComponent::class)

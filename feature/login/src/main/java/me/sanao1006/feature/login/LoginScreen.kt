@@ -31,7 +31,8 @@ fun LoginScreenUi(state: LoginScreen.State, modifier: Modifier) {
     Box(
         modifier = modifier
             .fillMaxSize()
-            .padding(vertical = 64.dp, horizontal = 24.dp), contentAlignment = Alignment.TopCenter
+            .padding(vertical = 64.dp, horizontal = 24.dp),
+        contentAlignment = Alignment.TopCenter
     ) {
         LoginContent(state = state)
     }

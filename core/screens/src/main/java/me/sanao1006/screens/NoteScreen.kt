@@ -17,7 +17,9 @@ data object NoteScreen : Screen {
         data object OnBackClicked : Event()
         data class OnNoteTextChanged(val text: String) : Event()
         data class OnNotePostClicked(val scope: CoroutineScope) : Event()
-        data class OnShowBottomSheet(val optionContent: me.sanao1006.core.model.notes.NoteOptionContent) :
+        data class OnShowBottomSheet(
+            val optionContent: me.sanao1006.core.model.notes.NoteOptionContent
+        ) :
             Event()
 
         data object OnHideBottomSheet : Event()
@@ -25,7 +27,9 @@ data object NoteScreen : Screen {
             Event()
 
         data class OnLocalOnlyChanged(val localOnly: Boolean) : Event()
-        data class OnReactionAcceptanceChanged(val reactionAcceptance: me.sanao1006.core.model.notes.ReactionAcceptance?) :
+        data class OnReactionAcceptanceChanged(
+            val reactionAcceptance: me.sanao1006.core.model.notes.ReactionAcceptance?
+        ) :
             Event()
     }
 
