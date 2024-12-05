@@ -1,7 +1,6 @@
 package me.sanao1006.feature.home
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -9,8 +8,11 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
@@ -24,10 +26,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
@@ -57,7 +61,8 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
             HomeScreenUiContent(
                 state = state,
                 pagerState = pagerState,
-                modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+                modifier = Modifier
+                    .nestedScroll(scrollBehavior.nestedScrollConnection),
                 scrollBehavior = scrollBehavior,
                 snackbarHostState = { SnackbarHost(hostState = snackbarHostState) },
                 onNavigationIconClick = {
@@ -99,7 +104,7 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 private fun HomeScreenUiContent(
     state: HomeScreen.State,
@@ -132,8 +137,22 @@ private fun HomeScreenUiContent(
         floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = floatingActionButton
     ) {
-        Column(modifier = Modifier.padding(it)) {
+        Box(
+            contentAlignment = Alignment.TopCenter,
+            modifier = Modifier
+                .padding(it)
+                .pullRefresh(state = state.pullToRefreshState)
+        ) {
+            PullRefreshIndicator(
+                refreshing = state.isRefreshed,
+                state = state.pullToRefreshState,
+                modifier = Modifier
+                    .zIndex(1f)
+                    .align(Alignment.TopCenter),
+                scale = true
+            )
             HorizontalPager(
+                modifier = Modifier.zIndex(0f),
                 state = pagerState
             ) { page ->
                 TimelineColumn(

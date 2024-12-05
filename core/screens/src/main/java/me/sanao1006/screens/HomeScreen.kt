@@ -1,6 +1,8 @@
 package me.sanao1006.screens
 
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.SnackbarHostState
+import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.runtime.Immutable
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
@@ -12,10 +14,12 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data object HomeScreen : Screen {
     @Immutable
-    data class State(
+    data class State @OptIn(ExperimentalMaterialApi::class) constructor(
         val uiState: List<me.sanao1006.core.model.notes.TimelineUiState?> = listOf(),
         val navigator: Navigator,
         val isSuccessCreateNote: Boolean? = null,
+        val pullToRefreshState: PullRefreshState,
+        val isRefreshed: Boolean = false,
         val eventSink: (Event) -> Unit
     ) : CircuitUiState
 

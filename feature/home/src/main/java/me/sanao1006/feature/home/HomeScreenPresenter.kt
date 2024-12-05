@@ -1,11 +1,16 @@
 package me.sanao1006.feature.home
 
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.foundation.rememberAnsweringNavigator
 import com.slack.circuit.retained.rememberRetained
@@ -15,6 +20,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.sanao1006.core.model.notes.TimelineUiState
 import me.sanao1006.feature.home.domain.GetNotesTimelineUseCase
@@ -28,10 +34,13 @@ class HomeScreenPresenter @AssistedInject constructor(
     private val getNotesTimelineUseCase: GetNotesTimelineUseCase,
 ) : Presenter<HomeScreen.State> {
 
+    @OptIn(ExperimentalMaterialApi::class)
     @Composable
     override fun present(): HomeScreen.State {
         var isSuccessCreateNote: Boolean? by rememberRetained { mutableStateOf(null) }
+
         val context = LocalContext.current
+        val scope = rememberCoroutineScope()
         val nav = rememberAnsweringNavigator<NoteScreen.Result>(navigator) { result ->
             isSuccessCreateNote = result.success
         }
@@ -41,6 +50,20 @@ class HomeScreenPresenter @AssistedInject constructor(
             mutableStateOf(emptyList())
         }
 
+        var isRefreshed by remember { mutableStateOf(false) }
+        val pullRefreshState = rememberPullRefreshState(
+            refreshing = isRefreshed,
+            onRefresh = {
+                scope.launch {
+                    isRefreshed = true
+                    timelineUiState = getNotesTimelineUseCase(timelineType)
+                    delay(1500L)
+                    isRefreshed = false
+                }
+            },
+            refreshThreshold = 50.dp,
+            refreshingOffset = 50.dp
+        )
         LaunchedEffect(Unit) {
             timelineUiState = getNotesTimelineUseCase(timelineType)
         }
@@ -48,7 +71,9 @@ class HomeScreenPresenter @AssistedInject constructor(
         return HomeScreen.State(
             uiState = timelineUiState,
             navigator = navigator,
-            isSuccessCreateNote = isSuccessCreateNote
+            isSuccessCreateNote = isSuccessCreateNote,
+            pullToRefreshState = pullRefreshState,
+            isRefreshed = isRefreshed
         ) { event ->
             when (event) {
                 is HomeScreen.Event.OnNoteCreated -> {
