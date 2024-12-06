@@ -6,8 +6,10 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import de.jensklingenberg.ktorfit.Ktorfit
 import javax.inject.Singleton
+import me.sanao1006.core.data.repository.AccountRepository
 import me.sanao1006.core.data.repository.MiauthRepository
 import me.sanao1006.core.data.repository.NotesRepository
+import me.sanao1006.core.data.repository.createAccountRepository
 import me.sanao1006.core.data.repository.createMiauthRepository
 import me.sanao1006.core.data.repository.createNotesRepository
 
@@ -28,5 +30,13 @@ object RepositoryModule {
         ktorfit: Ktorfit
     ): NotesRepository {
         return ktorfit.createNotesRepository()
+    }
+
+    @Provides
+    @Singleton
+    fun provideAccountRepository(
+        ktorfit: Ktorfit
+    ): AccountRepository {
+        return ktorfit.createAccountRepository()
     }
 }

@@ -17,4 +17,17 @@
     <string name="bottom_sheet_reaction_acceptance_item_description_like_only">いいねのみ</string>
     <string name="bottom_sheet_reaction_acceptance_item_description_like_only_for_remote">全て（リモートはいいねのみ）</string>
     <string name="bottom_sheet_reaction_acceptance_item_description_not_sensitive_only">非センシティブのみ</string>
+    <string name="drawer_followers">フォロワー</string>
+    <string name="drawer_following">フォロー</string>
+    <string name="drawer_item_favorite">お気に入り</string>
+    <string name="drawer_item_announcement">お知らせ</string>
+    <string name="drawer_item_clip">クリップ</string>
+    <string name="drawer_item_antenna">アンテナ</string>
+    <string name="drawer_item_explore">見つける</string>
+    <string name="drawer_item_channel">チャンネル</string>
+    <string name="drawer_item_drive">ドライブ</string>
+    <string name="drawer_item_gallery">ギャラリー</string>
+    <string name="drawer_item_about">情報</string>
+    <string name="drawer_item_account_preferences">アカウント設定</string>
+    <string name="drawer_item_settings">設定</string>
 </resources>

@@ -21,6 +21,7 @@ import java.security.MessageDigest
 import javax.inject.Inject
 import kotlinx.coroutines.launch
 import me.sanao1006.core.data.repository.createMiauthRepository
+import me.sanao1006.core.model.LoginUserInfo
 import me.sanao1006.core.model.NormalApi
 import me.sanao1006.core.model.auth.AppCreateRequestBody
 import me.sanao1006.core.model.auth.AuthSessionGenerateRequestBody
@@ -98,9 +99,17 @@ class LoginScreenPresenter @Inject constructor(
                                 token = token
                             )
                         )
+
                         val accessToken = (authSessionResponse.accessToken + secret).toSHA256()
                         dataStoreRepository.saveAccessToken(accessToken)
                         dataStoreRepository.saveBaseUrl(domain)
+                        dataStoreRepository.saveLoginUserInfo(
+                            LoginUserInfo(
+                                userName = authSessionResponse.user.username,
+                                name = authSessionResponse.user.name ?: "",
+                                avatarUrl = authSessionResponse.user.avatarUrl ?: ""
+                            )
+                        )
                     }
                 }
             }

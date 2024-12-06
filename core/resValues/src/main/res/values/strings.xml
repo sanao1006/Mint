@@ -17,4 +17,17 @@
     <string name="bottom_sheet_reaction_acceptance_item_description_like_only">Like Only</string>
     <string name="bottom_sheet_reaction_acceptance_item_description_like_only_for_remote">Like Only For Remote</string>
     <string name="bottom_sheet_reaction_acceptance_item_description_not_sensitive_only">Non Sensitive Only</string>
+    <string name="drawer_followers">Followers</string>
+    <string name="drawer_following">Following</string>
+    <string name="drawer_item_favorite">Favorite</string>
+    <string name="drawer_item_announcement">Announcement</string>
+    <string name="drawer_item_clip">Clip</string>
+    <string name="drawer_item_antenna">Antenna</string>
+    <string name="drawer_item_explore">Explore</string>
+    <string name="drawer_item_channel">Channel</string>
+    <string name="drawer_item_drive">Drive</string>
+    <string name="drawer_item_gallery">Gallery</string>
+    <string name="drawer_item_about">About</string>
+    <string name="drawer_item_account_preferences">Account Preferences</string>
+    <string name="drawer_item_settings">Settings</string>
 </resources>
