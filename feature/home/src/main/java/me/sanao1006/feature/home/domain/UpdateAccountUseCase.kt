@@ -7,19 +7,19 @@ import me.sanao1006.core.model.LoginUserInfo
 import me.sanao1006.datastore.DataStoreRepository
 
 class UpdateAccountUseCase @Inject constructor(
-  private val accountRepository: AccountRepository,
-  private val dataStoreRepository: DataStoreRepository
+    private val accountRepository: AccountRepository,
+    private val dataStoreRepository: DataStoreRepository
 ) {
-  suspend operator fun invoke(): LoginUserInfo {
-    val user = accountRepository.i(
-      body = Json.decodeFromString("{}")
-    )
-    return LoginUserInfo(
-      userName = user.username,
-      name = user.name ?: "",
-      avatarUrl = user.avatarUrl ?: "",
-      followersCount = user.followersCount,
-      followingCount = user.followingCount
-    )
-  }
+    suspend operator fun invoke(): LoginUserInfo {
+        val user = accountRepository.i(
+            body = Json.decodeFromString("{}")
+        )
+        return LoginUserInfo(
+            userName = user.username,
+            name = user.name ?: "",
+            avatarUrl = user.avatarUrl ?: "",
+            followersCount = user.followersCount,
+            followingCount = user.followingCount
+        )
+    }
 }

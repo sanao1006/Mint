@@ -4,6 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class AuthSessionUserKeyRequestBody(
-  val appSecret: String,
-  val token: String
+    val appSecret: String,
+    val token: String
 )

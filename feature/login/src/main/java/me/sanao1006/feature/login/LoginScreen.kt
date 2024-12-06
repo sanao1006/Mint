@@ -28,78 +28,78 @@ import me.snao1006.res_value.ResString
 @CircuitInject(LoginScreen::class, SingletonComponent::class)
 @Composable
 fun LoginScreenUi(state: LoginScreen.State, modifier: Modifier) {
-  Box(
-    modifier = modifier
-      .fillMaxSize()
-      .padding(vertical = 64.dp, horizontal = 24.dp),
-    contentAlignment = Alignment.TopCenter
-  ) {
-    LoginContent(state = state)
-  }
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(vertical = 64.dp, horizontal = 24.dp),
+        contentAlignment = Alignment.TopCenter
+    ) {
+        LoginContent(state = state)
+    }
 }
 
 @Composable
 private fun LoginContent(state: LoginScreen.State) {
-  Column(
-    modifier = Modifier.padding(64.dp),
-    horizontalAlignment = Alignment.CenterHorizontally,
-    verticalArrangement = Arrangement.Top
-  ) {
-    val scope = rememberCoroutineScope()
-    val context = LocalContext.current
-    Text(
-      text = stringResource(ResString.enter_domain),
-      style = MaterialTheme.typography.headlineMedium
-    )
-    Spacer(modifier = Modifier.padding(8.dp))
-    TextField(
-      value = state.domain,
-      maxLines = 1,
-      onValueChange = { state.eventSink(LoginScreen.Event.OnTextChanged(it)) }
-    )
-    Spacer(modifier = Modifier.padding(8.dp))
-    Button(
-      modifier = Modifier.fillMaxWidth(),
-      onClick = {
-        state.eventSink(
-          LoginScreen.Event.OnButtonClicked(
-            scope = scope,
-            context = context
-          )
-        )
-      }
+    Column(
+        modifier = Modifier.padding(64.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top
     ) {
-      if (state.authState == AuthStateType.WAITING) {
-        Text(stringResource(ResString.login_re_authentication))
-      } else {
-        Text(stringResource(ResString.login_authentication))
-      }
+        val scope = rememberCoroutineScope()
+        val context = LocalContext.current
+        Text(
+            text = stringResource(ResString.enter_domain),
+            style = MaterialTheme.typography.headlineMedium
+        )
+        Spacer(modifier = Modifier.padding(8.dp))
+        TextField(
+            value = state.domain,
+            maxLines = 1,
+            onValueChange = { state.eventSink(LoginScreen.Event.OnTextChanged(it)) }
+        )
+        Spacer(modifier = Modifier.padding(8.dp))
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = {
+                state.eventSink(
+                    LoginScreen.Event.OnButtonClicked(
+                        scope = scope,
+                        context = context
+                    )
+                )
+            }
+        ) {
+            if (state.authState == AuthStateType.WAITING) {
+                Text(stringResource(ResString.login_re_authentication))
+            } else {
+                Text(stringResource(ResString.login_authentication))
+            }
+        }
+        if (state.authState == AuthStateType.WAITING) {
+            Spacer(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth()
+            )
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                onClick = { state.eventSink(LoginScreen.Event.OnAuthButtonClicked(scope)) }
+            ) {
+                Text(stringResource(ResString.login))
+            }
+        }
     }
-    if (state.authState == AuthStateType.WAITING) {
-      Spacer(
-        modifier = Modifier
-          .padding(8.dp)
-          .fillMaxWidth()
-      )
-      Button(
-        modifier = Modifier
-          .fillMaxWidth(),
-        onClick = { state.eventSink(LoginScreen.Event.OnAuthButtonClicked(scope)) }
-      ) {
-        Text(stringResource(ResString.login))
-      }
-    }
-  }
 }
 
 @PreviewLightDark
 @Composable
 fun PreviewLoginScreenUi() {
-  LoginScreenUi(
-    state = LoginScreen.State(
-      domain = "example.com",
-      eventSink = {}
-    ),
-    modifier = Modifier
-  )
+    LoginScreenUi(
+        state = LoginScreen.State(
+            domain = "example.com",
+            eventSink = {}
+        ),
+        modifier = Modifier
+    )
 }

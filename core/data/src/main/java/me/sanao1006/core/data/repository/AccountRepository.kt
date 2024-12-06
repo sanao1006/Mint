@@ -6,8 +6,8 @@ import kotlinx.serialization.json.JsonObject
 import me.sanao1006.core.model.notes.User
 
 interface AccountRepository {
-  @POST("api/i")
-  suspend fun i(
-    @Body body: JsonObject
-  ): User
+    @POST("api/i")
+    suspend fun i(
+        @Body body: JsonObject
+    ): User
 }

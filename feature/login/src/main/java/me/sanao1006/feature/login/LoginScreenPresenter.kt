@@ -33,118 +33,118 @@ import me.sanao1006.screens.LoginScreen
 
 @CircuitInject(LoginScreen::class, SingletonComponent::class)
 class LoginScreenPresenter @Inject constructor(
-  @NormalApi
-  private val httpClient: HttpClient,
-  private val dataStoreRepository: DataStoreRepository
+    @NormalApi
+    private val httpClient: HttpClient,
+    private val dataStoreRepository: DataStoreRepository
 ) : Presenter<LoginScreen.State> {
-  private val ktorfit = Ktorfit.Builder()
-    .httpClient(httpClient)
-    .converterFactories(
-      FlowConverterFactory(),
-      ResponseConverterFactory()
-    )
+    private val ktorfit = Ktorfit.Builder()
+        .httpClient(httpClient)
+        .converterFactories(
+            FlowConverterFactory(),
+            ResponseConverterFactory()
+        )
 
-  @Composable
-  override fun present(): LoginScreen.State {
-    var domain by rememberRetained { mutableStateOf("") }
-    var secret by rememberRetained { mutableStateOf("") }
-    var token by rememberRetained { mutableStateOf("") }
-    var authState by rememberRetained { mutableStateOf(AuthStateType.FIXED) }
+    @Composable
+    override fun present(): LoginScreen.State {
+        var domain by rememberRetained { mutableStateOf("") }
+        var secret by rememberRetained { mutableStateOf("") }
+        var token by rememberRetained { mutableStateOf("") }
+        var authState by rememberRetained { mutableStateOf(AuthStateType.FIXED) }
 
-    return LoginScreen.State(
-      domain = domain,
-      authState = authState
-    ) { event ->
-      when (event) {
-        is LoginScreen.Event.OnTextChanged -> {
-          domain = event.text
+        return LoginScreen.State(
+            domain = domain,
+            authState = authState
+        ) { event ->
+            when (event) {
+                is LoginScreen.Event.OnTextChanged -> {
+                    domain = event.text
+                }
+
+                is LoginScreen.Event.OnButtonClicked -> {
+                    val ktorfitClient = ktorfit
+                        .baseUrl("$domain/")
+                        .build()
+                        .createMiauthRepository()
+                    event.scope.launch {
+                        val appCreate = ktorfitClient.createApp(
+                            appCreateRequestBody = AppCreateRequestBody(
+                                name = "Mint",
+                                description = "Mint",
+                                permission = PermissionKeys.getAllPermissions(),
+                                callbackUrl = "myapp://auth-callback"
+                            )
+                        )
+                        secret = appCreate.secret
+                        val sessionResponse = ktorfitClient.authSessionGenerate(
+                            authSessionGenerateRequestBody = AuthSessionGenerateRequestBody(
+                                appSecret = appCreate.secret
+                            )
+                        )
+                        token = sessionResponse.token
+                        openUrlInChrome(url = sessionResponse.url, context = event.context)
+                    }
+                    authState = AuthStateType.WAITING
+                }
+
+                is LoginScreen.Event.OnAuthButtonClicked -> {
+                    event.scope.launch {
+                        val ktorfitClient = ktorfit
+                            .baseUrl("$domain/")
+                            .build()
+                            .createMiauthRepository()
+
+                        val authSessionResponse = ktorfitClient.authSessionUserKey(
+                            authSessionUserKeyRequestBody = AuthSessionUserKeyRequestBody(
+                                appSecret = secret,
+                                token = token
+                            )
+                        )
+
+                        val accessToken = (authSessionResponse.accessToken + secret).toSHA256()
+                        dataStoreRepository.saveAccessToken(accessToken)
+                        dataStoreRepository.saveBaseUrl(domain)
+                        dataStoreRepository.saveLoginUserInfo(
+                            LoginUserInfo(
+                                userName = authSessionResponse.user.username,
+                                name = authSessionResponse.user.name ?: "",
+                                avatarUrl = authSessionResponse.user.avatarUrl ?: ""
+                            )
+                        )
+                    }
+                }
+            }
         }
-
-        is LoginScreen.Event.OnButtonClicked -> {
-          val ktorfitClient = ktorfit
-            .baseUrl("$domain/")
-            .build()
-            .createMiauthRepository()
-          event.scope.launch {
-            val appCreate = ktorfitClient.createApp(
-              appCreateRequestBody = AppCreateRequestBody(
-                name = "Mint",
-                description = "Mint",
-                permission = PermissionKeys.getAllPermissions(),
-                callbackUrl = "myapp://auth-callback"
-              )
-            )
-            secret = appCreate.secret
-            val sessionResponse = ktorfitClient.authSessionGenerate(
-              authSessionGenerateRequestBody = AuthSessionGenerateRequestBody(
-                appSecret = appCreate.secret
-              )
-            )
-            token = sessionResponse.token
-            openUrlInChrome(url = sessionResponse.url, context = event.context)
-          }
-          authState = AuthStateType.WAITING
-        }
-
-        is LoginScreen.Event.OnAuthButtonClicked -> {
-          event.scope.launch {
-            val ktorfitClient = ktorfit
-              .baseUrl("$domain/")
-              .build()
-              .createMiauthRepository()
-
-            val authSessionResponse = ktorfitClient.authSessionUserKey(
-              authSessionUserKeyRequestBody = AuthSessionUserKeyRequestBody(
-                appSecret = secret,
-                token = token
-              )
-            )
-
-            val accessToken = (authSessionResponse.accessToken + secret).toSHA256()
-            dataStoreRepository.saveAccessToken(accessToken)
-            dataStoreRepository.saveBaseUrl(domain)
-            dataStoreRepository.saveLoginUserInfo(
-              LoginUserInfo(
-                userName = authSessionResponse.user.username,
-                name = authSessionResponse.user.name ?: "",
-                avatarUrl = authSessionResponse.user.avatarUrl ?: ""
-              )
-            )
-          }
-        }
-      }
-    }
-  }
-
-  companion object {
-    private fun String.toSHA256(): String {
-      val bytes = MessageDigest.getInstance("SHA-256").digest(this.toByteArray())
-      return bytes.fold("", { str, it -> str + "%02x".format(it) })
     }
 
-    private fun openUrlInChrome(url: String, context: Context) {
-      if (url.isBlank() || !android.util.Patterns.WEB_URL.matcher(url).matches()) {
-        Toast.makeText(context, "Invalid Url", Toast.LENGTH_SHORT).show()
-        return
-      }
-
-      val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
-        setPackage("com.android.chrome")
-      }
-
-      try {
-        // Check if the Chrome browser is installed
-        if (intent.resolveActivity(context.packageManager) != null) {
-          context.startActivity(intent)
-        } else {
-          // Chrome browser is not installed, open in other browser
-          context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+    companion object {
+        private fun String.toSHA256(): String {
+            val bytes = MessageDigest.getInstance("SHA-256").digest(this.toByteArray())
+            return bytes.fold("", { str, it -> str + "%02x".format(it) })
         }
-      } catch (e: ActivityNotFoundException) {
-        Toast.makeText(context, "Browser not found", Toast.LENGTH_SHORT).show()
-      } catch (e: Exception) {
-        Toast.makeText(context, "Failed to open the url", Toast.LENGTH_SHORT).show()
-      }
+
+        private fun openUrlInChrome(url: String, context: Context) {
+            if (url.isBlank() || !android.util.Patterns.WEB_URL.matcher(url).matches()) {
+                Toast.makeText(context, "Invalid Url", Toast.LENGTH_SHORT).show()
+                return
+            }
+
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
+                setPackage("com.android.chrome")
+            }
+
+            try {
+                // Check if the Chrome browser is installed
+                if (intent.resolveActivity(context.packageManager) != null) {
+                    context.startActivity(intent)
+                } else {
+                    // Chrome browser is not installed, open in other browser
+                    context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                }
+            } catch (e: ActivityNotFoundException) {
+                Toast.makeText(context, "Browser not found", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                Toast.makeText(context, "Failed to open the url", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
-  }
 }

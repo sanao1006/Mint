@@ -5,12 +5,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 enum class ReactionAcceptance(val value: String) {
-  @SerialName("likeOnly")
-  LIKE_ONLY("likeOnly"),
+    @SerialName("likeOnly")
+    LIKE_ONLY("likeOnly"),
 
-  @SerialName("likeOnlyForRemote")
-  LIKE_ONLY_FOR_REMOTE("likeOnlyForRemote"),
+    @SerialName("likeOnlyForRemote")
+    LIKE_ONLY_FOR_REMOTE("likeOnlyForRemote"),
 
-  @SerialName("nonSensitiveOnly")
-  NON_SENSITIVE_ONLY("nonSensitiveOnly"),
+    @SerialName("nonSensitiveOnly")
+    NON_SENSITIVE_ONLY("nonSensitiveOnly"),
 }

@@ -14,17 +14,17 @@ class StableCoroutineScope(scope: CoroutineScope) : CoroutineScope by scope
 
 @Composable
 fun rememberRetainedCoroutineScope(): StableCoroutineScope {
-  return rememberRetained("coroutine_scope") {
-    object : RememberObserver {
-      val scope = StableCoroutineScope(CoroutineScope(Dispatchers.Main + Job()))
+    return rememberRetained("coroutine_scope") {
+        object : RememberObserver {
+            val scope = StableCoroutineScope(CoroutineScope(Dispatchers.Main + Job()))
 
-      override fun onAbandoned() = onForgotten()
+            override fun onAbandoned() = onForgotten()
 
-      override fun onForgotten() {
-        scope.cancel()
-      }
+            override fun onForgotten() {
+                scope.cancel()
+            }
 
-      override fun onRemembered() = Unit
-    }
-  }.scope
+            override fun onRemembered() = Unit
+        }
+    }.scope
 }

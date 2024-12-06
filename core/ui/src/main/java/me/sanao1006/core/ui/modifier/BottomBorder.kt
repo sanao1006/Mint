@@ -11,17 +11,17 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun Modifier.bottomBorder(
-  width: Dp = 3.dp,
-  color: Color = MaterialTheme.colorScheme.primary
+    width: Dp = 3.dp,
+    color: Color = MaterialTheme.colorScheme.primary
 ): Modifier = this.then(
-  Modifier.drawBehind {
-    val strokeWidth = width.toPx()
-    val y = size.height - strokeWidth / 2
-    drawLine(
-      color = color,
-      start = Offset(0f, y),
-      end = Offset(size.width, y),
-      strokeWidth = strokeWidth
-    )
-  }
+    Modifier.drawBehind {
+        val strokeWidth = width.toPx()
+        val y = size.height - strokeWidth / 2
+        drawLine(
+            color = color,
+            start = Offset(0f, y),
+            end = Offset(size.width, y),
+            strokeWidth = strokeWidth
+        )
+    }
 )

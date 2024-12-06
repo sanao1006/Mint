@@ -10,11 +10,11 @@ import kotlinx.serialization.json.Json
 @Module
 @InstallIn(SingletonComponent::class)
 object JsonModule {
-  @Provides
-  @Singleton
-  fun provideJson(): Json = Json {
-    prettyPrint = true
-    ignoreUnknownKeys = true
-    isLenient = true
-  }
+    @Provides
+    @Singleton
+    fun provideJson(): Json = Json {
+        prettyPrint = true
+        ignoreUnknownKeys = true
+        isLenient = true
+    }
 }

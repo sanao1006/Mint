@@ -12,29 +12,29 @@ import me.sanao1006.datastore.DataStoreRepository
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
-  private val dataStoreRepository: DataStoreRepository
+    private val dataStoreRepository: DataStoreRepository
 ) : ViewModel() {
-  val uiState: StateFlow<UiState> = dataStoreRepository.flowAccessToken().map {
-    UiState(
-      tokenState = TokenState.SUCCESS,
-      isLoggedIn = it.isNotBlank()
+    val uiState: StateFlow<UiState> = dataStoreRepository.flowAccessToken().map {
+        UiState(
+            tokenState = TokenState.SUCCESS,
+            isLoggedIn = it.isNotBlank()
+        )
+    }.stateIn(
+        scope = viewModelScope,
+        initialValue = UiState(
+            tokenState = TokenState.LOADING,
+            isLoggedIn = false
+        ),
+        started = SharingStarted.WhileSubscribed(5_000)
     )
-  }.stateIn(
-    scope = viewModelScope,
-    initialValue = UiState(
-      tokenState = TokenState.LOADING,
-      isLoggedIn = false
-    ),
-    started = SharingStarted.WhileSubscribed(5_000)
-  )
 }
 
 data class UiState(
-  val tokenState: TokenState,
-  val isLoggedIn: Boolean
+    val tokenState: TokenState,
+    val isLoggedIn: Boolean
 )
 
 enum class TokenState {
-  LOADING,
-  SUCCESS;
+    LOADING,
+    SUCCESS;
 }
