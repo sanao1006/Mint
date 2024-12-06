@@ -20,77 +20,77 @@ import me.sanao1006.core.ui.modifier.bottomBorder
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun HomeScreenTopAppBar(
-    topAppBarTimelineState: TopAppBarTimelineState,
-    scrollBehavior: TopAppBarScrollBehavior,
-    modifier: Modifier = Modifier,
-    onNavigationIconClick: () -> Unit,
-    onHomeClick: () -> Unit,
-    onSocialClick: () -> Unit,
-    onGlobalClick: () -> Unit
+  topAppBarTimelineState: TopAppBarTimelineState,
+  scrollBehavior: TopAppBarScrollBehavior,
+  modifier: Modifier = Modifier,
+  onNavigationIconClick: () -> Unit,
+  onHomeClick: () -> Unit,
+  onSocialClick: () -> Unit,
+  onGlobalClick: () -> Unit
 ) {
-    TopAppBar(
-        scrollBehavior = scrollBehavior,
-        modifier = modifier,
-        title = {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                TopAppBarTimelineState.entries.forEach { state ->
-                    IconButton(
-                        modifier = Modifier.then(
-                            if (state == topAppBarTimelineState) Modifier.bottomBorder() else Modifier
-                        ),
-                        onClick = {
-                            when (state) {
-                                TopAppBarTimelineState.HOME -> onHomeClick()
-                                TopAppBarTimelineState.SOCIAL -> onSocialClick()
-                                TopAppBarTimelineState.GLOBAL -> onGlobalClick()
-                            }
-                        }
-                    ) {
-                        Icon(
-                            painter = painterResource(
-                                when (state) {
-                                    TopAppBarTimelineState.HOME -> TablerIcons.Home
-                                    TopAppBarTimelineState.SOCIAL -> TablerIcons.Planet
-                                    TopAppBarTimelineState.GLOBAL -> TablerIcons.Universe
-                                }
-                            ),
-                            contentDescription = state.name
-                        )
-                    }
+  TopAppBar(
+    scrollBehavior = scrollBehavior,
+    modifier = modifier,
+    title = {
+      Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+      ) {
+        TopAppBarTimelineState.entries.forEach { state ->
+          IconButton(
+            modifier = Modifier.then(
+              if (state == topAppBarTimelineState) Modifier.bottomBorder() else Modifier
+            ),
+            onClick = {
+              when (state) {
+                TopAppBarTimelineState.HOME -> onHomeClick()
+                TopAppBarTimelineState.SOCIAL -> onSocialClick()
+                TopAppBarTimelineState.GLOBAL -> onGlobalClick()
+              }
+            }
+          ) {
+            Icon(
+              painter = painterResource(
+                when (state) {
+                  TopAppBarTimelineState.HOME -> TablerIcons.Home
+                  TopAppBarTimelineState.SOCIAL -> TablerIcons.Planet
+                  TopAppBarTimelineState.GLOBAL -> TablerIcons.Universe
                 }
-            }
-        },
-        navigationIcon = {
-            IconButton(onClick = onNavigationIconClick) {
-                Icon(painter = painterResource(TablerIcons.Menu2), "")
-            }
+              ),
+              contentDescription = state.name
+            )
+          }
         }
-    )
+      }
+    },
+    navigationIcon = {
+      IconButton(onClick = onNavigationIconClick) {
+        Icon(painter = painterResource(TablerIcons.Menu2), "")
+      }
+    }
+  )
 }
 
 internal enum class TopAppBarTimelineState(val index: Int) {
-    HOME(0),
-    SOCIAL(1),
-    GLOBAL(2);
+  HOME(0),
+  SOCIAL(1),
+  GLOBAL(2);
 
-    companion object {
-        fun get(index: Int): TopAppBarTimelineState = values().first { it.index == index }
-    }
+  companion object {
+    fun get(index: Int): TopAppBarTimelineState = values().first { it.index == index }
+  }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @PreviewLightDark
 @Composable
 fun PreviewHomeScreenTopAppBar() {
-    HomeScreenTopAppBar(
-        topAppBarTimelineState = TopAppBarTimelineState.SOCIAL,
-        scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
-        onNavigationIconClick = {},
-        onHomeClick = {},
-        onSocialClick = {},
-        onGlobalClick = {}
-    )
+  HomeScreenTopAppBar(
+    topAppBarTimelineState = TopAppBarTimelineState.SOCIAL,
+    scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
+    onNavigationIconClick = {},
+    onHomeClick = {},
+    onSocialClick = {},
+    onGlobalClick = {}
+  )
 }

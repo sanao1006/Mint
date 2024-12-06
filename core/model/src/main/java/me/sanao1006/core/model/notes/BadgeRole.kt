@@ -5,10 +5,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class BadgeRole(
-    @SerialName("displayOrder")
-    val displayOrder: Int = 0,
-    @SerialName("iconUrl")
-    val iconUrl: String = "",
-    @SerialName("name")
-    val name: String = ""
+  @SerialName("displayOrder")
+  val displayOrder: Int = 0,
+  @SerialName("iconUrl")
+  val iconUrl: String = "",
+  @SerialName("name")
+  val name: String = ""
 )

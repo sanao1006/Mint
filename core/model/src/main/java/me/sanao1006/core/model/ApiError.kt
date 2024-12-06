@@ -5,6 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ApiError(
-    @SerialName("error")
-    val error: Error = Error()
+  @SerialName("error")
+  val error: Error = Error()
 )

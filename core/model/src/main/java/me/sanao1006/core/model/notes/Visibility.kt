@@ -5,15 +5,15 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 enum class Visibility(val value: String) {
-    @SerialName("public")
-    PUBLIC("public"),
+  @SerialName("public")
+  PUBLIC("public"),
 
-    @SerialName("home")
-    HOME("home"),
+  @SerialName("home")
+  HOME("home"),
 
-    @SerialName("followers")
-    FOLLOWERS("followers"),
+  @SerialName("followers")
+  FOLLOWERS("followers"),
 
-    @SerialName("specified")
-    SPECIFIED("specified"),
+  @SerialName("specified")
+  SPECIFIED("specified"),
 }

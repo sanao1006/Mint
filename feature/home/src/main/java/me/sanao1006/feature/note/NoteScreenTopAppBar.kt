@@ -18,28 +18,28 @@ import me.snao1006.res_value.ResString
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteScreenTopAppBar(
-    modifier: Modifier = Modifier,
-    onBackClicked: () -> Unit,
-    onNotePostClicked: () -> Unit
+  modifier: Modifier = Modifier,
+  onBackClicked: () -> Unit,
+  onNotePostClicked: () -> Unit
 ) {
-    TopAppBar(
-        modifier = modifier,
-        navigationIcon = {
-            IconButton(onClick = onBackClicked) {
-                Icon(
-                    painter = painterResource(TablerIcons.ArrowLeft),
-                    contentDescription = "Back"
-                )
-            }
-        },
-        actions = {
-            FilledTonalButton(
-                modifier = Modifier.padding(horizontal = 8.dp),
-                onClick = onNotePostClicked
-            ) {
-                Text(stringResource(ResString.create_post))
-            }
-        },
-        title = {}
-    )
+  TopAppBar(
+    modifier = modifier,
+    navigationIcon = {
+      IconButton(onClick = onBackClicked) {
+        Icon(
+          painter = painterResource(TablerIcons.ArrowLeft),
+          contentDescription = "Back"
+        )
+      }
+    },
+    actions = {
+      FilledTonalButton(
+        modifier = Modifier.padding(horizontal = 8.dp),
+        onClick = onNotePostClicked
+      ) {
+        Text(stringResource(ResString.create_post))
+      }
+    },
+    title = {}
+  )
 }

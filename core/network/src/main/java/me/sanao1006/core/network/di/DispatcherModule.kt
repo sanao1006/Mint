@@ -27,28 +27,28 @@ annotation class UnconfinedDispatcher
 @InstallIn(SingletonComponent::class)
 @Module
 object DispatcherModule {
-    @DefaultDispatcher
-    @Provides
-    fun provideDefaultDispatcher(): CoroutineDispatcher {
-        return Dispatchers.Default
-    }
+  @DefaultDispatcher
+  @Provides
+  fun provideDefaultDispatcher(): CoroutineDispatcher {
+    return Dispatchers.Default
+  }
 
-    @IODispatcher
-    @Provides
-    fun provideIODispatcher(): CoroutineDispatcher {
-        return Dispatchers.IO
-    }
+  @IODispatcher
+  @Provides
+  fun provideIODispatcher(): CoroutineDispatcher {
+    return Dispatchers.IO
+  }
 
-    @MainDispatcher
-    @Provides
-    fun provideMainDispatcher(): CoroutineDispatcher {
-        Dispatchers.Unconfined
-        return Dispatchers.Main
-    }
+  @MainDispatcher
+  @Provides
+  fun provideMainDispatcher(): CoroutineDispatcher {
+    Dispatchers.Unconfined
+    return Dispatchers.Main
+  }
 
-    @UnconfinedDispatcher
-    @Provides
-    fun provideUnconfinedDispatcher(): CoroutineDispatcher {
-        return Dispatchers.Unconfined
-    }
+  @UnconfinedDispatcher
+  @Provides
+  fun provideUnconfinedDispatcher(): CoroutineDispatcher {
+    return Dispatchers.Unconfined
+  }
 }
