@@ -1,7 +1,7 @@
 package me.sanao1006.core.data.util
 
-import kotlin.coroutines.cancellation.CancellationException
 import timber.log.Timber
+import kotlin.coroutines.cancellation.CancellationException
 
 // ref: https://github.com/android/nowinandroid/blob/c0ba97e1705d842700fd0da6628f8188e9cbc1e0/core/data/src/main/java/com/google/samples/apps/nowinandroid/core/data/SyncUtilities.kt#L53-L68
 suspend fun <T> suspendRunCatching(block: suspend () -> T): Result<T> = try {

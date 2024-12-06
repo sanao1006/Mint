@@ -32,122 +32,122 @@ import me.sanao1006.screens.NoteScreen
 import me.snao1006.res_value.ResString
 
 class HomeScreenPresenter @AssistedInject constructor(
-    @Assisted private val navigator: Navigator,
-    private val getNotesTimelineUseCase: GetNotesTimelineUseCase,
-    private val updateMyAccountUseCase: UpdateAccountUseCase
+  @Assisted private val navigator: Navigator,
+  private val getNotesTimelineUseCase: GetNotesTimelineUseCase,
+  private val updateMyAccountUseCase: UpdateAccountUseCase
 ) : Presenter<HomeScreen.State> {
 
-    @OptIn(ExperimentalMaterialApi::class)
-    @Composable
-    override fun present(): HomeScreen.State {
-        var isSuccessCreateNote: Boolean? by rememberRetained { mutableStateOf(null) }
-        var loginUserInfo: LoginUserInfo by rememberRetained {
-            mutableStateOf(
-                LoginUserInfo(
-                    "",
-                    "",
-                    ""
-                )
-            )
-        }
-        val context = LocalContext.current
-        val scope = rememberCoroutineScope()
-        val nav = rememberAnsweringNavigator<NoteScreen.Result>(navigator) { result ->
-            isSuccessCreateNote = result.success
-        }
-
-        var timelineType by rememberRetained { mutableStateOf(TimelineType.SOCIAL) }
-        var timelineUiState: List<TimelineUiState> by rememberRetained(timelineType) {
-            mutableStateOf(emptyList())
-        }
-
-        var isRefreshed by remember { mutableStateOf(false) }
-        val pullRefreshState = rememberPullRefreshState(
-            refreshing = isRefreshed,
-            onRefresh = {
-                scope.launch {
-                    isRefreshed = true
-                    timelineUiState = getNotesTimelineUseCase(timelineType)
-                    delay(1500L)
-                    isRefreshed = false
-                }
-            },
-            refreshThreshold = 50.dp,
-            refreshingOffset = 50.dp
+  @OptIn(ExperimentalMaterialApi::class)
+  @Composable
+  override fun present(): HomeScreen.State {
+    var isSuccessCreateNote: Boolean? by rememberRetained { mutableStateOf(null) }
+    var loginUserInfo: LoginUserInfo by rememberRetained {
+      mutableStateOf(
+        LoginUserInfo(
+          "",
+          "",
+          ""
         )
-        LaunchedEffect(Unit) {
-            timelineUiState = getNotesTimelineUseCase(timelineType)
-            loginUserInfo = updateMyAccountUseCase()
-        }
-
-        return HomeScreen.State(
-            uiState = timelineUiState,
-            navigator = navigator,
-            isSuccessCreateNote = isSuccessCreateNote,
-            pullToRefreshState = pullRefreshState,
-            isRefreshed = isRefreshed,
-            drawerUserInfo = loginUserInfo,
-        ) { event ->
-            when (event) {
-                is HomeScreen.Event.OnNoteCreated -> {
-                    isSuccessCreateNote?.let { flg ->
-                        event.scope.launch {
-                            event.snackbarHostState.showSnackbar(
-                                message = if (flg) {
-                                    context.getString(ResString.post_result_message_success)
-                                } else {
-                                    context.getString(ResString.post_result_message_failed)
-                                }
-                            )
-                        }
-                    }
-                }
-
-                HomeScreen.Event.OnLocalTimelineClicked -> {
-                    timelineType = TimelineType.LOCAL
-                }
-
-                HomeScreen.Event.OnSocialTimelineClicked -> {
-                    timelineType = TimelineType.SOCIAL
-                }
-
-                HomeScreen.Event.OnGlobalTimelineClicked -> {
-                    timelineType = TimelineType.GLOBAL
-                }
-
-                HomeScreen.Event.OnNoteCreateClicked -> {
-                    nav.goTo(NoteScreen)
-//                    navigator.goTo(NoteScreen)
-                }
-
-                HomeScreen.Event.OnDrawerFavoriteClicked -> {}
-
-                HomeScreen.Event.OnDrawerAnnouncementClicked -> {}
-
-                HomeScreen.Event.OnDrawerClipClicked -> {}
-
-                HomeScreen.Event.OnDrawerAntennaClicked -> {}
-
-                HomeScreen.Event.OnDrawerExploreClicked -> {}
-
-                HomeScreen.Event.OnDrawerChannelClicked -> {}
-
-                HomeScreen.Event.OnDrawerDriveClicked -> {}
-
-                HomeScreen.Event.OnDrawerGalleryClicked -> {}
-
-                HomeScreen.Event.OnDrawerAboutClicked -> {}
-
-                HomeScreen.Event.OnDrawerAccountPreferencesClicked -> {}
-
-                HomeScreen.Event.OnDrawerSettingsClicked -> {}
-            }
-        }
+      )
     }
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val nav = rememberAnsweringNavigator<NoteScreen.Result>(navigator) { result ->
+      isSuccessCreateNote = result.success
+    }
+
+    var timelineType by rememberRetained { mutableStateOf(TimelineType.SOCIAL) }
+    var timelineUiState: List<TimelineUiState> by rememberRetained(timelineType) {
+      mutableStateOf(emptyList())
+    }
+
+    var isRefreshed by remember { mutableStateOf(false) }
+    val pullRefreshState = rememberPullRefreshState(
+      refreshing = isRefreshed,
+      onRefresh = {
+        scope.launch {
+          isRefreshed = true
+          timelineUiState = getNotesTimelineUseCase(timelineType)
+          delay(1500L)
+          isRefreshed = false
+        }
+      },
+      refreshThreshold = 50.dp,
+      refreshingOffset = 50.dp
+    )
+    LaunchedEffect(Unit) {
+      timelineUiState = getNotesTimelineUseCase(timelineType)
+      loginUserInfo = updateMyAccountUseCase()
+    }
+
+    return HomeScreen.State(
+      uiState = timelineUiState,
+      navigator = navigator,
+      isSuccessCreateNote = isSuccessCreateNote,
+      pullToRefreshState = pullRefreshState,
+      isRefreshed = isRefreshed,
+      drawerUserInfo = loginUserInfo
+    ) { event ->
+      when (event) {
+        is HomeScreen.Event.OnNoteCreated -> {
+          isSuccessCreateNote?.let { flg ->
+            event.scope.launch {
+              event.snackbarHostState.showSnackbar(
+                message = if (flg) {
+                  context.getString(ResString.post_result_message_success)
+                } else {
+                  context.getString(ResString.post_result_message_failed)
+                }
+              )
+            }
+          }
+        }
+
+        HomeScreen.Event.OnLocalTimelineClicked -> {
+          timelineType = TimelineType.LOCAL
+        }
+
+        HomeScreen.Event.OnSocialTimelineClicked -> {
+          timelineType = TimelineType.SOCIAL
+        }
+
+        HomeScreen.Event.OnGlobalTimelineClicked -> {
+          timelineType = TimelineType.GLOBAL
+        }
+
+        HomeScreen.Event.OnNoteCreateClicked -> {
+          nav.goTo(NoteScreen)
+//                    navigator.goTo(NoteScreen)
+        }
+
+        HomeScreen.Event.OnDrawerFavoriteClicked -> {}
+
+        HomeScreen.Event.OnDrawerAnnouncementClicked -> {}
+
+        HomeScreen.Event.OnDrawerClipClicked -> {}
+
+        HomeScreen.Event.OnDrawerAntennaClicked -> {}
+
+        HomeScreen.Event.OnDrawerExploreClicked -> {}
+
+        HomeScreen.Event.OnDrawerChannelClicked -> {}
+
+        HomeScreen.Event.OnDrawerDriveClicked -> {}
+
+        HomeScreen.Event.OnDrawerGalleryClicked -> {}
+
+        HomeScreen.Event.OnDrawerAboutClicked -> {}
+
+        HomeScreen.Event.OnDrawerAccountPreferencesClicked -> {}
+
+        HomeScreen.Event.OnDrawerSettingsClicked -> {}
+      }
+    }
+  }
 }
 
 @CircuitInject(HomeScreen::class, SingletonComponent::class)
 @AssistedFactory
 fun interface Factory {
-    fun create(navigator: Navigator): HomeScreenPresenter
+  fun create(navigator: Navigator): HomeScreenPresenter
 }

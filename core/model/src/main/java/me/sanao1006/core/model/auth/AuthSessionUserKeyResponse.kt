@@ -5,6 +5,6 @@ import me.sanao1006.core.model.notes.User
 
 @Serializable
 data class AuthSessionUserKeyResponse(
-    val accessToken: String,
-    val user: User
+  val accessToken: String,
+  val user: User
 )

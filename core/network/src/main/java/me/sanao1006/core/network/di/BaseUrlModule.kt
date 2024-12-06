@@ -1,8 +1,8 @@
 package me.sanao1006.core.network.di
 
-import javax.inject.Inject
 import kotlinx.coroutines.runBlocking
 import me.sanao1006.datastore.DataStoreRepository
+import javax.inject.Inject
 
 class BaseUrlModule @Inject constructor(
     private val dataStoreRepository: DataStoreRepository

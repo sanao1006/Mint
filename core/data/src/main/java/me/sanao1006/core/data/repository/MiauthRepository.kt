@@ -11,21 +11,21 @@ import me.sanao1006.core.model.auth.AuthSessionUserKeyRequestBody
 import me.sanao1006.core.model.auth.AuthSessionUserKeyResponse
 
 interface MiauthRepository {
-    @POST("api/miauth/{session}/check")
-    suspend fun miauth(@Path("session") session: String): String
+  @POST("api/miauth/{session}/check")
+  suspend fun miauth(@Path("session") session: String): String
 
-    @POST("api/app/create")
-    suspend fun createApp(
-        @Body appCreateRequestBody: AppCreateRequestBody
-    ): AppCreateResponse
+  @POST("api/app/create")
+  suspend fun createApp(
+    @Body appCreateRequestBody: AppCreateRequestBody
+  ): AppCreateResponse
 
-    @POST("api/auth/session/generate")
-    suspend fun authSessionGenerate(
-        @Body authSessionGenerateRequestBody: AuthSessionGenerateRequestBody
-    ): AuthSessionGenerateResponse
+  @POST("api/auth/session/generate")
+  suspend fun authSessionGenerate(
+    @Body authSessionGenerateRequestBody: AuthSessionGenerateRequestBody
+  ): AuthSessionGenerateResponse
 
-    @POST("api/auth/session/userkey")
-    suspend fun authSessionUserKey(
-        @Body authSessionUserKeyRequestBody: AuthSessionUserKeyRequestBody
-    ): AuthSessionUserKeyResponse
+  @POST("api/auth/session/userkey")
+  suspend fun authSessionUserKey(
+    @Body authSessionUserKeyRequestBody: AuthSessionUserKeyRequestBody
+  ): AuthSessionUserKeyResponse
 }
