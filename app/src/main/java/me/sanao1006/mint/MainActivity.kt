@@ -28,66 +28,66 @@ import me.sanao1006.screens.LoginScreen
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-  @Inject
-  lateinit var circuit: Circuit
+    @Inject
+    lateinit var circuit: Circuit
 
-  private val viewModel: MainActivityViewModel by viewModels()
+    private val viewModel: MainActivityViewModel by viewModels()
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    enableEdgeToEdge()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
 
-    setContent {
-      MintTheme {
-        val uiState = viewModel.uiState.collectAsState()
-        when (uiState.value.tokenState) {
-          TokenState.LOADING -> {
-            /* Display nothing while loading. */
-          }
-
-          TokenState.SUCCESS -> {
-            val backstack = rememberSaveableBackStack(
-              if (uiState.value.isLoggedIn) HomeScreen
-              else LoginScreen
-            )
-            val circuitNavigator = rememberCircuitNavigator(backstack)
-            val navigator = rememberAndroidScreenAwareNavigator(circuitNavigator, this)
-
-            CompositionLocalProvider(
-              LocalContext provides this
-            ) {
-              CircuitCompositionLocals(circuit) {
-                ContentWithOverlays {
-                  NavigableCircuitContent(
-                    navigator = navigator,
-                    backStack = backstack,
-                    circuit = circuit,
-                    decoration = GestureNavigationDecoration {
-                      navigator.pop()
+        setContent {
+            MintTheme {
+                val uiState = viewModel.uiState.collectAsState()
+                when (uiState.value.tokenState) {
+                    TokenState.LOADING -> {
+                        /* Display nothing while loading. */
                     }
-                  )
+
+                    TokenState.SUCCESS -> {
+                        val backstack = rememberSaveableBackStack(
+                            if (uiState.value.isLoggedIn) HomeScreen
+                            else LoginScreen
+                        )
+                        val circuitNavigator = rememberCircuitNavigator(backstack)
+                        val navigator = rememberAndroidScreenAwareNavigator(circuitNavigator, this)
+
+                        CompositionLocalProvider(
+                            LocalContext provides this
+                        ) {
+                            CircuitCompositionLocals(circuit) {
+                                ContentWithOverlays {
+                                    NavigableCircuitContent(
+                                        navigator = navigator,
+                                        backStack = backstack,
+                                        circuit = circuit,
+                                        decoration = GestureNavigationDecoration {
+                                            navigator.pop()
+                                        }
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
-              }
             }
-          }
         }
-      }
     }
-  }
 }
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
-  Text(
-    text = "Hello $name!",
-    modifier = modifier
-  )
+    Text(
+        text = "Hello $name!",
+        modifier = modifier
+    )
 }
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-  MintTheme {
-    Greeting("Android")
-  }
+    MintTheme {
+        Greeting("Android")
+    }
 }
