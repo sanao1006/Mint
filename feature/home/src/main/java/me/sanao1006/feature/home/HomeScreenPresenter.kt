@@ -31,7 +31,7 @@ import me.snao1006.res_value.ResString
 
 class HomeScreenPresenter @AssistedInject constructor(
     @Assisted private val navigator: Navigator,
-    private val getNotesTimelineUseCase: GetNotesTimelineUseCase,
+    private val getNotesTimelineUseCase: GetNotesTimelineUseCase
 ) : Presenter<HomeScreen.State> {
 
     @OptIn(ExperimentalMaterialApi::class)

@@ -1,10 +1,10 @@
 package me.sanao1006.core.model.auth
 
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonObject
+import me.sanao1006.core.model.notes.User
 
 @Serializable
 data class AuthSessionUserKeyResponse(
     val accessToken: String,
-    val user: JsonObject
+    val user: User
 )

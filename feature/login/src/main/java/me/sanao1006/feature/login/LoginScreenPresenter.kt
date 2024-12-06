@@ -17,10 +17,9 @@ import de.jensklingenberg.ktorfit.Ktorfit
 import de.jensklingenberg.ktorfit.converter.FlowConverterFactory
 import de.jensklingenberg.ktorfit.converter.ResponseConverterFactory
 import io.ktor.client.HttpClient
-import java.security.MessageDigest
-import javax.inject.Inject
 import kotlinx.coroutines.launch
 import me.sanao1006.core.data.repository.createMiauthRepository
+import me.sanao1006.core.model.LoginUserInfo
 import me.sanao1006.core.model.NormalApi
 import me.sanao1006.core.model.auth.AppCreateRequestBody
 import me.sanao1006.core.model.auth.AuthSessionGenerateRequestBody
@@ -29,6 +28,8 @@ import me.sanao1006.core.model.auth.PermissionKeys
 import me.sanao1006.datastore.DataStoreRepository
 import me.sanao1006.screens.AuthStateType
 import me.sanao1006.screens.LoginScreen
+import java.security.MessageDigest
+import javax.inject.Inject
 
 @CircuitInject(LoginScreen::class, SingletonComponent::class)
 class LoginScreenPresenter @Inject constructor(
@@ -98,9 +99,17 @@ class LoginScreenPresenter @Inject constructor(
                                 token = token
                             )
                         )
+
                         val accessToken = (authSessionResponse.accessToken + secret).toSHA256()
                         dataStoreRepository.saveAccessToken(accessToken)
                         dataStoreRepository.saveBaseUrl(domain)
+                        dataStoreRepository.saveLoginUserInfo(
+                            LoginUserInfo(
+                                userName = authSessionResponse.user.username,
+                                name = authSessionResponse.user.name ?: "",
+                                avatarUrl = authSessionResponse.user.avatarUrl ?: ""
+                            )
+                        )
                     }
                 }
             }
