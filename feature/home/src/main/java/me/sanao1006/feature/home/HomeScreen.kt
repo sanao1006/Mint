@@ -56,7 +56,18 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
         }
 
         HomeScreenDrawer(
-            drawerState = drawerState
+            drawerState = drawerState,
+            onDrawerFavoriteClick = { state.eventSink(HomeScreen.Event.OnDrawerFavoriteClicked) },
+            onDrawerAnnouncementClick = { state.eventSink(HomeScreen.Event.OnDrawerAnnouncementClicked) },
+            onDrawerClipClick = { state.eventSink(HomeScreen.Event.OnDrawerClipClicked) },
+            onDrawerAntennaClick = { state.eventSink(HomeScreen.Event.OnDrawerAntennaClicked) },
+            onDrawerExploreClick = { state.eventSink(HomeScreen.Event.OnDrawerExploreClicked) },
+            onDrawerChannelClick = { state.eventSink(HomeScreen.Event.OnDrawerChannelClicked) },
+            onDrawerDriveClick = { state.eventSink(HomeScreen.Event.OnDrawerDriveClicked) },
+            onDrawerGalleryClick = { state.eventSink(HomeScreen.Event.OnDrawerGalleryClicked) },
+            onDrawerAboutClick = { state.eventSink(HomeScreen.Event.OnDrawerAboutClicked) },
+            onDrawerAccountPreferencesClick = { state.eventSink(HomeScreen.Event.OnDrawerAccountPreferencesClicked) },
+            onDrawerSettingsClick = { state.eventSink(HomeScreen.Event.OnDrawerSettingsClicked) }
         ) {
             HomeScreenUiContent(
                 state = state,

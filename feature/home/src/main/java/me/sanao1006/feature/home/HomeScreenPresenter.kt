@@ -106,6 +106,28 @@ class HomeScreenPresenter @AssistedInject constructor(
                     nav.goTo(NoteScreen)
 //                    navigator.goTo(NoteScreen)
                 }
+
+                HomeScreen.Event.OnDrawerFavoriteClicked -> {}
+
+                HomeScreen.Event.OnDrawerAnnouncementClicked -> {}
+
+                HomeScreen.Event.OnDrawerClipClicked -> {}
+
+                HomeScreen.Event.OnDrawerAntennaClicked -> {}
+
+                HomeScreen.Event.OnDrawerExploreClicked -> {}
+
+                HomeScreen.Event.OnDrawerChannelClicked -> {}
+
+                HomeScreen.Event.OnDrawerDriveClicked -> {}
+
+                HomeScreen.Event.OnDrawerGalleryClicked -> {}
+
+                HomeScreen.Event.OnDrawerAboutClicked -> {}
+
+                HomeScreen.Event.OnDrawerAccountPreferencesClicked -> {}
+
+                HomeScreen.Event.OnDrawerSettingsClicked -> {}
             }
         }
     }

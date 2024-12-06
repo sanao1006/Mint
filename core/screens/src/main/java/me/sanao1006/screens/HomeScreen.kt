@@ -33,5 +33,17 @@ data object HomeScreen : Screen {
         data object OnSocialTimelineClicked : Event()
         data object OnGlobalTimelineClicked : Event()
         data object OnNoteCreateClicked : Event()
+
+        data object OnDrawerFavoriteClicked : Event()
+        data object OnDrawerAnnouncementClicked : Event()
+        data object OnDrawerClipClicked : Event()
+        data object OnDrawerAntennaClicked : Event()
+        data object OnDrawerExploreClicked : Event()
+        data object OnDrawerChannelClicked : Event()
+        data object OnDrawerDriveClicked : Event()
+        data object OnDrawerGalleryClicked : Event()
+        data object OnDrawerAboutClicked : Event()
+        data object OnDrawerAccountPreferencesClicked : Event()
+        data object OnDrawerSettingsClicked : Event()
     }
 }
