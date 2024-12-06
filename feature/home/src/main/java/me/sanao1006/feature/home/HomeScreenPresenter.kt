@@ -25,13 +25,15 @@ import kotlinx.coroutines.launch
 import me.sanao1006.core.model.notes.TimelineUiState
 import me.sanao1006.feature.home.domain.GetNotesTimelineUseCase
 import me.sanao1006.feature.home.domain.TimelineType
+import me.sanao1006.feature.home.domain.UpdateAccountUseCase
 import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.NoteScreen
 import me.snao1006.res_value.ResString
 
 class HomeScreenPresenter @AssistedInject constructor(
     @Assisted private val navigator: Navigator,
-    private val getNotesTimelineUseCase: GetNotesTimelineUseCase
+    private val getNotesTimelineUseCase: GetNotesTimelineUseCase,
+    private val updateMyAccountUseCase: UpdateAccountUseCase
 ) : Presenter<HomeScreen.State> {
 
     @OptIn(ExperimentalMaterialApi::class)
@@ -66,6 +68,7 @@ class HomeScreenPresenter @AssistedInject constructor(
         )
         LaunchedEffect(Unit) {
             timelineUiState = getNotesTimelineUseCase(timelineType)
+            updateMyAccountUseCase()
         }
 
         return HomeScreen.State(
