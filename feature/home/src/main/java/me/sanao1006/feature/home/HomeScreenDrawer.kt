@@ -25,11 +25,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.rememberAsyncImagePainter
 import ir.alirezaivaz.tablericons.TablerIcons
 import me.sanao1006.core.model.LoginUserInfo
+import me.snao1006.res_value.ResString
 
 @Composable
 fun HomeScreenDrawer(
@@ -121,7 +123,7 @@ private fun LoginUserInfo(
                 style = MaterialTheme.typography.labelSmall
             )
         }
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         Row(
             modifier = Modifier.wrapContentHeight(align = Alignment.Bottom),
@@ -132,9 +134,9 @@ private fun LoginUserInfo(
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Bold
             )
-            Spacer(modifier = Modifier.width(2.dp))
+            Spacer(modifier = Modifier.width(4.dp))
             Text(
-                text = " Following",
+                text = stringResource(ResString.drawer_following),
                 style = MaterialTheme.typography.labelLarge
             )
 
@@ -145,9 +147,9 @@ private fun LoginUserInfo(
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Bold
             )
-            Spacer(modifier = Modifier.width(2.dp))
+            Spacer(modifier = Modifier.width(4.dp))
             Text(
-                text = " Followers",
+                text = stringResource(ResString.drawer_followers),
                 style = MaterialTheme.typography.labelLarge
             )
         }

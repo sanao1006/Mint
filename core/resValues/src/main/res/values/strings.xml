@@ -17,4 +17,6 @@
     <string name="bottom_sheet_reaction_acceptance_item_description_like_only">Like Only</string>
     <string name="bottom_sheet_reaction_acceptance_item_description_like_only_for_remote">Like Only For Remote</string>
     <string name="bottom_sheet_reaction_acceptance_item_description_not_sensitive_only">Non Sensitive Only</string>
+    <string name="drawer_followers">Followers</string>
+    <string name="drawer_following">Following</string>
 </resources>

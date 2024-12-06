@@ -17,4 +17,6 @@
     <string name="bottom_sheet_reaction_acceptance_item_description_like_only">いいねのみ</string>
     <string name="bottom_sheet_reaction_acceptance_item_description_like_only_for_remote">全て（リモートはいいねのみ）</string>
     <string name="bottom_sheet_reaction_acceptance_item_description_not_sensitive_only">非センシティブのみ</string>
+    <string name="drawer_followers">フォロワー</string>
+    <string name="drawer_following">フォロー</string>
 </resources>
