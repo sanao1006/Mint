@@ -22,6 +22,7 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import me.sanao1006.core.model.LoginUserInfo
 import me.sanao1006.core.model.notes.TimelineUiState
 import me.sanao1006.feature.home.domain.GetNotesTimelineUseCase
 import me.sanao1006.feature.home.domain.TimelineType
@@ -40,7 +41,15 @@ class HomeScreenPresenter @AssistedInject constructor(
     @Composable
     override fun present(): HomeScreen.State {
         var isSuccessCreateNote: Boolean? by rememberRetained { mutableStateOf(null) }
-
+        var loginUserInfo: LoginUserInfo by rememberRetained {
+            mutableStateOf(
+                LoginUserInfo(
+                    "",
+                    "",
+                    ""
+                )
+            )
+        }
         val context = LocalContext.current
         val scope = rememberCoroutineScope()
         val nav = rememberAnsweringNavigator<NoteScreen.Result>(navigator) { result ->
@@ -68,7 +77,7 @@ class HomeScreenPresenter @AssistedInject constructor(
         )
         LaunchedEffect(Unit) {
             timelineUiState = getNotesTimelineUseCase(timelineType)
-            updateMyAccountUseCase()
+            loginUserInfo = updateMyAccountUseCase()
         }
 
         return HomeScreen.State(
@@ -76,7 +85,8 @@ class HomeScreenPresenter @AssistedInject constructor(
             navigator = navigator,
             isSuccessCreateNote = isSuccessCreateNote,
             pullToRefreshState = pullRefreshState,
-            isRefreshed = isRefreshed
+            isRefreshed = isRefreshed,
+            drawerUserInfo = loginUserInfo,
         ) { event ->
             when (event) {
                 is HomeScreen.Event.OnNoteCreated -> {

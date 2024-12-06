@@ -30,5 +30,9 @@ data class User(
     @SerialName("onlineStatus")
     val onlineStatus: String? = null,
     @SerialName("username")
-    val username: String = ""
+    val username: String = "",
+    @SerialName("followingCount")
+    val followingCount: Int = 0,
+    @SerialName("followersCount")
+    val followersCount: Int = 0,
 )

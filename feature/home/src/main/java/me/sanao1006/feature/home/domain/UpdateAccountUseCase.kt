@@ -11,16 +11,16 @@ class UpdateAccountUseCase @Inject constructor(
     private val accountRepository: AccountRepository,
     private val dataStoreRepository: DataStoreRepository
 ) {
-    suspend operator fun invoke() {
+    suspend operator fun invoke(): LoginUserInfo {
         val user = accountRepository.i(
             body = Json.decodeFromString("{}")
         )
-        dataStoreRepository.saveLoginUserInfo(
-            loginUserInfo = LoginUserInfo(
-                userName = user.username,
-                name = user.name ?: "",
-                avatarUrl = user.avatarUrl ?: ""
-            )
+        return LoginUserInfo(
+            userName = user.username,
+            name = user.name ?: "",
+            avatarUrl = user.avatarUrl ?: "",
+            followersCount = user.followersCount,
+            followingCount = user.followingCount
         )
     }
 }

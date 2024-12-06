@@ -10,6 +10,7 @@ import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.screen.Screen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.parcelize.Parcelize
+import me.sanao1006.core.model.LoginUserInfo
 
 @Parcelize
 data object HomeScreen : Screen {
@@ -20,6 +21,7 @@ data object HomeScreen : Screen {
         val isSuccessCreateNote: Boolean? = null,
         val pullToRefreshState: PullRefreshState,
         val isRefreshed: Boolean = false,
+        val drawerUserInfo: LoginUserInfo,
         val eventSink: (Event) -> Unit
     ) : CircuitUiState
 

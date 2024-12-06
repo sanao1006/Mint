@@ -56,6 +56,7 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
         }
 
         HomeScreenDrawer(
+            loginUserInfo = state.drawerUserInfo,
             drawerState = drawerState,
             onDrawerFavoriteClick = { state.eventSink(HomeScreen.Event.OnDrawerFavoriteClicked) },
             onDrawerAnnouncementClick = { state.eventSink(HomeScreen.Event.OnDrawerAnnouncementClicked) },
