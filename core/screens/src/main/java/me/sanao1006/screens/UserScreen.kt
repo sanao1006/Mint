@@ -5,6 +5,7 @@ import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.Screen
 import kotlinx.parcelize.Parcelize
+import me.sanao1006.core.model.user.UserScreenUiState
 
 @Parcelize
 data class UserScreen(
@@ -14,6 +15,7 @@ data class UserScreen(
 ) : Screen {
     @Immutable
     data class State(
+        val uiState: UserScreenUiState,
         val eventSink: (Event) -> Unit
     ) : CircuitUiState
 
