@@ -134,8 +134,6 @@ class HomeScreenPresenter @AssistedInject constructor(
 
                 HomeScreen.Event.OnDrawerDriveClicked -> {}
 
-                HomeScreen.Event.OnDrawerGalleryClicked -> {}
-
                 HomeScreen.Event.OnDrawerAboutClicked -> {}
 
                 HomeScreen.Event.OnDrawerAccountPreferencesClicked -> {}

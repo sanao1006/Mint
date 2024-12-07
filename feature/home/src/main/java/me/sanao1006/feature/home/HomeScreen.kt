@@ -79,9 +79,6 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
             onDrawerDriveClick = {
                 state.eventSink(HomeScreen.Event.OnDrawerDriveClicked)
             },
-            onDrawerGalleryClick = {
-                state.eventSink(HomeScreen.Event.OnDrawerGalleryClicked)
-            },
             onDrawerAboutClick = {
                 state.eventSink(HomeScreen.Event.OnDrawerAboutClicked)
             },

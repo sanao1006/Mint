@@ -47,7 +47,6 @@ fun HomeScreenDrawer(
     onDrawerExploreClick: () -> Unit,
     onDrawerChannelClick: () -> Unit,
     onDrawerDriveClick: () -> Unit,
-    onDrawerGalleryClick: () -> Unit,
     onDrawerAboutClick: () -> Unit,
     onDrawerAccountPreferencesClick: () -> Unit,
     onDrawerSettingsClick: () -> Unit,
@@ -82,7 +81,6 @@ fun HomeScreenDrawer(
                             DrawerItem.EXPLORE -> onDrawerExploreClick
                             DrawerItem.CHANNEL -> onDrawerChannelClick
                             DrawerItem.DRIVE -> onDrawerDriveClick
-                            DrawerItem.GALLERY -> onDrawerGalleryClick
                             DrawerItem.ABOUT -> onDrawerAboutClick
                             DrawerItem.ACCOUNT_PREFERENCES -> onDrawerAccountPreferencesClick
                             DrawerItem.SETTINGS -> onDrawerSettingsClick
@@ -166,7 +164,6 @@ enum class DrawerItem(@DrawableRes val iconId: Int, @StringRes val titleId: Int)
     EXPLORE(TablerIcons.Hash, ResString.drawer_item_explore),
     CHANNEL(TablerIcons.DeviceTv, ResString.drawer_item_channel),
     DRIVE(TablerIcons.BrandOnedrive, ResString.drawer_item_drive),
-    GALLERY(TablerIcons.Icons, ResString.drawer_item_gallery),
     ABOUT(TablerIcons.InfoCircle, ResString.drawer_item_about),
     ACCOUNT_PREFERENCES(TablerIcons.User, ResString.drawer_item_account_preferences),
     SETTINGS(TablerIcons.Settings, ResString.drawer_item_settings);

@@ -45,7 +45,6 @@ data object HomeScreen : Screen {
         data object OnDrawerExploreClicked : Event()
         data object OnDrawerChannelClicked : Event()
         data object OnDrawerDriveClicked : Event()
-        data object OnDrawerGalleryClicked : Event()
         data object OnDrawerAboutClicked : Event()
         data object OnDrawerAccountPreferencesClicked : Event()
         data object OnDrawerSettingsClicked : Event()
