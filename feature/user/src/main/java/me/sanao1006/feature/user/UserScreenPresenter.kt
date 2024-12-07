@@ -31,13 +31,16 @@ class UserScreenPresenter @AssistedInject constructor(
 
         LaunchedImpressionEffect(Unit) {
             userUiState = getUserShowUserCase(
-                UsersShowRequestBody(
+                isFromDrawer = screen.isFromDrawer,
+                usersShowRequestBody = UsersShowRequestBody(
                     userId = screen.userId,
                     username = screen.userName,
                     host = screen.host
                 )
             )
         }
+
+
         return UserScreen.State(
             uiState = userUiState
         ) { event ->

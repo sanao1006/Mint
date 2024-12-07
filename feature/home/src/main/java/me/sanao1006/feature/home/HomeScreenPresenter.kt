@@ -154,7 +154,8 @@ class HomeScreenPresenter @AssistedInject constructor(
                         UserScreen(
                             userId = loginUserInfo.userId,
                             userName = loginUserInfo.userName,
-                            host = loginUserInfo.host
+                            host = loginUserInfo.host,
+                            isFromDrawer = true
                         )
                     )
                 }

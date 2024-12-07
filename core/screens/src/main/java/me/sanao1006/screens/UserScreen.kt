@@ -11,7 +11,8 @@ import me.sanao1006.core.model.user.UserScreenUiState
 data class UserScreen(
     val userId: String,
     val userName: String? = null,
-    val host: String? = null
+    val host: String? = null,
+    val isFromDrawer: Boolean = false
 ) : Screen {
     @Immutable
     data class State(
