@@ -58,6 +58,10 @@ data object HomeScreen : Screen {
         data object OnDrawerFollowingCountClicked : Event()
         data object OnDrawerFollowersCountClicked : Event()
 
-        data class OnTimelineIconClicked(val userId: String, val userName: String?, val host: String?) : Event()
+        data class OnTimelineIconClicked(
+            val userId: String,
+            val userName: String?,
+            val host: String?
+        ) : Event()
     }
 }
