@@ -17,6 +17,10 @@ class UserScreenPresenter @AssistedInject constructor(
     override fun present(): UserScreen.State {
         return UserScreen.State { event ->
             when (event) {
+                UserScreen.Event.OnNavigationIconClicked -> {
+                    navigator.pop()
+                }
+
                 UserScreen.Event.OnNotesCountClicked -> {}
                 UserScreen.Event.OnFollowersCountClicked -> {}
                 UserScreen.Event.OnFollowingCountClicked -> {}

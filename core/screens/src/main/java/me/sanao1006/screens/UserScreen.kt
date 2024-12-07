@@ -18,6 +18,7 @@ data class UserScreen(
     ) : CircuitUiState
 
     sealed class Event : CircuitUiEvent {
+        data object OnNavigationIconClicked : Event()
         data object OnNotesCountClicked : Event()
         data object OnFollowersCountClicked : Event()
         data object OnFollowingCountClicked : Event()
