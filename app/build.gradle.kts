@@ -34,6 +34,7 @@ android {
         implementation(projects.core.dataStore)
         implementation(projects.core.designsystem)
         implementation(projects.core.screens)
+        implementation(projects.core.domain)
         implementation(projects.misskeyStreaming)
     }
 }

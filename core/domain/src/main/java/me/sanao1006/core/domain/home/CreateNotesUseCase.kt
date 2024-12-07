@@ -1,4 +1,4 @@
-package me.sanao1006.feature.note.domain
+package me.sanao1006.core.domain.home
 
 import javax.inject.Inject
 import javax.inject.Singleton
