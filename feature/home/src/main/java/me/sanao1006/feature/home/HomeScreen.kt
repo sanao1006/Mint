@@ -193,7 +193,16 @@ private fun HomeScreenUiContent(
             ) { page ->
                 TimelineColumn(
                     state = state,
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
+                    onIconClick = { id, username, host ->
+                        state.eventSink(
+                            HomeScreen.Event.OnTimelineIconClicked(
+                                id,
+                                username,
+                                host
+                            )
+                        )
+                    }
                 )
             }
         }

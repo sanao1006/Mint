@@ -162,6 +162,16 @@ class HomeScreenPresenter @AssistedInject constructor(
                 HomeScreen.Event.OnDrawerFollowingCountClicked -> {}
 
                 HomeScreen.Event.OnDrawerFollowersCountClicked -> {}
+
+                is HomeScreen.Event.OnTimelineIconClicked -> {
+                    nav.goTo(
+                        UserScreen(
+                            userId = event.userId,
+                            userName = event.userName,
+                            host = event.host
+                        )
+                    )
+                }
             }
         }
     }
