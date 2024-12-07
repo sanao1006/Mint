@@ -28,7 +28,9 @@ fun UserScreenUi(state: UserScreen.State, modifier: Modifier) {
                 TopAppBar(
                     title = { },
                     navigationIcon = {
-                        IconButton(onClick = { state.eventSink(UserScreen.Event.OnNavigationIconClicked) }) {
+                        IconButton(
+                            onClick = { state.eventSink(UserScreen.Event.OnNavigationIconClicked) }
+                        ) {
                             Icon(painter = painterResource(TablerIcons.ArrowLeft), "")
                         }
                     }
