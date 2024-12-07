@@ -40,7 +40,6 @@ class UserScreenPresenter @AssistedInject constructor(
             )
         }
 
-
         return UserScreen.State(
             uiState = userUiState
         ) { event ->
