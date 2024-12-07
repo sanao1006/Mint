@@ -1,3 +1,5 @@
+import me.sanao1006.mint.convention.implementation
+
 plugins {
     id("mint.convention.androidLibrary")
     id("mint.convention.library.compose")
@@ -18,6 +20,7 @@ android {
         implementation(projects.misskeyStreaming)
         implementation(projects.core.screens)
         implementation(projects.core.ui)
+        implementation(projects.core.domain)
 
         testImplementation(libs.junit)
         androidTestImplementation(libs.androidx.junit)
