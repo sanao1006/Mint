@@ -25,7 +25,8 @@ rootProject.name = "Mint"
 include(":app")
 include(
     "feature:login",
-    "feature:home"
+    "feature:home",
+    "feature:user"
 )
 include(
     "core:network",
