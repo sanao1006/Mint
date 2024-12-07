@@ -1,10 +1,10 @@
-package me.sanao1006.feature.home.domain
+package me.sanao1006.core.domain.home
 
-import javax.inject.Inject
 import kotlinx.serialization.json.Json
 import me.sanao1006.core.data.repository.AccountRepository
 import me.sanao1006.core.model.LoginUserInfo
 import me.sanao1006.datastore.DataStoreRepository
+import javax.inject.Inject
 
 class UpdateAccountUseCase @Inject constructor(
     private val accountRepository: AccountRepository,

@@ -22,11 +22,11 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import me.sanao1006.core.domain.home.GetNotesTimelineUseCase
+import me.sanao1006.core.domain.home.TimelineType
+import me.sanao1006.core.domain.home.UpdateAccountUseCase
 import me.sanao1006.core.model.LoginUserInfo
 import me.sanao1006.core.model.notes.TimelineUiState
-import me.sanao1006.feature.home.domain.GetNotesTimelineUseCase
-import me.sanao1006.feature.home.domain.TimelineType
-import me.sanao1006.feature.home.domain.UpdateAccountUseCase
 import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.NoteScreen
 import me.snao1006.res_value.ResString
