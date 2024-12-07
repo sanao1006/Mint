@@ -116,6 +116,14 @@ class HomeScreenPresenter @AssistedInject constructor(
 //                    navigator.goTo(NoteScreen)
                 }
 
+                is HomeScreen.Event.OnNavigationIconClicked -> {
+                    event.scope.launch {
+                        event.drawerState.apply {
+                            if (isClosed) open() else close()
+                        }
+                    }
+                }
+
                 HomeScreen.Event.OnDrawerFavoriteClicked -> {}
 
                 HomeScreen.Event.OnDrawerAnnouncementClicked -> {}

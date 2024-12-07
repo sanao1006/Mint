@@ -106,11 +106,7 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
                 scrollBehavior = scrollBehavior,
                 snackbarHostState = { SnackbarHost(hostState = snackbarHostState) },
                 onNavigationIconClick = {
-                    scope.launch {
-                        drawerState.apply {
-                            if (isClosed) open() else close()
-                        }
-                    }
+                    state.eventSink(HomeScreen.Event.OnNavigationIconClicked(drawerState, scope))
                 },
                 onHomeClick = {
                     scope.launch {

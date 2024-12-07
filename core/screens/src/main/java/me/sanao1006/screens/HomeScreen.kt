@@ -3,6 +3,7 @@ package me.sanao1006.screens
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.pullrefresh.PullRefreshState
+import androidx.compose.material3.DrawerState
 import androidx.compose.runtime.Immutable
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
@@ -37,6 +38,11 @@ data object HomeScreen : Screen {
         data object OnSocialTimelineClicked : Event()
         data object OnGlobalTimelineClicked : Event()
         data object OnNoteCreateClicked : Event()
+
+        data class OnNavigationIconClicked(
+            val drawerState: DrawerState,
+            val scope: CoroutineScope
+        ) : Event()
 
         data object OnDrawerFavoriteClicked : Event()
         data object OnDrawerAnnouncementClicked : Event()
