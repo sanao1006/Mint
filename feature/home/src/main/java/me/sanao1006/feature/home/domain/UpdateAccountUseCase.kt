@@ -1,10 +1,10 @@
 package me.sanao1006.feature.home.domain
 
-import javax.inject.Inject
 import kotlinx.serialization.json.Json
 import me.sanao1006.core.data.repository.AccountRepository
 import me.sanao1006.core.model.LoginUserInfo
 import me.sanao1006.datastore.DataStoreRepository
+import javax.inject.Inject
 
 class UpdateAccountUseCase @Inject constructor(
     private val accountRepository: AccountRepository,
@@ -19,7 +19,9 @@ class UpdateAccountUseCase @Inject constructor(
             name = user.name ?: "",
             avatarUrl = user.avatarUrl ?: "",
             followersCount = user.followersCount,
-            followingCount = user.followingCount
+            followingCount = user.followingCount,
+            userId = user.id,
+            host = user.host ?: ""
         )
     }
 }

@@ -12,8 +12,8 @@ import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
 import me.sanao1006.screens.UserScreen
 
-@Composable
 @CircuitInject(UserScreen::class, SingletonComponent::class)
+@Composable
 fun UserScreenUi(state: UserScreen.State, modifier: Modifier) {
     Box(modifier = modifier.fillMaxSize()) {
         Scaffold {

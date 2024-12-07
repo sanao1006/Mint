@@ -29,6 +29,7 @@ import me.sanao1006.feature.home.domain.TimelineType
 import me.sanao1006.feature.home.domain.UpdateAccountUseCase
 import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.NoteScreen
+import me.sanao1006.screens.UserScreen
 import me.snao1006.res_value.ResString
 
 class HomeScreenPresenter @AssistedInject constructor(
@@ -148,7 +149,15 @@ class HomeScreenPresenter @AssistedInject constructor(
 
                 HomeScreen.Event.OnDrawerSettingsClicked -> {}
 
-                HomeScreen.Event.OnDrawerIconClicked -> {}
+                HomeScreen.Event.OnDrawerIconClicked -> {
+                    nav.goTo(
+                        UserScreen(
+                            userId = loginUserInfo.userId,
+                            userName = loginUserInfo.userName,
+                            host = loginUserInfo.host
+                        )
+                    )
+                }
 
                 HomeScreen.Event.OnDrawerFollowingCountClicked -> {}
 

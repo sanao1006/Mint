@@ -29,6 +29,7 @@ android {
 
         implementation(projects.feature.login)
         implementation(projects.feature.home)
+        implementation(projects.feature.user)
         implementation(projects.core.network)
         implementation(projects.core.dataStore)
         implementation(projects.core.designsystem)
