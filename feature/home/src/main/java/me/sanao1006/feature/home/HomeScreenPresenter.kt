@@ -135,6 +135,12 @@ class HomeScreenPresenter @AssistedInject constructor(
                 HomeScreen.Event.OnDrawerAccountPreferencesClicked -> {}
 
                 HomeScreen.Event.OnDrawerSettingsClicked -> {}
+
+                HomeScreen.Event.OnDrawerIconClicked -> {}
+
+                HomeScreen.Event.OnDrawerFollowingCountClicked -> {}
+
+                HomeScreen.Event.OnDrawerFollowersCountClicked -> {}
             }
         }
     }

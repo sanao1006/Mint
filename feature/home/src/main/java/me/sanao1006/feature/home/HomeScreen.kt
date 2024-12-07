@@ -87,6 +87,15 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
             },
             onDrawerSettingsClick = {
                 state.eventSink(HomeScreen.Event.OnDrawerSettingsClicked)
+            },
+            onIconClick = {
+                state.eventSink(HomeScreen.Event.OnDrawerIconClicked)
+            },
+            onFollowingCountClick = {
+                state.eventSink(HomeScreen.Event.OnDrawerFollowingCountClicked)
+            },
+            onFollowersCountClick = {
+                state.eventSink(HomeScreen.Event.OnDrawerFollowersCountClicked)
             }
         ) {
             HomeScreenUiContent(

@@ -48,5 +48,8 @@ data object HomeScreen : Screen {
         data object OnDrawerAboutClicked : Event()
         data object OnDrawerAccountPreferencesClicked : Event()
         data object OnDrawerSettingsClicked : Event()
+        data object OnDrawerIconClicked : Event()
+        data object OnDrawerFollowingCountClicked : Event()
+        data object OnDrawerFollowersCountClicked : Event()
     }
 }

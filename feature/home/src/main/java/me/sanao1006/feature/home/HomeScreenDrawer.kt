@@ -3,6 +3,7 @@ package me.sanao1006.feature.home
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -36,7 +37,7 @@ import me.sanao1006.core.model.LoginUserInfo
 import me.snao1006.res_value.ResString
 
 @Composable
-fun HomeScreenDrawer(
+internal fun HomeScreenDrawer(
     loginUserInfo: LoginUserInfo,
     modifier: Modifier = Modifier,
     drawerState: DrawerState,
@@ -50,6 +51,9 @@ fun HomeScreenDrawer(
     onDrawerAboutClick: () -> Unit,
     onDrawerAccountPreferencesClick: () -> Unit,
     onDrawerSettingsClick: () -> Unit,
+    onIconClick: () -> Unit,
+    onFollowingCountClick: () -> Unit,
+    onFollowersCountClick: () -> Unit,
     content: @Composable () -> Unit
 ) {
     ModalNavigationDrawer(
@@ -57,9 +61,12 @@ fun HomeScreenDrawer(
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet {
-                LoginUserInfo(
+                LoginUserInfoBox(
                     modifier = Modifier.padding(start = 16.dp, end = 24.dp),
-                    loginUserInfo = loginUserInfo
+                    loginUserInfo = loginUserInfo,
+                    onIconClick = onIconClick,
+                    onFollowingCountClick = onFollowingCountClick,
+                    onFollowersCountClick = onFollowersCountClick
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 HorizontalDivider(
@@ -94,9 +101,12 @@ fun HomeScreenDrawer(
 }
 
 @Composable
-private fun LoginUserInfo(
+private fun LoginUserInfoBox(
     loginUserInfo: LoginUserInfo,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onIconClick: () -> Unit = {},
+    onFollowingCountClick: () -> Unit,
+    onFollowersCountClick: () -> Unit = {}
 ) {
     Column(
         modifier = modifier,
@@ -108,7 +118,8 @@ private fun LoginUserInfo(
             contentDescription = null,
             modifier = Modifier
                 .clip(CircleShape)
-                .size(64.dp),
+                .size(64.dp)
+                .clickable { onIconClick() },
             contentScale = ContentScale.Crop
         )
         Spacer(modifier = Modifier.height(4.dp))
@@ -116,43 +127,62 @@ private fun LoginUserInfo(
             text = loginUserInfo.userName,
             style = MaterialTheme.typography.headlineSmall
         )
-        loginUserInfo.name?.let {
+        if (loginUserInfo.name.isNotEmpty()) {
             Spacer(modifier = Modifier.height(2.dp))
             Text(
-                text = it,
+                text = loginUserInfo.name,
                 style = MaterialTheme.typography.labelSmall
             )
         }
         Spacer(modifier = Modifier.height(8.dp))
 
-        Row(
-            modifier = Modifier.wrapContentHeight(align = Alignment.Bottom),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = loginUserInfo.followingCount.toString(),
-                style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(modifier = Modifier.width(4.dp))
-            Text(
-                text = stringResource(ResString.drawer_following),
-                style = MaterialTheme.typography.labelLarge
-            )
+        UserFollowInfo(
+            followingCount = loginUserInfo.followingCount,
+            followersCount = loginUserInfo.followersCount,
+            onFollowingCountClick = onFollowingCountClick,
+            onFollowersCountClick = onFollowersCountClick
+        )
+    }
+}
 
-            Spacer(modifier = Modifier.width(10.dp))
+@Composable
+private fun UserFollowInfo(
+    followingCount: Int,
+    followersCount: Int,
+    onFollowingCountClick: () -> Unit,
+    onFollowersCountClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier.wrapContentHeight(align = Alignment.Bottom),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        FollowCount(
+            count = followingCount,
+            labelResId = ResString.drawer_following,
+            onClick = onFollowingCountClick
+        )
+        Spacer(modifier = Modifier.width(10.dp))
+        FollowCount(
+            count = followersCount,
+            labelResId = ResString.drawer_followers,
+            onClick = onFollowersCountClick
+        )
+    }
+}
 
-            Text(
-                text = loginUserInfo.followersCount.toString(),
-                style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(modifier = Modifier.width(4.dp))
-            Text(
-                text = stringResource(ResString.drawer_followers),
-                style = MaterialTheme.typography.labelLarge
-            )
-        }
+@Composable
+private fun FollowCount(count: Int, labelResId: Int, onClick: () -> Unit) {
+    Row(modifier = Modifier.clickable { onClick() }) {
+        Text(
+            text = count.toString(),
+            style = MaterialTheme.typography.bodyLarge,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        Text(
+            text = stringResource(labelResId),
+            style = MaterialTheme.typography.labelLarge
+        )
     }
 }
 
