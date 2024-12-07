@@ -3,7 +3,6 @@ package me.sanao1006.feature.home
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -16,6 +15,7 @@ import com.slack.circuit.foundation.rememberAnsweringNavigator
 import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
+import com.slack.circuitx.effects.LaunchedImpressionEffect
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -71,9 +71,13 @@ class HomeScreenPresenter @AssistedInject constructor(
             refreshThreshold = 50.dp,
             refreshingOffset = 50.dp
         )
-        LaunchedEffect(Unit) {
+        LaunchedImpressionEffect {
             timelineUiState = getNotesTimelineUseCase(timelineType)
             loginUserInfo = updateMyAccountUseCase()
+        }
+
+        LaunchedImpressionEffect(timelineType) {
+            timelineUiState = getNotesTimelineUseCase(timelineType)
         }
 
         return HomeScreen.State(
