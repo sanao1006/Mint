@@ -116,10 +116,10 @@ private fun LoginUserInfo(
             text = loginUserInfo.userName,
             style = MaterialTheme.typography.headlineSmall
         )
-        if (loginUserInfo.name.isNotEmpty()) {
+        loginUserInfo.name?.let {
             Spacer(modifier = Modifier.height(2.dp))
             Text(
-                text = loginUserInfo.name,
+                text = it,
                 style = MaterialTheme.typography.labelSmall
             )
         }

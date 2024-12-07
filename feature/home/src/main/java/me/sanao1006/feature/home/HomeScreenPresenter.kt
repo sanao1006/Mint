@@ -43,11 +43,7 @@ class HomeScreenPresenter @AssistedInject constructor(
         var isSuccessCreateNote: Boolean? by rememberRetained { mutableStateOf(null) }
         var loginUserInfo: LoginUserInfo by rememberRetained {
             mutableStateOf(
-                LoginUserInfo(
-                    "",
-                    "",
-                    ""
-                )
+                LoginUserInfo()
             )
         }
         val context = LocalContext.current
