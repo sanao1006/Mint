@@ -42,6 +42,7 @@ internal fun Project.configureAndroidCompose(
             implementation(libs.library("tablerIcons"))
             implementation(libs.library("coil.compose"))
             implementation(libs.library("coil.network.okhttp"))
+            implementation(libs.library("coil.gif"))
 
             debugImplementation(libs.library("${androidxCompose}ui.tooling"))
             debugImplementation(libs.library("${androidxCompose}ui.test.manifest"))

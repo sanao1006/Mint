@@ -1,6 +1,7 @@
 package me.sanao1006.core.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -37,6 +38,7 @@ import me.sanao1006.screens.HomeScreen
 @Composable
 fun TimelineColumn(
     modifier: Modifier = Modifier,
+    onIconClick: (String, String?, String?) -> Unit,
     state: HomeScreen.State
 ) {
     LazyColumn(
@@ -47,6 +49,7 @@ fun TimelineColumn(
             it?.let { timelineUiState ->
                 TimelineItem(
                     modifier = Modifier.padding(bottom = 8.dp),
+                    onIconClick = onIconClick,
                     timelineUiState = timelineUiState
                 )
                 HorizontalDivider()
@@ -58,6 +61,7 @@ fun TimelineColumn(
 @Composable
 private fun TimelineItem(
     modifier: Modifier = Modifier,
+    onIconClick: (String, String?, String?) -> Unit,
     timelineUiState: TimelineUiState
 ) {
     Column(
@@ -69,7 +73,14 @@ private fun TimelineItem(
             Image(
                 modifier = Modifier
                     .size(40.dp)
-                    .clip(shape = CircleShape),
+                    .clip(shape = CircleShape)
+                    .clickable {
+                        onIconClick(
+                            timelineUiState.user?.id ?: "",
+                            timelineUiState.user?.username,
+                            timelineUiState.user?.host
+                        )
+                    },
                 painter = rememberAsyncImagePainter(timelineUiState.user?.avatarUrl),
                 contentDescription = null,
                 contentScale = ContentScale.Crop
@@ -152,6 +163,7 @@ fun PreviewTimeLineItem() {
                 avatarUrl = ""
             ),
             text = "Hello, World!"
-        )
+        ),
+        onIconClick = { _, _, _ -> }
     )
 }

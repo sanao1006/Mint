@@ -59,7 +59,11 @@ class DataStoreRepositoryImpl @Inject constructor(
         return LoginUserInfo(
             userName = preferences[PreferenceKeys.LOGIN_USER_NAME] ?: "",
             name = preferences[PreferenceKeys.LOGIN_NAME] ?: "",
-            avatarUrl = preferences[PreferenceKeys.LOGIN_AVATAR_URL] ?: ""
+            avatarUrl = preferences[PreferenceKeys.LOGIN_AVATAR_URL] ?: "",
+            followersCount = preferences[PreferenceKeys.LOGIN_FOLLOWERS_COUNT] ?: 0,
+            followingCount = preferences[PreferenceKeys.LOGIN_FOLLOWING_COUNT] ?: 0,
+            userId = preferences[PreferenceKeys.LOGIN_USER_ID] ?: "",
+            host = preferences[PreferenceKeys.LOGIN_HOST] ?: ""
         )
     }
 }

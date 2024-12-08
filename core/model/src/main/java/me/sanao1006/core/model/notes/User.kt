@@ -8,19 +8,19 @@ data class User(
     @SerialName("avatarBlurhash")
     val avatarBlurhash: String? = null,
     @SerialName("avatarDecorations")
-    val avatarDecorations: List<me.sanao1006.core.model.notes.AvatarDecoration> = listOf(),
+    val avatarDecorations: List<AvatarDecoration> = listOf(),
     @SerialName("avatarUrl")
     val avatarUrl: String? = null,
     @SerialName("badgeRoles")
-    val badgeRoles: List<me.sanao1006.core.model.notes.BadgeRole> = listOf(),
+    val badgeRoles: List<BadgeRole> = listOf(),
     @SerialName("emojis")
-    val emojis: me.sanao1006.core.model.notes.Emojis = me.sanao1006.core.model.notes.Emojis(),
+    val emojis: Emojis = Emojis(),
     @SerialName("host")
     val host: String? = null,
     @SerialName("id")
     val id: String = "",
     @SerialName("instance")
-    val instance: me.sanao1006.core.model.notes.Instance = me.sanao1006.core.model.notes.Instance(),
+    val instance: Instance = Instance(),
     @SerialName("isBot")
     val isBot: Boolean = false,
     @SerialName("isCat")
@@ -34,5 +34,21 @@ data class User(
     @SerialName("followingCount")
     val followingCount: Int = 0,
     @SerialName("followersCount")
-    val followersCount: Int = 0
+    val followersCount: Int = 0,
+    @SerialName("bannerUrl")
+    val bannerUrl: String? = null,
+    @SerialName("description")
+    val description: String? = null,
+    @SerialName("fields")
+    val fields: List<Field>? = null,
+    @SerialName("notesCount")
+    val notesCount: Int = 0
+)
+
+@Serializable
+data class Field(
+    @SerialName("name")
+    val name: String = "",
+    @SerialName("value")
+    val value: String = ""
 )
