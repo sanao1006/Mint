@@ -7,11 +7,13 @@ data class UserScreenUiState(
     val name: String? = null,
     val avatarUrl: String? = null,
     val bannerUrl: String? = null,
+    val host: String? = null
 )
 
 fun User.toUserScreenUiState() = UserScreenUiState(
     username = username,
     name = name,
     avatarUrl = avatarUrl,
-    bannerUrl = bannerUrl
+    bannerUrl = bannerUrl,
+    host = host
 )
