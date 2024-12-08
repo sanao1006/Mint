@@ -30,4 +30,5 @@
     <string name="drawer_item_about">情報</string>
     <string name="drawer_item_account_preferences">アカウント設定</string>
     <string name="drawer_item_settings">設定</string>
+    <string name="notes_count">ノート</string>
 </resources>

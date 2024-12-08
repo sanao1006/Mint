@@ -41,6 +41,8 @@ data class User(
     val description: String? = null,
     @SerialName("fields")
     val fields: List<Field>? = null,
+    @SerialName("notesCount")
+    val notesCount: Int = 0,
 )
 
 @Serializable

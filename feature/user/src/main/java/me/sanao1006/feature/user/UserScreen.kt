@@ -15,7 +15,9 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -32,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -44,6 +47,7 @@ import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
 import me.sanao1006.core.model.notes.Field
 import me.sanao1006.screens.UserScreen
+import me.snao1006.res_value.ResString
 
 @OptIn(ExperimentalMaterial3Api::class)
 @CircuitInject(UserScreen::class, SingletonComponent::class)
@@ -65,7 +69,9 @@ fun UserScreenUi(state: UserScreen.State, modifier: Modifier) {
             }
         ) {
             Column(
-                modifier = Modifier.padding(it)
+                modifier = Modifier
+                    .padding(it)
+                    .verticalScroll(rememberScrollState())
             ) {
                 HeaderContent(
                     bannerUrl = state.uiState.bannerUrl,
@@ -84,6 +90,15 @@ fun UserScreenUi(state: UserScreen.State, modifier: Modifier) {
                         .padding(horizontal = 16.dp),
                     description = state.uiState.description,
                     fields = state.uiState.fields
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+                PostInfoContent(
+                    notesCount = state.uiState.notesCount,
+                    followingCount = state.uiState.followingCount,
+                    followersCount = state.uiState.followersCount,
+                    modifier = Modifier
+                        .fillMaxWidth(0.8f)
+                        .align(Alignment.CenterHorizontally)
                 )
             }
         }
@@ -207,6 +222,32 @@ private fun BioContent(
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun PostInfoContent(
+    notesCount: Int,
+    followingCount: Int,
+    followersCount: Int,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Column {
+            Text(text = stringResource(ResString.notes_count))
+            Text(notesCount.toString())
+        }
+        Column {
+            Text(text = stringResource(ResString.drawer_following))
+            Text(followingCount.toString())
+        }
+        Column {
+            Text(text = stringResource(ResString.drawer_followers))
+            Text(followersCount.toString())
         }
     }
 }

@@ -12,7 +12,8 @@ data class UserScreenUiState(
     val followingCount: Int = 0,
     val followersCount: Int = 0,
     val description: String? = null,
-    val fields: List<Field>? = null
+    val fields: List<Field>? = null,
+    val notesCount: Int = 0
 )
 
 fun User.toUserScreenUiState() = UserScreenUiState(
@@ -24,5 +25,6 @@ fun User.toUserScreenUiState() = UserScreenUiState(
     followingCount = followingCount,
     followersCount = followersCount,
     description = description,
-    fields = fields
+    fields = fields,
+    notesCount = notesCount
 )
