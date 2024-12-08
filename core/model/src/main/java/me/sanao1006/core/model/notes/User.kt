@@ -34,5 +34,7 @@ data class User(
     @SerialName("followingCount")
     val followingCount: Int = 0,
     @SerialName("followersCount")
-    val followersCount: Int = 0
+    val followersCount: Int = 0,
+    @SerialName("bannerUrl")
+    val bannerUrl: String? = null,
 )
