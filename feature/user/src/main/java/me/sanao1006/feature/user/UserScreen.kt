@@ -66,6 +66,7 @@ fun UserScreenUi(state: UserScreen.State, modifier: Modifier) {
                     bannerUrl = state.uiState.bannerUrl,
                     avatarUrl = state.uiState.avatarUrl
                 )
+                Spacer(modifier = Modifier.height(60.dp))
                 UserNameContent(
                     username = state.uiState.username,
                     name = state.uiState.name,
@@ -82,7 +83,7 @@ private fun HeaderContent(
     avatarUrl: String?,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier) {
+    Box(modifier = modifier) {
         if (bannerUrl.isNullOrEmpty()) {
             Box(
                 modifier = Modifier
@@ -115,8 +116,8 @@ private fun HeaderContent(
 
         Box(
             modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .offset(y = (-50).dp)
+                .align(Alignment.BottomCenter)
+                .offset(y = (50).dp)
         ) {
             Image(
                 modifier = Modifier
