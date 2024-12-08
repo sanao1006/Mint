@@ -42,7 +42,7 @@ data class User(
     @SerialName("fields")
     val fields: List<Field>? = null,
     @SerialName("notesCount")
-    val notesCount: Int = 0,
+    val notesCount: Int = 0
 )
 
 @Serializable

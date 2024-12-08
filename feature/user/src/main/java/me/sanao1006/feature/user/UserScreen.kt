@@ -179,7 +179,7 @@ private fun ColumnScope.UserNameContent(
         Spacer(modifier = Modifier.height(2.dp))
         Text(
             text = username + (host?.let { "@$it" } ?: ""),
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.bodyMedium
         )
     }
 }
