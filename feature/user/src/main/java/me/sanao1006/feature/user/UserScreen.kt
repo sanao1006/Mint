@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,8 +14,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -30,6 +33,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil3.ImageLoader
 import coil3.compose.AsyncImage
@@ -38,6 +42,7 @@ import coil3.gif.GifDecoder
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
+import me.sanao1006.core.model.notes.Field
 import me.sanao1006.screens.UserScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -71,6 +76,14 @@ fun UserScreenUi(state: UserScreen.State, modifier: Modifier) {
                     username = state.uiState.username,
                     name = state.uiState.name,
                     host = state.uiState.host
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                BioContent(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    description = state.uiState.description,
+                    fields = state.uiState.fields
                 )
             }
         }
@@ -153,5 +166,47 @@ private fun ColumnScope.UserNameContent(
             text = username + (host?.let { "@$it" } ?: ""),
             style = MaterialTheme.typography.bodyMedium,
         )
+    }
+}
+
+@Composable
+private fun BioContent(
+    description: String?,
+    fields: List<Field>?,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = description ?: "",
+            textAlign = TextAlign.Center
+        )
+        if (!fields.isNullOrEmpty()) {
+            HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
+            fields.forEachIndexed { index, it ->
+                Row(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = it.name,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.width(120.dp),
+                        textAlign = TextAlign.Start
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = it.value,
+                        modifier = Modifier
+                            .weight(1f)
+                            .alignByBaseline()
+                    )
+                }
+                if (index != fields.size - 1) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+            }
+        }
     }
 }
