@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.retained.rememberRetained
@@ -30,6 +31,7 @@ import me.sanao1006.datastore.DataStoreRepository
 import me.sanao1006.screens.AuthStateType
 import me.sanao1006.screens.LoginScreen
 import me.snao1006.res_value.ResString
+import timber.log.Timber
 import java.security.MessageDigest
 import javax.inject.Inject
 
@@ -53,6 +55,7 @@ class LoginScreenPresenter @Inject constructor(
         var token by rememberRetained { mutableStateOf("") }
         var buttonEnabled by rememberRetained { mutableStateOf(false) }
         var authState by rememberRetained { mutableStateOf(AuthStateType.FIXED) }
+        val scope = rememberCoroutineScope()
 
         return LoginScreen.State(
             domain = domain,
@@ -68,7 +71,7 @@ class LoginScreenPresenter @Inject constructor(
                 }
 
                 is LoginScreen.Event.OnButtonClicked -> {
-                    val inputDomain = if (domain.startsWith("http")) {
+                    val inputDomain = if (domain.startsWith("http") || domain.startsWith("https")) {
                         domain
                     } else {
                         "https://${domain}"
@@ -124,29 +127,48 @@ class LoginScreenPresenter @Inject constructor(
                 }
 
                 is LoginScreen.Event.OnAuthButtonClicked -> {
-                    event.scope.launch {
-                        val ktorfitClient = ktorfit
-                            .baseUrl("$domain/")
-                            .build()
-                            .createMiauthRepository()
+                    val inputDomain =
+                        if (domain.startsWith("http") || domain.startsWith("https")) {
+                            domain
+                        } else {
+                            "https://${domain}"
+                        }
+                    Timber.tag("ray").d("inputDomain: $inputDomain")
+                    scope.launch {
+                        suspendRunCatching {
+                            ktorfit
+                                .baseUrl("$inputDomain/")
+                                .build()
+                                .createMiauthRepository()
+                        }
+                            .onSuccess { ktorfitClient ->
+                                val authSessionResponse = ktorfitClient.authSessionUserKey(
+                                    authSessionUserKeyRequestBody = AuthSessionUserKeyRequestBody(
+                                        appSecret = secret,
+                                        token = token
+                                    )
+                                )
 
-                        val authSessionResponse = ktorfitClient.authSessionUserKey(
-                            authSessionUserKeyRequestBody = AuthSessionUserKeyRequestBody(
-                                appSecret = secret,
-                                token = token
-                            )
-                        )
+                                val accessToken =
+                                    (authSessionResponse.accessToken + secret).toSHA256()
+                                dataStoreRepository.saveAccessToken(accessToken)
+                                dataStoreRepository.saveBaseUrl(domain)
+                                dataStoreRepository.saveLoginUserInfo(
+                                    LoginUserInfo(
+                                        userName = authSessionResponse.user.username,
+                                        name = authSessionResponse.user.name ?: "",
+                                        avatarUrl = authSessionResponse.user.avatarUrl ?: ""
+                                    )
+                                )
 
-                        val accessToken = (authSessionResponse.accessToken + secret).toSHA256()
-                        dataStoreRepository.saveAccessToken(accessToken)
-                        dataStoreRepository.saveBaseUrl(domain)
-                        dataStoreRepository.saveLoginUserInfo(
-                            LoginUserInfo(
-                                userName = authSessionResponse.user.username,
-                                name = authSessionResponse.user.name ?: "",
-                                avatarUrl = authSessionResponse.user.avatarUrl ?: ""
-                            )
-                        )
+                            }.onFailure {
+                                Toast.makeText(
+                                    event.context,
+                                    event.context.getString(ResString.login_failed),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                authState = AuthStateType.FIXED
+                            }
                     }
                 }
             }

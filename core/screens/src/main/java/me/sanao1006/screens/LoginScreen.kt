@@ -22,7 +22,7 @@ data object LoginScreen : Screen {
     sealed class Event : CircuitUiEvent {
         data class OnTextChanged(val text: String) : Event()
         data class OnButtonClicked(val scope: CoroutineScope, val context: Context) : Event()
-        data class OnAuthButtonClicked(val scope: CoroutineScope) : Event()
+        data class OnAuthButtonClicked(val scope: CoroutineScope, val context: Context) : Event()
     }
 }
 

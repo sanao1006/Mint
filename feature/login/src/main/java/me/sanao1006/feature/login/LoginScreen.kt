@@ -85,7 +85,7 @@ private fun LoginContent(state: LoginScreen.State) {
             Button(
                 modifier = Modifier
                     .fillMaxWidth(),
-                onClick = { state.eventSink(LoginScreen.Event.OnAuthButtonClicked(scope)) }
+                onClick = { state.eventSink(LoginScreen.Event.OnAuthButtonClicked(scope, context)) }
             ) {
                 Text(stringResource(ResString.login))
             }
