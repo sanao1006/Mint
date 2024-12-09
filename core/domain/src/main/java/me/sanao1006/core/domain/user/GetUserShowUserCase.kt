@@ -1,12 +1,12 @@
 package me.sanao1006.core.domain.user
 
-import javax.inject.Inject
-import javax.inject.Singleton
 import me.sanao1006.core.data.repository.AccountRepository
 import me.sanao1006.core.data.repository.UsersRepository
 import me.sanao1006.core.model.user.UserScreenUiState
 import me.sanao1006.core.model.user.UsersShowRequestBody
 import me.sanao1006.core.model.user.toUserScreenUiState
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @Singleton
 class GetUserShowUserCase @Inject constructor(
@@ -22,7 +22,14 @@ class GetUserShowUserCase @Inject constructor(
             return UserScreenUiState(
                 username = user.username,
                 name = user.name,
-                avatarUrl = user.avatarUrl
+                avatarUrl = user.avatarUrl,
+                bannerUrl = user.bannerUrl,
+                host = user.host,
+                followingCount = user.followingCount,
+                followersCount = user.followersCount,
+                description = user.description,
+                fields = user.fields,
+                notesCount = user.notesCount
             )
         }
 
