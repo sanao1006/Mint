@@ -29,8 +29,6 @@ import me.sanao1006.core.model.LoginUserInfo
 import me.sanao1006.core.model.notes.TimelineUiState
 import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.NoteScreen
-import me.sanao1006.screens.UserScreen
-import me.snao1006.res_value.ResString
 
 class HomeScreenPresenter @AssistedInject constructor(
     @Assisted private val navigator: Navigator,
@@ -90,106 +88,25 @@ class HomeScreenPresenter @AssistedInject constructor(
             drawerUserInfo = loginUserInfo
         ) { event ->
             when (event) {
-                is HomeScreen.Event.OnNoteCreated -> {
-                    isSuccessCreateNote?.let { flg ->
-                        event.scope.launch {
-                            event.snackbarHostState.showSnackbar(
-                                message = if (flg) {
-                                    context.getString(ResString.post_result_message_success)
-                                } else {
-                                    context.getString(ResString.post_result_message_failed)
-                                }
-                            )
-                        }
-                    }
+                is HomeScreen.Event.OnNoteCreated -> handleNoteCreated(
+                    event,
+                    isSuccessCreateNote,
+                    context
+                )
+
+                HomeScreen.Event.OnNoteCreateClicked -> handleNoteCreateClicked(nav)
+                is HomeScreen.Event.OnNavigationIconClicked -> handleNavigationIconClicked(event)
+                is HomeScreen.Event.TimelineEvent -> handleTimelineEvent(event) {
+                    timelineType = it
                 }
 
-                HomeScreen.Event.OnLocalTimelineClicked -> {
-                    timelineType = TimelineType.LOCAL
-                }
+                is HomeScreen.Event.BottomAppBarActionEvent -> handleBottomAppBarActionEvent(
+                    event,
+                    navigator
+                )
 
-                HomeScreen.Event.OnSocialTimelineClicked -> {
-                    timelineType = TimelineType.SOCIAL
-                }
-
-                HomeScreen.Event.OnGlobalTimelineClicked -> {
-                    timelineType = TimelineType.GLOBAL
-                }
-
-                HomeScreen.Event.OnNoteCreateClicked -> {
-                    nav.goTo(NoteScreen)
-//                    navigator.goTo(NoteScreen)
-                }
-
-                is HomeScreen.Event.OnNavigationIconClicked -> {
-                    event.scope.launch {
-                        event.drawerState.apply {
-                            if (isClosed) open() else close()
-                        }
-                    }
-                }
-
-                // Bottom App Bar Event Begin
-                HomeScreen.Event.OnHomeIconClicked -> {
-                    navigator.goTo(HomeScreen)
-                }
-
-                HomeScreen.Event.OnSearchIconClicked -> {
-                    // TODO goto Search Screen
-                }
-
-                HomeScreen.Event.OnNotificationIconClicked -> {
-                    // TODO goto Notification Screen
-                }
-                // Bottom App Bar Event End
-
-                // Drawer Event Begin
-                HomeScreen.Event.OnDrawerFavoriteClicked -> {}
-
-                HomeScreen.Event.OnDrawerAnnouncementClicked -> {}
-
-                HomeScreen.Event.OnDrawerClipClicked -> {}
-
-                HomeScreen.Event.OnDrawerAntennaClicked -> {}
-
-                HomeScreen.Event.OnDrawerExploreClicked -> {}
-
-                HomeScreen.Event.OnDrawerChannelClicked -> {}
-
-                HomeScreen.Event.OnDrawerDriveClicked -> {}
-
-                HomeScreen.Event.OnDrawerAboutClicked -> {}
-
-                HomeScreen.Event.OnDrawerAccountPreferencesClicked -> {}
-
-                HomeScreen.Event.OnDrawerSettingsClicked -> {}
-
-                HomeScreen.Event.OnDrawerIconClicked -> {
-                    nav.goTo(
-                        UserScreen(
-                            userId = loginUserInfo.userId,
-                            userName = loginUserInfo.userName,
-                            host = loginUserInfo.host,
-                            isFromDrawer = true
-                        )
-                    )
-                }
-
-                HomeScreen.Event.OnDrawerFollowingCountClicked -> {}
-
-                HomeScreen.Event.OnDrawerFollowersCountClicked -> {}
-
-                // Drawer Event End
-
-                is HomeScreen.Event.OnTimelineIconClicked -> {
-                    nav.goTo(
-                        UserScreen(
-                            userId = event.userId,
-                            userName = event.userName,
-                            host = event.host
-                        )
-                    )
-                }
+                is HomeScreen.Event.DrawerEvent -> handleDrawerEvent(event, nav, loginUserInfo)
+                is HomeScreen.Event.TimelineItemEvent -> handleTimelineItemEvent(event, nav)
             }
         }
     }

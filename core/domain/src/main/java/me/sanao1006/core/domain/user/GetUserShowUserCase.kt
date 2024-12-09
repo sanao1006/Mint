@@ -22,7 +22,14 @@ class GetUserShowUserCase @Inject constructor(
             return UserScreenUiState(
                 username = user.username,
                 name = user.name,
-                avatarUrl = user.avatarUrl
+                avatarUrl = user.avatarUrl,
+                bannerUrl = user.bannerUrl,
+                host = user.host,
+                followingCount = user.followingCount,
+                followersCount = user.followersCount,
+                description = user.description,
+                fields = user.fields,
+                notesCount = user.notesCount
             )
         }
 

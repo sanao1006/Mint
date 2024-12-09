@@ -55,43 +55,43 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
             loginUserInfo = state.drawerUserInfo,
             drawerState = drawerState,
             onDrawerFavoriteClick = {
-                state.eventSink(HomeScreen.Event.OnDrawerFavoriteClicked)
+                state.eventSink(HomeScreen.Event.DrawerEvent.OnDrawerFavoriteClicked)
             },
             onDrawerAnnouncementClick = {
-                state.eventSink(HomeScreen.Event.OnDrawerAnnouncementClicked)
+                state.eventSink(HomeScreen.Event.DrawerEvent.OnDrawerAnnouncementClicked)
             },
             onDrawerClipClick = {
-                state.eventSink(HomeScreen.Event.OnDrawerClipClicked)
+                state.eventSink(HomeScreen.Event.DrawerEvent.OnDrawerClipClicked)
             },
             onDrawerAntennaClick = {
-                state.eventSink(HomeScreen.Event.OnDrawerAntennaClicked)
+                state.eventSink(HomeScreen.Event.DrawerEvent.OnDrawerAntennaClicked)
             },
             onDrawerExploreClick = {
-                state.eventSink(HomeScreen.Event.OnDrawerExploreClicked)
+                state.eventSink(HomeScreen.Event.DrawerEvent.OnDrawerExploreClicked)
             },
             onDrawerChannelClick = {
-                state.eventSink(HomeScreen.Event.OnDrawerChannelClicked)
+                state.eventSink(HomeScreen.Event.DrawerEvent.OnDrawerChannelClicked)
             },
             onDrawerDriveClick = {
-                state.eventSink(HomeScreen.Event.OnDrawerDriveClicked)
+                state.eventSink(HomeScreen.Event.DrawerEvent.OnDrawerDriveClicked)
             },
             onDrawerAboutClick = {
-                state.eventSink(HomeScreen.Event.OnDrawerAboutClicked)
+                state.eventSink(HomeScreen.Event.DrawerEvent.OnDrawerAboutClicked)
             },
             onDrawerAccountPreferencesClick = {
-                state.eventSink(HomeScreen.Event.OnDrawerAccountPreferencesClicked)
+                state.eventSink(HomeScreen.Event.DrawerEvent.OnDrawerAccountPreferencesClicked)
             },
             onDrawerSettingsClick = {
-                state.eventSink(HomeScreen.Event.OnDrawerSettingsClicked)
+                state.eventSink(HomeScreen.Event.DrawerEvent.OnDrawerSettingsClicked)
             },
             onIconClick = {
-                state.eventSink(HomeScreen.Event.OnDrawerIconClicked)
+                state.eventSink(HomeScreen.Event.DrawerEvent.OnDrawerIconClicked)
             },
             onFollowingCountClick = {
-                state.eventSink(HomeScreen.Event.OnDrawerFollowingCountClicked)
+                state.eventSink(HomeScreen.Event.DrawerEvent.OnDrawerFollowingCountClicked)
             },
             onFollowersCountClick = {
-                state.eventSink(HomeScreen.Event.OnDrawerFollowersCountClicked)
+                state.eventSink(HomeScreen.Event.DrawerEvent.OnDrawerFollowersCountClicked)
             }
         ) {
             HomeScreenUiContent(
@@ -106,19 +106,19 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
                 },
                 onHomeClick = {
                     scope.launch {
-                        state.eventSink(HomeScreen.Event.OnLocalTimelineClicked)
+                        state.eventSink(HomeScreen.Event.TimelineEvent.OnLocalTimelineClicked)
                         pagerState.animateScrollToPage(0)
                     }
                 },
                 onSocialClick = {
                     scope.launch {
-                        state.eventSink(HomeScreen.Event.OnSocialTimelineClicked)
+                        state.eventSink(HomeScreen.Event.TimelineEvent.OnSocialTimelineClicked)
                         pagerState.animateScrollToPage(1)
                     }
                 },
                 onGlobalClick = {
                     scope.launch {
-                        state.eventSink(HomeScreen.Event.OnGlobalTimelineClicked)
+                        state.eventSink(HomeScreen.Event.TimelineEvent.OnGlobalTimelineClicked)
                         pagerState.animateScrollToPage(2)
                     }
                 },
@@ -164,10 +164,16 @@ private fun HomeScreenUiContent(
         bottomBar = {
             MainScreenBottomAppBar(
                 mainSheetType = MainScreenType.HOME,
-                onHomeClick = { state.eventSink(HomeScreen.Event.OnHomeIconClicked) },
-                onSearchClick = { state.eventSink(HomeScreen.Event.OnSearchIconClicked) },
+                onHomeClick = {
+                    state.eventSink(HomeScreen.Event.BottomAppBarActionEvent.OnHomeIconClicked)
+                },
+                onSearchClick = {
+                    state.eventSink(HomeScreen.Event.BottomAppBarActionEvent.OnSearchIconClicked)
+                },
                 onNotificationClick = {
-                    state.eventSink(HomeScreen.Event.OnNotificationIconClicked)
+                    state.eventSink(
+                        HomeScreen.Event.BottomAppBarActionEvent.OnNotificationIconClicked
+                    )
                 },
                 floatingActionButton = floatingActionButton
             )
@@ -197,7 +203,7 @@ private fun HomeScreenUiContent(
                     modifier = Modifier.fillMaxSize(),
                     onIconClick = { id, username, host ->
                         state.eventSink(
-                            HomeScreen.Event.OnTimelineIconClicked(
+                            HomeScreen.Event.TimelineItemEvent.OnTimelineIconClicked(
                                 id,
                                 username,
                                 host
