@@ -13,6 +13,7 @@ android {
         implementation(projects.core.dataStore)
         implementation(projects.core.data)
         implementation(projects.core.screens)
+        implementation(projects.core.designsystem)
 
         testImplementation(libs.junit)
         androidTestImplementation(libs.androidx.junit)

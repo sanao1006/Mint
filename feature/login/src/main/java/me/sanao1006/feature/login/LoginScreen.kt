@@ -1,21 +1,34 @@
 package me.sanao1006.feature.login
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
@@ -23,25 +36,54 @@ import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
 import me.sanao1006.screens.AuthStateType
 import me.sanao1006.screens.LoginScreen
+import me.snao1006.res_value.ResDrawable
 import me.snao1006.res_value.ResString
 
 @CircuitInject(LoginScreen::class, SingletonComponent::class)
 @Composable
 fun LoginScreenUi(state: LoginScreen.State, modifier: Modifier) {
-    Box(
+
+    var showIcon by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        showIcon = true
+    }
+    Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(vertical = 64.dp, horizontal = 24.dp),
-        contentAlignment = Alignment.TopCenter
+            .background(MaterialTheme.colorScheme.background)
+            .padding(horizontal = 24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        LoginContent(state = state)
+        AnimatedVisibility(
+            visible = showIcon,
+            enter = fadeIn(animationSpec = tween(durationMillis = 1500))
+        ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Image(
+                    modifier = Modifier.size(128.dp),
+                    painter = painterResource(ResDrawable.ic_main_icon),
+                    contentDescription = ""
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Welcome to Mint!",
+                    style = MaterialTheme.typography.displaySmall,
+                    color = MaterialTheme.colorScheme.secondary
+                )
+            }
+        }
+        LoginContent(
+            state = state,
+            modifier = Modifier.padding(vertical = 32.dp, horizontal = 56.dp)
+        )
     }
 }
 
 @Composable
-private fun LoginContent(state: LoginScreen.State) {
+private fun LoginContent(state: LoginScreen.State, modifier: Modifier = Modifier) {
     Column(
-        modifier = Modifier.padding(64.dp),
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
@@ -49,9 +91,10 @@ private fun LoginContent(state: LoginScreen.State) {
         val context = LocalContext.current
         Text(
             text = stringResource(ResString.enter_domain),
-            style = MaterialTheme.typography.headlineMedium
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.secondary
         )
-        Spacer(modifier = Modifier.padding(8.dp))
+        Spacer(modifier = Modifier.padding(6.dp))
         TextField(
             value = state.domain,
             maxLines = 1,
@@ -65,7 +108,9 @@ private fun LoginContent(state: LoginScreen.State) {
         )
         Spacer(modifier = Modifier.padding(8.dp))
         Button(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
             enabled = state.buttonEnabled,
             onClick = {
                 state.eventSink(
@@ -77,9 +122,15 @@ private fun LoginContent(state: LoginScreen.State) {
             }
         ) {
             if (state.authState == AuthStateType.WAITING) {
-                Text(stringResource(ResString.login_re_authentication))
+                Text(
+                    text = stringResource(ResString.login_re_authentication),
+                    color = Color.White
+                )
             } else {
-                Text(stringResource(ResString.login_authentication))
+                Text(
+                    text = stringResource(ResString.login_authentication),
+                    color = Color.White
+                )
             }
         }
         if (state.authState == AuthStateType.WAITING) {
@@ -90,10 +141,14 @@ private fun LoginContent(state: LoginScreen.State) {
             )
             Button(
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
                 onClick = { state.eventSink(LoginScreen.Event.OnAuthButtonClicked(scope, context)) }
             ) {
-                Text(stringResource(ResString.login))
+                Text(
+                    text = stringResource(ResString.login),
+                    color = Color.White
+                )
             }
         }
     }
