@@ -34,38 +34,50 @@ data object HomeScreen : Screen {
             val scope: CoroutineScope
         ) : Event()
 
-        data object OnLocalTimelineClicked : Event()
-        data object OnSocialTimelineClicked : Event()
-        data object OnGlobalTimelineClicked : Event()
         data object OnNoteCreateClicked : Event()
-
         data class OnNavigationIconClicked(
             val drawerState: DrawerState,
             val scope: CoroutineScope
         ) : Event()
 
-        data object OnDrawerFavoriteClicked : Event()
-        data object OnDrawerAnnouncementClicked : Event()
-        data object OnDrawerClipClicked : Event()
-        data object OnDrawerAntennaClicked : Event()
-        data object OnDrawerExploreClicked : Event()
-        data object OnDrawerChannelClicked : Event()
-        data object OnDrawerDriveClicked : Event()
-        data object OnDrawerAboutClicked : Event()
-        data object OnDrawerAccountPreferencesClicked : Event()
-        data object OnDrawerSettingsClicked : Event()
-        data object OnDrawerIconClicked : Event()
-        data object OnDrawerFollowingCountClicked : Event()
-        data object OnDrawerFollowersCountClicked : Event()
+        sealed class DrawerEvent : Event() {
+            data object OnDrawerFavoriteClicked : DrawerEvent()
+            data object OnDrawerAnnouncementClicked : DrawerEvent()
+            data object OnDrawerClipClicked : DrawerEvent()
+            data object OnDrawerAntennaClicked : DrawerEvent()
+            data object OnDrawerExploreClicked : DrawerEvent()
+            data object OnDrawerChannelClicked : DrawerEvent()
+            data object OnDrawerDriveClicked : DrawerEvent()
+            data object OnDrawerAboutClicked : DrawerEvent()
+            data object OnDrawerAccountPreferencesClicked : DrawerEvent()
+            data object OnDrawerSettingsClicked : DrawerEvent()
+            data object OnDrawerIconClicked : DrawerEvent()
+            data object OnDrawerFollowingCountClicked : DrawerEvent()
+            data object OnDrawerFollowersCountClicked : DrawerEvent()
+        }
 
-        data class OnTimelineIconClicked(
-            val userId: String,
-            val userName: String?,
-            val host: String?
-        ) : Event()
+        sealed class TimelineEvent : Event() {
+            data object OnLocalTimelineClicked : TimelineEvent()
+            data object OnSocialTimelineClicked : TimelineEvent()
+            data object OnGlobalTimelineClicked : TimelineEvent()
+        }
 
-        data object OnHomeIconClicked : Event()
-        data object OnSearchIconClicked : Event()
-        data object OnNotificationIconClicked : Event()
+        sealed class TimelineItemEvent : Event() {
+            abstract val userId: String
+            abstract val userName: String?
+            abstract val host: String?
+
+            data class OnTimelineIconClicked(
+                override val userId: String,
+                override val userName: String?,
+                override val host: String?
+            ) : TimelineItemEvent()
+        }
+
+        sealed class BottomAppBarActionEvent : Event() {
+            data object OnHomeIconClicked : BottomAppBarActionEvent()
+            data object OnSearchIconClicked : BottomAppBarActionEvent()
+            data object OnNotificationIconClicked : BottomAppBarActionEvent()
+        }
     }
 }
