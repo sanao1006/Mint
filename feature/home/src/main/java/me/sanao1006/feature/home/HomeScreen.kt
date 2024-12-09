@@ -166,7 +166,9 @@ private fun HomeScreenUiContent(
                 mainSheetType = MainScreenType.HOME,
                 onHomeClick = { state.eventSink(HomeScreen.Event.OnHomeIconClicked) },
                 onSearchClick = { state.eventSink(HomeScreen.Event.OnSearchIconClicked) },
-                onNotificationClick = { state.eventSink(HomeScreen.Event.OnNotificationIconClicked) },
+                onNotificationClick = {
+                    state.eventSink(HomeScreen.Event.OnNotificationIconClicked)
+                },
                 floatingActionButton = floatingActionButton
             )
         },

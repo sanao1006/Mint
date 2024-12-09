@@ -190,8 +190,6 @@ class HomeScreenPresenter @AssistedInject constructor(
                         )
                     )
                 }
-
-
             }
         }
     }
