@@ -42,7 +42,6 @@ import me.snao1006.res_value.ResString
 @CircuitInject(LoginScreen::class, SingletonComponent::class)
 @Composable
 fun LoginScreenUi(state: LoginScreen.State, modifier: Modifier) {
-
     var showIcon by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) {
         showIcon = true
