@@ -31,7 +31,6 @@ import me.sanao1006.datastore.DataStoreRepository
 import me.sanao1006.screens.AuthStateType
 import me.sanao1006.screens.LoginScreen
 import me.snao1006.res_value.ResString
-import timber.log.Timber
 import java.security.MessageDigest
 import javax.inject.Inject
 
@@ -66,20 +65,15 @@ class LoginScreenPresenter @Inject constructor(
                 is LoginScreen.Event.OnTextChanged -> {
                     buttonEnabled = event.text.isNotBlank() &&
                             event.text
-                                .matches(Regex("^(https?://)?[a-zA-Z0-9]+(\\.[a-zA-Z0-9]+)+\$"))
+                                .matches(Regex("^https?://[a-zA-Z0-9]+(\\.[a-zA-Z0-9]+)+\$"))
                     domain = event.text
                 }
 
                 is LoginScreen.Event.OnButtonClicked -> {
-                    val inputDomain = if (domain.startsWith("http") || domain.startsWith("https")) {
-                        domain
-                    } else {
-                        "https://${domain}"
-                    }
                     event.scope.launch {
                         suspendRunCatching {
                             ktorfit
-                                .baseUrl("$inputDomain/")
+                                .baseUrl("$domain/")
                                 .build()
                                 .createMiauthRepository()
                         }.onSuccess { ktorfitClient ->
@@ -127,40 +121,42 @@ class LoginScreenPresenter @Inject constructor(
                 }
 
                 is LoginScreen.Event.OnAuthButtonClicked -> {
-                    val inputDomain =
-                        if (domain.startsWith("http") || domain.startsWith("https")) {
-                            domain
-                        } else {
-                            "https://${domain}"
-                        }
-                    Timber.tag("ray").d("inputDomain: $inputDomain")
                     scope.launch {
                         suspendRunCatching {
                             ktorfit
-                                .baseUrl("$inputDomain/")
+                                .baseUrl("$domain/")
                                 .build()
                                 .createMiauthRepository()
                         }
                             .onSuccess { ktorfitClient ->
-                                val authSessionResponse = ktorfitClient.authSessionUserKey(
-                                    authSessionUserKeyRequestBody = AuthSessionUserKeyRequestBody(
-                                        appSecret = secret,
-                                        token = token
+                                suspendRunCatching {
+                                    ktorfitClient.authSessionUserKey(
+                                        authSessionUserKeyRequestBody = AuthSessionUserKeyRequestBody(
+                                            appSecret = secret,
+                                            token = token
+                                        )
                                     )
-                                )
-
-                                val accessToken =
-                                    (authSessionResponse.accessToken + secret).toSHA256()
-                                dataStoreRepository.saveAccessToken(accessToken)
-                                dataStoreRepository.saveBaseUrl(domain)
-                                dataStoreRepository.saveLoginUserInfo(
-                                    LoginUserInfo(
-                                        userName = authSessionResponse.user.username,
-                                        name = authSessionResponse.user.name ?: "",
-                                        avatarUrl = authSessionResponse.user.avatarUrl ?: ""
+                                }.onSuccess { authSessionResponse ->
+                                    val accessToken =
+                                        (authSessionResponse.accessToken + secret).toSHA256()
+                                    dataStoreRepository.saveAccessToken(accessToken)
+                                    dataStoreRepository.saveBaseUrl(domain)
+                                    dataStoreRepository.saveLoginUserInfo(
+                                        LoginUserInfo(
+                                            userName = authSessionResponse.user.username,
+                                            name = authSessionResponse.user.name ?: "",
+                                            avatarUrl = authSessionResponse.user.avatarUrl ?: ""
+                                        )
                                     )
-                                )
-
+                                    authState = AuthStateType.SUCCESS
+                                }.onFailure {
+                                    Toast.makeText(
+                                        event.context,
+                                        event.context.getString(ResString.login_failed),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    authState = AuthStateType.FIXED
+                                }
                             }.onFailure {
                                 Toast.makeText(
                                     event.context,

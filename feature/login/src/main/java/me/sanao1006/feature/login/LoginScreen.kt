@@ -55,6 +55,12 @@ private fun LoginContent(state: LoginScreen.State) {
         TextField(
             value = state.domain,
             maxLines = 1,
+            placeholder = {
+                Text(
+                    text = "https://misskey.io",
+                    color = MaterialTheme.colorScheme.outline
+                )
+            },
             onValueChange = { state.eventSink(LoginScreen.Event.OnTextChanged(it)) }
         )
         Spacer(modifier = Modifier.padding(8.dp))
