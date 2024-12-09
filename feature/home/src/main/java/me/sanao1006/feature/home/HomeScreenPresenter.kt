@@ -129,6 +129,21 @@ class HomeScreenPresenter @AssistedInject constructor(
                     }
                 }
 
+                // Bottom App Bar Event Begin
+                HomeScreen.Event.OnHomeIconClicked -> {
+                    navigator.goTo(HomeScreen)
+                }
+
+                HomeScreen.Event.OnSearchIconClicked -> {
+                    // TODO goto Search Screen
+                }
+
+                HomeScreen.Event.OnNotificationIconClicked -> {
+                    // TODO goto Notification Screen
+                }
+                // Bottom App Bar Event End
+
+                // Drawer Event Begin
                 HomeScreen.Event.OnDrawerFavoriteClicked -> {}
 
                 HomeScreen.Event.OnDrawerAnnouncementClicked -> {}
@@ -164,6 +179,8 @@ class HomeScreenPresenter @AssistedInject constructor(
 
                 HomeScreen.Event.OnDrawerFollowersCountClicked -> {}
 
+                // Drawer Event End
+
                 is HomeScreen.Event.OnTimelineIconClicked -> {
                     nav.goTo(
                         UserScreen(
@@ -173,6 +190,8 @@ class HomeScreenPresenter @AssistedInject constructor(
                         )
                     )
                 }
+
+
             }
         }
     }

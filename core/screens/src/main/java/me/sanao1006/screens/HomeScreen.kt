@@ -63,5 +63,9 @@ data object HomeScreen : Screen {
             val userName: String?,
             val host: String?
         ) : Event()
+
+        data object OnHomeIconClicked : Event()
+        data object OnSearchIconClicked : Event()
+        data object OnNotificationIconClicked : Event()
     }
 }
