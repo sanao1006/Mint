@@ -60,6 +60,7 @@ private fun LoginContent(state: LoginScreen.State) {
         Spacer(modifier = Modifier.padding(8.dp))
         Button(
             modifier = Modifier.fillMaxWidth(),
+            enabled = state.buttonEnabled,
             onClick = {
                 state.eventSink(
                     LoginScreen.Event.OnButtonClicked(

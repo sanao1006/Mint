@@ -14,6 +14,7 @@ data object LoginScreen : Screen {
     data class State(
         val domain: String = "",
         val error: String = "",
+        val buttonEnabled: Boolean = false,
         val authState: AuthStateType = AuthStateType.FIXED,
         val eventSink: (Event) -> Unit
     ) : CircuitUiState

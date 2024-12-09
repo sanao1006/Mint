@@ -31,4 +31,6 @@
     <string name="drawer_item_account_preferences">Account Preferences</string>
     <string name="drawer_item_settings">Settings</string>
     <string name="notes_count">Notes</string>
+    <string name="login_invalid_url">Invalid URL</string>
+    <string name="login_invalid_host">Unable to resolve host %1$s</string>
 </resources>
