@@ -31,4 +31,7 @@
     <string name="drawer_item_account_preferences">アカウント設定</string>
     <string name="drawer_item_settings">設定</string>
     <string name="notes_count">ノート</string>
+    <string name="login_invalid_url">無効なURLです</string>
+    <string name="login_invalid_host">無効なホストです: %1$s</string>
+    <string name="login_failed">ログイン失敗しました。再認証してください</string>
 </resources>

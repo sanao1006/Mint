@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.retained.rememberRetained
@@ -21,6 +22,7 @@ import java.security.MessageDigest
 import javax.inject.Inject
 import kotlinx.coroutines.launch
 import me.sanao1006.core.data.repository.createMiauthRepository
+import me.sanao1006.core.data.util.suspendRunCatching
 import me.sanao1006.core.model.LoginUserInfo
 import me.sanao1006.core.model.NormalApi
 import me.sanao1006.core.model.auth.AppCreateRequestBody
@@ -30,6 +32,7 @@ import me.sanao1006.core.model.auth.PermissionKeys
 import me.sanao1006.datastore.DataStoreRepository
 import me.sanao1006.screens.AuthStateType
 import me.sanao1006.screens.LoginScreen
+import me.snao1006.res_value.ResString
 
 @CircuitInject(LoginScreen::class, SingletonComponent::class)
 class LoginScreenPresenter @Inject constructor(
@@ -49,67 +52,121 @@ class LoginScreenPresenter @Inject constructor(
         var domain by rememberRetained { mutableStateOf("") }
         var secret by rememberRetained { mutableStateOf("") }
         var token by rememberRetained { mutableStateOf("") }
+        var buttonEnabled by rememberRetained { mutableStateOf(false) }
         var authState by rememberRetained { mutableStateOf(AuthStateType.FIXED) }
+        val scope = rememberCoroutineScope()
 
         return LoginScreen.State(
             domain = domain,
+            buttonEnabled = buttonEnabled,
             authState = authState
         ) { event ->
             when (event) {
                 is LoginScreen.Event.OnTextChanged -> {
+                    buttonEnabled = event.text.isNotBlank() &&
+                        event.text
+                            .matches(Regex("^https?://[a-zA-Z0-9]+(\\.[a-zA-Z0-9]+)+\$"))
                     domain = event.text
                 }
 
                 is LoginScreen.Event.OnButtonClicked -> {
-                    val ktorfitClient = ktorfit
-                        .baseUrl("$domain/")
-                        .build()
-                        .createMiauthRepository()
                     event.scope.launch {
-                        val appCreate = ktorfitClient.createApp(
-                            appCreateRequestBody = AppCreateRequestBody(
-                                name = "Mint",
-                                description = "Mint",
-                                permission = PermissionKeys.getAllPermissions(),
-                                callbackUrl = "myapp://auth-callback"
-                            )
-                        )
-                        secret = appCreate.secret
-                        val sessionResponse = ktorfitClient.authSessionGenerate(
-                            authSessionGenerateRequestBody = AuthSessionGenerateRequestBody(
-                                appSecret = appCreate.secret
-                            )
-                        )
-                        token = sessionResponse.token
-                        openUrlInChrome(url = sessionResponse.url, context = event.context)
+                        suspendRunCatching {
+                            ktorfit
+                                .baseUrl("$domain/")
+                                .build()
+                                .createMiauthRepository()
+                        }.onSuccess { ktorfitClient ->
+                            suspendRunCatching {
+                                ktorfitClient.createApp(
+                                    appCreateRequestBody = AppCreateRequestBody(
+                                        name = "Mint",
+                                        description = "Mint",
+                                        permission = PermissionKeys.getAllPermissions(),
+                                        callbackUrl = "myapp://auth-callback"
+                                    )
+                                )
+                            }
+                                .onSuccess { appCreate ->
+                                    secret = appCreate.secret
+                                    val sessionResponse = ktorfitClient.authSessionGenerate(
+                                        authSessionGenerateRequestBody =
+                                        AuthSessionGenerateRequestBody(
+                                            appSecret = appCreate.secret
+                                        )
+                                    )
+                                    token = sessionResponse.token
+                                    openUrlInChrome(
+                                        url = sessionResponse.url,
+                                        context = event.context
+                                    )
+                                    authState = AuthStateType.WAITING
+                                }.onFailure {
+                                    Toast.makeText(
+                                        event.context,
+                                        event.context.getString(
+                                            ResString.login_invalid_host,
+                                            domain
+                                        ),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                        }.onFailure {
+                            Toast.makeText(
+                                event.context,
+                                it.message,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
-                    authState = AuthStateType.WAITING
                 }
 
                 is LoginScreen.Event.OnAuthButtonClicked -> {
-                    event.scope.launch {
-                        val ktorfitClient = ktorfit
-                            .baseUrl("$domain/")
-                            .build()
-                            .createMiauthRepository()
-
-                        val authSessionResponse = ktorfitClient.authSessionUserKey(
-                            authSessionUserKeyRequestBody = AuthSessionUserKeyRequestBody(
-                                appSecret = secret,
-                                token = token
-                            )
-                        )
-
-                        val accessToken = (authSessionResponse.accessToken + secret).toSHA256()
-                        dataStoreRepository.saveAccessToken(accessToken)
-                        dataStoreRepository.saveBaseUrl(domain)
-                        dataStoreRepository.saveLoginUserInfo(
-                            LoginUserInfo(
-                                userName = authSessionResponse.user.username,
-                                name = authSessionResponse.user.name ?: "",
-                                avatarUrl = authSessionResponse.user.avatarUrl ?: ""
-                            )
-                        )
+                    scope.launch {
+                        suspendRunCatching {
+                            ktorfit
+                                .baseUrl("$domain/")
+                                .build()
+                                .createMiauthRepository()
+                        }
+                            .onSuccess { ktorfitClient ->
+                                suspendRunCatching {
+                                    ktorfitClient.authSessionUserKey(
+                                        authSessionUserKeyRequestBody =
+                                        AuthSessionUserKeyRequestBody(
+                                            appSecret = secret,
+                                            token = token
+                                        )
+                                    )
+                                }.onSuccess { authSessionResponse ->
+                                    val accessToken =
+                                        (authSessionResponse.accessToken + secret).toSHA256()
+                                    dataStoreRepository.saveAccessToken(accessToken)
+                                    dataStoreRepository.saveBaseUrl(domain)
+                                    dataStoreRepository.saveLoginUserInfo(
+                                        LoginUserInfo(
+                                            userName = authSessionResponse.user.username,
+                                            name = authSessionResponse.user.name ?: "",
+                                            avatarUrl = authSessionResponse.user.avatarUrl ?: ""
+                                        )
+                                    )
+                                    authState = AuthStateType.SUCCESS
+                                }.onFailure {
+                                    Toast.makeText(
+                                        event.context,
+                                        event.context.getString(ResString.login_failed),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    authState = AuthStateType.FIXED
+                                }
+                            }.onFailure {
+                                Toast.makeText(
+                                    event.context,
+                                    event.context.getString(ResString.login_failed),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                authState = AuthStateType.FIXED
+                            }
                     }
                 }
             }

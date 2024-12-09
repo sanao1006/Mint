@@ -55,11 +55,18 @@ private fun LoginContent(state: LoginScreen.State) {
         TextField(
             value = state.domain,
             maxLines = 1,
+            placeholder = {
+                Text(
+                    text = "https://misskey.io",
+                    color = MaterialTheme.colorScheme.outline
+                )
+            },
             onValueChange = { state.eventSink(LoginScreen.Event.OnTextChanged(it)) }
         )
         Spacer(modifier = Modifier.padding(8.dp))
         Button(
             modifier = Modifier.fillMaxWidth(),
+            enabled = state.buttonEnabled,
             onClick = {
                 state.eventSink(
                     LoginScreen.Event.OnButtonClicked(
@@ -84,7 +91,7 @@ private fun LoginContent(state: LoginScreen.State) {
             Button(
                 modifier = Modifier
                     .fillMaxWidth(),
-                onClick = { state.eventSink(LoginScreen.Event.OnAuthButtonClicked(scope)) }
+                onClick = { state.eventSink(LoginScreen.Event.OnAuthButtonClicked(scope, context)) }
             ) {
                 Text(stringResource(ResString.login))
             }

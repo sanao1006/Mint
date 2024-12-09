@@ -6,15 +6,15 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class AvatarDecoration(
     @SerialName("angle")
-    val angle: Int = 0,
+    val angle: Double = 0.0,
     @SerialName("flipH")
     val flipH: Boolean = false,
     @SerialName("id")
     val id: String = "",
     @SerialName("offsetX")
-    val offsetX: Int = 0,
+    val offsetX: Double = 0.0,
     @SerialName("offsetY")
-    val offsetY: Int = 0,
+    val offsetY: Double = 0.0,
     @SerialName("url")
     val url: String = ""
 )
