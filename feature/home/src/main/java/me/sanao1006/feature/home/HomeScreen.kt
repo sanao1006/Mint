@@ -37,6 +37,7 @@ import me.sanao1006.core.ui.MainScreenDrawerWrapper
 import me.sanao1006.core.ui.TimelineColumn
 import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.MainScreenType
+import me.sanao1006.screens.event.GlobalIconEvent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @CircuitInject(HomeScreen::class, SingletonComponent::class)
@@ -65,7 +66,12 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
                 scrollBehavior = scrollBehavior,
                 snackbarHostState = { SnackbarHost(hostState = snackbarHostState) },
                 onNavigationIconClick = {
-                    state.eventSink(HomeScreen.Event.OnNavigationIconClicked(drawerState, scope))
+                    state.globalIconEventSink(
+                        GlobalIconEvent.OnGlobalIconClicked(
+                            drawerState,
+                            scope
+                        )
+                    )
                 },
                 onHomeClick = {
                     scope.launch {

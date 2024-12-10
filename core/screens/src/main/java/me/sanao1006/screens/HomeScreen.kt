@@ -3,7 +3,6 @@ package me.sanao1006.screens
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.pullrefresh.PullRefreshState
-import androidx.compose.material3.DrawerState
 import androidx.compose.runtime.Immutable
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
@@ -14,6 +13,7 @@ import kotlinx.parcelize.Parcelize
 import me.sanao1006.core.model.LoginUserInfo
 import me.sanao1006.core.model.notes.TimelineUiState
 import me.sanao1006.screens.event.DrawerEvent
+import me.sanao1006.screens.event.GlobalIconEvent
 
 @Parcelize
 data object HomeScreen : Screen {
@@ -27,6 +27,7 @@ data object HomeScreen : Screen {
         val isRefreshed: Boolean = false,
         val drawerUserInfo: LoginUserInfo,
         val drawerEventSink: (DrawerEvent) -> Unit,
+        val globalIconEventSink: (GlobalIconEvent) -> Unit,
         val eventSink: (Event) -> Unit
     ) : CircuitUiState
 
@@ -37,10 +38,6 @@ data object HomeScreen : Screen {
         ) : Event()
 
         data object OnNoteCreateClicked : Event()
-        data class OnNavigationIconClicked(
-            val drawerState: DrawerState,
-            val scope: CoroutineScope
-        ) : Event()
 
         sealed class TimelineEvent : Event() {
             data object OnLocalTimelineClicked : TimelineEvent()

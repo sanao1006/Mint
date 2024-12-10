@@ -33,14 +33,6 @@ internal fun handleNoteCreateClicked(nav: GoToNavigator) {
     nav.goTo(NoteScreen)
 }
 
-internal fun handleNavigationIconClicked(event: HomeScreen.Event.OnNavigationIconClicked) {
-    event.scope.launch {
-        event.drawerState.apply {
-            if (isClosed) open() else close()
-        }
-    }
-}
-
 internal fun handleTimelineEvent(
     event: HomeScreen.Event.TimelineEvent,
     setTimelineType: (TimelineType) -> Unit
