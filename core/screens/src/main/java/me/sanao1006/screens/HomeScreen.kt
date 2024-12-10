@@ -13,6 +13,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.parcelize.Parcelize
 import me.sanao1006.core.model.LoginUserInfo
 import me.sanao1006.core.model.notes.TimelineUiState
+import me.sanao1006.screens.event.DrawerEvent
 
 @Parcelize
 data object HomeScreen : Screen {

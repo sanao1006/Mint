@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.rememberAsyncImagePainter
 import ir.alirezaivaz.tablericons.TablerIcons
 import me.sanao1006.core.model.LoginUserInfo
-import me.sanao1006.screens.DrawerEvent
+import me.sanao1006.screens.event.DrawerEvent
 import me.snao1006.res_value.ResString
 
 @Composable

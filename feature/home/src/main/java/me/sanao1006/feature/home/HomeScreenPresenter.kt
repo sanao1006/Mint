@@ -29,6 +29,7 @@ import me.sanao1006.core.model.LoginUserInfo
 import me.sanao1006.core.model.notes.TimelineUiState
 import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.NoteScreen
+import me.sanao1006.screens.event.handleDrawerEvent
 
 class HomeScreenPresenter @AssistedInject constructor(
     @Assisted private val navigator: Navigator,
@@ -86,7 +87,7 @@ class HomeScreenPresenter @AssistedInject constructor(
             pullToRefreshState = pullRefreshState,
             isRefreshed = isRefreshed,
             drawerUserInfo = loginUserInfo,
-            drawerEventSink = { event -> handleDrawerEvent(event, nav, loginUserInfo) },
+            drawerEventSink = { event -> event.handleDrawerEvent(nav, loginUserInfo) },
         ) { event ->
             when (event) {
                 is HomeScreen.Event.OnNoteCreated -> handleNoteCreated(
@@ -105,7 +106,7 @@ class HomeScreenPresenter @AssistedInject constructor(
                     event,
                     navigator
                 )
-                
+
                 is HomeScreen.Event.TimelineItemEvent -> handleTimelineItemEvent(event, nav)
             }
         }

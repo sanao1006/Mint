@@ -5,8 +5,6 @@ import com.slack.circuit.runtime.GoToNavigator
 import com.slack.circuit.runtime.Navigator
 import kotlinx.coroutines.launch
 import me.sanao1006.core.domain.home.TimelineType
-import me.sanao1006.core.model.LoginUserInfo
-import me.sanao1006.screens.DrawerEvent
 import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.NoteScreen
 import me.sanao1006.screens.SearchScreen
@@ -75,27 +73,6 @@ internal fun handleBottomAppBarActionEvent(
         HomeScreen.Event.BottomAppBarActionEvent.OnNotificationIconClicked -> {
             // TODO goto Notification Screen
         }
-    }
-}
-
-internal fun handleDrawerEvent(
-    event: DrawerEvent,
-    nav: GoToNavigator,
-    loginUserInfo: LoginUserInfo
-) {
-    when (event) {
-        DrawerEvent.OnDrawerIconClicked -> {
-            nav.goTo(
-                UserScreen(
-                    userId = loginUserInfo.userId,
-                    userName = loginUserInfo.userName,
-                    host = loginUserInfo.host,
-                    isFromDrawer = true
-                )
-            )
-        }
-
-        else -> {}
     }
 }
 
