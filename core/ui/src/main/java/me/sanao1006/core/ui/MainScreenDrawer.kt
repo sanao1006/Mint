@@ -1,4 +1,4 @@
-package me.sanao1006.feature.home
+package me.sanao1006.core.ui
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -34,10 +34,36 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.rememberAsyncImagePainter
 import ir.alirezaivaz.tablericons.TablerIcons
 import me.sanao1006.core.model.LoginUserInfo
+import me.sanao1006.screens.DrawerEvent
 import me.snao1006.res_value.ResString
 
 @Composable
-internal fun HomeScreenDrawer(
+fun MainScreenDrawerWrapper(
+    loginUserInfo: LoginUserInfo,
+    drawerState: DrawerState,
+    event: (DrawerEvent) -> Unit,
+    content: @Composable () -> Unit
+) = MainScreenDrawer(
+    loginUserInfo = loginUserInfo,
+    drawerState = drawerState,
+    onDrawerFavoriteClick = { event(DrawerEvent.OnDrawerFavoriteClicked) },
+    onDrawerAnnouncementClick = { event(DrawerEvent.OnDrawerAnnouncementClicked) },
+    onDrawerClipClick = { event(DrawerEvent.OnDrawerClipClicked) },
+    onDrawerAntennaClick = { event(DrawerEvent.OnDrawerAntennaClicked) },
+    onDrawerExploreClick = { event(DrawerEvent.OnDrawerExploreClicked) },
+    onDrawerChannelClick = { event(DrawerEvent.OnDrawerChannelClicked) },
+    onDrawerDriveClick = { event(DrawerEvent.OnDrawerDriveClicked) },
+    onDrawerAboutClick = { event(DrawerEvent.OnDrawerAboutClicked) },
+    onDrawerAccountPreferencesClick = { event(DrawerEvent.OnDrawerAccountPreferencesClicked) },
+    onDrawerSettingsClick = { event(DrawerEvent.OnDrawerSettingsClicked) },
+    onIconClick = { event(DrawerEvent.OnDrawerIconClicked) },
+    onFollowingCountClick = { event(DrawerEvent.OnDrawerFollowingCountClicked) },
+    onFollowersCountClick = { event(DrawerEvent.OnDrawerFollowersCountClicked) },
+    content = content
+)
+
+@Composable
+private fun MainScreenDrawer(
     loginUserInfo: LoginUserInfo,
     modifier: Modifier = Modifier,
     drawerState: DrawerState,

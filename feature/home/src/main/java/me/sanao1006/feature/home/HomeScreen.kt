@@ -33,8 +33,8 @@ import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
 import kotlinx.coroutines.launch
 import me.sanao1006.core.ui.MainScreenBottomAppBar
+import me.sanao1006.core.ui.MainScreenDrawerWrapper
 import me.sanao1006.core.ui.TimelineColumn
-import me.sanao1006.screens.DrawerEvent
 import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.MainScreenType
 
@@ -52,48 +52,10 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
             state.eventSink(HomeScreen.Event.OnNoteCreated(snackbarHostState, scope))
         }
 
-        HomeScreenDrawer(
+        MainScreenDrawerWrapper(
             loginUserInfo = state.drawerUserInfo,
             drawerState = drawerState,
-            onDrawerFavoriteClick = {
-                state.drawerEventSink(DrawerEvent.OnDrawerIconClicked)
-            },
-            onDrawerAnnouncementClick = {
-                state.drawerEventSink(DrawerEvent.OnDrawerAnnouncementClicked)
-            },
-            onDrawerClipClick = {
-                state.drawerEventSink(DrawerEvent.OnDrawerClipClicked)
-            },
-            onDrawerAntennaClick = {
-                state.drawerEventSink(DrawerEvent.OnDrawerAntennaClicked)
-            },
-            onDrawerExploreClick = {
-                state.drawerEventSink(DrawerEvent.OnDrawerExploreClicked)
-            },
-            onDrawerChannelClick = {
-                state.drawerEventSink(DrawerEvent.OnDrawerChannelClicked)
-            },
-            onDrawerDriveClick = {
-                state.drawerEventSink(DrawerEvent.OnDrawerDriveClicked)
-            },
-            onDrawerAboutClick = {
-                state.drawerEventSink(DrawerEvent.OnDrawerAboutClicked)
-            },
-            onDrawerAccountPreferencesClick = {
-                state.drawerEventSink(DrawerEvent.OnDrawerAccountPreferencesClicked)
-            },
-            onDrawerSettingsClick = {
-                state.drawerEventSink(DrawerEvent.OnDrawerSettingsClicked)
-            },
-            onIconClick = {
-                state.drawerEventSink(DrawerEvent.OnDrawerIconClicked)
-            },
-            onFollowingCountClick = {
-                state.drawerEventSink(DrawerEvent.OnDrawerFollowingCountClicked)
-            },
-            onFollowersCountClick = {
-                state.drawerEventSink(DrawerEvent.OnDrawerFollowersCountClicked)
-            }
+            event = state.drawerEventSink
         ) {
             HomeScreenUiContent(
                 state = state,
