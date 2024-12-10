@@ -8,6 +8,7 @@ import me.sanao1006.core.domain.home.TimelineType
 import me.sanao1006.core.model.LoginUserInfo
 import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.NoteScreen
+import me.sanao1006.screens.SearchScreen
 import me.sanao1006.screens.UserScreen
 import me.snao1006.res_value.ResString
 
@@ -67,7 +68,7 @@ internal fun handleBottomAppBarActionEvent(
         }
 
         HomeScreen.Event.BottomAppBarActionEvent.OnSearchIconClicked -> {
-            // TODO goto Search Screen
+            navigator.goTo(SearchScreen)
         }
 
         HomeScreen.Event.BottomAppBarActionEvent.OnNotificationIconClicked -> {
