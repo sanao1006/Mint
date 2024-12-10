@@ -85,7 +85,8 @@ class HomeScreenPresenter @AssistedInject constructor(
             isSuccessCreateNote = isSuccessCreateNote,
             pullToRefreshState = pullRefreshState,
             isRefreshed = isRefreshed,
-            drawerUserInfo = loginUserInfo
+            drawerUserInfo = loginUserInfo,
+            drawerEventSink = { event -> handleDrawerEvent(event, nav, loginUserInfo) },
         ) { event ->
             when (event) {
                 is HomeScreen.Event.OnNoteCreated -> handleNoteCreated(
@@ -104,8 +105,7 @@ class HomeScreenPresenter @AssistedInject constructor(
                     event,
                     navigator
                 )
-
-                is HomeScreen.Event.DrawerEvent -> handleDrawerEvent(event, nav, loginUserInfo)
+                
                 is HomeScreen.Event.TimelineItemEvent -> handleTimelineItemEvent(event, nav)
             }
         }

@@ -25,6 +25,7 @@ data object HomeScreen : Screen {
         val pullToRefreshState: PullRefreshState,
         val isRefreshed: Boolean = false,
         val drawerUserInfo: LoginUserInfo,
+        val drawerEventSink: (DrawerEvent) -> Unit,
         val eventSink: (Event) -> Unit
     ) : CircuitUiState
 
@@ -39,22 +40,6 @@ data object HomeScreen : Screen {
             val drawerState: DrawerState,
             val scope: CoroutineScope
         ) : Event()
-
-        sealed class DrawerEvent : Event() {
-            data object OnDrawerFavoriteClicked : DrawerEvent()
-            data object OnDrawerAnnouncementClicked : DrawerEvent()
-            data object OnDrawerClipClicked : DrawerEvent()
-            data object OnDrawerAntennaClicked : DrawerEvent()
-            data object OnDrawerExploreClicked : DrawerEvent()
-            data object OnDrawerChannelClicked : DrawerEvent()
-            data object OnDrawerDriveClicked : DrawerEvent()
-            data object OnDrawerAboutClicked : DrawerEvent()
-            data object OnDrawerAccountPreferencesClicked : DrawerEvent()
-            data object OnDrawerSettingsClicked : DrawerEvent()
-            data object OnDrawerIconClicked : DrawerEvent()
-            data object OnDrawerFollowingCountClicked : DrawerEvent()
-            data object OnDrawerFollowersCountClicked : DrawerEvent()
-        }
 
         sealed class TimelineEvent : Event() {
             data object OnLocalTimelineClicked : TimelineEvent()
