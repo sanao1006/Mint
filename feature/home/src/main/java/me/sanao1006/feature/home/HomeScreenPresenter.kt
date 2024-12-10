@@ -88,7 +88,7 @@ class HomeScreenPresenter @AssistedInject constructor(
             pullToRefreshState = pullRefreshState,
             isRefreshed = isRefreshed,
             drawerUserInfo = loginUserInfo,
-            drawerEventSink = { event -> event.handleDrawerEvent(nav, loginUserInfo) },
+            drawerEventSink = { event -> event.handleDrawerEvent(navigator, loginUserInfo) },
             globalIconEventSink = { event -> event.handleNavigationIconClicked() }
         ) { event ->
             when (event) {

@@ -1,6 +1,6 @@
 package me.sanao1006.screens.event
 
-import com.slack.circuit.runtime.GoToNavigator
+import com.slack.circuit.runtime.Navigator
 import me.sanao1006.core.model.LoginUserInfo
 import me.sanao1006.screens.UserScreen
 
@@ -21,12 +21,12 @@ sealed class DrawerEvent {
 }
 
 fun DrawerEvent.handleDrawerEvent(
-    nav: GoToNavigator,
+    navigator: Navigator,
     loginUserInfo: LoginUserInfo
 ) {
     when (this) {
         DrawerEvent.OnDrawerIconClicked -> {
-            nav.goTo(
+            navigator.goTo(
                 UserScreen(
                     userId = loginUserInfo.userId,
                     userName = loginUserInfo.userName,

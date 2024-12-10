@@ -1,7 +1,12 @@
 package me.sanao1006.feature.search
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -15,9 +20,12 @@ import androidx.compose.ui.res.painterResource
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
+import kotlinx.coroutines.CoroutineScope
 import me.sanao1006.core.ui.MainScreenBottomAppBar
+import me.sanao1006.core.ui.MainScreenDrawerWrapper
 import me.sanao1006.screens.MainScreenType
 import me.sanao1006.screens.SearchScreen
+import me.sanao1006.screens.event.GlobalIconEvent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @CircuitInject(SearchScreen::class, SingletonComponent::class)
@@ -25,21 +33,48 @@ import me.sanao1006.screens.SearchScreen
 fun SearchScreenUi(state: SearchScreen.State, modifier: Modifier) {
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
+    Box(modifier = modifier.fillMaxSize()) {
+        MainScreenDrawerWrapper(
+            loginUserInfo = state.loginUserInfo,
+            drawerState = drawerState,
+            event = state.drawerEventSink
+        ) {
+            SearchScreenUiContent(
+                state = state,
+                drawerState = drawerState,
+                scope = scope,
+                modifier = modifier
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun SearchScreenUiContent(
+    state: SearchScreen.State,
+    drawerState: DrawerState,
+    scope: CoroutineScope,
+    modifier: Modifier = Modifier
+) {
     Scaffold(
+        modifier = modifier,
         topBar = {
             TopAppBar(
                 title = {},
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            state.eventSink(
-                                SearchScreen.Event.OnNavigationIconClicked(
-                                    drawerState,
-                                    scope
-                                )
+                            state.globalIconEventSink(
+                                GlobalIconEvent.OnGlobalIconClicked(drawerState, scope)
                             )
                         }
-                    ) { Icon(painter = painterResource(TablerIcons.Dots), "") }
+                    ) {
+                        Icon(
+                            painter = painterResource(TablerIcons.Menu2),
+                            contentDescription = null
+                        )
+                    }
                 }
             )
         },
@@ -53,11 +88,8 @@ fun SearchScreenUi(state: SearchScreen.State, modifier: Modifier) {
             )
         }
     ) {
-        SearchScreenUiContent(modifier = modifier.padding(it))
+        Column(modifier = Modifier.padding(it)) {
+            Text(text = "Search Screen")
+        }
     }
-}
-
-@Composable
-private fun SearchScreenUiContent(modifier: Modifier = Modifier) {
-
 }
