@@ -26,7 +26,8 @@ include(":app")
 include(
     "feature:login",
     "feature:home",
-    "feature:user"
+    "feature:user",
+    "feature:search"
 )
 include(
     "core:network",
