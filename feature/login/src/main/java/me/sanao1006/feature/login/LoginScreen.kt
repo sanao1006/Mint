@@ -49,8 +49,7 @@ fun LoginScreenUi(state: LoginScreen.State, modifier: Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .padding(horizontal = 24.dp),
+            .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -64,17 +63,14 @@ fun LoginScreenUi(state: LoginScreen.State, modifier: Modifier) {
                     painter = painterResource(ResDrawable.ic_main_icon),
                     contentDescription = ""
                 )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "Welcome to Mint!",
-                    style = MaterialTheme.typography.displaySmall,
-                    color = MaterialTheme.colorScheme.secondary
-                )
             }
         }
+        Spacer(modifier = Modifier.height(12.dp))
         LoginContent(
             state = state,
-            modifier = Modifier.padding(vertical = 32.dp, horizontal = 56.dp)
+            modifier = Modifier
+                .padding(vertical = 32.dp, horizontal = 40.dp)
+                .fillMaxWidth()
         )
     }
 }
@@ -89,12 +85,13 @@ private fun LoginContent(state: LoginScreen.State, modifier: Modifier = Modifier
         val scope = rememberCoroutineScope()
         val context = LocalContext.current
         Text(
-            text = stringResource(ResString.enter_domain),
+            text = stringResource(ResString.enter_misskey_server_url),
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.secondary
         )
         Spacer(modifier = Modifier.padding(6.dp))
         TextField(
+            modifier = Modifier.fillMaxWidth(),
             value = state.domain,
             maxLines = 1,
             placeholder = {

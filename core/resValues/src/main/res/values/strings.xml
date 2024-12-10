@@ -2,7 +2,7 @@
 <resources>
     <string name="create_post">Post</string>
     <string name="note_placeholder">What\'ts up?</string>
-    <string name="enter_domain">Enter domain</string>
+    <string name="enter_misskey_server_url">Enter Misskey Server URL</string>
     <string name="login_authentication">Authentication</string>
     <string name="login_re_authentication">Re Authentication</string>
     <string name="login">Login!</string>
