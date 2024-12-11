@@ -11,13 +11,13 @@ import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material3.BottomAppBarDefaults
+import androidx.compose.material3.BottomAppBarScrollBehavior
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -48,7 +48,7 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
         val scope = rememberCoroutineScope()
         val drawerState = rememberDrawerState(DrawerValue.Closed)
         val snackbarHostState = remember { SnackbarHostState() }
-        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+        val scrollBehavior = BottomAppBarDefaults.exitAlwaysScrollBehavior()
         LaunchedEffect(state.isSuccessCreateNote) {
             state.eventSink(HomeScreen.Event.OnNoteCreated(snackbarHostState, scope))
         }
@@ -110,7 +110,7 @@ private fun HomeScreenUiContent(
     state: HomeScreen.State,
     pagerState: PagerState,
     modifier: Modifier = Modifier,
-    scrollBehavior: TopAppBarScrollBehavior,
+    scrollBehavior: BottomAppBarScrollBehavior,
     snackbarHostState: @Composable () -> Unit,
     onGlobalIconClicked: () -> Unit,
     onHomeClick: () -> Unit,
@@ -123,7 +123,6 @@ private fun HomeScreenUiContent(
         topBar = {
             HomeScreenTopAppBar(
                 topAppBarTimelineState = TopAppBarTimelineState.get(pagerState.currentPage),
-                scrollBehavior = scrollBehavior,
                 onNavigationIconClick = onGlobalIconClicked,
                 onHomeClick = onHomeClick,
                 onSocialClick = onSocialClick,
@@ -133,7 +132,8 @@ private fun HomeScreenUiContent(
         bottomBar = {
             MainScreenBottomAppBarWrapper(
                 mainScreenType = MainScreenType.HOME,
-                event = state.bottomAppBarEventSInk
+                event = state.bottomAppBarEventSInk,
+                scrollBehavior = scrollBehavior
             )
         },
         floatingActionButton = floatingActionButton,

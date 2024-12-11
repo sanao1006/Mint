@@ -7,8 +7,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -21,7 +19,6 @@ import me.sanao1006.core.ui.modifier.bottomBorder
 @Composable
 internal fun HomeScreenTopAppBar(
     topAppBarTimelineState: TopAppBarTimelineState,
-    scrollBehavior: TopAppBarScrollBehavior,
     modifier: Modifier = Modifier,
     onNavigationIconClick: () -> Unit,
     onHomeClick: () -> Unit,
@@ -29,7 +26,6 @@ internal fun HomeScreenTopAppBar(
     onGlobalClick: () -> Unit
 ) {
     TopAppBar(
-        scrollBehavior = scrollBehavior,
         modifier = modifier,
         title = {
             Row(
@@ -40,7 +36,9 @@ internal fun HomeScreenTopAppBar(
                     IconButton(
                         modifier = Modifier.then(
                             if (state == topAppBarTimelineState) Modifier.bottomBorder()
-                            else { Modifier }
+                            else {
+                                Modifier
+                            }
                         ),
                         onClick = {
                             when (state) {
@@ -88,7 +86,6 @@ internal enum class TopAppBarTimelineState(val index: Int) {
 fun PreviewHomeScreenTopAppBar() {
     HomeScreenTopAppBar(
         topAppBarTimelineState = TopAppBarTimelineState.SOCIAL,
-        scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
         onNavigationIconClick = {},
         onHomeClick = {},
         onSocialClick = {},

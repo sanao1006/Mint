@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.BottomAppBarDefaults
+import androidx.compose.material3.BottomAppBarScrollBehavior
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -31,6 +33,7 @@ import me.sanao1006.screens.event.GlobalIconEvent
 fun SearchScreenUi(state: SearchScreen.State, modifier: Modifier) {
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val scrollBehavior = BottomAppBarDefaults.exitAlwaysScrollBehavior()
     Box(modifier = modifier.fillMaxSize()) {
         MainScreenDrawerWrapper(
             loginUserInfo = state.loginUserInfo,
@@ -39,6 +42,7 @@ fun SearchScreenUi(state: SearchScreen.State, modifier: Modifier) {
         ) {
             SearchScreenUiContent(
                 state = state,
+                scrollBehavior = scrollBehavior,
                 onGlobalClick = {
                     state.globalIconEventSink(
                         GlobalIconEvent.OnGlobalIconClicked(drawerState, scope)
@@ -54,6 +58,7 @@ fun SearchScreenUi(state: SearchScreen.State, modifier: Modifier) {
 @Composable
 private fun SearchScreenUiContent(
     state: SearchScreen.State,
+    scrollBehavior: BottomAppBarScrollBehavior,
     onGlobalClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -75,6 +80,7 @@ private fun SearchScreenUiContent(
         bottomBar = {
             MainScreenBottomAppBarWrapper(
                 mainScreenType = MainScreenType.SEARCH,
+                scrollBehavior = scrollBehavior,
                 modifier = Modifier,
                 event = state.bottomAppBarActionEventSink
             )
