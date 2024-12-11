@@ -1,75 +1,84 @@
 package me.sanao1006.core.ui
 
-import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.BottomAppBarScrollBehavior
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.HorizontalFloatingAppBar
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import ir.alirezaivaz.tablericons.TablerIcons
 import me.sanao1006.screens.MainScreenType
 import me.sanao1006.screens.event.BottomAppBarActionEvent
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun MainScreenBottomAppBarWrapper(
     mainScreenType: MainScreenType,
-    scrollBehavior: BottomAppBarScrollBehavior,
     modifier: Modifier = Modifier,
-    event: (BottomAppBarActionEvent) -> Unit
+    event: (BottomAppBarActionEvent) -> Unit,
+    floatingActionButton: @Composable RowScope.() -> Unit
 ) = MainScreenBottomAppBar(
     mainSheetType = mainScreenType,
-    scrollBehavior = scrollBehavior,
     onHomeClick = { event(BottomAppBarActionEvent.OnHomeIconClicked) },
-    onSearchClick = { event(BottomAppBarActionEvent.OnSearchIconClicked) },
     onNotificationClick = { event(BottomAppBarActionEvent.OnNotificationIconClicked) },
-    modifier = modifier
+    modifier = modifier,
+    floatingActionButton = floatingActionButton
 )
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun MainScreenBottomAppBar(
     mainSheetType: MainScreenType,
-    scrollBehavior: BottomAppBarScrollBehavior,
     onHomeClick: () -> Unit,
-    onSearchClick: () -> Unit,
     onNotificationClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    floatingActionButton: @Composable RowScope.() -> Unit = {}
 ) {
-    BottomAppBar(
+    HorizontalFloatingAppBar(
+        expanded = true,
         modifier = modifier,
-        scrollBehavior = scrollBehavior
-    ) {
-        BottomSheetType.entries.forEach {
-            NavigationBarItem(
-                icon = {
-                    Icon(
-                        painter = painterResource(it.resId),
-                        contentDescription = null,
-                        tint = if (it.mainSheetType == mainSheetType) {
-                            MaterialTheme.colorScheme.primary
-                        } else {
-                            LocalContentColor.current
-                        }
-                    )
-                },
-                selected = it.mainSheetType == mainSheetType,
-                onClick = {
-                    if (it.mainSheetType != mainSheetType) {
-                        when (it) {
-                            BottomSheetType.HOME -> onHomeClick()
-                            BottomSheetType.SEARCH -> onSearchClick()
-                            BottomSheetType.NOTIFICATION -> onNotificationClick()
-                        }
-                    }
-                }
-            )
-        }
-    }
+        leadingContent = {
+            IconButton(
+                modifier = Modifier.padding(start = 8.dp, end = 16.dp),
+                onClick = onHomeClick
+            ) {
+                Icon(
+                    painter = painterResource(
+                        if (mainSheetType == MainScreenType.HOME)
+                            TablerIcons.HomeFilled
+                        else
+                            TablerIcons.Home
+                    ),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
+        },
+        trailingContent = {
+            IconButton(
+                modifier = Modifier.padding(start = 16.dp, end = 8.dp),
+                onClick = onNotificationClick
+            ) {
+                Icon(
+                    painter = painterResource(
+                        if (mainSheetType == MainScreenType.NOTIFICATION)
+                            TablerIcons.BellFilled
+                        else
+                            TablerIcons.Bell
+                    ),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
+        },
+        content = floatingActionButton
+    )
 }
 
 private enum class BottomSheetType(

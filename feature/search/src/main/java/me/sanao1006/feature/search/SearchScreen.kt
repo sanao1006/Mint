@@ -8,6 +8,7 @@ import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.BottomAppBarScrollBehavior
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -27,7 +28,7 @@ import me.sanao1006.screens.MainScreenType
 import me.sanao1006.screens.SearchScreen
 import me.sanao1006.screens.event.GlobalIconEvent
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @CircuitInject(SearchScreen::class, SingletonComponent::class)
 @Composable
 fun SearchScreenUi(state: SearchScreen.State, modifier: Modifier) {
@@ -80,9 +81,9 @@ private fun SearchScreenUiContent(
         bottomBar = {
             MainScreenBottomAppBarWrapper(
                 mainScreenType = MainScreenType.SEARCH,
-                scrollBehavior = scrollBehavior,
                 modifier = Modifier,
-                event = state.bottomAppBarActionEventSink
+                event = state.bottomAppBarActionEventSink,
+                floatingActionButton = { }
             )
         }
     ) {
