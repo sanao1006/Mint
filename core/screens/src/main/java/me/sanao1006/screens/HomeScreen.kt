@@ -3,7 +3,6 @@ package me.sanao1006.screens
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.pullrefresh.PullRefreshState
-import androidx.compose.material3.DrawerState
 import androidx.compose.runtime.Immutable
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
@@ -13,6 +12,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.parcelize.Parcelize
 import me.sanao1006.core.model.LoginUserInfo
 import me.sanao1006.core.model.notes.TimelineUiState
+import me.sanao1006.screens.event.BottomAppBarActionEvent
+import me.sanao1006.screens.event.DrawerEvent
+import me.sanao1006.screens.event.GlobalIconEvent
 
 @Parcelize
 data object HomeScreen : Screen {
@@ -25,6 +27,9 @@ data object HomeScreen : Screen {
         val pullToRefreshState: PullRefreshState,
         val isRefreshed: Boolean = false,
         val drawerUserInfo: LoginUserInfo,
+        val drawerEventSink: (DrawerEvent) -> Unit,
+        val globalIconEventSink: (GlobalIconEvent) -> Unit,
+        val bottomAppBarEventSInk: (BottomAppBarActionEvent) -> Unit,
         val eventSink: (Event) -> Unit
     ) : CircuitUiState
 
@@ -35,26 +40,6 @@ data object HomeScreen : Screen {
         ) : Event()
 
         data object OnNoteCreateClicked : Event()
-        data class OnNavigationIconClicked(
-            val drawerState: DrawerState,
-            val scope: CoroutineScope
-        ) : Event()
-
-        sealed class DrawerEvent : Event() {
-            data object OnDrawerFavoriteClicked : DrawerEvent()
-            data object OnDrawerAnnouncementClicked : DrawerEvent()
-            data object OnDrawerClipClicked : DrawerEvent()
-            data object OnDrawerAntennaClicked : DrawerEvent()
-            data object OnDrawerExploreClicked : DrawerEvent()
-            data object OnDrawerChannelClicked : DrawerEvent()
-            data object OnDrawerDriveClicked : DrawerEvent()
-            data object OnDrawerAboutClicked : DrawerEvent()
-            data object OnDrawerAccountPreferencesClicked : DrawerEvent()
-            data object OnDrawerSettingsClicked : DrawerEvent()
-            data object OnDrawerIconClicked : DrawerEvent()
-            data object OnDrawerFollowingCountClicked : DrawerEvent()
-            data object OnDrawerFollowersCountClicked : DrawerEvent()
-        }
 
         sealed class TimelineEvent : Event() {
             data object OnLocalTimelineClicked : TimelineEvent()
@@ -72,12 +57,6 @@ data object HomeScreen : Screen {
                 override val userName: String?,
                 override val host: String?
             ) : TimelineItemEvent()
-        }
-
-        sealed class BottomAppBarActionEvent : Event() {
-            data object OnHomeIconClicked : BottomAppBarActionEvent()
-            data object OnSearchIconClicked : BottomAppBarActionEvent()
-            data object OnNotificationIconClicked : BottomAppBarActionEvent()
         }
     }
 }

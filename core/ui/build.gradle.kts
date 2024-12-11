@@ -8,4 +8,5 @@ plugins {
 dependencies {
     implementation(projects.core.screens)
     implementation(projects.core.model)
+    implementation(projects.core.resValues)
 }

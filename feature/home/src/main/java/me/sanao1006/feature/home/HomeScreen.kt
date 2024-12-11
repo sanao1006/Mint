@@ -2,6 +2,7 @@ package me.sanao1006.feature.home
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
@@ -13,31 +14,33 @@ import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingAppBarDefaults.ScreenOffset
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.zIndex
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
 import kotlinx.coroutines.launch
-import me.sanao1006.core.ui.MainScreenBottomAppBar
+import me.sanao1006.core.ui.MainScreenBottomAppBarWrapper
+import me.sanao1006.core.ui.MainScreenDrawerWrapper
 import me.sanao1006.core.ui.TimelineColumn
 import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.MainScreenType
+import me.sanao1006.screens.event.GlobalIconEvent
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @CircuitInject(HomeScreen::class, SingletonComponent::class)
 @Composable
 fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
@@ -46,63 +49,28 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
         val scope = rememberCoroutineScope()
         val drawerState = rememberDrawerState(DrawerValue.Closed)
         val snackbarHostState = remember { SnackbarHostState() }
-        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
         LaunchedEffect(state.isSuccessCreateNote) {
             state.eventSink(HomeScreen.Event.OnNoteCreated(snackbarHostState, scope))
         }
 
-        HomeScreenDrawer(
+        MainScreenDrawerWrapper(
             loginUserInfo = state.drawerUserInfo,
             drawerState = drawerState,
-            onDrawerFavoriteClick = {
-                state.eventSink(HomeScreen.Event.DrawerEvent.OnDrawerFavoriteClicked)
-            },
-            onDrawerAnnouncementClick = {
-                state.eventSink(HomeScreen.Event.DrawerEvent.OnDrawerAnnouncementClicked)
-            },
-            onDrawerClipClick = {
-                state.eventSink(HomeScreen.Event.DrawerEvent.OnDrawerClipClicked)
-            },
-            onDrawerAntennaClick = {
-                state.eventSink(HomeScreen.Event.DrawerEvent.OnDrawerAntennaClicked)
-            },
-            onDrawerExploreClick = {
-                state.eventSink(HomeScreen.Event.DrawerEvent.OnDrawerExploreClicked)
-            },
-            onDrawerChannelClick = {
-                state.eventSink(HomeScreen.Event.DrawerEvent.OnDrawerChannelClicked)
-            },
-            onDrawerDriveClick = {
-                state.eventSink(HomeScreen.Event.DrawerEvent.OnDrawerDriveClicked)
-            },
-            onDrawerAboutClick = {
-                state.eventSink(HomeScreen.Event.DrawerEvent.OnDrawerAboutClicked)
-            },
-            onDrawerAccountPreferencesClick = {
-                state.eventSink(HomeScreen.Event.DrawerEvent.OnDrawerAccountPreferencesClicked)
-            },
-            onDrawerSettingsClick = {
-                state.eventSink(HomeScreen.Event.DrawerEvent.OnDrawerSettingsClicked)
-            },
-            onIconClick = {
-                state.eventSink(HomeScreen.Event.DrawerEvent.OnDrawerIconClicked)
-            },
-            onFollowingCountClick = {
-                state.eventSink(HomeScreen.Event.DrawerEvent.OnDrawerFollowingCountClicked)
-            },
-            onFollowersCountClick = {
-                state.eventSink(HomeScreen.Event.DrawerEvent.OnDrawerFollowersCountClicked)
-            }
+            scope = scope,
+            event = state.drawerEventSink
         ) {
             HomeScreenUiContent(
                 state = state,
                 pagerState = pagerState,
-                modifier = Modifier
-                    .nestedScroll(scrollBehavior.nestedScrollConnection),
-                scrollBehavior = scrollBehavior,
+                modifier = Modifier,
                 snackbarHostState = { SnackbarHost(hostState = snackbarHostState) },
-                onNavigationIconClick = {
-                    state.eventSink(HomeScreen.Event.OnNavigationIconClicked(drawerState, scope))
+                onGlobalIconClicked = {
+                    state.globalIconEventSink(
+                        GlobalIconEvent.OnGlobalIconClicked(
+                            drawerState,
+                            scope
+                        )
+                    )
                 },
                 onHomeClick = {
                     scope.launch {
@@ -135,15 +103,14 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun HomeScreenUiContent(
     state: HomeScreen.State,
     pagerState: PagerState,
     modifier: Modifier = Modifier,
-    scrollBehavior: TopAppBarScrollBehavior,
     snackbarHostState: @Composable () -> Unit,
-    onNavigationIconClick: () -> Unit,
+    onGlobalIconClicked: () -> Unit,
     onHomeClick: () -> Unit,
     onSocialClick: () -> Unit,
     onGlobalClick: () -> Unit,
@@ -154,28 +121,10 @@ private fun HomeScreenUiContent(
         topBar = {
             HomeScreenTopAppBar(
                 topAppBarTimelineState = TopAppBarTimelineState.get(pagerState.currentPage),
-                scrollBehavior = scrollBehavior,
-                onNavigationIconClick = onNavigationIconClick,
+                onNavigationIconClick = onGlobalIconClicked,
                 onHomeClick = onHomeClick,
                 onSocialClick = onSocialClick,
                 onGlobalClick = onGlobalClick
-            )
-        },
-        bottomBar = {
-            MainScreenBottomAppBar(
-                mainSheetType = MainScreenType.HOME,
-                onHomeClick = {
-                    state.eventSink(HomeScreen.Event.BottomAppBarActionEvent.OnHomeIconClicked)
-                },
-                onSearchClick = {
-                    state.eventSink(HomeScreen.Event.BottomAppBarActionEvent.OnSearchIconClicked)
-                },
-                onNotificationClick = {
-                    state.eventSink(
-                        HomeScreen.Event.BottomAppBarActionEvent.OnNotificationIconClicked
-                    )
-                },
-                floatingActionButton = floatingActionButton
             )
         },
         snackbarHost = snackbarHostState
@@ -212,6 +161,14 @@ private fun HomeScreenUiContent(
                     }
                 )
             }
+            MainScreenBottomAppBarWrapper(
+                modifier = Modifier
+                    .align(BottomCenter)
+                    .offset(y = -(ScreenOffset)),
+                mainScreenType = MainScreenType.HOME,
+                event = state.bottomAppBarEventSInk,
+                floatingActionButton = { floatingActionButton() }
+            )
         }
     }
 }
