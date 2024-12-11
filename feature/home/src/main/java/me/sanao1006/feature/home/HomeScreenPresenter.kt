@@ -91,7 +91,7 @@ class HomeScreenPresenter @AssistedInject constructor(
             drawerUserInfo = loginUserInfo,
             drawerEventSink = { event -> event.handleDrawerEvent(navigator, loginUserInfo) },
             bottomAppBarEventSInk = { event -> event.handleBottomAppBarActionEvent(navigator) },
-            globalIconEventSink = { event -> event.handleNavigationIconClicked() }
+            globalIconEventSink = { event -> event.handleNavigationIconClicked(navigator) }
         ) { event ->
             when (event) {
                 is HomeScreen.Event.OnNoteCreated -> handleNoteCreated(

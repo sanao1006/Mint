@@ -35,6 +35,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.rememberAsyncImagePainter
 import ir.alirezaivaz.tablericons.TablerIcons
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import me.sanao1006.core.model.LoginUserInfo
 import me.sanao1006.screens.event.DrawerEvent
 import me.snao1006.res_value.ResString
@@ -43,11 +45,13 @@ import me.snao1006.res_value.ResString
 fun MainScreenDrawerWrapper(
     loginUserInfo: LoginUserInfo,
     drawerState: DrawerState,
+    scope: CoroutineScope,
     event: (DrawerEvent) -> Unit,
     content: @Composable () -> Unit
 ) = MainScreenDrawer(
     loginUserInfo = loginUserInfo,
     drawerState = drawerState,
+    scope = scope,
     onDrawerFavoriteClick = { event(DrawerEvent.OnDrawerFavoriteClicked) },
     onDrawerAnnouncementClick = { event(DrawerEvent.OnDrawerAnnouncementClicked) },
     onDrawerClipClick = { event(DrawerEvent.OnDrawerClipClicked) },
@@ -68,6 +72,7 @@ fun MainScreenDrawerWrapper(
 @Composable
 private fun MainScreenDrawer(
     loginUserInfo: LoginUserInfo,
+    scope: CoroutineScope,
     modifier: Modifier = Modifier,
     drawerState: DrawerState,
     onDrawerFavoriteClick: () -> Unit,
@@ -113,18 +118,25 @@ private fun MainScreenDrawer(
                             icon = { Icon(painter = painterResource(it.iconId), "") },
                             label = { Text(text = stringResource(it.titleId)) },
                             selected = false,
-                            onClick = when (it) {
-                                DrawerItem.FAVORITE -> onDrawerFavoriteClick
-                                DrawerItem.ANNOUNCEMENT -> onDrawerAnnouncementClick
-                                DrawerItem.CLIP -> onDrawerClipClick
-                                DrawerItem.ANTENNA -> onDrawerAntennaClick
-                                DrawerItem.EXPLORE -> onDrawerExploreClick
-                                DrawerItem.CHANNEL -> onDrawerChannelClick
-                                DrawerItem.SEARCH -> onDrawerSearchClick
-                                DrawerItem.DRIVE -> onDrawerDriveClick
-                                DrawerItem.ABOUT -> onDrawerAboutClick
-                                DrawerItem.ACCOUNT_PREFERENCES -> onDrawerAccountPreferencesClick
-                                DrawerItem.SETTINGS -> onDrawerSettingsClick
+                            onClick = {
+                                scope.launch {
+                                    drawerState.close()
+                                }
+                                when (it) {
+                                    DrawerItem.FAVORITE -> onDrawerFavoriteClick()
+                                    DrawerItem.ANNOUNCEMENT -> onDrawerAnnouncementClick()
+                                    DrawerItem.CLIP -> onDrawerClipClick()
+                                    DrawerItem.ANTENNA -> onDrawerAntennaClick()
+                                    DrawerItem.EXPLORE -> onDrawerExploreClick()
+                                    DrawerItem.CHANNEL -> onDrawerChannelClick()
+                                    DrawerItem.SEARCH -> onDrawerSearchClick()
+                                    DrawerItem.DRIVE -> onDrawerDriveClick()
+                                    DrawerItem.ABOUT -> onDrawerAboutClick()
+                                    DrawerItem.ACCOUNT_PREFERENCES ->
+                                        onDrawerAccountPreferencesClick()
+
+                                    DrawerItem.SETTINGS -> onDrawerSettingsClick()
+                                }
                             }
                         )
                     }

@@ -50,10 +50,11 @@ private fun MainScreenBottomAppBar(
             ) {
                 Icon(
                     painter = painterResource(
-                        if (mainSheetType == MainScreenType.HOME)
+                        if (mainSheetType == MainScreenType.HOME) {
                             TablerIcons.HomeFilled
-                        else
+                        } else {
                             TablerIcons.Home
+                        }
                     ),
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary
@@ -67,10 +68,11 @@ private fun MainScreenBottomAppBar(
             ) {
                 Icon(
                     painter = painterResource(
-                        if (mainSheetType == MainScreenType.NOTIFICATION)
+                        if (mainSheetType == MainScreenType.NOTIFICATION) {
                             TablerIcons.BellFilled
-                        else
+                        } else {
                             TablerIcons.Bell
+                        }
                     ),
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary

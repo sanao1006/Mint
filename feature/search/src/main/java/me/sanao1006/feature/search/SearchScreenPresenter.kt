@@ -37,7 +37,7 @@ class SearchScreenPresenter @AssistedInject constructor(
         return SearchScreen.State(
             loginUserInfo = loginUserInfo,
             drawerEventSink = { event -> event.handleDrawerEvent(navigator, loginUserInfo) },
-            globalIconEventSink = { event -> event.handleNavigationIconClicked() },
+            globalIconEventSink = { event -> event.handleNavigationIconClicked(navigator) },
             bottomAppBarActionEventSink = { event ->
                 event.handleBottomAppBarActionEvent(navigator)
             },

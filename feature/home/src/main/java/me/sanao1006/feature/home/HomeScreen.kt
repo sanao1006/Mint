@@ -56,6 +56,7 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
         MainScreenDrawerWrapper(
             loginUserInfo = state.drawerUserInfo,
             drawerState = drawerState,
+            scope = scope,
             event = state.drawerEventSink
         ) {
             HomeScreenUiContent(

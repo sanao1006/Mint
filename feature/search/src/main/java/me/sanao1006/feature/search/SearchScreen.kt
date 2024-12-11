@@ -4,11 +4,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.BottomAppBarDefaults
-import androidx.compose.material3.BottomAppBarScrollBehavior
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -22,32 +19,26 @@ import androidx.compose.ui.res.painterResource
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
-import me.sanao1006.core.ui.MainScreenBottomAppBarWrapper
 import me.sanao1006.core.ui.MainScreenDrawerWrapper
-import me.sanao1006.screens.MainScreenType
 import me.sanao1006.screens.SearchScreen
 import me.sanao1006.screens.event.GlobalIconEvent
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @CircuitInject(SearchScreen::class, SingletonComponent::class)
 @Composable
 fun SearchScreenUi(state: SearchScreen.State, modifier: Modifier) {
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
-    val scrollBehavior = BottomAppBarDefaults.exitAlwaysScrollBehavior()
     Box(modifier = modifier.fillMaxSize()) {
         MainScreenDrawerWrapper(
             loginUserInfo = state.loginUserInfo,
             drawerState = drawerState,
+            scope = scope,
             event = state.drawerEventSink
         ) {
             SearchScreenUiContent(
                 state = state,
-                scrollBehavior = scrollBehavior,
                 onGlobalClick = {
-                    state.globalIconEventSink(
-                        GlobalIconEvent.OnGlobalIconClicked(drawerState, scope)
-                    )
+                    state.globalIconEventSink(GlobalIconEvent.OnArrowBackIconClicked)
                 },
                 modifier = modifier
             )
@@ -59,7 +50,6 @@ fun SearchScreenUi(state: SearchScreen.State, modifier: Modifier) {
 @Composable
 private fun SearchScreenUiContent(
     state: SearchScreen.State,
-    scrollBehavior: BottomAppBarScrollBehavior,
     onGlobalClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -71,19 +61,11 @@ private fun SearchScreenUiContent(
                 navigationIcon = {
                     IconButton(onClick = onGlobalClick) {
                         Icon(
-                            painter = painterResource(TablerIcons.Menu2),
+                            painter = painterResource(TablerIcons.ArrowLeft),
                             contentDescription = null
                         )
                     }
                 }
-            )
-        },
-        bottomBar = {
-            MainScreenBottomAppBarWrapper(
-                mainScreenType = MainScreenType.SEARCH,
-                modifier = Modifier,
-                event = state.bottomAppBarActionEventSink,
-                floatingActionButton = { }
             )
         }
     ) {
