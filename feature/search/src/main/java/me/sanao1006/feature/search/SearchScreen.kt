@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -20,7 +19,6 @@ import androidx.compose.ui.res.painterResource
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
-import kotlinx.coroutines.CoroutineScope
 import me.sanao1006.core.ui.MainScreenBottomAppBarWrapper
 import me.sanao1006.core.ui.MainScreenDrawerWrapper
 import me.sanao1006.screens.MainScreenType
@@ -41,8 +39,11 @@ fun SearchScreenUi(state: SearchScreen.State, modifier: Modifier) {
         ) {
             SearchScreenUiContent(
                 state = state,
-                drawerState = drawerState,
-                scope = scope,
+                onGlobalClick = {
+                    state.globalIconEventSink(
+                        GlobalIconEvent.OnGlobalIconClicked(drawerState, scope)
+                    )
+                },
                 modifier = modifier
             )
         }
@@ -53,8 +54,7 @@ fun SearchScreenUi(state: SearchScreen.State, modifier: Modifier) {
 @Composable
 private fun SearchScreenUiContent(
     state: SearchScreen.State,
-    drawerState: DrawerState,
-    scope: CoroutineScope,
+    onGlobalClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -63,13 +63,7 @@ private fun SearchScreenUiContent(
             TopAppBar(
                 title = {},
                 navigationIcon = {
-                    IconButton(
-                        onClick = {
-                            state.globalIconEventSink(
-                                GlobalIconEvent.OnGlobalIconClicked(drawerState, scope)
-                            )
-                        }
-                    ) {
+                    IconButton(onClick = onGlobalClick) {
                         Icon(
                             painter = painterResource(TablerIcons.Menu2),
                             contentDescription = null

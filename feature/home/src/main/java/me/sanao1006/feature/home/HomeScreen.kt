@@ -65,7 +65,7 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
                     .nestedScroll(scrollBehavior.nestedScrollConnection),
                 scrollBehavior = scrollBehavior,
                 snackbarHostState = { SnackbarHost(hostState = snackbarHostState) },
-                onNavigationIconClick = {
+                onGlobalIconClicked = {
                     state.globalIconEventSink(
                         GlobalIconEvent.OnGlobalIconClicked(
                             drawerState,
@@ -112,7 +112,7 @@ private fun HomeScreenUiContent(
     modifier: Modifier = Modifier,
     scrollBehavior: TopAppBarScrollBehavior,
     snackbarHostState: @Composable () -> Unit,
-    onNavigationIconClick: () -> Unit,
+    onGlobalIconClicked: () -> Unit,
     onHomeClick: () -> Unit,
     onSocialClick: () -> Unit,
     onGlobalClick: () -> Unit,
@@ -124,7 +124,7 @@ private fun HomeScreenUiContent(
             HomeScreenTopAppBar(
                 topAppBarTimelineState = TopAppBarTimelineState.get(pagerState.currentPage),
                 scrollBehavior = scrollBehavior,
-                onNavigationIconClick = onNavigationIconClick,
+                onNavigationIconClick = onGlobalIconClicked,
                 onHomeClick = onHomeClick,
                 onSocialClick = onSocialClick,
                 onGlobalClick = onGlobalClick
