@@ -133,10 +133,10 @@ private fun HomeScreenUiContent(
         bottomBar = {
             MainScreenBottomAppBarWrapper(
                 mainScreenType = MainScreenType.HOME,
-                event = state.bottomAppBarEventSInk,
-                floatingActionButton = floatingActionButton
+                event = state.bottomAppBarEventSInk
             )
         },
+        floatingActionButton = floatingActionButton,
         snackbarHost = snackbarHostState
     ) {
         Box(

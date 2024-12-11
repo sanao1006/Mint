@@ -82,8 +82,7 @@ private fun SearchScreenUiContent(
             MainScreenBottomAppBarWrapper(
                 mainScreenType = MainScreenType.SEARCH,
                 modifier = Modifier,
-                event = state.bottomAppBarActionEventSink,
-                floatingActionButton = { }
+                event = state.bottomAppBarActionEventSink
             )
         }
     ) {
