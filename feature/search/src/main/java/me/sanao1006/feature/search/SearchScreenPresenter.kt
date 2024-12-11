@@ -16,6 +16,7 @@ import dagger.hilt.components.SingletonComponent
 import me.sanao1006.core.domain.home.UpdateAccountUseCase
 import me.sanao1006.core.model.LoginUserInfo
 import me.sanao1006.screens.SearchScreen
+import me.sanao1006.screens.event.handleBottomAppBarActionEvent
 import me.sanao1006.screens.event.handleDrawerEvent
 import me.sanao1006.screens.event.handleNavigationIconClicked
 
@@ -37,6 +38,7 @@ class SearchScreenPresenter @AssistedInject constructor(
             loginUserInfo = loginUserInfo,
             drawerEventSink = { event -> event.handleDrawerEvent(navigator, loginUserInfo) },
             globalIconEventSink = { event -> event.handleNavigationIconClicked() },
+            bottomAppBarActionEventSink = { event -> event.handleBottomAppBarActionEvent(navigator) },
             eventSink = { event -> }
         )
     }

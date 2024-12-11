@@ -8,9 +8,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import ir.alirezaivaz.tablericons.TablerIcons
 import me.sanao1006.screens.MainScreenType
+import me.sanao1006.screens.event.BottomAppBarActionEvent
 
 @Composable
-fun MainScreenBottomAppBar(
+fun MainScreenBottomAppBarWrapper(
+    mainScreenType: MainScreenType,
+    modifier: Modifier = Modifier,
+    event: (BottomAppBarActionEvent) -> Unit,
+    floatingActionButton: @Composable () -> Unit
+) = MainScreenBottomAppBar(
+    mainSheetType = mainScreenType,
+    onHomeClick = { event(BottomAppBarActionEvent.OnHomeIconClicked) },
+    onSearchClick = { event(BottomAppBarActionEvent.OnSearchIconClicked) },
+    onNotificationClick = { event(BottomAppBarActionEvent.OnNotificationIconClicked) },
+    modifier = modifier,
+    floatingActionButton = floatingActionButton
+)
+
+@Composable
+private fun MainScreenBottomAppBar(
     mainSheetType: MainScreenType,
     onHomeClick: () -> Unit,
     onSearchClick: () -> Unit,

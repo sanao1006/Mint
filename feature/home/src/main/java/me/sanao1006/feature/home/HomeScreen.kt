@@ -32,7 +32,7 @@ import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
 import kotlinx.coroutines.launch
-import me.sanao1006.core.ui.MainScreenBottomAppBar
+import me.sanao1006.core.ui.MainScreenBottomAppBarWrapper
 import me.sanao1006.core.ui.MainScreenDrawerWrapper
 import me.sanao1006.core.ui.TimelineColumn
 import me.sanao1006.screens.HomeScreen
@@ -131,19 +131,9 @@ private fun HomeScreenUiContent(
             )
         },
         bottomBar = {
-            MainScreenBottomAppBar(
-                mainSheetType = MainScreenType.HOME,
-                onHomeClick = {
-                    state.eventSink(HomeScreen.Event.BottomAppBarActionEvent.OnHomeIconClicked)
-                },
-                onSearchClick = {
-                    state.eventSink(HomeScreen.Event.BottomAppBarActionEvent.OnSearchIconClicked)
-                },
-                onNotificationClick = {
-                    state.eventSink(
-                        HomeScreen.Event.BottomAppBarActionEvent.OnNotificationIconClicked
-                    )
-                },
+            MainScreenBottomAppBarWrapper(
+                mainScreenType = MainScreenType.HOME,
+                event = state.bottomAppBarEventSInk,
                 floatingActionButton = floatingActionButton
             )
         },

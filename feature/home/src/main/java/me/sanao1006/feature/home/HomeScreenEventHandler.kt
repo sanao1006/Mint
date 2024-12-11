@@ -2,12 +2,10 @@ package me.sanao1006.feature.home
 
 import android.content.Context
 import com.slack.circuit.runtime.GoToNavigator
-import com.slack.circuit.runtime.Navigator
 import kotlinx.coroutines.launch
 import me.sanao1006.core.domain.home.TimelineType
 import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.NoteScreen
-import me.sanao1006.screens.SearchScreen
 import me.sanao1006.screens.UserScreen
 import me.snao1006.res_value.ResString
 
@@ -46,25 +44,6 @@ internal fun handleTimelineEvent(
         HomeScreen.Event.TimelineEvent.OnGlobalTimelineClicked -> setTimelineType(
             TimelineType.GLOBAL
         )
-    }
-}
-
-internal fun handleBottomAppBarActionEvent(
-    event: HomeScreen.Event.BottomAppBarActionEvent,
-    navigator: Navigator
-) {
-    when (event) {
-        HomeScreen.Event.BottomAppBarActionEvent.OnHomeIconClicked -> {
-            navigator.goTo(HomeScreen)
-        }
-
-        HomeScreen.Event.BottomAppBarActionEvent.OnSearchIconClicked -> {
-            navigator.goTo(SearchScreen)
-        }
-
-        HomeScreen.Event.BottomAppBarActionEvent.OnNotificationIconClicked -> {
-            // TODO goto Notification Screen
-        }
     }
 }
 

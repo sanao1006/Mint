@@ -29,6 +29,7 @@ import me.sanao1006.core.model.LoginUserInfo
 import me.sanao1006.core.model.notes.TimelineUiState
 import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.NoteScreen
+import me.sanao1006.screens.event.handleBottomAppBarActionEvent
 import me.sanao1006.screens.event.handleDrawerEvent
 import me.sanao1006.screens.event.handleNavigationIconClicked
 
@@ -89,6 +90,7 @@ class HomeScreenPresenter @AssistedInject constructor(
             isRefreshed = isRefreshed,
             drawerUserInfo = loginUserInfo,
             drawerEventSink = { event -> event.handleDrawerEvent(navigator, loginUserInfo) },
+            bottomAppBarEventSInk = { event -> event.handleBottomAppBarActionEvent(navigator) },
             globalIconEventSink = { event -> event.handleNavigationIconClicked() }
         ) { event ->
             when (event) {
@@ -103,11 +105,6 @@ class HomeScreenPresenter @AssistedInject constructor(
                 is HomeScreen.Event.TimelineEvent -> handleTimelineEvent(event) {
                     timelineType = it
                 }
-
-                is HomeScreen.Event.BottomAppBarActionEvent -> handleBottomAppBarActionEvent(
-                    event,
-                    navigator
-                )
 
                 is HomeScreen.Event.TimelineItemEvent -> handleTimelineItemEvent(event, nav)
             }

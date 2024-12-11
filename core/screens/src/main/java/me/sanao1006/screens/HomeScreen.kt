@@ -12,6 +12,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.parcelize.Parcelize
 import me.sanao1006.core.model.LoginUserInfo
 import me.sanao1006.core.model.notes.TimelineUiState
+import me.sanao1006.screens.event.BottomAppBarActionEvent
 import me.sanao1006.screens.event.DrawerEvent
 import me.sanao1006.screens.event.GlobalIconEvent
 
@@ -28,6 +29,7 @@ data object HomeScreen : Screen {
         val drawerUserInfo: LoginUserInfo,
         val drawerEventSink: (DrawerEvent) -> Unit,
         val globalIconEventSink: (GlobalIconEvent) -> Unit,
+        val bottomAppBarEventSInk: (BottomAppBarActionEvent) -> Unit,
         val eventSink: (Event) -> Unit
     ) : CircuitUiState
 
@@ -55,12 +57,6 @@ data object HomeScreen : Screen {
                 override val userName: String?,
                 override val host: String?
             ) : TimelineItemEvent()
-        }
-
-        sealed class BottomAppBarActionEvent : Event() {
-            data object OnHomeIconClicked : BottomAppBarActionEvent()
-            data object OnSearchIconClicked : BottomAppBarActionEvent()
-            data object OnNotificationIconClicked : BottomAppBarActionEvent()
         }
     }
 }

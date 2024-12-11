@@ -21,7 +21,7 @@ import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
 import kotlinx.coroutines.CoroutineScope
-import me.sanao1006.core.ui.MainScreenBottomAppBar
+import me.sanao1006.core.ui.MainScreenBottomAppBarWrapper
 import me.sanao1006.core.ui.MainScreenDrawerWrapper
 import me.sanao1006.screens.MainScreenType
 import me.sanao1006.screens.SearchScreen
@@ -79,11 +79,10 @@ private fun SearchScreenUiContent(
             )
         },
         bottomBar = {
-            MainScreenBottomAppBar(
-                mainSheetType = MainScreenType.SEARCH,
-                onHomeClick = { },
-                onSearchClick = { },
-                onNotificationClick = { },
+            MainScreenBottomAppBarWrapper(
+                mainScreenType = MainScreenType.SEARCH,
+                modifier = Modifier,
+                event = state.bottomAppBarActionEventSink,
                 floatingActionButton = { }
             )
         }
