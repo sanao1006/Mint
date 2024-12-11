@@ -42,10 +42,11 @@ private fun MainScreenBottomAppBar(
                     Icon(
                         painter = painterResource(it.resId),
                         contentDescription = null,
-                        tint = if (it.mainSheetType == mainSheetType)
+                        tint = if (it.mainSheetType == mainSheetType) {
                             MaterialTheme.colorScheme.primary
-                        else
+                        } else {
                             LocalContentColor.current
+                        }
                     )
                 },
                 selected = it.mainSheetType == mainSheetType,
