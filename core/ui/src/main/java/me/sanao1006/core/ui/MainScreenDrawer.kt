@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.HorizontalDivider
@@ -52,6 +54,7 @@ fun MainScreenDrawerWrapper(
     onDrawerAntennaClick = { event(DrawerEvent.OnDrawerAntennaClicked) },
     onDrawerExploreClick = { event(DrawerEvent.OnDrawerExploreClicked) },
     onDrawerChannelClick = { event(DrawerEvent.OnDrawerChannelClicked) },
+    onDrawerSearchClick = { event(DrawerEvent.OnDrawerSearchClicked) },
     onDrawerDriveClick = { event(DrawerEvent.OnDrawerDriveClicked) },
     onDrawerAboutClick = { event(DrawerEvent.OnDrawerAboutClicked) },
     onDrawerAccountPreferencesClick = { event(DrawerEvent.OnDrawerAccountPreferencesClicked) },
@@ -73,6 +76,7 @@ private fun MainScreenDrawer(
     onDrawerAntennaClick: () -> Unit,
     onDrawerExploreClick: () -> Unit,
     onDrawerChannelClick: () -> Unit,
+    onDrawerSearchClick: () -> Unit,
     onDrawerDriveClick: () -> Unit,
     onDrawerAboutClick: () -> Unit,
     onDrawerAccountPreferencesClick: () -> Unit,
@@ -87,38 +91,43 @@ private fun MainScreenDrawer(
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet {
-                LoginUserInfoBox(
-                    modifier = Modifier.padding(start = 16.dp, end = 24.dp),
-                    loginUserInfo = loginUserInfo,
-                    onIconClick = onIconClick,
-                    onFollowingCountClick = onFollowingCountClick,
-                    onFollowersCountClick = onFollowersCountClick
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                HorizontalDivider(
-                    modifier = Modifier
-                        .fillMaxWidth(0.9f)
-                        .align(Alignment.CenterHorizontally)
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                DrawerItem.entries.forEach {
-                    NavigationDrawerItem(
-                        icon = { Icon(painter = painterResource(it.iconId), "") },
-                        label = { Text(text = stringResource(it.titleId)) },
-                        selected = false,
-                        onClick = when (it) {
-                            DrawerItem.FAVORITE -> onDrawerFavoriteClick
-                            DrawerItem.ANNOUNCEMENT -> onDrawerAnnouncementClick
-                            DrawerItem.CLIP -> onDrawerClipClick
-                            DrawerItem.ANTENNA -> onDrawerAntennaClick
-                            DrawerItem.EXPLORE -> onDrawerExploreClick
-                            DrawerItem.CHANNEL -> onDrawerChannelClick
-                            DrawerItem.DRIVE -> onDrawerDriveClick
-                            DrawerItem.ABOUT -> onDrawerAboutClick
-                            DrawerItem.ACCOUNT_PREFERENCES -> onDrawerAccountPreferencesClick
-                            DrawerItem.SETTINGS -> onDrawerSettingsClick
-                        }
-                    )
+                LazyColumn {
+                    item {
+                        LoginUserInfoBox(
+                            modifier = Modifier.padding(start = 16.dp, end = 24.dp),
+                            loginUserInfo = loginUserInfo,
+                            onIconClick = onIconClick,
+                            onFollowingCountClick = onFollowingCountClick,
+                            onFollowersCountClick = onFollowersCountClick
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        HorizontalDivider(
+                            modifier = Modifier
+                                .fillMaxWidth(0.9f)
+                                .align(Alignment.CenterHorizontally)
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
+                    items(DrawerItem.entries) {
+                        NavigationDrawerItem(
+                            icon = { Icon(painter = painterResource(it.iconId), "") },
+                            label = { Text(text = stringResource(it.titleId)) },
+                            selected = false,
+                            onClick = when (it) {
+                                DrawerItem.FAVORITE -> onDrawerFavoriteClick
+                                DrawerItem.ANNOUNCEMENT -> onDrawerAnnouncementClick
+                                DrawerItem.CLIP -> onDrawerClipClick
+                                DrawerItem.ANTENNA -> onDrawerAntennaClick
+                                DrawerItem.EXPLORE -> onDrawerExploreClick
+                                DrawerItem.CHANNEL -> onDrawerChannelClick
+                                DrawerItem.SEARCH -> onDrawerSearchClick
+                                DrawerItem.DRIVE -> onDrawerDriveClick
+                                DrawerItem.ABOUT -> onDrawerAboutClick
+                                DrawerItem.ACCOUNT_PREFERENCES -> onDrawerAccountPreferencesClick
+                                DrawerItem.SETTINGS -> onDrawerSettingsClick
+                            }
+                        )
+                    }
                 }
             }
         },
@@ -219,6 +228,7 @@ enum class DrawerItem(@DrawableRes val iconId: Int, @StringRes val titleId: Int)
     ANTENNA(TablerIcons.Antenna, ResString.drawer_item_antenna),
     EXPLORE(TablerIcons.Hash, ResString.drawer_item_explore),
     CHANNEL(TablerIcons.DeviceTv, ResString.drawer_item_channel),
+    SEARCH(TablerIcons.Search, ResString.drawer_item_search),
     DRIVE(TablerIcons.BrandOnedrive, ResString.drawer_item_drive),
     ABOUT(TablerIcons.InfoCircle, ResString.drawer_item_about),
     ACCOUNT_PREFERENCES(TablerIcons.User, ResString.drawer_item_account_preferences),

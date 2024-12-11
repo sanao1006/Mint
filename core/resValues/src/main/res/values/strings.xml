@@ -25,6 +25,7 @@
     <string name="drawer_item_antenna">Antenna</string>
     <string name="drawer_item_explore">Explore</string>
     <string name="drawer_item_channel">Channel</string>
+    <string name="drawer_item_search">Search</string>
     <string name="drawer_item_drive">Drive</string>
     <string name="drawer_item_gallery">Gallery</string>
     <string name="drawer_item_about">About</string>

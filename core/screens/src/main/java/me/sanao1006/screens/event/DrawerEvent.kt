@@ -2,6 +2,7 @@ package me.sanao1006.screens.event
 
 import com.slack.circuit.runtime.Navigator
 import me.sanao1006.core.model.LoginUserInfo
+import me.sanao1006.screens.SearchScreen
 import me.sanao1006.screens.UserScreen
 
 sealed class DrawerEvent {
@@ -11,6 +12,7 @@ sealed class DrawerEvent {
     data object OnDrawerAntennaClicked : DrawerEvent()
     data object OnDrawerExploreClicked : DrawerEvent()
     data object OnDrawerChannelClicked : DrawerEvent()
+    data object OnDrawerSearchClicked : DrawerEvent()
     data object OnDrawerDriveClicked : DrawerEvent()
     data object OnDrawerAboutClicked : DrawerEvent()
     data object OnDrawerAccountPreferencesClicked : DrawerEvent()
@@ -34,6 +36,10 @@ fun DrawerEvent.handleDrawerEvent(
                     isFromDrawer = true
                 )
             )
+        }
+
+        DrawerEvent.OnDrawerSearchClicked -> {
+            navigator.goTo(SearchScreen)
         }
 
         else -> {}

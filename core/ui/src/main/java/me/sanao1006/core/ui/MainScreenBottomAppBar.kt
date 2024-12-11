@@ -81,11 +81,7 @@ private fun MainScreenBottomAppBar(
     )
 }
 
-private enum class BottomSheetType(
-    val mainSheetType: MainScreenType,
-    val resId: Int
-) {
-    HOME(MainScreenType.HOME, TablerIcons.Home),
-    SEARCH(MainScreenType.SEARCH, TablerIcons.Search),
-    NOTIFICATION(MainScreenType.NOTIFICATION, TablerIcons.Bell)
+private enum class MainScreenType {
+    HOME,
+    NOTIFICATION
 }

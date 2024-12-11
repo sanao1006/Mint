@@ -25,6 +25,7 @@
     <string name="drawer_item_antenna">アンテナ</string>
     <string name="drawer_item_explore">見つける</string>
     <string name="drawer_item_channel">チャンネル</string>
+    <string name="drawer_item_search">検索</string>
     <string name="drawer_item_drive">ドライブ</string>
     <string name="drawer_item_gallery">ギャラリー</string>
     <string name="drawer_item_about">情報</string>
