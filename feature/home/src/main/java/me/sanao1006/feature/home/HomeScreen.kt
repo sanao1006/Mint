@@ -10,6 +10,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material3.ContainedLoadingIndicator
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FloatingActionButton
@@ -134,45 +135,54 @@ private fun HomeScreenUiContent(
         snackbarHost = snackbarHostState
     ) {
         Box(
-            contentAlignment = Alignment.TopCenter,
+            contentAlignment = if (state.uiState.isEmpty()) {
+                Alignment.Center
+            } else {
+                Alignment.TopCenter
+            },
             modifier = Modifier
+                .fillMaxSize()
                 .padding(it)
                 .pullRefresh(state = state.pullToRefreshState)
         ) {
-            PullRefreshIndicator(
-                refreshing = state.isRefreshed,
-                state = state.pullToRefreshState,
-                modifier = Modifier
-                    .zIndex(1f)
-                    .align(Alignment.TopCenter),
-                scale = true
-            )
-            HorizontalPager(
-                modifier = Modifier.zIndex(0f),
-                state = pagerState
-            ) { page ->
-                TimelineColumn(
-                    state = state,
-                    modifier = Modifier.fillMaxSize(),
-                    onIconClick = { id, username, host ->
-                        state.eventSink(
-                            HomeScreen.Event.TimelineItemEvent.OnTimelineIconClicked(
-                                id,
-                                username,
-                                host
+            if (state.uiState.isEmpty()) {
+                ContainedLoadingIndicator()
+            } else {
+                PullRefreshIndicator(
+                    refreshing = state.isRefreshed,
+                    state = state.pullToRefreshState,
+                    modifier = Modifier
+                        .zIndex(1f)
+                        .align(Alignment.TopCenter),
+                    scale = true
+                )
+                HorizontalPager(
+                    modifier = Modifier.zIndex(0f),
+                    state = pagerState
+                ) { page ->
+                    TimelineColumn(
+                        state = state,
+                        modifier = Modifier.fillMaxSize(),
+                        onIconClick = { id, username, host ->
+                            state.eventSink(
+                                HomeScreen.Event.TimelineItemEvent.OnTimelineIconClicked(
+                                    id,
+                                    username,
+                                    host
+                                )
                             )
-                        )
-                    }
+                        }
+                    )
+                }
+                MainScreenBottomAppBarWrapper(
+                    modifier = Modifier
+                        .align(BottomCenter)
+                        .offset(y = -(ScreenOffset)),
+                    mainScreenType = MainScreenType.HOME,
+                    event = state.bottomAppBarEventSInk,
+                    floatingActionButton = { floatingActionButton() }
                 )
             }
-            MainScreenBottomAppBarWrapper(
-                modifier = Modifier
-                    .align(BottomCenter)
-                    .offset(y = -(ScreenOffset)),
-                mainScreenType = MainScreenType.HOME,
-                event = state.bottomAppBarEventSInk,
-                floatingActionButton = { floatingActionButton() }
-            )
         }
     }
 }
