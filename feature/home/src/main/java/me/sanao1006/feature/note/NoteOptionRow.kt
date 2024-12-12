@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,8 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.slack.circuit.overlay.OverlayEffect
-import com.slack.circuitx.overlays.BottomSheetOverlay
 import ir.alirezaivaz.tablericons.TablerIcons
 import me.sanao1006.core.model.notes.NoteOptionContent
 import me.sanao1006.core.model.notes.ReactionAcceptance
@@ -103,7 +102,7 @@ enum class ReactionAcceptanceItem(
 
     companion object {
         fun getAllItems(): List<ReactionAcceptanceItem> =
-            listOf(All, LikeOnly, LikeOnlyForRemote, NonSensitiveOnly)
+            listOf(All, LikeOnlyForRemote, LikeOnly, NonSensitiveOnly)
     }
 }
 
@@ -126,49 +125,40 @@ internal fun NoteOptionRow(
     onLocalOnlyClicked: (Boolean) -> Unit,
     onReactionAcceptanceClicked: (ReactionAcceptance?) -> Unit
 ) {
-    OverlayEffect(isShowBottomSheet) {
-        if (isShowBottomSheet) {
+    if (isShowBottomSheet) {
+        ModalBottomSheet(
+            onDismissRequest = onBottomSheetOuterClicked
+        ) {
             val model = when (noteOptionContent) {
                 NoteOptionContent.VISIBILITY -> VisibilityItem.getAllItems()
                 NoteOptionContent.LOCAL_ONLY -> LocalOnlyItem.getAllItems()
                 NoteOptionContent.REACTION_ACCEPTANCE -> ReactionAcceptanceItem.getAllItems()
             }
-            show(
-                BottomSheetOverlay(
-                    model = model,
-                    onDismiss = onBottomSheetOuterClicked,
-                    content = { modelItems, _ ->
-                        Column(
-                            modifier = Modifier.padding(
-                                top = 24.dp,
-                                end = 16.dp,
-                                bottom = 40.dp,
-                                start = 16.dp
-                            ),
-                            verticalArrangement = Arrangement.spacedBy(24.dp)
-                        ) {
-                            modelItems.forEach {
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .clickable {
-                                            when (it) {
-                                                is VisibilityItem -> onVisibilityClicked(it.value)
-                                                is LocalOnlyItem -> onLocalOnlyClicked(it.value)
-                                                is ReactionAcceptanceItem ->
-                                                    onReactionAcceptanceClicked(it.value)
-                                            }
-                                        }
-                                ) {
-                                    Icon(painter = painterResource(it.resId), "")
-                                    Spacer(modifier = Modifier.width(8.dp))
-                                    Text(text = stringResource(it.description))
+            Column(
+                modifier = Modifier.padding(
+                    vertical = 24.dp,
+                    horizontal = 16.dp
+                ),
+                verticalArrangement = Arrangement.spacedBy(24.dp)
+            ) {
+                model.forEach {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                when (it) {
+                                    is VisibilityItem -> onVisibilityClicked(it.value)
+                                    is LocalOnlyItem -> onLocalOnlyClicked(it.value)
+                                    is ReactionAcceptanceItem -> onReactionAcceptanceClicked(it.value)
                                 }
                             }
-                        }
+                    ) {
+                        Icon(painter = painterResource(it.resId), "")
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(text = stringResource(it.description))
                     }
-                )
-            )
+                }
+            }
         }
     }
 
