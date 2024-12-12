@@ -136,5 +136,4 @@ private fun NotificationScreenContent(
             )
         }
     }
-
 }
