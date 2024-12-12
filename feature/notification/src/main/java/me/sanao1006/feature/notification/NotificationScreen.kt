@@ -103,6 +103,7 @@ private fun NotificationScreenContent(
                 title = {
                     Text(
                         text = stringResource(ResString.title_notification),
+                        color = MaterialTheme.colorScheme.onSurface,
                         style = MaterialTheme.typography.titleLarge
                     )
                 },
