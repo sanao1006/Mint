@@ -27,7 +27,7 @@ private val LightColors = lightColorScheme(
     onError = Color.White
 )
 
-//Color(0xFF1DA1F2)
+// Color(0xFF1DA1F2)
 private val DarkColors = darkColorScheme(
     primary = Color(0xFF1D66AA),
     onPrimary = Color.White,

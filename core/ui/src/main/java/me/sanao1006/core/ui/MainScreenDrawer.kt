@@ -102,7 +102,7 @@ private fun MainScreenDrawer(
                     LocalMintColors.current.background
                 } else {
                     LocalMintColors.current.background
-                },
+                }
             ) {
                 LazyColumn {
                     item {

@@ -135,7 +135,11 @@ private fun TimelineActionRow(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         IconButton(onClick = onReplyClick) {
-            Icon(painterResource(TablerIcons.MessageCirclePlus), "", modifier = Modifier.size(22.dp))
+            Icon(
+                painterResource(TablerIcons.MessageCirclePlus),
+                "",
+                modifier = Modifier.size(22.dp)
+            )
         }
 
         IconButton(onClick = onRepostClick) {
