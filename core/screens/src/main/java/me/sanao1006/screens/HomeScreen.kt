@@ -1,8 +1,8 @@
 package me.sanao1006.screens
 
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.pullrefresh.PullRefreshState
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Immutable
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState

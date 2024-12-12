@@ -8,20 +8,18 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.SnackbarHost
-import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingAppBarDefaults.ScreenOffset
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -30,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.zIndex
 import com.slack.circuit.codegen.annotations.CircuitInject
+import com.slack.circuitx.effects.LaunchedImpressionEffect
 import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
 import kotlinx.coroutines.launch
@@ -40,7 +39,6 @@ import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.MainScreenType
 import me.sanao1006.screens.event.GlobalIconEvent
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @CircuitInject(HomeScreen::class, SingletonComponent::class)
 @Composable
 fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
@@ -49,7 +47,7 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
         val scope = rememberCoroutineScope()
         val drawerState = rememberDrawerState(DrawerValue.Closed)
         val snackbarHostState = remember { SnackbarHostState() }
-        LaunchedEffect(state.isSuccessCreateNote) {
+        LaunchedImpressionEffect(state.isSuccessCreateNote) {
             state.eventSink(HomeScreen.Event.OnNoteCreated(snackbarHostState, scope))
         }
 
