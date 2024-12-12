@@ -27,7 +27,8 @@ include(
     "feature:login",
     "feature:home",
     "feature:user",
-    "feature:search"
+    "feature:search",
+    "feature:notification"
 )
 include(
     "core:network",

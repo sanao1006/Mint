@@ -35,4 +35,5 @@
     <string name="login_invalid_url">Invalid URL</string>
     <string name="login_invalid_host">Unable to resolve host %1$s</string>
     <string name="login_failed">Login failed. Please re-authenticate.</string>
+    <string name="title_notification">Notification</string>
 </resources>
