@@ -48,7 +48,6 @@ fun TimelineColumn(
         items(state.uiState) {
             it?.let { timelineUiState ->
                 TimelineItem(
-                    modifier = Modifier.padding(bottom = 8.dp),
                     onIconClick = onIconClick,
                     timelineUiState = timelineUiState
                 )
@@ -136,19 +135,19 @@ private fun TimelineActionRow(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         IconButton(onClick = onReplyClick) {
-            Icon(painterResource(TablerIcons.MessageCirclePlus), "")
+            Icon(painterResource(TablerIcons.MessageCirclePlus), "", modifier = Modifier.size(22.dp))
         }
 
         IconButton(onClick = onRepostClick) {
-            Icon(painterResource(TablerIcons.Repeat), "")
+            Icon(painterResource(TablerIcons.Repeat), "", modifier = Modifier.size(22.dp))
         }
 
         IconButton(onClick = onReactionClick) {
-            Icon(painterResource(TablerIcons.MoodPlus), "")
+            Icon(painterResource(TablerIcons.MoodPlus), "", modifier = Modifier.size(22.dp))
         }
 
         IconButton(onClick = onOptionClick) {
-            Icon(painterResource(TablerIcons.Dots), "")
+            Icon(painterResource(TablerIcons.Dots), "", modifier = Modifier.size(22.dp))
         }
     }
 }

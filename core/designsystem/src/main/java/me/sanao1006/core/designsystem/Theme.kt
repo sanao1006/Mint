@@ -1,57 +1,66 @@
 package me.sanao1006.core.designsystem
 
-import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.graphics.Color
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+private val LightColors = lightColorScheme(
+    primary = Color(0xFFB2DFDB), // Lighter Mint Green
+    onPrimary = Color.Black,
+    primaryContainer = Color(0xFFE0F2F1),
+    onPrimaryContainer = Color.Black,
+    secondary = Color(0xFF80CBC4),
+    onSecondary = Color.Black,
+    secondaryContainer = Color(0xFFB2DFDB),
+    onSecondaryContainer = Color.Black,
+    background = Color(0xFFE0F7FA),
+    onBackground = Color.Black,
+    surface = Color(0xFFE0F2F1),
+    onSurface = Color.Black,
+    error = Color(0xFFB00020),
+    onError = Color.White
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
+//Color(0xFF1DA1F2)
+private val DarkColors = darkColorScheme(
+    primary = Color(0xFF1D66AA),
     onPrimary = Color.White,
+    primaryContainer = Color(0xFF1A91DA),
+    onPrimaryContainer = Color.White,
+    secondary = Color(0xFF14171A),
     onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-     */
+    secondaryContainer = Color(0xFF657786),
+    onSecondaryContainer = Color.White,
+    background = Color(0xFF15202B),
+    onBackground = Color.White,
+    surface = Color(0xFF192734),
+    onSurface = Color.White,
+    error = Color(0xFFCF6679),
+    onError = Color.Black
 )
+
+val LocalMintColors = staticCompositionLocalOf<ColorScheme> {
+    error("No MintColors provided")
+}
 
 @Composable
 fun MintTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
+    val colorScheme = if (darkTheme) DarkColors else LightColors
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+    CompositionLocalProvider(LocalMintColors provides colorScheme) {
+        MaterialTheme(
+            colorScheme = colorScheme,
+            typography = Typography,
+            content = content
+        )
     }
-
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        content = content
-    )
 }

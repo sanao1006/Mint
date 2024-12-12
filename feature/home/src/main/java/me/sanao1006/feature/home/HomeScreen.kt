@@ -10,7 +10,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material3.ContainedLoadingIndicator
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FloatingActionButton
@@ -146,7 +146,7 @@ private fun HomeScreenUiContent(
                 .pullRefresh(state = state.pullToRefreshState)
         ) {
             if (state.uiState.isEmpty()) {
-                ContainedLoadingIndicator()
+                CircularProgressIndicator()
             } else {
                 PullRefreshIndicator(
                     refreshing = state.isRefreshed,

@@ -4,6 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -37,6 +38,7 @@ import coil3.compose.rememberAsyncImagePainter
 import ir.alirezaivaz.tablericons.TablerIcons
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import me.sanao1006.core.designsystem.LocalMintColors
 import me.sanao1006.core.model.LoginUserInfo
 import me.sanao1006.screens.event.DrawerEvent
 import me.snao1006.res_value.ResString
@@ -95,7 +97,13 @@ private fun MainScreenDrawer(
         modifier = modifier,
         drawerState = drawerState,
         drawerContent = {
-            ModalDrawerSheet {
+            ModalDrawerSheet(
+                drawerContainerColor = if (isSystemInDarkTheme()) {
+                    LocalMintColors.current.background
+                } else {
+                    LocalMintColors.current.background
+                },
+            ) {
                 LazyColumn {
                     item {
                         LoginUserInfoBox(
@@ -117,7 +125,12 @@ private fun MainScreenDrawer(
                     items(DrawerItem.entries) {
                         NavigationDrawerItem(
                             icon = { Icon(painter = painterResource(it.iconId), "") },
-                            label = { Text(text = stringResource(it.titleId)) },
+                            label = {
+                                Text(
+                                    text = stringResource(it.titleId),
+                                    color = LocalMintColors.current.onPrimary
+                                )
+                            },
                             selected = false,
                             onClick = {
                                 scope.launch {
