@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -45,9 +45,19 @@ fun TimelineColumn(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        items(state.uiState) {
+        itemsIndexed(state.uiState) { index, it ->
             it?.let { timelineUiState ->
                 TimelineItem(
+                    modifier = Modifier
+                        .padding(
+                            top = if (index == 0) {
+                                16.dp
+                            } else {
+                                0.dp
+                            },
+                            start = 16.dp,
+                            end = 16.dp
+                        ),
                     onIconClick = onIconClick,
                     timelineUiState = timelineUiState
                 )
@@ -66,7 +76,6 @@ private fun TimelineItem(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
     ) {
         Row {
             Image(
