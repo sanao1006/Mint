@@ -2,6 +2,7 @@ package me.sanao1006.screens.event
 
 import com.slack.circuit.runtime.Navigator
 import me.sanao1006.screens.HomeScreen
+import me.sanao1006.screens.NotificationScreen
 
 sealed class BottomAppBarActionEvent {
     data object OnHomeIconClicked : BottomAppBarActionEvent()
@@ -17,7 +18,7 @@ fun BottomAppBarActionEvent.handleBottomAppBarActionEvent(
         }
 
         BottomAppBarActionEvent.OnNotificationIconClicked -> {
-            // TODO goto Notification Screen
+            navigator.goTo(NotificationScreen)
         }
     }
 }
