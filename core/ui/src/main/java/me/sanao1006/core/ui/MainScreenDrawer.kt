@@ -108,8 +108,9 @@ private fun MainScreenDrawer(
                         Spacer(modifier = Modifier.height(16.dp))
                         HorizontalDivider(
                             modifier = Modifier
-                                .fillMaxWidth(0.9f)
+                                .fillMaxWidth()
                                 .align(Alignment.CenterHorizontally)
+                                .padding(horizontal = 16.dp)
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                     }
