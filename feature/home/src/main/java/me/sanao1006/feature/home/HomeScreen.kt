@@ -38,6 +38,7 @@ import me.sanao1006.core.ui.TimelineColumn
 import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.MainScreenType
 import me.sanao1006.screens.event.GlobalIconEvent
+import me.sanao1006.screens.event.NoteCreateEvent
 
 @CircuitInject(HomeScreen::class, SingletonComponent::class)
 @Composable
@@ -48,7 +49,12 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
         val drawerState = rememberDrawerState(DrawerValue.Closed)
         val snackbarHostState = remember { SnackbarHostState() }
         LaunchedImpressionEffect(state.isSuccessCreateNote) {
-            state.eventSink(HomeScreen.Event.OnNoteCreated(snackbarHostState, scope))
+            state.noteCreateEventSink(
+                NoteCreateEvent.OnNoteCreated(
+                    snackbarHostState = snackbarHostState,
+                    scope = scope
+                )
+            )
         }
 
         MainScreenDrawerWrapper(
@@ -91,7 +97,7 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
                 floatingActionButton = {
                     FloatingActionButton(
                         modifier = Modifier,
-                        onClick = { state.eventSink(HomeScreen.Event.OnNoteCreateClicked) }
+                        onClick = { state.noteCreateEventSink(NoteCreateEvent.OnNoteCreateClicked) }
                     ) {
                         Icon(painter = painterResource(TablerIcons.Pencil), "")
                     }

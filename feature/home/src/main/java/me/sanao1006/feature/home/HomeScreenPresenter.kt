@@ -32,6 +32,7 @@ import me.sanao1006.screens.NoteScreen
 import me.sanao1006.screens.event.handleBottomAppBarActionEvent
 import me.sanao1006.screens.event.handleDrawerEvent
 import me.sanao1006.screens.event.handleNavigationIconClicked
+import me.sanao1006.screens.event.handleNoteCreateEvent
 
 class HomeScreenPresenter @AssistedInject constructor(
     @Assisted private val navigator: Navigator,
@@ -89,19 +90,18 @@ class HomeScreenPresenter @AssistedInject constructor(
             pullToRefreshState = pullRefreshState,
             isRefreshed = isRefreshed,
             drawerUserInfo = loginUserInfo,
+            noteCreateEventSink = { event ->
+                event.handleNoteCreateEvent(
+                    isSuccessCreateNote,
+                    context,
+                    nav
+                )
+            },
             drawerEventSink = { event -> event.handleDrawerEvent(navigator, loginUserInfo) },
             bottomAppBarEventSInk = { event -> event.handleBottomAppBarActionEvent(navigator) },
             globalIconEventSink = { event -> event.handleNavigationIconClicked(navigator) }
         ) { event ->
             when (event) {
-                is HomeScreen.Event.OnNoteCreated -> handleNoteCreated(
-                    event,
-                    isSuccessCreateNote,
-                    context
-                )
-
-                HomeScreen.Event.OnNoteCreateClicked -> handleNoteCreateClicked(nav)
-
                 is HomeScreen.Event.TimelineEvent -> handleTimelineEvent(event) {
                     timelineType = it
                 }

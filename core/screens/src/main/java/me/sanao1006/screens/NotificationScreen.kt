@@ -8,12 +8,15 @@ import me.sanao1006.core.model.LoginUserInfo
 import me.sanao1006.screens.event.BottomAppBarActionEvent
 import me.sanao1006.screens.event.DrawerEvent
 import me.sanao1006.screens.event.GlobalIconEvent
+import me.sanao1006.screens.event.NoteCreateEvent
 
 @Parcelize
 data object NotificationScreen : Screen {
     data class State(
+        val isSuccessCreateNote: Boolean?,
         val navigator: Navigator,
         val drawerUserInfo: LoginUserInfo,
+        val noteCreateEventSink: (NoteCreateEvent) -> Unit,
         val drawerEventSink: (DrawerEvent) -> Unit,
         val globalIconEventSink: (GlobalIconEvent) -> Unit,
         val bottomAppBarEventSInk: (BottomAppBarActionEvent) -> Unit,

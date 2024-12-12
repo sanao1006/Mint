@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.slack.circuit.codegen.annotations.CircuitInject
+import com.slack.circuitx.effects.LaunchedImpressionEffect
 import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
 import me.sanao1006.core.ui.MainScreenBottomAppBarWrapper
@@ -36,6 +37,7 @@ import me.sanao1006.core.ui.MainScreenDrawerWrapper
 import me.sanao1006.screens.MainScreenType
 import me.sanao1006.screens.NotificationScreen
 import me.sanao1006.screens.event.GlobalIconEvent
+import me.sanao1006.screens.event.NoteCreateEvent
 import me.snao1006.res_value.ResString
 
 @CircuitInject(NotificationScreen::class, SingletonComponent::class)
@@ -44,6 +46,15 @@ fun NotificationScreenUi(state: NotificationScreen.State, modifier: Modifier) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedImpressionEffect(state.isSuccessCreateNote) {
+        state.noteCreateEventSink(
+            NoteCreateEvent.OnNoteCreated(
+                snackbarHostState = snackbarHostState,
+                scope = scope
+            )
+        )
+    }
     Box(modifier = modifier.fillMaxSize()) {
         MainScreenDrawerWrapper(
             loginUserInfo = state.drawerUserInfo,
@@ -66,7 +77,7 @@ fun NotificationScreenUi(state: NotificationScreen.State, modifier: Modifier) {
                 floatingActionButton = {
                     FloatingActionButton(
                         modifier = Modifier,
-                        onClick = { }
+                        onClick = { state.noteCreateEventSink(NoteCreateEvent.OnNoteCreateClicked) }
                     ) {
                         Icon(painter = painterResource(TablerIcons.Pencil), "")
                     }
