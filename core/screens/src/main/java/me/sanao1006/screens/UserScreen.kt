@@ -1,6 +1,5 @@
 package me.sanao1006.screens
 
-import androidx.compose.runtime.Immutable
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.Screen
@@ -14,7 +13,6 @@ data class UserScreen(
     val host: String? = null,
     val isFromDrawer: Boolean = false
 ) : Screen {
-    @Immutable
     data class State(
         val uiState: UserScreenUiState,
         val eventSink: (Event) -> Unit

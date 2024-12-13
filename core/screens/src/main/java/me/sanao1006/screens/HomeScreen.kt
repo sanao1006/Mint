@@ -2,7 +2,6 @@ package me.sanao1006.screens
 
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshState
-import androidx.compose.runtime.Immutable
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.Navigator
@@ -19,7 +18,6 @@ import me.sanao1006.screens.event.TimelineItemEvent
 @Parcelize
 data object HomeScreen : Screen {
     @OptIn(ExperimentalMaterialApi::class)
-    @Immutable
     data class State(
         val uiState: List<TimelineUiState?> = listOf(),
         val navigator: Navigator,

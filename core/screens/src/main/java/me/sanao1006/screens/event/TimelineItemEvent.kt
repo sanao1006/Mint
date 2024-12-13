@@ -1,11 +1,12 @@
 package me.sanao1006.screens.event
 
+import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.GoToNavigator
 import me.sanao1006.screens.NoteScreen
 import me.sanao1006.screens.ReplyObject
 import me.sanao1006.screens.UserScreen
 
-sealed class TimelineItemEvent {
+sealed class TimelineItemEvent : CircuitUiEvent {
     data class OnTimelineItemIconClicked(
         val id: String,
         val username: String?,

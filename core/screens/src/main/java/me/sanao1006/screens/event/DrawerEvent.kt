@@ -1,11 +1,12 @@
 package me.sanao1006.screens.event
 
+import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.Navigator
 import me.sanao1006.core.model.LoginUserInfo
 import me.sanao1006.screens.SearchScreen
 import me.sanao1006.screens.UserScreen
 
-sealed class DrawerEvent {
+sealed class DrawerEvent : CircuitUiEvent {
     data object OnDrawerFavoriteClicked : DrawerEvent()
     data object OnDrawerAnnouncementClicked : DrawerEvent()
     data object OnDrawerClipClicked : DrawerEvent()
