@@ -137,7 +137,7 @@ class HomeScreenPresenter @AssistedInject constructor(
                 }
 
                 HomeScreen.Event.OnDismissRequest -> {
-                    timelineUiState.showBottomSheet
+                    timelineUiState = timelineUiState.copy(showBottomSheet = false)
                 }
             }
         }

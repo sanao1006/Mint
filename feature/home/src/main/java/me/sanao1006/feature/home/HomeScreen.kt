@@ -203,7 +203,7 @@ private fun HomeScreenUiContent(
                 TimelineBottomSheet(
                     isShowBottomSheet = state.timelineUiState.showBottomSheet,
                     timelineItemAction = state.timelineUiState.timelineAction,
-                    onDismissRequest = { },
+                    onDismissRequest = { state.eventSink(HomeScreen.Event.OnDismissRequest) },
                     onRenoteIconCLick = { },
                     onOptionIconCLick = { }
                 )
