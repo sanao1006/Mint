@@ -66,7 +66,7 @@ enum class OptionItem(
         ResString.description_share
     ),
     Favorite(
-        TablerIcons.StarFilled,
+        TablerIcons.Star,
         ResString.description_favorite
     )
     ;
