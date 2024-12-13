@@ -31,7 +31,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import coil3.compose.rememberAsyncImagePainter
 import ir.alirezaivaz.tablericons.TablerIcons
-import me.sanao1006.core.model.notes.TimelineUiState
+import me.sanao1006.core.model.notes.TimelineItem
 import me.sanao1006.core.model.notes.User
 import me.sanao1006.screens.HomeScreen
 
@@ -49,7 +49,7 @@ fun TimelineColumn(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        itemsIndexed(state.uiState) { index, it ->
+        itemsIndexed(state.timelineUiState.timelineItems) { index, it ->
             it?.let { timelineUiState ->
                 TimelineItem(
                     modifier = Modifier
@@ -62,7 +62,7 @@ fun TimelineColumn(
                             start = 16.dp,
                             end = 16.dp
                         ),
-                    timelineUiState = timelineUiState,
+                    timelineItem = timelineUiState,
                     onIconClick = onIconClick,
                     onReplyClick = {
                         if (!it.user?.username.isNullOrEmpty()) {
@@ -87,7 +87,7 @@ private fun TimelineItem(
     onRepostClick: () -> Unit,
     onReactionClick: () -> Unit,
     onOptionClick: () -> Unit,
-    timelineUiState: TimelineUiState
+    timelineItem: TimelineItem
 ) {
     Column(
         modifier = modifier
@@ -100,19 +100,19 @@ private fun TimelineItem(
                     .clip(shape = CircleShape)
                     .clickable {
                         onIconClick(
-                            timelineUiState.user?.id ?: "",
-                            timelineUiState.user?.username,
-                            timelineUiState.user?.host
+                            timelineItem.user?.id ?: "",
+                            timelineItem.user?.username,
+                            timelineItem.user?.host
                         )
                     },
-                painter = rememberAsyncImagePainter(timelineUiState.user?.avatarUrl),
+                painter = rememberAsyncImagePainter(timelineItem.user?.avatarUrl),
                 contentDescription = null,
                 contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.width(8.dp))
             Row(verticalAlignment = Alignment.Bottom) {
                 Text(
-                    text = timelineUiState.user?.name ?: timelineUiState.user?.username ?: "",
+                    text = timelineItem.user?.name ?: timelineItem.user?.username ?: "",
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.SemiBold,
                     maxLines = 1,
@@ -120,9 +120,9 @@ private fun TimelineItem(
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 val username =
-                    timelineUiState.user?.username?.takeIf { it.isNotBlank() }?.let { "@$it" } ?: ""
+                    timelineItem.user?.username?.takeIf { it.isNotBlank() }?.let { "@$it" } ?: ""
                 val host =
-                    timelineUiState.user?.host?.takeIf { it.isNotBlank() }?.let { "@$it" } ?: ""
+                    timelineItem.user?.host?.takeIf { it.isNotBlank() }?.let { "@$it" } ?: ""
 
                 if (username.isNotEmpty() && host.isNotEmpty()) {
                     Text(
@@ -135,7 +135,7 @@ private fun TimelineItem(
             }
         }
         Spacer(modifier = Modifier.height(2.dp))
-        Text(text = timelineUiState.text)
+        Text(text = timelineItem.text)
         Spacer(modifier = Modifier.height(8.dp))
         TimelineActionRow(
             modifier = Modifier.fillMaxWidth(),
@@ -185,7 +185,7 @@ private fun TimelineActionRow(
 @Composable
 fun PreviewTimeLineItem() {
     TimelineItem(
-        timelineUiState = TimelineUiState(
+        timelineItem = TimelineItem(
             user = User(
                 name = "sanao1006",
                 avatarUrl = ""

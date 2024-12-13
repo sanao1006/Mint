@@ -50,7 +50,7 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
         val scope = rememberCoroutineScope()
         val drawerState = rememberDrawerState(DrawerValue.Closed)
         val snackbarHostState = remember { SnackbarHostState() }
-        LaunchedImpressionEffect(state.isSuccessCreateNote) {
+        LaunchedImpressionEffect(state.timelineUiState.isSuccessCreateNote) {
             state.noteCreateEventSink(
                 NoteCreateEvent.OnNoteCreated(
                     snackbarHostState = snackbarHostState,
@@ -136,7 +136,7 @@ private fun HomeScreenUiContent(
         snackbarHost = snackbarHostState
     ) {
         Box(
-            contentAlignment = if (state.uiState.isEmpty()) {
+            contentAlignment = if (state.timelineUiState.timelineItems.isEmpty()) {
                 Alignment.Center
             } else {
                 Alignment.TopCenter
@@ -146,7 +146,7 @@ private fun HomeScreenUiContent(
                 .padding(it)
                 .pullRefresh(state = state.pullToRefreshState)
         ) {
-            if (state.uiState.isEmpty()) {
+            if (state.timelineUiState.timelineItems.isEmpty()) {
                 CircularProgressIndicator()
             } else {
                 PullRefreshIndicator(
@@ -165,7 +165,7 @@ private fun HomeScreenUiContent(
                         state = state,
                         modifier = Modifier.fillMaxSize(),
                         onIconClick = { id, username, host ->
-                            state.timelineEventSink(
+                            state.timelineUiState.timelineEventSink(
                                 TimelineItemEvent.OnTimelineItemIconClicked(
                                     id,
                                     username,
@@ -174,19 +174,19 @@ private fun HomeScreenUiContent(
                             )
                         },
                         onReplyClick = { id, user, host ->
-                            state.timelineEventSink(
+                            state.timelineUiState.timelineEventSink(
                                 TimelineItemEvent.OnTimelineItemReplyClicked(id, user, host)
                             )
                         },
                         onRepostClick = { userId ->
-                            state.timelineEventSink(
+                            state.timelineUiState.timelineEventSink(
                                 TimelineItemEvent.OnTimelineItemRepostClicked(
                                     userId
                                 )
                             )
                         },
                         onReactionClick = { userId ->
-                            state.timelineEventSink(
+                            state.timelineUiState.timelineEventSink(
                                 TimelineItemEvent.OnTimelineItemReactionClicked(
                                     userId
                                 )

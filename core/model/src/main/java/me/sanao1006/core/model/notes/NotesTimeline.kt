@@ -68,8 +68,8 @@ data class NotesTimeline(
     @SerialName("visibleUserIds")
     val visibleUserIds: List<String> = listOf()
 ) {
-    fun toTimelineUiState(): TimelineUiState {
-        return TimelineUiState(
+    fun toTimelineUiState(): TimelineItem {
+        return TimelineItem(
             user = user,
             text = text.orEmpty(),
             id = id
