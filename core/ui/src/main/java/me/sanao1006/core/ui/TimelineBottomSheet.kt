@@ -93,7 +93,7 @@ fun TimelineBottomSheet(
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit,
     onRenoteIconCLick: (RenoteItem) -> Unit,
-    onOptionIconCLick: (OptionItem) -> Unit,
+    onOptionIconCLick: (OptionItem) -> Unit
 ) {
     if (isShowBottomSheet) {
         val model = when (timelineItemAction) {
