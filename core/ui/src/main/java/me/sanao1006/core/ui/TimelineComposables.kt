@@ -40,7 +40,7 @@ fun TimelineColumn(
     modifier: Modifier = Modifier,
     state: HomeScreen.State,
     onIconClick: (String, String?, String?) -> Unit,
-    onReplyClick: (String) -> Unit,
+    onReplyClick: (String, String, String?) -> Unit,
     onRepostClick: (String) -> Unit,
     onReactionClick: (String) -> Unit,
     onOptionClick: () -> Unit
@@ -64,7 +64,11 @@ fun TimelineColumn(
                         ),
                     timelineUiState = timelineUiState,
                     onIconClick = onIconClick,
-                    onReplyClick = { it.user?.id?.let { id -> onReplyClick(id) } },
+                    onReplyClick = {
+                        if (!it.user?.username.isNullOrEmpty()) {
+                            onReplyClick(it.id, it.user?.username.orEmpty(), it.user?.host)
+                        }
+                    },
                     onRepostClick = { it.user?.id?.let { id -> onRepostClick(id) } },
                     onReactionClick = { it.user?.id?.let { id -> onReactionClick(id) } },
                     onOptionClick = onOptionClick
@@ -186,7 +190,8 @@ fun PreviewTimeLineItem() {
                 name = "sanao1006",
                 avatarUrl = ""
             ),
-            text = "Hello, World!"
+            text = "Hello, World!",
+            id = "1"
         ),
         onIconClick = { _, _, _ -> },
         onReplyClick = {},

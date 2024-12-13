@@ -19,6 +19,7 @@ import me.sanao1006.screens.NoteScreen
 
 class NoteScreenPresenter @AssistedInject constructor(
     @Assisted private val navigator: Navigator,
+    @Assisted private val screen: NoteScreen,
     private val createNotesUseCase: CreateNotesUseCase
 ) : Presenter<NoteScreen.State> {
     @Composable
@@ -26,7 +27,8 @@ class NoteScreenPresenter @AssistedInject constructor(
         var uiState by rememberRetained {
             mutableStateOf(
                 NoteScreenUiState(
-                    ""
+                    noteText = screen.replyObject?.user ?: "",
+                    replyId = screen.replyObject?.id
                 )
             )
         }
@@ -44,12 +46,22 @@ class NoteScreenPresenter @AssistedInject constructor(
 
                 is NoteScreen.Event.OnNotePostClicked -> {
                     it.scope.launch {
-                        createNotesUseCase(
-                            text = uiState.noteText,
-                            visibility = uiState.visibility,
-                            localOnly = uiState.localOnly,
-                            reactionAcceptance = uiState.reactionAcceptance
-                        )
+                        if (uiState.replyId.isNullOrEmpty()) {
+                            createNotesUseCase(
+                                text = uiState.noteText,
+                                visibility = uiState.visibility,
+                                localOnly = uiState.localOnly,
+                                reactionAcceptance = uiState.reactionAcceptance
+                            )
+                        } else {
+                            createNotesUseCase(
+                                text = uiState.noteText,
+                                visibility = uiState.visibility,
+                                localOnly = uiState.localOnly,
+                                reactionAcceptance = uiState.reactionAcceptance,
+                                replyId = uiState.replyId
+                            )
+                        }
                     }
                     navigator.pop(result = NoteScreen.Result(true))
                 }
@@ -95,5 +107,5 @@ class NoteScreenPresenter @AssistedInject constructor(
 @CircuitInject(NoteScreen::class, SingletonComponent::class)
 @AssistedFactory
 fun interface NoteScreenFactory {
-    fun create(navigator: Navigator): NoteScreenPresenter
+    fun create(navigator: Navigator, screen: NoteScreen): NoteScreenPresenter
 }

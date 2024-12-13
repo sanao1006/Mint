@@ -38,7 +38,7 @@ fun NoteCreateEvent.handleNoteCreateEvent(
         }
 
         NoteCreateEvent.OnNoteCreateClicked -> {
-            nav.goTo(NoteScreen)
+            nav.goTo(NoteScreen())
         }
     }
 }

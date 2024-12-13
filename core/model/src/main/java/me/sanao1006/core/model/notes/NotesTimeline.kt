@@ -71,7 +71,8 @@ data class NotesTimeline(
     fun toTimelineUiState(): TimelineUiState {
         return TimelineUiState(
             user = user,
-            text = text.orEmpty()
+            text = text.orEmpty(),
+            id = id
         )
     }
 }

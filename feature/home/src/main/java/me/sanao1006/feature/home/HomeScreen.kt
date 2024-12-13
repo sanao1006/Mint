@@ -173,11 +173,9 @@ private fun HomeScreenUiContent(
                                 )
                             )
                         },
-                        onReplyClick = { userId ->
+                        onReplyClick = { id, user, host ->
                             state.timelineEventSink(
-                                TimelineItemEvent.OnTimelineItemReplyClicked(
-                                    userId
-                                )
+                                TimelineItemEvent.OnTimelineItemReplyClicked(id, user, host)
                             )
                         },
                         onRepostClick = { userId ->
