@@ -38,8 +38,12 @@ import me.sanao1006.screens.HomeScreen
 @Composable
 fun TimelineColumn(
     modifier: Modifier = Modifier,
+    state: HomeScreen.State,
     onIconClick: (String, String?, String?) -> Unit,
-    state: HomeScreen.State
+    onReplyClick: (String) -> Unit,
+    onRepostClick: (String) -> Unit,
+    onReactionClick: (String) -> Unit,
+    onOptionClick: () -> Unit
 ) {
     LazyColumn(
         modifier = modifier,
@@ -58,8 +62,12 @@ fun TimelineColumn(
                             start = 16.dp,
                             end = 16.dp
                         ),
+                    timelineUiState = timelineUiState,
                     onIconClick = onIconClick,
-                    timelineUiState = timelineUiState
+                    onReplyClick = { it.user?.id?.let { id -> onReplyClick(id) } },
+                    onRepostClick = { it.user?.id?.let { id -> onRepostClick(id) } },
+                    onReactionClick = { it.user?.id?.let { id -> onReactionClick(id) } },
+                    onOptionClick = onOptionClick
                 )
                 HorizontalDivider()
             }
@@ -71,6 +79,10 @@ fun TimelineColumn(
 private fun TimelineItem(
     modifier: Modifier = Modifier,
     onIconClick: (String, String?, String?) -> Unit,
+    onReplyClick: () -> Unit,
+    onRepostClick: () -> Unit,
+    onReactionClick: () -> Unit,
+    onOptionClick: () -> Unit,
     timelineUiState: TimelineUiState
 ) {
     Column(
@@ -123,11 +135,11 @@ private fun TimelineItem(
         Spacer(modifier = Modifier.height(8.dp))
         TimelineActionRow(
             modifier = Modifier.fillMaxWidth(),
-            onReplyClick = {},
-            onRepostClick = {},
-            onReactionClick = {}
-        ) {
-        }
+            onReplyClick = onReplyClick,
+            onRepostClick = onRepostClick,
+            onReactionClick = onReactionClick,
+            onOptionClick = onOptionClick
+        )
     }
 }
 
@@ -176,6 +188,10 @@ fun PreviewTimeLineItem() {
             ),
             text = "Hello, World!"
         ),
-        onIconClick = { _, _, _ -> }
+        onIconClick = { _, _, _ -> },
+        onReplyClick = {},
+        onRepostClick = {},
+        onReactionClick = {},
+        onOptionClick = {}
     )
 }

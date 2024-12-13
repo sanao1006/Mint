@@ -40,6 +40,7 @@ import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.MainScreenType
 import me.sanao1006.screens.event.GlobalIconEvent
 import me.sanao1006.screens.event.NoteCreateEvent
+import me.sanao1006.screens.event.TimelineItemEvent
 
 @CircuitInject(HomeScreen::class, SingletonComponent::class)
 @Composable
@@ -164,14 +165,36 @@ private fun HomeScreenUiContent(
                         state = state,
                         modifier = Modifier.fillMaxSize(),
                         onIconClick = { id, username, host ->
-                            state.eventSink(
-                                HomeScreen.Event.TimelineItemEvent.OnTimelineIconClicked(
+                            state.timelineEventSink(
+                                TimelineItemEvent.OnTimelineItemIconClicked(
                                     id,
                                     username,
                                     host
                                 )
                             )
-                        }
+                        },
+                        onReplyClick = { userId ->
+                            state.timelineEventSink(
+                                TimelineItemEvent.OnTimelineItemReplyClicked(
+                                    userId
+                                )
+                            )
+                        },
+                        onRepostClick = { userId ->
+                            state.timelineEventSink(
+                                TimelineItemEvent.OnTimelineItemRepostClicked(
+                                    userId
+                                )
+                            )
+                        },
+                        onReactionClick = { userId ->
+                            state.timelineEventSink(
+                                TimelineItemEvent.OnTimelineItemReactionClicked(
+                                    userId
+                                )
+                            )
+                        },
+                        onOptionClick = { }
                     )
                 }
                 MainScreenBottomAppBarWrapper(

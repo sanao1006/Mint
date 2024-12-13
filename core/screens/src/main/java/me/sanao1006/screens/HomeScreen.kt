@@ -14,6 +14,7 @@ import me.sanao1006.screens.event.BottomAppBarActionEvent
 import me.sanao1006.screens.event.DrawerEvent
 import me.sanao1006.screens.event.GlobalIconEvent
 import me.sanao1006.screens.event.NoteCreateEvent
+import me.sanao1006.screens.event.TimelineItemEvent
 
 @Parcelize
 data object HomeScreen : Screen {
@@ -29,6 +30,7 @@ data object HomeScreen : Screen {
         val noteCreateEventSink: (NoteCreateEvent) -> Unit,
         val drawerEventSink: (DrawerEvent) -> Unit,
         val globalIconEventSink: (GlobalIconEvent) -> Unit,
+        val timelineEventSink: (TimelineItemEvent) -> Unit,
         val bottomAppBarEventSInk: (BottomAppBarActionEvent) -> Unit,
         val eventSink: (Event) -> Unit
     ) : CircuitUiState
@@ -38,18 +40,6 @@ data object HomeScreen : Screen {
             data object OnLocalTimelineClicked : TimelineEvent()
             data object OnSocialTimelineClicked : TimelineEvent()
             data object OnGlobalTimelineClicked : TimelineEvent()
-        }
-
-        sealed class TimelineItemEvent : Event() {
-            abstract val userId: String
-            abstract val userName: String?
-            abstract val host: String?
-
-            data class OnTimelineIconClicked(
-                override val userId: String,
-                override val userName: String?,
-                override val host: String?
-            ) : TimelineItemEvent()
         }
     }
 }

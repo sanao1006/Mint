@@ -33,6 +33,7 @@ import me.sanao1006.screens.event.handleBottomAppBarActionEvent
 import me.sanao1006.screens.event.handleDrawerEvent
 import me.sanao1006.screens.event.handleNavigationIconClicked
 import me.sanao1006.screens.event.handleNoteCreateEvent
+import me.sanao1006.screens.event.handleTimelineItemEvent
 
 class HomeScreenPresenter @AssistedInject constructor(
     @Assisted private val navigator: Navigator,
@@ -98,6 +99,7 @@ class HomeScreenPresenter @AssistedInject constructor(
                 )
             },
             drawerEventSink = { event -> event.handleDrawerEvent(navigator, loginUserInfo) },
+            timelineEventSink = { event -> event.handleTimelineItemEvent(navigator) },
             bottomAppBarEventSInk = { event -> event.handleBottomAppBarActionEvent(navigator) },
             globalIconEventSink = { event -> event.handleNavigationIconClicked(navigator) }
         ) { event ->
@@ -105,8 +107,6 @@ class HomeScreenPresenter @AssistedInject constructor(
                 is HomeScreen.Event.TimelineEvent -> handleTimelineEvent(event) {
                     timelineType = it
                 }
-
-                is HomeScreen.Event.TimelineItemEvent -> handleTimelineItemEvent(event, nav)
             }
         }
     }
