@@ -28,11 +28,14 @@ import me.sanao1006.core.domain.home.UpdateAccountUseCase
 import me.sanao1006.core.model.LoginUserInfo
 import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.NoteScreen
+import me.sanao1006.screens.event.TimelineItemAction
+import me.sanao1006.screens.event.TimelineItemEvent
 import me.sanao1006.screens.event.handleBottomAppBarActionEvent
 import me.sanao1006.screens.event.handleDrawerEvent
 import me.sanao1006.screens.event.handleNavigationIconClicked
 import me.sanao1006.screens.event.handleNoteCreateEvent
-import me.sanao1006.screens.event.handleTimelineItemEvent
+import me.sanao1006.screens.event.handleTimelineItemIconClicked
+import me.sanao1006.screens.event.handleTimelineItemReplyClicked
 import me.sanao1006.screens.uiState.TimelineUiState
 
 class HomeScreenPresenter @AssistedInject constructor(
@@ -58,13 +61,7 @@ class HomeScreenPresenter @AssistedInject constructor(
 
         var timelineType by rememberRetained { mutableStateOf(TimelineType.SOCIAL) }
         var timelineUiState: TimelineUiState by rememberRetained(timelineType) {
-            mutableStateOf(
-                TimelineUiState(
-                    timelineEventSink = { event ->
-                        event.handleTimelineItemEvent(navigator)
-                    }
-                )
-            )
+            mutableStateOf(TimelineUiState())
         }
 
         var isRefreshed by remember { mutableStateOf(false) }
@@ -103,6 +100,33 @@ class HomeScreenPresenter @AssistedInject constructor(
                     nav
                 )
             },
+            timelineEventSink = { event ->
+                when (event) {
+                    is TimelineItemEvent.OnTimelineItemIconClicked ->
+                        event.handleTimelineItemIconClicked(navigator)
+
+                    is TimelineItemEvent.OnTimelineItemReplyClicked ->
+                        event.handleTimelineItemReplyClicked(navigator)
+
+                    is TimelineItemEvent.OnTimelineItemRepostClicked -> {
+                        timelineUiState =
+                            timelineUiState.copy(
+                                showBottomSheet = true,
+                                timelineAction = TimelineItemAction.Renote
+                            )
+                    }
+
+                    is TimelineItemEvent.OnTimelineItemReactionClicked -> {}
+
+                    is TimelineItemEvent.OnTimelineItemOptionClicked -> {
+                        timelineUiState =
+                            timelineUiState.copy(
+                                showBottomSheet = true,
+                                timelineAction = TimelineItemAction.Option
+                            )
+                    }
+                }
+            },
             drawerEventSink = { event -> event.handleDrawerEvent(navigator, loginUserInfo) },
             bottomAppBarEventSInk = { event -> event.handleBottomAppBarActionEvent(navigator) },
             globalIconEventSink = { event -> event.handleNavigationIconClicked(navigator) }
@@ -110,6 +134,10 @@ class HomeScreenPresenter @AssistedInject constructor(
             when (event) {
                 is HomeScreen.Event.TimelineEvent -> handleTimelineEvent(event) {
                     timelineType = it
+                }
+
+                HomeScreen.Event.OnDismissRequest -> {
+                    timelineUiState.showBottomSheet
                 }
             }
         }

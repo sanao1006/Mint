@@ -43,7 +43,7 @@ fun TimelineColumn(
     onReplyClick: (String, String, String?) -> Unit,
     onRepostClick: (String) -> Unit,
     onReactionClick: (String) -> Unit,
-    onOptionClick: () -> Unit
+    onOptionClick: (String) -> Unit
 ) {
     LazyColumn(
         modifier = modifier,
@@ -71,7 +71,7 @@ fun TimelineColumn(
                     },
                     onRepostClick = { it.user?.id?.let { id -> onRepostClick(id) } },
                     onReactionClick = { it.user?.id?.let { id -> onReactionClick(id) } },
-                    onOptionClick = onOptionClick
+                    onOptionClick = { it.user?.id?.let { id -> onOptionClick(id) } }
                 )
                 HorizontalDivider()
             }

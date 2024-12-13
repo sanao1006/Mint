@@ -24,39 +24,38 @@ sealed class TimelineItemEvent : CircuitUiEvent {
     data class OnTimelineItemOptionClicked(val id: String) : TimelineItemEvent()
 }
 
-fun TimelineItemEvent.handleTimelineItemEvent(
+fun TimelineItemEvent.OnTimelineItemIconClicked.handleTimelineItemIconClicked(
     navigator: GoToNavigator
 ) {
-    when (this) {
-        is TimelineItemEvent.OnTimelineItemIconClicked -> {
-            navigator.goTo(
-                UserScreen(
-                    userId = this.id,
-                    userName = this.username,
-                    host = this.host
-                )
-            )
-        }
+    navigator.goTo(
+        UserScreen(
+            userId = this.id,
+            userName = this.username,
+            host = this.host
+        )
+    )
+}
 
-        is TimelineItemEvent.OnTimelineItemReplyClicked -> {
-            val user = buildString {
-                append("@${this@handleTimelineItemEvent.user}")
-                if (!this@handleTimelineItemEvent.host.isNullOrEmpty()) {
-                    append("@${this@handleTimelineItemEvent.host}")
-                }
-            }
-            navigator.goTo(
-                NoteScreen(
-                    replyObject = ReplyObject(
-                        id = this.id,
-                        user = user
-                    )
-                )
-            )
+fun TimelineItemEvent.OnTimelineItemReplyClicked.handleTimelineItemReplyClicked(
+    navigator: GoToNavigator
+) {
+    val user = buildString {
+        append("@${this@handleTimelineItemReplyClicked.user}")
+        if (!this@handleTimelineItemReplyClicked.host.isNullOrEmpty()) {
+            append("@${this@handleTimelineItemReplyClicked.host}")
         }
-
-        is TimelineItemEvent.OnTimelineItemRepostClicked -> {}
-        is TimelineItemEvent.OnTimelineItemReactionClicked -> {}
-        is TimelineItemEvent.OnTimelineItemOptionClicked -> {}
     }
+    navigator.goTo(
+        NoteScreen(
+            replyObject = ReplyObject(
+                id = this.id,
+                user = user
+            )
+        )
+    )
+}
+
+enum class TimelineItemAction {
+    Renote,
+    Option
 }

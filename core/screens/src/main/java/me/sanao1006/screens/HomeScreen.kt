@@ -12,6 +12,7 @@ import me.sanao1006.screens.event.BottomAppBarActionEvent
 import me.sanao1006.screens.event.DrawerEvent
 import me.sanao1006.screens.event.GlobalIconEvent
 import me.sanao1006.screens.event.NoteCreateEvent
+import me.sanao1006.screens.event.TimelineItemEvent
 import me.sanao1006.screens.uiState.TimelineUiState
 
 @Parcelize
@@ -23,6 +24,7 @@ data object HomeScreen : Screen {
         val pullToRefreshState: PullRefreshState,
         val isRefreshed: Boolean = false,
         val drawerUserInfo: LoginUserInfo,
+        val timelineEventSink: (TimelineItemEvent) -> Unit,
         val noteCreateEventSink: (NoteCreateEvent) -> Unit,
         val drawerEventSink: (DrawerEvent) -> Unit,
         val globalIconEventSink: (GlobalIconEvent) -> Unit,
@@ -31,6 +33,7 @@ data object HomeScreen : Screen {
     ) : CircuitUiState
 
     sealed class Event : CircuitUiEvent {
+        data object OnDismissRequest : Event()
         sealed class TimelineEvent : Event() {
             data object OnLocalTimelineClicked : TimelineEvent()
             data object OnSocialTimelineClicked : TimelineEvent()

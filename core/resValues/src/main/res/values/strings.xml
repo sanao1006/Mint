@@ -36,4 +36,11 @@
     <string name="login_invalid_host">Unable to resolve host %1$s</string>
     <string name="login_failed">Login failed. Please re-authenticate.</string>
     <string name="title_notification">Notification</string>
+    <string name="description_renote">Renote</string>
+    <string name="description_quote">Quote</string>
+    <string name="description_detail">Detail</string>
+    <string name="description_copy">Copy</string>
+    <string name="description_copy_link">Copy Link</string>
+    <string name="description_share">Share</string>
+    <string name="description_favorite">Favorite</string>
 </resources>

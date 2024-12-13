@@ -19,11 +19,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ir.alirezaivaz.tablericons.TablerIcons
-
-enum class TimelineItemAction {
-    Renote,
-    Option
-}
+import me.sanao1006.screens.event.TimelineItemAction
+import me.snao1006.res_value.ResString
 
 interface TimelineItem {
     val resId: Int
@@ -36,11 +33,11 @@ enum class RenoteItem(
 ) : TimelineItem {
     Renote(
         TablerIcons.Repeat,
-        1
+        ResString.description_renote
     ),
     Quote(
         TablerIcons.Quote,
-        1
+        ResString.description_quote
     );
 
     companion object {
@@ -54,23 +51,23 @@ enum class OptionItem(
 ) : TimelineItem {
     Detail(
         TablerIcons.InfoCircle,
-        1
+        ResString.description_detail
     ),
     Copy(
         TablerIcons.Copy,
-        1
+        ResString.description_copy
     ),
     CopyLink(
         TablerIcons.Link,
-        1
+        ResString.description_copy_link
     ),
     Share(
         TablerIcons.Share,
-        1
+        ResString.description_share
     ),
     Favorite(
         TablerIcons.StarFilled,
-        1
+        ResString.description_favorite
     )
     ;
 

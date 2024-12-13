@@ -35,6 +35,7 @@ import ir.alirezaivaz.tablericons.TablerIcons
 import kotlinx.coroutines.launch
 import me.sanao1006.core.ui.MainScreenBottomAppBarWrapper
 import me.sanao1006.core.ui.MainScreenDrawerWrapper
+import me.sanao1006.core.ui.TimelineBottomSheet
 import me.sanao1006.core.ui.TimelineColumn
 import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.MainScreenType
@@ -165,7 +166,7 @@ private fun HomeScreenUiContent(
                         state = state,
                         modifier = Modifier.fillMaxSize(),
                         onIconClick = { id, username, host ->
-                            state.timelineUiState.timelineEventSink(
+                            state.timelineEventSink(
                                 TimelineItemEvent.OnTimelineItemIconClicked(
                                     id,
                                     username,
@@ -174,27 +175,38 @@ private fun HomeScreenUiContent(
                             )
                         },
                         onReplyClick = { id, user, host ->
-                            state.timelineUiState.timelineEventSink(
+                            state.timelineEventSink(
                                 TimelineItemEvent.OnTimelineItemReplyClicked(id, user, host)
                             )
                         },
                         onRepostClick = { userId ->
-                            state.timelineUiState.timelineEventSink(
+                            state.timelineEventSink(
                                 TimelineItemEvent.OnTimelineItemRepostClicked(
                                     userId
                                 )
                             )
                         },
                         onReactionClick = { userId ->
-                            state.timelineUiState.timelineEventSink(
+                            state.timelineEventSink(
                                 TimelineItemEvent.OnTimelineItemReactionClicked(
                                     userId
                                 )
                             )
                         },
-                        onOptionClick = { }
+                        onOptionClick = {
+                            state.timelineEventSink(
+                                TimelineItemEvent.OnTimelineItemOptionClicked(it)
+                            )
+                        }
                     )
                 }
+                TimelineBottomSheet(
+                    isShowBottomSheet = state.timelineUiState.showBottomSheet,
+                    timelineItemAction = state.timelineUiState.timelineAction,
+                    onDismissRequest = { },
+                    onRenoteIconCLick = { },
+                    onOptionIconCLick = { }
+                )
                 MainScreenBottomAppBarWrapper(
                     modifier = Modifier
                         .align(BottomCenter)
