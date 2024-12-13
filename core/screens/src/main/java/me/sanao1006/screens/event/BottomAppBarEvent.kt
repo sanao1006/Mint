@@ -1,10 +1,11 @@
 package me.sanao1006.screens.event
 
+import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.Navigator
 import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.NotificationScreen
 
-sealed class BottomAppBarActionEvent {
+sealed class BottomAppBarActionEvent : CircuitUiEvent {
     data object OnHomeIconClicked : BottomAppBarActionEvent()
     data object OnNotificationIconClicked : BottomAppBarActionEvent()
 }

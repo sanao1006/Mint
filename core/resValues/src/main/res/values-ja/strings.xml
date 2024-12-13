@@ -36,4 +36,11 @@
     <string name="login_invalid_host">無効なホストです: %1$s</string>
     <string name="login_failed">ログイン失敗しました。再認証してください</string>
     <string name="title_notification">通知</string>
+    <string name="description_renote">リノート</string>
+    <string name="description_quote">引用</string>
+    <string name="description_detail">詳細</string>
+    <string name="description_copy">内容をコピーする</string>
+    <string name="description_copy_link">リンクをコピーする</string>
+    <string name="description_share">共有</string>
+    <string name="description_favorite">お気に入り</string>
 </resources>

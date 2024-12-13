@@ -6,7 +6,8 @@ data class NoteScreenUiState(
     val localOnly: Boolean = false,
     val reactionAcceptance: ReactionAcceptance? = null,
     val isShowBottomSheet: Boolean = false,
-    val noteOptionContent: NoteOptionContent = NoteOptionContent.VISIBILITY
+    val noteOptionContent: NoteOptionContent = NoteOptionContent.VISIBILITY,
+    val replyId: String? = null
 )
 
 enum class NoteOptionContent {

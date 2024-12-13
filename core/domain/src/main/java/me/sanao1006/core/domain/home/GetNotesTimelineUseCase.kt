@@ -3,12 +3,12 @@ package me.sanao1006.core.domain.home
 import javax.inject.Inject
 import me.sanao1006.core.data.repository.NotesRepository
 import me.sanao1006.core.model.notes.NotesTimeLineRequestBody
-import me.sanao1006.core.model.notes.TimelineUiState
+import me.sanao1006.core.model.notes.TimelineItem
 
 class GetNotesTimelineUseCase @Inject constructor(
     private val notesRepository: NotesRepository
 ) {
-    suspend operator fun invoke(timelineType: TimelineType): List<TimelineUiState> {
+    suspend operator fun invoke(timelineType: TimelineType): List<TimelineItem> {
         val response = when (timelineType) {
             TimelineType.LOCAL -> notesRepository.getNotesLocalTimeline(
                 notesTimeLineRequestBody = NotesTimeLineRequestBody(

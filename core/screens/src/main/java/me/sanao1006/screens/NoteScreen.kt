@@ -1,5 +1,6 @@
 package me.sanao1006.screens
 
+import android.os.Parcelable
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.PopResult
 import com.slack.circuit.runtime.screen.Screen
@@ -7,7 +8,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data object NoteScreen : Screen {
+data class NoteScreen(
+    val replyObject: ReplyObject? = null
+) : Screen {
     data class State(
         val uiState: me.sanao1006.core.model.notes.NoteScreenUiState,
         val eventSink: (Event) -> Unit
@@ -36,3 +39,9 @@ data object NoteScreen : Screen {
     @Parcelize
     data class Result(val success: Boolean) : PopResult
 }
+
+@Parcelize
+data class ReplyObject(
+    val id: String,
+    val user: String
+) : Parcelable

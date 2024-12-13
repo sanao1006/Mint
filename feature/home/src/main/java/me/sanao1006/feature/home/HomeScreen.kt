@@ -35,11 +35,13 @@ import ir.alirezaivaz.tablericons.TablerIcons
 import kotlinx.coroutines.launch
 import me.sanao1006.core.ui.MainScreenBottomAppBarWrapper
 import me.sanao1006.core.ui.MainScreenDrawerWrapper
+import me.sanao1006.core.ui.TimelineBottomSheet
 import me.sanao1006.core.ui.TimelineColumn
 import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.MainScreenType
 import me.sanao1006.screens.event.GlobalIconEvent
 import me.sanao1006.screens.event.NoteCreateEvent
+import me.sanao1006.screens.event.TimelineItemEvent
 
 @CircuitInject(HomeScreen::class, SingletonComponent::class)
 @Composable
@@ -49,7 +51,7 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
         val scope = rememberCoroutineScope()
         val drawerState = rememberDrawerState(DrawerValue.Closed)
         val snackbarHostState = remember { SnackbarHostState() }
-        LaunchedImpressionEffect(state.isSuccessCreateNote) {
+        LaunchedImpressionEffect(state.timelineUiState.isSuccessCreateNote) {
             state.noteCreateEventSink(
                 NoteCreateEvent.OnNoteCreated(
                     snackbarHostState = snackbarHostState,
@@ -135,7 +137,7 @@ private fun HomeScreenUiContent(
         snackbarHost = snackbarHostState
     ) {
         Box(
-            contentAlignment = if (state.uiState.isEmpty()) {
+            contentAlignment = if (state.timelineUiState.timelineItems.isEmpty()) {
                 Alignment.Center
             } else {
                 Alignment.TopCenter
@@ -145,7 +147,7 @@ private fun HomeScreenUiContent(
                 .padding(it)
                 .pullRefresh(state = state.pullToRefreshState)
         ) {
-            if (state.uiState.isEmpty()) {
+            if (state.timelineUiState.timelineItems.isEmpty()) {
                 CircularProgressIndicator()
             } else {
                 PullRefreshIndicator(
@@ -164,16 +166,47 @@ private fun HomeScreenUiContent(
                         state = state,
                         modifier = Modifier.fillMaxSize(),
                         onIconClick = { id, username, host ->
-                            state.eventSink(
-                                HomeScreen.Event.TimelineItemEvent.OnTimelineIconClicked(
+                            state.timelineEventSink(
+                                TimelineItemEvent.OnTimelineItemIconClicked(
                                     id,
                                     username,
                                     host
                                 )
                             )
+                        },
+                        onReplyClick = { id, user, host ->
+                            state.timelineEventSink(
+                                TimelineItemEvent.OnTimelineItemReplyClicked(id, user, host)
+                            )
+                        },
+                        onRepostClick = { userId ->
+                            state.timelineEventSink(
+                                TimelineItemEvent.OnTimelineItemRepostClicked(
+                                    userId
+                                )
+                            )
+                        },
+                        onReactionClick = { userId ->
+                            state.timelineEventSink(
+                                TimelineItemEvent.OnTimelineItemReactionClicked(
+                                    userId
+                                )
+                            )
+                        },
+                        onOptionClick = {
+                            state.timelineEventSink(
+                                TimelineItemEvent.OnTimelineItemOptionClicked(it)
+                            )
                         }
                     )
                 }
+                TimelineBottomSheet(
+                    isShowBottomSheet = state.timelineUiState.showBottomSheet,
+                    timelineItemAction = state.timelineUiState.timelineAction,
+                    onDismissRequest = { state.eventSink(HomeScreen.Event.OnDismissRequest) },
+                    onRenoteIconCLick = { },
+                    onOptionIconCLick = { }
+                )
                 MainScreenBottomAppBarWrapper(
                     modifier = Modifier
                         .align(BottomCenter)

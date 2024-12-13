@@ -1,7 +1,6 @@
 package me.sanao1006.screens
 
 import android.content.Context
-import androidx.compose.runtime.Immutable
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.Screen
@@ -10,7 +9,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data object LoginScreen : Screen {
-    @Immutable
     data class State(
         val domain: String = "",
         val error: String = "",

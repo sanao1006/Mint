@@ -12,14 +12,16 @@ class CreateNotesUseCase @Inject constructor(
         text: String,
         visibility: me.sanao1006.core.model.notes.Visibility,
         localOnly: Boolean,
-        reactionAcceptance: me.sanao1006.core.model.notes.ReactionAcceptance?
+        reactionAcceptance: me.sanao1006.core.model.notes.ReactionAcceptance?,
+        replyId: String? = null
     ) {
         notesRepository.createNotes(
             notesCreateRequestBody = me.sanao1006.core.model.notes.NotesCreateRequestBody(
                 text = text,
                 visibility = visibility,
                 localOnly = localOnly,
-                reactionAcceptance = reactionAcceptance
+                reactionAcceptance = reactionAcceptance,
+                replyId = replyId
             )
         )
     }
