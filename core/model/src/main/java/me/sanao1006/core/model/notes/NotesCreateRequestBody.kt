@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class NotesCreateRequestBody(
-    val text: String,
+    val text: String? = null,
     val visibility: me.sanao1006.core.model.notes.Visibility,
     val visibleUserIds: List<String>? = null,
     val cw: String? = null,

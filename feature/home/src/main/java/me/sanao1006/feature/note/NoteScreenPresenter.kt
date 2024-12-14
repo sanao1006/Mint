@@ -29,7 +29,8 @@ class NoteScreenPresenter @AssistedInject constructor(
             mutableStateOf(
                 NoteScreenUiState(
                     noteText = screen.replyObject?.user ?: "",
-                    replyId = screen.replyObject?.id
+                    replyId = screen.replyObject?.id,
+                    renoteId = screen.idForQuote
                 )
             )
         }
@@ -48,20 +49,28 @@ class NoteScreenPresenter @AssistedInject constructor(
                 is NoteScreen.Event.OnNotePostClicked -> {
                     it.scope.launch {
                         suspendRunCatching {
-                            if (uiState.replyId.isNullOrEmpty()) {
-                                createNotesUseCase(
-                                    text = uiState.noteText,
-                                    visibility = uiState.visibility,
-                                    localOnly = uiState.localOnly,
-                                    reactionAcceptance = uiState.reactionAcceptance
-                                )
-                            } else {
+                            if (!uiState.replyId.isNullOrEmpty()) {
                                 createNotesUseCase(
                                     text = uiState.noteText,
                                     visibility = uiState.visibility,
                                     localOnly = uiState.localOnly,
                                     reactionAcceptance = uiState.reactionAcceptance,
                                     replyId = uiState.replyId
+                                )
+                            } else if (!uiState.renoteId.isNullOrEmpty()) {
+                                createNotesUseCase(
+                                    text = uiState.noteText,
+                                    visibility = uiState.visibility,
+                                    localOnly = uiState.localOnly,
+                                    reactionAcceptance = null,
+                                    renoteId = uiState.renoteId
+                                )
+                            } else {
+                                createNotesUseCase(
+                                    text = uiState.noteText,
+                                    visibility = uiState.visibility,
+                                    localOnly = uiState.localOnly,
+                                    reactionAcceptance = uiState.reactionAcceptance
                                 )
                             }
                         }.onSuccess {

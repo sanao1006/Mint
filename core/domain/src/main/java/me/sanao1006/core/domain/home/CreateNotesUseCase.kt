@@ -9,11 +9,12 @@ class CreateNotesUseCase @Inject constructor(
     private val notesRepository: NotesRepository
 ) {
     suspend operator fun invoke(
-        text: String,
+        text: String? = null,
         visibility: me.sanao1006.core.model.notes.Visibility,
         localOnly: Boolean,
         reactionAcceptance: me.sanao1006.core.model.notes.ReactionAcceptance?,
-        replyId: String? = null
+        replyId: String? = null,
+        renoteId: String? = null
     ) {
         notesRepository.createNotes(
             notesCreateRequestBody = me.sanao1006.core.model.notes.NotesCreateRequestBody(
@@ -21,7 +22,8 @@ class CreateNotesUseCase @Inject constructor(
                 visibility = visibility,
                 localOnly = localOnly,
                 reactionAcceptance = reactionAcceptance,
-                replyId = replyId
+                replyId = replyId,
+                renoteId = renoteId
             )
         )
     }

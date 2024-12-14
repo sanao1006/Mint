@@ -22,6 +22,14 @@ sealed class TimelineItemEvent : CircuitUiEvent {
     data class OnTimelineItemRepostClicked(val id: String) : TimelineItemEvent()
     data class OnTimelineItemReactionClicked(val id: String) : TimelineItemEvent()
     data class OnTimelineItemOptionClicked(val id: String) : TimelineItemEvent()
+
+    data class OnRenoteClicked(
+        val id: String
+    ) : TimelineItemEvent()
+
+    data class OnQuoteClicked(
+        val id: String
+    ) : TimelineItemEvent()
 }
 
 fun TimelineItemEvent.OnTimelineItemIconClicked.handleTimelineItemIconClicked(
