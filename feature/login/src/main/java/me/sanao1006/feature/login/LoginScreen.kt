@@ -18,7 +18,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,6 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
+import com.slack.circuitx.effects.LaunchedImpressionEffect
 import dagger.hilt.components.SingletonComponent
 import me.sanao1006.screens.AuthStateType
 import me.sanao1006.screens.LoginScreen
@@ -43,7 +43,7 @@ import me.snao1006.res_value.ResString
 @Composable
 fun LoginScreenUi(state: LoginScreen.State, modifier: Modifier) {
     var showIcon by remember { mutableStateOf(false) }
-    LaunchedEffect(Unit) {
+    LaunchedImpressionEffect(Unit) {
         showIcon = true
     }
     Column(
