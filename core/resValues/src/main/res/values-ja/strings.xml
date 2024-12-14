@@ -43,4 +43,10 @@
     <string name="description_copy_link">リンクをコピーする</string>
     <string name="description_share">共有</string>
     <string name="description_favorite">お気に入り</string>
+    <string name="date_now">たった今</string>
+    <string name="date_minute_ago">%1$s 分前</string>
+    <string name="date_hour_ago">%1$s 時間前</string>
+    <string name="date_day_ago">%1$s 日前</string>
+    <string name="date_month_ago">%1$s ヶ月前</string>
+    <string name="date_year_ago">%1$s 年前</string>
 </resources>

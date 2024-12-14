@@ -1,5 +1,6 @@
 package me.sanao1006.core.ui
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -27,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -35,26 +37,31 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.compose.rememberAsyncImagePainter
 import ir.alirezaivaz.tablericons.TablerIcons
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+import me.sanao1006.core.designsystem.LocalMintColors
 import me.sanao1006.core.model.notes.TimelineItem
 import me.sanao1006.core.model.notes.User
 import me.sanao1006.core.model.notes.Visibility
+import me.snao1006.res_value.ResString
 
-typealias Id = String
+typealias NoteId = String
 typealias UserId = String
 typealias Username = String
 typealias Host = String
 typealias Uri = String
-typealias OnOptionClick = (Id, UserId?, Username?, Host?, Uri) -> Unit
 
 @Composable
 fun TimelineColumn(
     modifier: Modifier = Modifier,
     timelineItems: List<TimelineItem?>,
     onIconClick: (String, String?, String?) -> Unit,
-    onReplyClick: (String, String, String?) -> Unit,
-    onRepostClick: (String) -> Unit,
-    onReactionClick: (String) -> Unit,
-    onOptionClick: OnOptionClick
+    onReplyClick: (NoteId, Username, Host?) -> Unit,
+    onRepostClick: (NoteId) -> Unit,
+    onReactionClick: (NoteId) -> Unit,
+    onOptionClick: (NoteId, UserId?, Username?, Host?, Uri) -> Unit
 ) {
     LazyColumn(
         modifier = modifier,
@@ -112,7 +119,7 @@ private fun TimelineItem(
         modifier = modifier
             .fillMaxWidth()
     ) {
-        TimelineUserInfo(
+        TimelineUserInfoRow(
             timelineItem = timelineItem,
             modifier = Modifier.fillMaxWidth(),
             onIconClick = onIconClick
@@ -135,12 +142,13 @@ private fun TimelineItem(
 }
 
 @Composable
-private fun TimelineUserInfo(
+private fun TimelineUserInfoRow(
     timelineItem: TimelineItem,
     modifier: Modifier = Modifier,
     onIconClick: (String, String?, String?) -> Unit
 ) {
     Row(modifier = modifier) {
+        // user icon
         Image(
             modifier = Modifier
                 .size(40.dp)
@@ -158,86 +166,144 @@ private fun TimelineUserInfo(
         )
 
         Spacer(modifier = Modifier.width(8.dp))
-        Column(modifier = Modifier.fillMaxWidth()) {
-            Row(verticalAlignment = Alignment.Bottom) {
-                Text(
-                    text = timelineItem.user?.name ?: timelineItem.user?.username ?: "",
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.SemiBold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+        UserInfoColumn(
+            timelineItem = timelineItem,
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
+}
+
+@Composable
+private fun UserInfoColumn(
+    timelineItem: TimelineItem,
+    modifier: Modifier = Modifier
+) {
+    val context = LocalContext.current
+    Column(modifier = modifier) {
+        UserNameRow(
+            timelineItem = timelineItem,
+            context = context,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        val instance = timelineItem.user?.instance
+        if (instance != null) {
+            InstanceInfoRow(
+                timelineItem = timelineItem,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(4.dp))
+            )
+        }
+    }
+}
+
+@Composable
+private fun UserNameRow(
+    timelineItem: TimelineItem,
+    context: Context,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.Bottom
+    ) {
+        Text(
+            text = timelineItem.user?.name ?: timelineItem.user?.username ?: "",
+            style = MaterialTheme.typography.bodyMedium,
+            fontWeight = FontWeight.SemiBold,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.weight(1f)
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        val icon = when (timelineItem.visibility) {
+            Visibility.PUBLIC -> null
+            Visibility.HOME -> TablerIcons.Home
+            Visibility.FOLLOWERS -> TablerIcons.Lock
+            Visibility.SPECIFIED -> TablerIcons.Mail
+        }
+        Row {
+            Text(
+                text = getRelativeTimeString(context, timelineItem.createdAt),
+                style = MaterialTheme.typography.bodyMedium,
+                color = LocalMintColors.current.onBackground
+            )
+
+            icon?.let {
+                Spacer(modifier = Modifier.width(2.dp))
+                Icon(
+                    modifier = Modifier.size(20.dp),
+                    painter = painterResource(it),
+                    contentDescription = ""
                 )
-                Spacer(modifier = Modifier.width(4.dp))
-                val username =
-                    timelineItem.user?.username?.takeIf { it.isNotBlank() }?.let { "@$it" }
-                        ?: ""
-                val host =
-                    timelineItem.user?.host?.takeIf { it.isNotBlank() }?.let { "@$it" } ?: ""
-
-                if (username.isNotEmpty() && host.isNotEmpty()) {
-                    Text(
-                        text = "$username$host",
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
-                Spacer(modifier = Modifier.weight(1f))
-                val icon = when (timelineItem.visibility) {
-                    Visibility.PUBLIC -> null
-                    Visibility.HOME -> TablerIcons.Home
-                    Visibility.FOLLOWERS -> TablerIcons.Lock
-                    Visibility.SPECIFIED -> TablerIcons.Mail
-                }
-                icon?.let {
-                    Icon(
-                        modifier = Modifier.size(20.dp),
-                        painter = painterResource(it),
-                        contentDescription = ""
-                    )
-                }
-            }
-
-            val instance = timelineItem.user?.instance
-            if (instance != null) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(4.dp))
-                        .then(
-                            if (!timelineItem.user?.instance?.themeColor.isNullOrEmpty()) {
-                                Modifier.background(
-                                    Color(
-                                        android.graphics.Color.parseColor(
-                                            timelineItem.user?.instance?.themeColor!!
-                                        )
-                                    )
-                                )
-                            } else {
-                                Modifier
-                            }
-                        )
-                ) {
-                    Spacer(modifier = Modifier.width(4.dp))
-                    AsyncImage(
-                        modifier = Modifier
-                            .size(16.dp)
-                            .clip(RoundedCornerShape(4.dp)),
-                        model = timelineItem.user?.instance?.faviconUrl,
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        text = timelineItem.user?.instance?.name ?: "",
-                        style = MaterialTheme.typography.bodyMedium,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
             }
         }
+    }
+}
+
+@Composable
+private fun InstanceInfoRow(
+    timelineItem: TimelineItem,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .then(
+                if (!timelineItem.user?.instance?.themeColor.isNullOrEmpty()) {
+                    Modifier.background(
+                        Color(
+                            android.graphics.Color.parseColor(
+                                timelineItem.user?.instance?.themeColor!!
+                            )
+                        )
+                    )
+                } else {
+                    Modifier
+                }
+            )
+    ) {
+        Spacer(modifier = Modifier.width(4.dp))
+        AsyncImage(
+            modifier = Modifier
+                .size(16.dp)
+                .clip(RoundedCornerShape(4.dp)),
+            model = timelineItem.user?.instance?.faviconUrl,
+            contentDescription = null,
+            contentScale = ContentScale.Crop
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        Text(
+            text = timelineItem.user?.instance?.name ?: "",
+            style = MaterialTheme.typography.bodyMedium,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            color = LocalMintColors.current.background
+        )
+    }
+}
+
+private fun getRelativeTimeString(context: Context, isoDateString: String): String {
+    val dateTime = Instant.parse(isoDateString).toLocalDateTime(TimeZone.currentSystemDefault())
+    val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+
+    val yearsBetween = now.year - dateTime.year
+    val monthsBetween = (now.year - dateTime.year) * 12 + (now.monthNumber - dateTime.monthNumber)
+    val daysBetween = now.date.dayOfYear - dateTime.date.dayOfYear
+    val hoursBetween = now.hour - dateTime.hour
+    val minutesBetween = now.minute - dateTime.minute
+    return when {
+        yearsBetween > 0 -> context.getString(ResString.date_year_ago, yearsBetween.toString())
+        monthsBetween > 0 -> context.getString(ResString.date_month_ago, monthsBetween.toString())
+        daysBetween > 0 -> context.getString(ResString.date_day_ago, daysBetween.toString())
+        hoursBetween > 0 -> context.getString(ResString.date_hour_ago, hoursBetween.toString())
+        minutesBetween > 0 -> context.getString(
+            ResString.date_minute_ago,
+            minutesBetween.toString()
+        )
+
+        else -> context.getString(ResString.date_now)
     }
 }
 
@@ -294,7 +360,8 @@ fun PreviewTimeLineItem() {
             text = "Hello, World!",
             id = "1",
             visibility = Visibility.get("public"),
-            ""
+            "",
+            "2024-12-14T08:58:55.689Z"
         ),
         onIconClick = { _, _, _ -> },
         onReplyClick = {},
