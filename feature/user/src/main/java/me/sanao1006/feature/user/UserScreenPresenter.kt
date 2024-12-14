@@ -51,6 +51,9 @@ class UserScreenPresenter @AssistedInject constructor(
                 UserScreen.Event.OnNotesCountClicked -> {}
                 UserScreen.Event.OnFollowersCountClicked -> {}
                 UserScreen.Event.OnFollowingCountClicked -> {}
+                UserScreen.Event.OnLoadingFailed -> {
+                    navigator.pop()
+                }
             }
         }
     }

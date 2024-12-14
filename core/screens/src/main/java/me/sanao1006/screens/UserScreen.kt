@@ -23,5 +23,7 @@ data class UserScreen(
         data object OnNotesCountClicked : Event()
         data object OnFollowersCountClicked : Event()
         data object OnFollowingCountClicked : Event()
+
+        data object OnLoadingFailed : Event()
     }
 }

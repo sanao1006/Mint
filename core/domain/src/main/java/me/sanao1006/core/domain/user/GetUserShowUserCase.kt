@@ -16,25 +16,13 @@ class GetUserShowUserCase @Inject constructor(
     suspend operator fun invoke(
         isFromDrawer: Boolean,
         usersShowRequestBody: UsersShowRequestBody
-    ): UserScreenUiState {
+    ): UserScreenUiState = try {
         if (isFromDrawer) {
-            val user = accountRepository.i()
-            return UserScreenUiState.Success(
-                username = user.username,
-                name = user.name,
-                avatarUrl = user.avatarUrl,
-                bannerUrl = user.bannerUrl,
-                host = user.host,
-                followingCount = user.followingCount,
-                followersCount = user.followersCount,
-                description = user.description,
-                fields = user.fields,
-                notesCount = user.notesCount
-            )
+            accountRepository.i().toUserScreenUiState()
+        } else {
+            usersRepository.getUsersShow(usersShowRequestBody).toUserScreenUiState()
         }
-
-        return usersRepository
-            .getUsersShow(usersShowRequestBody)
-            .toUserScreenUiState()
+    } catch (e: Exception) {
+        UserScreenUiState.Failed
     }
 }

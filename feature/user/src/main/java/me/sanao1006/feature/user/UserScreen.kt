@@ -81,6 +81,10 @@ fun UserScreenUi(state: UserScreen.State, modifier: Modifier) {
                     }
                 }
 
+                is UserScreenUiState.Failed -> {
+                    state.eventSink(UserScreen.Event.OnLoadingFailed)
+                }
+
                 is UserScreenUiState.Success -> {
                     Column(
                         modifier = Modifier

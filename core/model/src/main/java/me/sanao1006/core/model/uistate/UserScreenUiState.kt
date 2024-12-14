@@ -5,6 +5,7 @@ import me.sanao1006.core.model.notes.User
 
 sealed interface UserScreenUiState {
     data object Loading : UserScreenUiState
+    data object Failed : UserScreenUiState
 
     data class Success(
         val username: String = "",
