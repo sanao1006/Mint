@@ -114,8 +114,12 @@ fun TimelineBottomSheet(
                             .fillMaxWidth()
                             .clickable {
                                 when (timelineItemAction) {
-                                    TimelineItemAction.Renote -> onRenoteIconCLick(it as RenoteActionIcon)
-                                    TimelineItemAction.Option -> onOptionIconCLick(it as OptionActionIcon)
+                                    TimelineItemAction.Renote -> onRenoteIconCLick(
+                                        it as RenoteActionIcon
+                                    )
+                                    TimelineItemAction.Option -> onOptionIconCLick(
+                                        it as OptionActionIcon
+                                    )
                                 }
                             }
                     ) {

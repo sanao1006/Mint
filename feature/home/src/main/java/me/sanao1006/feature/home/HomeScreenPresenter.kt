@@ -132,9 +132,14 @@ class HomeScreenPresenter @AssistedInject constructor(
             globalIconEventSink = { event -> event.handleNavigationIconClicked(navigator) }
         ) { event ->
             when (event) {
-                is HomeScreen.Event.TimelineEvent -> handleTimelineEvent(event) {
-                    timelineType = it
-                }
+                HomeScreen.Event.TimelineEvent.OnLocalTimelineClicked ->
+                    timelineType = TimelineType.LOCAL
+
+                HomeScreen.Event.TimelineEvent.OnSocialTimelineClicked
+                -> timelineType = TimelineType.SOCIAL
+
+                HomeScreen.Event.TimelineEvent.OnGlobalTimelineClicked ->
+                    timelineType = TimelineType.GLOBAL
 
                 HomeScreen.Event.OnDismissRequest -> {
                     timelineUiState = timelineUiState.copy(showBottomSheet = false)
