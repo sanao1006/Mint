@@ -15,5 +15,17 @@ enum class Visibility(val value: String) {
     FOLLOWERS("followers"),
 
     @SerialName("specified")
-    SPECIFIED("specified"),
+    SPECIFIED("specified");
+
+    companion object {
+        fun get(value: String): Visibility {
+            return when (value) {
+                "public" -> PUBLIC
+                "home" -> HOME
+                "followers" -> FOLLOWERS
+                "specified" -> SPECIFIED
+                else -> PUBLIC
+            }
+        }
+    }
 }

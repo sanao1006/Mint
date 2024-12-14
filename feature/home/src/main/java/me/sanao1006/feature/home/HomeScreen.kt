@@ -35,6 +35,7 @@ import ir.alirezaivaz.tablericons.TablerIcons
 import kotlinx.coroutines.launch
 import me.sanao1006.core.ui.MainScreenBottomAppBarWrapper
 import me.sanao1006.core.ui.MainScreenDrawerWrapper
+import me.sanao1006.core.ui.OptionActionIcon
 import me.sanao1006.core.ui.RenoteActionIcon
 import me.sanao1006.core.ui.TimelineBottomSheet
 import me.sanao1006.core.ui.TimelineColumn
@@ -82,20 +83,20 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
                 },
                 onHomeClick = {
                     scope.launch {
-                        state.eventSink(HomeScreen.Event.TimelineEvent.OnLocalTimelineClicked)
                         pagerState.animateScrollToPage(0)
+                        state.eventSink(HomeScreen.Event.TimelineEvent.OnLocalTimelineClicked)
                     }
                 },
                 onSocialClick = {
                     scope.launch {
-                        state.eventSink(HomeScreen.Event.TimelineEvent.OnSocialTimelineClicked)
                         pagerState.animateScrollToPage(1)
+                        state.eventSink(HomeScreen.Event.TimelineEvent.OnSocialTimelineClicked)
                     }
                 },
                 onGlobalClick = {
                     scope.launch {
-                        state.eventSink(HomeScreen.Event.TimelineEvent.OnGlobalTimelineClicked)
                         pagerState.animateScrollToPage(2)
+                        state.eventSink(HomeScreen.Event.TimelineEvent.OnGlobalTimelineClicked)
                     }
                 },
                 floatingActionButton = {
@@ -194,9 +195,15 @@ private fun HomeScreenUiContent(
                                 )
                             )
                         },
-                        onOptionClick = {
+                        onOptionClick = { noteId, userId, host, username, uri ->
                             state.timelineEventSink(
-                                TimelineItemEvent.OnTimelineItemOptionClicked(it)
+                                TimelineItemEvent.OnTimelineItemOptionClicked(
+                                    noteId,
+                                    userId,
+                                    host,
+                                    username,
+                                    uri
+                                )
                             )
                         }
                     )
@@ -224,7 +231,51 @@ private fun HomeScreenUiContent(
                             }
                         }
                     },
-                    onOptionIconCLick = { }
+                    onOptionIconCLick = { event ->
+                        when (event) {
+                            OptionActionIcon.Detail -> {
+                                state.timelineEventSink(
+                                    TimelineItemEvent.OnDetailClicked(
+                                        state.timelineUiState.selectedUserId ?: "",
+                                        null,
+                                        null
+                                    )
+                                )
+                            }
+
+                            OptionActionIcon.Copy -> {
+                                state.timelineEventSink(
+                                    TimelineItemEvent.OnCopyClicked(
+                                        state.timelineUiState.selectedUserId ?: ""
+                                    )
+                                )
+                            }
+
+                            OptionActionIcon.CopyLink -> {
+                                state.timelineEventSink(
+                                    TimelineItemEvent.OnCopyLinkClicked(
+                                        state.timelineUiState.selectedUserId ?: ""
+                                    )
+                                )
+                            }
+
+                            OptionActionIcon.Share -> {
+                                state.timelineEventSink(
+                                    TimelineItemEvent.OnShareClicked(
+                                        state.timelineUiState.selectedUserId ?: ""
+                                    )
+                                )
+                            }
+
+                            OptionActionIcon.Favorite -> {
+                                state.timelineEventSink(
+                                    TimelineItemEvent.OnFavoriteClicked(
+                                        state.timelineUiState.selectedUserId ?: ""
+                                    )
+                                )
+                            }
+                        }
+                    }
                 )
                 MainScreenBottomAppBarWrapper(
                     modifier = Modifier

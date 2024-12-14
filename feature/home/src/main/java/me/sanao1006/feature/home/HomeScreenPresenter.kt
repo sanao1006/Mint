@@ -87,7 +87,8 @@ class HomeScreenPresenter @AssistedInject constructor(
         }
 
         LaunchedImpressionEffect(timelineType) {
-            timelineUiState.timelineItems = getNotesTimelineUseCase(timelineType)
+            timelineUiState =
+                timelineUiState.copy(timelineItems = getNotesTimelineUseCase(timelineType))
         }
 
         return HomeScreen.State(
@@ -147,6 +148,26 @@ class HomeScreenPresenter @AssistedInject constructor(
                     is TimelineItemEvent.OnQuoteClicked -> {
                         timelineUiState = timelineUiState.copy(showBottomSheet = false)
                         nav.goTo(NoteScreen(idForQuote = event.id))
+                    }
+
+                    is TimelineItemEvent.OnDetailClicked -> {
+                        timelineUiState = timelineUiState.copy(showBottomSheet = false)
+                    }
+
+                    is TimelineItemEvent.OnCopyClicked -> {
+                        timelineUiState = timelineUiState.copy(showBottomSheet = false)
+                    }
+
+                    is TimelineItemEvent.OnCopyLinkClicked -> {
+                        timelineUiState = timelineUiState.copy(showBottomSheet = false)
+                    }
+
+                    is TimelineItemEvent.OnShareClicked -> {
+                        timelineUiState = timelineUiState.copy(showBottomSheet = false)
+                    }
+
+                    is TimelineItemEvent.OnFavoriteClicked -> {
+                        timelineUiState = timelineUiState.copy(showBottomSheet = false)
                     }
                 }
             },

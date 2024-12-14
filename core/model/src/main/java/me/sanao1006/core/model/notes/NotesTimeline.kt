@@ -72,7 +72,9 @@ data class NotesTimeline(
         return TimelineItem(
             user = user,
             text = text.orEmpty(),
-            id = id
+            id = id,
+            visibility = Visibility.get(visibility),
+            uri = uri
         )
     }
 }

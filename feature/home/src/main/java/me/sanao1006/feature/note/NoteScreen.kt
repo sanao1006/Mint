@@ -11,7 +11,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -20,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.retained.rememberRetained
+import com.slack.circuitx.effects.LaunchedImpressionEffect
 import dagger.hilt.components.SingletonComponent
 import me.sanao1006.core.designsystem.MintTheme
 import me.sanao1006.core.model.uistate.NoteOptionContent
@@ -32,7 +32,7 @@ fun NoteScreenUi(state: NoteScreen.State, modifier: Modifier) {
     MintTheme {
         val scope = rememberCoroutineScope()
         val focusRequester = rememberRetained { FocusRequester() }
-        LaunchedEffect(Unit) {
+        LaunchedImpressionEffect(Unit) {
             focusRequester.requestFocus()
         }
         Box(

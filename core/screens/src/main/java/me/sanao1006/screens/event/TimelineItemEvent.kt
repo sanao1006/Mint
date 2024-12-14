@@ -21,7 +21,13 @@ sealed class TimelineItemEvent : CircuitUiEvent {
 
     data class OnTimelineItemRepostClicked(val id: String) : TimelineItemEvent()
     data class OnTimelineItemReactionClicked(val id: String) : TimelineItemEvent()
-    data class OnTimelineItemOptionClicked(val id: String) : TimelineItemEvent()
+    data class OnTimelineItemOptionClicked(
+        val id: String,
+        val userId: String?,
+        val host: String?,
+        val username: String?,
+        val text: String
+    ) : TimelineItemEvent()
 
     data class OnRenoteClicked(
         val id: String
@@ -29,6 +35,28 @@ sealed class TimelineItemEvent : CircuitUiEvent {
 
     data class OnQuoteClicked(
         val id: String
+    ) : TimelineItemEvent()
+
+    data class OnDetailClicked(
+        val id: String,
+        val username: String?,
+        val host: String?
+    ) : TimelineItemEvent()
+
+    data class OnCopyClicked(
+        val text: String
+    ) : TimelineItemEvent()
+
+    data class OnCopyLinkClicked(
+        val link: String
+    ) : TimelineItemEvent()
+
+    data class OnShareClicked(
+        val link: String
+    ) : TimelineItemEvent()
+
+    data class OnFavoriteClicked(
+        val noteId: String
     ) : TimelineItemEvent()
 }
 
