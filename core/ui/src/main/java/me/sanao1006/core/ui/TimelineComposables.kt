@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.compose.rememberAsyncImagePainter
 import ir.alirezaivaz.tablericons.TablerIcons
+import me.sanao1006.core.designsystem.LocalMintColors
 import me.sanao1006.core.model.notes.TimelineItem
 import me.sanao1006.core.model.notes.User
 import me.sanao1006.core.model.notes.Visibility
@@ -121,7 +122,7 @@ private fun TimelineItem(
         Spacer(modifier = Modifier.height(8.dp))
         val canRenote =
             timelineItem.visibility == Visibility.PUBLIC ||
-                timelineItem.visibility == Visibility.HOME
+                    timelineItem.visibility == Visibility.HOME
         TimelineActionRow(
             canRenote = canRenote,
             modifier = Modifier.fillMaxWidth(),
@@ -202,24 +203,10 @@ private fun UserNameRow(
             style = MaterialTheme.typography.bodyLarge,
             fontWeight = FontWeight.SemiBold,
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.weight(1f)
         )
         Spacer(modifier = Modifier.width(4.dp))
-        val username =
-            timelineItem.user?.username?.takeIf { it.isNotBlank() }?.let { "@$it" }
-                ?: ""
-        val host =
-            timelineItem.user?.host?.takeIf { it.isNotBlank() }?.let { "@$it" } ?: ""
-
-        if (username.isNotEmpty() && host.isNotEmpty()) {
-            Text(
-                text = "$username$host",
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.bodyMedium
-            )
-        }
-        Spacer(modifier = Modifier.weight(1f))
         val icon = when (timelineItem.visibility) {
             Visibility.PUBLIC -> null
             Visibility.HOME -> TablerIcons.Home
@@ -272,7 +259,8 @@ private fun InstanceInfoRow(
             text = timelineItem.user?.instance?.name ?: "",
             style = MaterialTheme.typography.bodyMedium,
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
+            color = LocalMintColors.current.background
         )
     }
 }
