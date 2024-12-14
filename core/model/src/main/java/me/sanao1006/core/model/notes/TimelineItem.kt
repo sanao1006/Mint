@@ -6,5 +6,5 @@ data class TimelineItem(
     val id: String,
     val visibility: Visibility,
     val uri: String,
-    val createdAt: String,
+    val createdAt: String
 )
