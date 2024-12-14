@@ -87,7 +87,8 @@ class HomeScreenPresenter @AssistedInject constructor(
         }
 
         LaunchedImpressionEffect(timelineType) {
-            timelineUiState.timelineItems = getNotesTimelineUseCase(timelineType)
+            timelineUiState =
+                timelineUiState.copy(timelineItems = getNotesTimelineUseCase(timelineType))
         }
 
         return HomeScreen.State(

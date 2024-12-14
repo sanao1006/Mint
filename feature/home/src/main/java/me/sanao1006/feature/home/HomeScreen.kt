@@ -82,20 +82,20 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
                 },
                 onHomeClick = {
                     scope.launch {
-                        state.eventSink(HomeScreen.Event.TimelineEvent.OnLocalTimelineClicked)
                         pagerState.animateScrollToPage(0)
+                        state.eventSink(HomeScreen.Event.TimelineEvent.OnLocalTimelineClicked)
                     }
                 },
                 onSocialClick = {
                     scope.launch {
-                        state.eventSink(HomeScreen.Event.TimelineEvent.OnSocialTimelineClicked)
                         pagerState.animateScrollToPage(1)
+                        state.eventSink(HomeScreen.Event.TimelineEvent.OnSocialTimelineClicked)
                     }
                 },
                 onGlobalClick = {
                     scope.launch {
-                        state.eventSink(HomeScreen.Event.TimelineEvent.OnGlobalTimelineClicked)
                         pagerState.animateScrollToPage(2)
+                        state.eventSink(HomeScreen.Event.TimelineEvent.OnGlobalTimelineClicked)
                     }
                 },
                 floatingActionButton = {
