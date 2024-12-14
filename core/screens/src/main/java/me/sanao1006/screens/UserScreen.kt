@@ -4,7 +4,7 @@ import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.Screen
 import kotlinx.parcelize.Parcelize
-import me.sanao1006.core.model.user.UserScreenUiState
+import me.sanao1006.core.model.uistate.UserScreenUiState
 
 @Parcelize
 data class UserScreen(

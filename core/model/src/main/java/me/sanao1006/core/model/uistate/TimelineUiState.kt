@@ -1,7 +1,6 @@
-package me.sanao1006.screens.uiState
+package me.sanao1006.core.model.uistate
 
 import me.sanao1006.core.model.notes.TimelineItem
-import me.sanao1006.screens.event.TimelineItemAction
 
 data class TimelineUiState(
     var timelineItems: List<TimelineItem?> = listOf(),
@@ -9,3 +8,8 @@ data class TimelineUiState(
     var showBottomSheet: Boolean = false,
     var timelineAction: TimelineItemAction = TimelineItemAction.Renote
 )
+
+enum class TimelineItemAction {
+    Renote,
+    Option
+}

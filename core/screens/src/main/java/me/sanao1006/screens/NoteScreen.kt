@@ -6,13 +6,15 @@ import com.slack.circuit.runtime.screen.PopResult
 import com.slack.circuit.runtime.screen.Screen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.parcelize.Parcelize
+import me.sanao1006.core.model.uistate.NoteOptionContent
+import me.sanao1006.core.model.uistate.NoteScreenUiState
 
 @Parcelize
 data class NoteScreen(
     val replyObject: ReplyObject? = null
 ) : Screen {
     data class State(
-        val uiState: me.sanao1006.core.model.notes.NoteScreenUiState,
+        val uiState: NoteScreenUiState,
         val eventSink: (Event) -> Unit
     ) : CircuitUiState
 
@@ -21,7 +23,7 @@ data class NoteScreen(
         data class OnNoteTextChanged(val text: String) : Event()
         data class OnNotePostClicked(val scope: CoroutineScope) : Event()
         data class OnShowBottomSheet(
-            val optionContent: me.sanao1006.core.model.notes.NoteOptionContent
+            val optionContent: NoteOptionContent
         ) :
             Event()
 

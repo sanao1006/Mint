@@ -21,21 +21,21 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ir.alirezaivaz.tablericons.TablerIcons
-import me.sanao1006.core.model.notes.NoteOptionContent
 import me.sanao1006.core.model.notes.ReactionAcceptance
 import me.sanao1006.core.model.notes.Visibility
+import me.sanao1006.core.model.uistate.NoteOptionContent
 import me.snao1006.res_value.ResString
 
-interface ModelSheetItem {
+interface ModelSheetItemIcon {
     val resId: Int
     val description: Int
 }
 
-enum class VisibilityItem(
+enum class VisibilityItemIcon(
     val value: Visibility,
     override val resId: Int,
     @StringRes override val description: Int
-) : ModelSheetItem {
+) : ModelSheetItemIcon {
     Public(
         Visibility.PUBLIC,
         TablerIcons.World,
@@ -53,15 +53,15 @@ enum class VisibilityItem(
     );
 
     companion object {
-        fun getAllItems(): List<VisibilityItem> = listOf(Public, Home, Followers)
+        fun getAllItems(): List<VisibilityItemIcon> = listOf(Public, Home, Followers)
     }
 }
 
-enum class LocalOnlyItem(
+enum class LocalOnlyItemIcon(
     val value: Boolean,
     override val resId: Int,
     @StringRes override val description: Int
-) : ModelSheetItem {
+) : ModelSheetItemIcon {
     LocalOnly(
         true,
         TablerIcons.Rocket,
@@ -74,15 +74,15 @@ enum class LocalOnlyItem(
     );
 
     companion object {
-        fun getAllItems(): List<LocalOnlyItem> = listOf(LocalOnly, NotLocalOnly)
+        fun getAllItems(): List<LocalOnlyItemIcon> = listOf(LocalOnly, NotLocalOnly)
     }
 }
 
-enum class ReactionAcceptanceItem(
+enum class ReactionAcceptanceItemIcon(
     val value: ReactionAcceptance?,
     override val resId: Int,
     @StringRes override val description: Int
-) : ModelSheetItem {
+) : ModelSheetItemIcon {
     All(null, TablerIcons.Icons, ResString.bottom_sheet_reaction_acceptance_item_description_all),
     LikeOnly(
         ReactionAcceptance.LIKE_ONLY,
@@ -101,7 +101,7 @@ enum class ReactionAcceptanceItem(
     );
 
     companion object {
-        fun getAllItems(): List<ReactionAcceptanceItem> =
+        fun getAllItems(): List<ReactionAcceptanceItemIcon> =
             listOf(All, LikeOnlyForRemote, LikeOnly, NonSensitiveOnly)
     }
 }
@@ -130,9 +130,9 @@ internal fun NoteOptionRow(
             onDismissRequest = onBottomSheetOuterClicked
         ) {
             val model = when (noteOptionContent) {
-                NoteOptionContent.VISIBILITY -> VisibilityItem.getAllItems()
-                NoteOptionContent.LOCAL_ONLY -> LocalOnlyItem.getAllItems()
-                NoteOptionContent.REACTION_ACCEPTANCE -> ReactionAcceptanceItem.getAllItems()
+                NoteOptionContent.VISIBILITY -> VisibilityItemIcon.getAllItems()
+                NoteOptionContent.LOCAL_ONLY -> LocalOnlyItemIcon.getAllItems()
+                NoteOptionContent.REACTION_ACCEPTANCE -> ReactionAcceptanceItemIcon.getAllItems()
             }
             Column(
                 modifier = Modifier.padding(
@@ -147,9 +147,9 @@ internal fun NoteOptionRow(
                             .fillMaxWidth()
                             .clickable {
                                 when (it) {
-                                    is VisibilityItem -> onVisibilityClicked(it.value)
-                                    is LocalOnlyItem -> onLocalOnlyClicked(it.value)
-                                    is ReactionAcceptanceItem -> onReactionAcceptanceClicked(
+                                    is VisibilityItemIcon -> onVisibilityClicked(it.value)
+                                    is LocalOnlyItemIcon -> onLocalOnlyClicked(it.value)
+                                    is ReactionAcceptanceItemIcon -> onReactionAcceptanceClicked(
                                         it.value
                                     )
                                 }

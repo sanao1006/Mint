@@ -15,7 +15,7 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.launch
 import me.sanao1006.core.data.util.suspendRunCatching
 import me.sanao1006.core.domain.home.CreateNotesUseCase
-import me.sanao1006.core.model.notes.NoteScreenUiState
+import me.sanao1006.core.model.uistate.NoteScreenUiState
 import me.sanao1006.screens.NoteScreen
 
 class NoteScreenPresenter @AssistedInject constructor(

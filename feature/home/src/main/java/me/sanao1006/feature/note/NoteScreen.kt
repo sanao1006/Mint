@@ -22,6 +22,7 @@ import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.retained.rememberRetained
 import dagger.hilt.components.SingletonComponent
 import me.sanao1006.core.designsystem.MintTheme
+import me.sanao1006.core.model.uistate.NoteOptionContent
 import me.sanao1006.screens.NoteScreen
 import me.snao1006.res_value.ResString
 
@@ -126,7 +127,7 @@ fun A() {
     MintTheme {
         NoteOptionRow(
             true,
-            me.sanao1006.core.model.notes.NoteOptionContent.VISIBILITY,
+            NoteOptionContent.VISIBILITY,
             NoteOptionState(
                 me.sanao1006.core.model.notes.Visibility.PUBLIC,
                 false,

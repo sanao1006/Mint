@@ -54,8 +54,3 @@ fun TimelineItemEvent.OnTimelineItemReplyClicked.handleTimelineItemReplyClicked(
         )
     )
 }
-
-enum class TimelineItemAction {
-    Renote,
-    Option
-}

@@ -19,18 +19,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ir.alirezaivaz.tablericons.TablerIcons
-import me.sanao1006.screens.event.TimelineItemAction
+import me.sanao1006.core.model.uistate.TimelineItemAction
 import me.snao1006.res_value.ResString
 
-interface TimelineItem {
+interface TimelineActionIcon {
     val resId: Int
     val description: Int
 }
 
-enum class RenoteItem(
+enum class RenoteActionIcon(
     override val resId: Int,
     @StringRes override val description: Int
-) : TimelineItem {
+) : TimelineActionIcon {
     Renote(
         TablerIcons.Repeat,
         ResString.description_renote
@@ -41,14 +41,14 @@ enum class RenoteItem(
     );
 
     companion object {
-        fun getAllItems(): List<RenoteItem> = listOf(Renote, Quote)
+        fun getAllItems(): List<RenoteActionIcon> = listOf(Renote, Quote)
     }
 }
 
-enum class OptionItem(
+enum class OptionActionIcon(
     override val resId: Int,
     @StringRes override val description: Int
-) : TimelineItem {
+) : TimelineActionIcon {
     Detail(
         TablerIcons.InfoCircle,
         ResString.description_detail
@@ -72,7 +72,7 @@ enum class OptionItem(
     ;
 
     companion object {
-        fun getAllItems(): List<OptionItem> = listOf(
+        fun getAllItems(): List<OptionActionIcon> = listOf(
             Detail,
             Copy,
             CopyLink,
@@ -89,13 +89,13 @@ fun TimelineBottomSheet(
     timelineItemAction: TimelineItemAction,
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit,
-    onRenoteIconCLick: (RenoteItem) -> Unit,
-    onOptionIconCLick: (OptionItem) -> Unit
+    onRenoteIconCLick: (RenoteActionIcon) -> Unit,
+    onOptionIconCLick: (OptionActionIcon) -> Unit
 ) {
     if (isShowBottomSheet) {
         val model = when (timelineItemAction) {
-            TimelineItemAction.Renote -> RenoteItem.getAllItems()
-            TimelineItemAction.Option -> OptionItem.getAllItems()
+            TimelineItemAction.Renote -> RenoteActionIcon.getAllItems()
+            TimelineItemAction.Option -> OptionActionIcon.getAllItems()
         }
         ModalBottomSheet(
             modifier = modifier,
@@ -114,8 +114,8 @@ fun TimelineBottomSheet(
                             .fillMaxWidth()
                             .clickable {
                                 when (timelineItemAction) {
-                                    TimelineItemAction.Renote -> onRenoteIconCLick(it as RenoteItem)
-                                    TimelineItemAction.Option -> onOptionIconCLick(it as OptionItem)
+                                    TimelineItemAction.Renote -> onRenoteIconCLick(it as RenoteActionIcon)
+                                    TimelineItemAction.Option -> onOptionIconCLick(it as OptionActionIcon)
                                 }
                             }
                     ) {

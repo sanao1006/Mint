@@ -8,12 +8,12 @@ import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.screen.Screen
 import kotlinx.parcelize.Parcelize
 import me.sanao1006.core.model.LoginUserInfo
+import me.sanao1006.core.model.uistate.TimelineUiState
 import me.sanao1006.screens.event.BottomAppBarActionEvent
 import me.sanao1006.screens.event.DrawerEvent
 import me.sanao1006.screens.event.GlobalIconEvent
 import me.sanao1006.screens.event.NoteCreateEvent
 import me.sanao1006.screens.event.TimelineItemEvent
-import me.sanao1006.screens.uiState.TimelineUiState
 
 @Parcelize
 data object HomeScreen : Screen {

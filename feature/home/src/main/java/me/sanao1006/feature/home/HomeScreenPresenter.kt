@@ -26,9 +26,10 @@ import me.sanao1006.core.domain.home.GetNotesTimelineUseCase
 import me.sanao1006.core.domain.home.TimelineType
 import me.sanao1006.core.domain.home.UpdateAccountUseCase
 import me.sanao1006.core.model.LoginUserInfo
+import me.sanao1006.core.model.uistate.TimelineItemAction
+import me.sanao1006.core.model.uistate.TimelineUiState
 import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.NoteScreen
-import me.sanao1006.screens.event.TimelineItemAction
 import me.sanao1006.screens.event.TimelineItemEvent
 import me.sanao1006.screens.event.handleBottomAppBarActionEvent
 import me.sanao1006.screens.event.handleDrawerEvent
@@ -36,7 +37,6 @@ import me.sanao1006.screens.event.handleNavigationIconClicked
 import me.sanao1006.screens.event.handleNoteCreateEvent
 import me.sanao1006.screens.event.handleTimelineItemIconClicked
 import me.sanao1006.screens.event.handleTimelineItemReplyClicked
-import me.sanao1006.screens.uiState.TimelineUiState
 
 class HomeScreenPresenter @AssistedInject constructor(
     @Assisted private val navigator: Navigator,
