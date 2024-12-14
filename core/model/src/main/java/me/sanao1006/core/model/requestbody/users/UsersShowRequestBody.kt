@@ -1,4 +1,4 @@
-package me.sanao1006.core.model.user
+package me.sanao1006.core.model.requestbody.users
 
 import kotlinx.serialization.Serializable
 

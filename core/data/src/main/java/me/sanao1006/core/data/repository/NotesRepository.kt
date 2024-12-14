@@ -4,9 +4,9 @@ import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.POST
 import kotlinx.coroutines.flow.Flow
 import kotlinx.serialization.json.JsonObject
-import me.sanao1006.core.model.notes.NotesCreateRequestBody
-import me.sanao1006.core.model.notes.NotesTimeLineRequestBody
 import me.sanao1006.core.model.notes.NotesTimeline
+import me.sanao1006.core.model.requestbody.notes.NotesCreateRequestBody
+import me.sanao1006.core.model.requestbody.notes.NotesTimeLineRequestBody
 
 interface NotesRepository {
     @POST("api/notes/create")

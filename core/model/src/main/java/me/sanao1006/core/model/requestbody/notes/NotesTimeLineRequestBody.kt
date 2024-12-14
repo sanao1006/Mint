@@ -1,4 +1,4 @@
-package me.sanao1006.core.model.notes
+package me.sanao1006.core.model.requestbody.notes
 
 import kotlinx.serialization.Serializable
 

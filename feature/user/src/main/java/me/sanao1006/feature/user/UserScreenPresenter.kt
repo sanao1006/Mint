@@ -14,8 +14,8 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
 import me.sanao1006.core.domain.user.GetUserShowUserCase
+import me.sanao1006.core.model.requestbody.users.UsersShowRequestBody
 import me.sanao1006.core.model.uistate.UserScreenUiState
-import me.sanao1006.core.model.user.UsersShowRequestBody
 import me.sanao1006.screens.UserScreen
 
 class UserScreenPresenter @AssistedInject constructor(
