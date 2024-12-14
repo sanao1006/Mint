@@ -115,8 +115,6 @@ fun UserScreenUi(state: UserScreen.State, modifier: Modifier) {
                                 .align(Alignment.CenterHorizontally)
                         )
                     }
-
-
                 }
             }
         }

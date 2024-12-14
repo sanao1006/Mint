@@ -3,7 +3,6 @@ package me.sanao1006.core.model.uistate
 import me.sanao1006.core.model.notes.Field
 import me.sanao1006.core.model.notes.User
 
-
 sealed interface UserScreenUiState {
     data object Loading : UserScreenUiState
 
