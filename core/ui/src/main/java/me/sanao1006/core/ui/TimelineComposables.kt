@@ -1,5 +1,6 @@
 package me.sanao1006.core.ui
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -27,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -43,6 +45,7 @@ import me.sanao1006.core.designsystem.LocalMintColors
 import me.sanao1006.core.model.notes.TimelineItem
 import me.sanao1006.core.model.notes.User
 import me.sanao1006.core.model.notes.Visibility
+import me.snao1006.res_value.ResString
 
 typealias NoteId = String
 typealias UserId = String
@@ -175,9 +178,11 @@ private fun UserInfoColumn(
     timelineItem: TimelineItem,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
     Column(modifier = modifier) {
         UserNameRow(
             timelineItem = timelineItem,
+            context = context,
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -196,6 +201,7 @@ private fun UserInfoColumn(
 @Composable
 private fun UserNameRow(
     timelineItem: TimelineItem,
+    context: Context,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -219,7 +225,7 @@ private fun UserNameRow(
         }
         Row {
             Text(
-                text = getRelativeTimeString(timelineItem.createdAt),
+                text = getRelativeTimeString(context, timelineItem.createdAt),
                 style = MaterialTheme.typography.bodyMedium,
                 color = LocalMintColors.current.onBackground
             )
@@ -278,7 +284,7 @@ private fun InstanceInfoRow(
     }
 }
 
-private fun getRelativeTimeString(isoDateString: String): String {
+private fun getRelativeTimeString(context: Context, isoDateString: String): String {
     val dateTime = Instant.parse(isoDateString).toLocalDateTime(TimeZone.currentSystemDefault())
     val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
 
@@ -288,12 +294,16 @@ private fun getRelativeTimeString(isoDateString: String): String {
     val hoursBetween = now.hour - dateTime.hour
     val minutesBetween = now.minute - dateTime.minute
     return when {
-        yearsBetween > 0 -> "${yearsBetween}年前"
-        monthsBetween > 0 -> "${monthsBetween}か月前"
-        daysBetween > 0 -> "${daysBetween}日前"
-        hoursBetween > 0 -> "${hoursBetween}時間前"
-        minutesBetween > 0 -> "${minutesBetween}分前"
-        else -> "たった今"
+        yearsBetween > 0 -> context.getString(ResString.date_year_ago, yearsBetween.toString())
+        monthsBetween > 0 -> context.getString(ResString.date_month_ago, monthsBetween.toString())
+        daysBetween > 0 -> context.getString(ResString.date_day_ago, daysBetween.toString())
+        hoursBetween > 0 -> context.getString(ResString.date_hour_ago, hoursBetween.toString())
+        minutesBetween > 0 -> context.getString(
+            ResString.date_minute_ago,
+            minutesBetween.toString()
+        )
+
+        else -> context.getString(ResString.date_now)
     }
 }
 
