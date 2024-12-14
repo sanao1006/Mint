@@ -39,22 +39,21 @@ import me.sanao1006.core.model.notes.TimelineItem
 import me.sanao1006.core.model.notes.User
 import me.sanao1006.core.model.notes.Visibility
 
-typealias Id = String
+typealias NoteId = String
 typealias UserId = String
 typealias Username = String
 typealias Host = String
 typealias Uri = String
-typealias OnOptionClick = (Id, UserId?, Username?, Host?, Uri) -> Unit
 
 @Composable
 fun TimelineColumn(
     modifier: Modifier = Modifier,
     timelineItems: List<TimelineItem?>,
     onIconClick: (String, String?, String?) -> Unit,
-    onReplyClick: (String, String, String?) -> Unit,
-    onRepostClick: (String) -> Unit,
-    onReactionClick: (String) -> Unit,
-    onOptionClick: OnOptionClick
+    onReplyClick: (NoteId, Username, Host?) -> Unit,
+    onRepostClick: (NoteId) -> Unit,
+    onReactionClick: (NoteId) -> Unit,
+    onOptionClick: (NoteId, UserId?, Username?, Host?, Uri) -> Unit
 ) {
     LazyColumn(
         modifier = modifier,
