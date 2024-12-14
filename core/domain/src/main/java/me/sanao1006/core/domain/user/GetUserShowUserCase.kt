@@ -1,12 +1,12 @@
 package me.sanao1006.core.domain.user
 
-import javax.inject.Inject
-import javax.inject.Singleton
 import me.sanao1006.core.data.repository.AccountRepository
 import me.sanao1006.core.data.repository.UsersRepository
 import me.sanao1006.core.model.requestbody.users.UsersShowRequestBody
 import me.sanao1006.core.model.uistate.UserScreenUiState
 import me.sanao1006.core.model.uistate.toUserScreenUiState
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @Singleton
 class GetUserShowUserCase @Inject constructor(
@@ -19,7 +19,7 @@ class GetUserShowUserCase @Inject constructor(
     ): UserScreenUiState {
         if (isFromDrawer) {
             val user = accountRepository.i()
-            return UserScreenUiState(
+            return UserScreenUiState.Success(
                 username = user.username,
                 name = user.name,
                 avatarUrl = user.avatarUrl,
