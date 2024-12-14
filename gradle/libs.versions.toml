@@ -36,7 +36,7 @@ kotlinxSerialization = "1.7.3"
 dataStore = "1.1.1"
 tablericons = "1.13.1"
 coil = "3.0.3"
-
+kotlinxDatetime = "0.6.1"
 spotless = "6.7.0"
 
 [libraries]
@@ -121,6 +121,8 @@ tablerIcons = { group = "ir.alirezaivaz", name = "tablericons", version.ref = "t
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
 coil-gif = { module = "io.coil-kt.coil3:coil-gif", version.ref = "coil" }
+
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 
 [plugins]
 androidApplicationGradlePlugin = { id = "com.android.application", version.ref = "agp" }

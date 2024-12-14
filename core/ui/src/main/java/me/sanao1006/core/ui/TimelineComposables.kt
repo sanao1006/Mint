@@ -35,6 +35,10 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.compose.rememberAsyncImagePainter
 import ir.alirezaivaz.tablericons.TablerIcons
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import me.sanao1006.core.designsystem.LocalMintColors
 import me.sanao1006.core.model.notes.TimelineItem
 import me.sanao1006.core.model.notes.User
@@ -200,7 +204,7 @@ private fun UserNameRow(
     ) {
         Text(
             text = timelineItem.user?.name ?: timelineItem.user?.username ?: "",
-            style = MaterialTheme.typography.bodyLarge,
+            style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.SemiBold,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -213,12 +217,21 @@ private fun UserNameRow(
             Visibility.FOLLOWERS -> TablerIcons.Lock
             Visibility.SPECIFIED -> TablerIcons.Mail
         }
-        icon?.let {
-            Icon(
-                modifier = Modifier.size(20.dp),
-                painter = painterResource(it),
-                contentDescription = ""
+        Row {
+            Text(
+                text = getRelativeTimeString(timelineItem.createdAt),
+                style = MaterialTheme.typography.bodyMedium,
+                color = LocalMintColors.current.onBackground
             )
+
+            icon?.let {
+                Spacer(modifier = Modifier.width(2.dp))
+                Icon(
+                    modifier = Modifier.size(20.dp),
+                    painter = painterResource(it),
+                    contentDescription = ""
+                )
+            }
         }
     }
 }
@@ -262,6 +275,25 @@ private fun InstanceInfoRow(
             overflow = TextOverflow.Ellipsis,
             color = LocalMintColors.current.background
         )
+    }
+}
+
+private fun getRelativeTimeString(isoDateString: String): String {
+    val dateTime = Instant.parse(isoDateString).toLocalDateTime(TimeZone.currentSystemDefault())
+    val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+
+    val yearsBetween = now.year - dateTime.year
+    val monthsBetween = (now.year - dateTime.year) * 12 + (now.monthNumber - dateTime.monthNumber)
+    val daysBetween = now.date.dayOfYear - dateTime.date.dayOfYear
+    val hoursBetween = now.hour - dateTime.hour
+    val minutesBetween = now.minute - dateTime.minute
+    return when {
+        yearsBetween > 0 -> "${yearsBetween}年前"
+        monthsBetween > 0 -> "${monthsBetween}か月前"
+        daysBetween > 0 -> "${daysBetween}日前"
+        hoursBetween > 0 -> "${hoursBetween}時間前"
+        minutesBetween > 0 -> "${minutesBetween}分前"
+        else -> "たった今"
     }
 }
 
@@ -318,7 +350,8 @@ fun PreviewTimeLineItem() {
             text = "Hello, World!",
             id = "1",
             visibility = Visibility.get("public"),
-            ""
+            "",
+            "2024-12-14T08:58:55.689Z"
         ),
         onIconClick = { _, _, _ -> },
         onReplyClick = {},

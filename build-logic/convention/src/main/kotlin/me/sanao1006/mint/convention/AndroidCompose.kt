@@ -44,6 +44,8 @@ internal fun Project.configureAndroidCompose(
             implementation(libs.library("coil.network.okhttp"))
             implementation(libs.library("coil.gif"))
 
+            implementation(libs.library("kotlinx.datetime"))
+
             debugImplementation(libs.library("${androidxCompose}ui.tooling"))
             debugImplementation(libs.library("${androidxCompose}ui.test.manifest"))
         }
