@@ -24,11 +24,11 @@ sealed class TimelineItemEvent : CircuitUiEvent {
     data class OnTimelineItemOptionClicked(val id: String) : TimelineItemEvent()
 
     data class OnRenoteClicked(
-        val id: String,
+        val id: String
     ) : TimelineItemEvent()
 
     data class OnQuoteClicked(
-        val id: String,
+        val id: String
     ) : TimelineItemEvent()
 }
 
