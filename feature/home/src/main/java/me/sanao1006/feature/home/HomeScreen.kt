@@ -274,7 +274,6 @@ private fun HomeScreenUiContent(
                                     )
                                 )
                             }
-
                         }
                     }
                 )
