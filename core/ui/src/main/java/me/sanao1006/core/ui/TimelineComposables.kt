@@ -97,111 +97,17 @@ private fun TimelineItem(
         modifier = modifier
             .fillMaxWidth()
     ) {
-        Row {
-            Image(
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(shape = CircleShape)
-                    .clickable {
-                        onIconClick(
-                            timelineItem.user?.id ?: "",
-                            timelineItem.user?.username,
-                            timelineItem.user?.host
-                        )
-                    },
-                painter = rememberAsyncImagePainter(timelineItem.user?.avatarUrl),
-                contentDescription = null,
-                contentScale = ContentScale.Crop
-            )
-
-            Spacer(modifier = Modifier.width(8.dp))
-            Column(modifier = Modifier.fillMaxWidth()) {
-                Row(verticalAlignment = Alignment.Bottom) {
-                    Text(
-                        text = timelineItem.user?.name ?: timelineItem.user?.username ?: "",
-                        style = MaterialTheme.typography.bodyLarge,
-                        fontWeight = FontWeight.SemiBold,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    val username =
-                        timelineItem.user?.username?.takeIf { it.isNotBlank() }?.let { "@$it" }
-                            ?: ""
-                    val host =
-                        timelineItem.user?.host?.takeIf { it.isNotBlank() }?.let { "@$it" } ?: ""
-
-                    if (username.isNotEmpty() && host.isNotEmpty()) {
-                        Text(
-                            text = "$username$host",
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                    }
-                    Spacer(modifier = Modifier.weight(1f))
-                    val icon = when (timelineItem.visibility) {
-                        Visibility.PUBLIC -> null
-                        Visibility.HOME -> TablerIcons.Home
-                        Visibility.FOLLOWERS -> TablerIcons.Lock
-                        Visibility.SPECIFIED -> TablerIcons.Mail
-                    }
-                    icon?.let {
-                        Icon(
-                            modifier = Modifier.size(20.dp),
-                            painter = painterResource(it),
-                            contentDescription = ""
-                        )
-                    }
-                }
-
-                val instance = timelineItem.user?.instance
-                if (instance != null) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(4.dp))
-                            .then(
-                                if (!timelineItem.user?.instance?.themeColor.isNullOrEmpty()) {
-                                    Modifier.background(
-                                        Color(
-                                            android.graphics.Color.parseColor(
-                                                timelineItem.user?.instance?.themeColor!!
-                                            )
-                                        )
-                                    )
-                                } else {
-                                    Modifier
-                                }
-                            )
-                    ) {
-                        Spacer(modifier = Modifier.width(4.dp))
-                        AsyncImage(
-                            modifier = Modifier
-                                .size(16.dp)
-                                .clip(CircleShape),
-                            model = timelineItem.user?.instance?.iconUrl,
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(
-                            text = timelineItem.user?.instance?.name ?: "",
-                            style = MaterialTheme.typography.bodyMedium,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
-                }
-            }
-        }
+        TimelineUserInfo(
+            timelineItem = timelineItem,
+            modifier = Modifier.fillMaxWidth(),
+            onIconClick = onIconClick
+        )
         Spacer(modifier = Modifier.height(2.dp))
         Text(text = timelineItem.text)
         Spacer(modifier = Modifier.height(8.dp))
         val canRenote =
             timelineItem.visibility == Visibility.PUBLIC ||
-                timelineItem.visibility == Visibility.HOME
+                    timelineItem.visibility == Visibility.HOME
         TimelineActionRow(
             canRenote = canRenote,
             modifier = Modifier.fillMaxWidth(),
@@ -210,6 +116,113 @@ private fun TimelineItem(
             onReactionClick = onReactionClick,
             onOptionClick = onOptionClick
         )
+    }
+}
+
+@Composable
+private fun TimelineUserInfo(
+    timelineItem: TimelineItem,
+    modifier: Modifier = Modifier,
+    onIconClick: (String, String?, String?) -> Unit
+) {
+    Row(modifier = modifier) {
+        Image(
+            modifier = Modifier
+                .size(40.dp)
+                .clip(shape = CircleShape)
+                .clickable {
+                    onIconClick(
+                        timelineItem.user?.id ?: "",
+                        timelineItem.user?.username,
+                        timelineItem.user?.host
+                    )
+                },
+            painter = rememberAsyncImagePainter(timelineItem.user?.avatarUrl),
+            contentDescription = null,
+            contentScale = ContentScale.Crop
+        )
+
+        Spacer(modifier = Modifier.width(8.dp))
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Row(verticalAlignment = Alignment.Bottom) {
+                Text(
+                    text = timelineItem.user?.name ?: timelineItem.user?.username ?: "",
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                val username =
+                    timelineItem.user?.username?.takeIf { it.isNotBlank() }?.let { "@$it" }
+                        ?: ""
+                val host =
+                    timelineItem.user?.host?.takeIf { it.isNotBlank() }?.let { "@$it" } ?: ""
+
+                if (username.isNotEmpty() && host.isNotEmpty()) {
+                    Text(
+                        text = "$username$host",
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+                Spacer(modifier = Modifier.weight(1f))
+                val icon = when (timelineItem.visibility) {
+                    Visibility.PUBLIC -> null
+                    Visibility.HOME -> TablerIcons.Home
+                    Visibility.FOLLOWERS -> TablerIcons.Lock
+                    Visibility.SPECIFIED -> TablerIcons.Mail
+                }
+                icon?.let {
+                    Icon(
+                        modifier = Modifier.size(20.dp),
+                        painter = painterResource(it),
+                        contentDescription = ""
+                    )
+                }
+            }
+
+            val instance = timelineItem.user?.instance
+            if (instance != null) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(4.dp))
+                        .then(
+                            if (!timelineItem.user?.instance?.themeColor.isNullOrEmpty()) {
+                                Modifier.background(
+                                    Color(
+                                        android.graphics.Color.parseColor(
+                                            timelineItem.user?.instance?.themeColor!!
+                                        )
+                                    )
+                                )
+                            } else {
+                                Modifier
+                            }
+                        )
+                ) {
+                    Spacer(modifier = Modifier.width(4.dp))
+                    AsyncImage(
+                        modifier = Modifier
+                            .size(16.dp)
+                            .clip(RoundedCornerShape(4.dp)),
+                        model = timelineItem.user?.instance?.faviconUrl,
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = timelineItem.user?.instance?.name ?: "",
+                        style = MaterialTheme.typography.bodyMedium,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            }
+        }
     }
 }
 
