@@ -22,10 +22,12 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import me.sanao1006.core.domain.home.CreateNotesUseCase
 import me.sanao1006.core.domain.home.GetNotesTimelineUseCase
 import me.sanao1006.core.domain.home.TimelineType
 import me.sanao1006.core.domain.home.UpdateAccountUseCase
 import me.sanao1006.core.model.LoginUserInfo
+import me.sanao1006.core.model.notes.Visibility
 import me.sanao1006.core.model.uistate.TimelineItemAction
 import me.sanao1006.core.model.uistate.TimelineUiState
 import me.sanao1006.screens.HomeScreen
@@ -41,7 +43,8 @@ import me.sanao1006.screens.event.handleTimelineItemReplyClicked
 class HomeScreenPresenter @AssistedInject constructor(
     @Assisted private val navigator: Navigator,
     private val getNotesTimelineUseCase: GetNotesTimelineUseCase,
-    private val updateMyAccountUseCase: UpdateAccountUseCase
+    private val updateMyAccountUseCase: UpdateAccountUseCase,
+    private val createNotesUseCase: CreateNotesUseCase
 ) : Presenter<HomeScreen.State> {
 
     @OptIn(ExperimentalMaterialApi::class)
@@ -112,7 +115,8 @@ class HomeScreenPresenter @AssistedInject constructor(
                         timelineUiState =
                             timelineUiState.copy(
                                 showBottomSheet = true,
-                                timelineAction = TimelineItemAction.Renote
+                                timelineAction = TimelineItemAction.Renote,
+                                selectedUserId = event.id
                             )
                     }
 
@@ -122,8 +126,27 @@ class HomeScreenPresenter @AssistedInject constructor(
                         timelineUiState =
                             timelineUiState.copy(
                                 showBottomSheet = true,
-                                timelineAction = TimelineItemAction.Option
+                                timelineAction = TimelineItemAction.Option,
+                                selectedUserId = event.id
                             )
+                    }
+
+                    is TimelineItemEvent.OnRenoteClicked -> {
+                        scope.launch {
+                            createNotesUseCase.invoke(
+                                text = null,
+                                visibility = Visibility.PUBLIC,
+                                localOnly = false,
+                                reactionAcceptance = null,
+                                renoteId = event.id
+                            )
+                            timelineUiState = timelineUiState.copy(showBottomSheet = false)
+                        }
+                    }
+
+                    is TimelineItemEvent.OnQuoteClicked -> {
+                        timelineUiState = timelineUiState.copy(showBottomSheet = false)
+                        nav.goTo(NoteScreen(idForQuote = event.id))
                     }
                 }
             },
@@ -136,7 +159,7 @@ class HomeScreenPresenter @AssistedInject constructor(
                     timelineType = TimelineType.LOCAL
 
                 HomeScreen.Event.TimelineEvent.OnSocialTimelineClicked
-                -> timelineType = TimelineType.SOCIAL
+                    -> timelineType = TimelineType.SOCIAL
 
                 HomeScreen.Event.TimelineEvent.OnGlobalTimelineClicked ->
                     timelineType = TimelineType.GLOBAL

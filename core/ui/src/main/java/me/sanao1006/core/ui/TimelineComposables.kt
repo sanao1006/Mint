@@ -69,9 +69,9 @@ fun TimelineColumn(
                             onReplyClick(it.id, it.user?.username.orEmpty(), it.user?.host)
                         }
                     },
-                    onRepostClick = { it.user?.id?.let { id -> onRepostClick(id) } },
-                    onReactionClick = { it.user?.id?.let { id -> onReactionClick(id) } },
-                    onOptionClick = { it.user?.id?.let { id -> onOptionClick(id) } }
+                    onRepostClick = { onRepostClick(it.id) },
+                    onReactionClick = { onReactionClick(it.id) },
+                    onOptionClick = { onOptionClick(it.id) }
                 )
                 HorizontalDivider()
             }

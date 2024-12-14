@@ -35,6 +35,7 @@ import ir.alirezaivaz.tablericons.TablerIcons
 import kotlinx.coroutines.launch
 import me.sanao1006.core.ui.MainScreenBottomAppBarWrapper
 import me.sanao1006.core.ui.MainScreenDrawerWrapper
+import me.sanao1006.core.ui.RenoteActionIcon
 import me.sanao1006.core.ui.TimelineBottomSheet
 import me.sanao1006.core.ui.TimelineColumn
 import me.sanao1006.screens.HomeScreen
@@ -204,7 +205,25 @@ private fun HomeScreenUiContent(
                     isShowBottomSheet = state.timelineUiState.showBottomSheet,
                     timelineItemAction = state.timelineUiState.timelineAction,
                     onDismissRequest = { state.eventSink(HomeScreen.Event.OnDismissRequest) },
-                    onRenoteIconCLick = { },
+                    onRenoteIconCLick = { event ->
+                        when (event) {
+                            RenoteActionIcon.Renote -> {
+                                state.timelineEventSink(
+                                    TimelineItemEvent.OnRenoteClicked(
+                                        state.timelineUiState.selectedUserId ?: ""
+                                    )
+                                )
+                            }
+
+                            RenoteActionIcon.Quote -> {
+                                state.timelineEventSink(
+                                    TimelineItemEvent.OnQuoteClicked(
+                                        state.timelineUiState.selectedUserId ?: ""
+                                    )
+                                )
+                            }
+                        }
+                    },
                     onOptionIconCLick = { }
                 )
                 MainScreenBottomAppBarWrapper(

@@ -6,7 +6,8 @@ data class TimelineUiState(
     var timelineItems: List<TimelineItem?> = listOf(),
     var isSuccessCreateNote: Boolean? = null,
     var showBottomSheet: Boolean = false,
-    var timelineAction: TimelineItemAction = TimelineItemAction.Renote
+    var timelineAction: TimelineItemAction = TimelineItemAction.Renote,
+    val selectedUserId: String? = null
 )
 
 enum class TimelineItemAction {
