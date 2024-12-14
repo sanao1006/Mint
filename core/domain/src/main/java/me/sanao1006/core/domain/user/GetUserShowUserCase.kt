@@ -19,7 +19,7 @@ class GetUserShowUserCase @Inject constructor(
     ): UserScreenUiState {
         if (isFromDrawer) {
             val user = accountRepository.i()
-            return UserScreenUiState(
+            return UserScreenUiState.Success(
                 username = user.username,
                 name = user.name,
                 avatarUrl = user.avatarUrl,

@@ -26,7 +26,7 @@ class UserScreenPresenter @AssistedInject constructor(
     @Composable
     override fun present(): UserScreen.State {
         var userUiState: UserScreenUiState by rememberRetained {
-            mutableStateOf(UserScreenUiState())
+            mutableStateOf(UserScreenUiState.Loading)
         }
 
         LaunchedImpressionEffect(Unit) {

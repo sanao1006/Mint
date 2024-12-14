@@ -18,7 +18,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ContainedLoadingIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -46,10 +48,11 @@ import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
 import me.sanao1006.core.model.notes.Field
+import me.sanao1006.core.model.uistate.UserScreenUiState
 import me.sanao1006.screens.UserScreen
 import me.snao1006.res_value.ResString
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @CircuitInject(UserScreen::class, SingletonComponent::class)
 @Composable
 fun UserScreenUi(state: UserScreen.State, modifier: Modifier) {
@@ -68,38 +71,51 @@ fun UserScreenUi(state: UserScreen.State, modifier: Modifier) {
                 )
             }
         ) {
-            Column(
-                modifier = Modifier
-                    .padding(it)
-                    .verticalScroll(rememberScrollState())
-            ) {
-                HeaderContent(
-                    bannerUrl = state.uiState.bannerUrl,
-                    avatarUrl = state.uiState.avatarUrl
-                )
-                Spacer(modifier = Modifier.height(60.dp))
-                UserNameContent(
-                    username = state.uiState.username,
-                    name = state.uiState.name,
-                    host = state.uiState.host
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                BioContent(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    description = state.uiState.description,
-                    fields = state.uiState.fields
-                )
-                Spacer(modifier = Modifier.height(24.dp))
-                PostInfoContent(
-                    notesCount = state.uiState.notesCount,
-                    followingCount = state.uiState.followingCount,
-                    followersCount = state.uiState.followersCount,
-                    modifier = Modifier
-                        .fillMaxWidth(0.8f)
-                        .align(Alignment.CenterHorizontally)
-                )
+            when (val uiState = state.uiState) {
+                is UserScreenUiState.Loading -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        ContainedLoadingIndicator()
+                    }
+                }
+
+                is UserScreenUiState.Success -> {
+                    Column(
+                        modifier = Modifier
+                            .padding(it)
+                            .verticalScroll(rememberScrollState())
+                    ) {
+                        HeaderContent(
+                            bannerUrl = uiState.bannerUrl,
+                            avatarUrl = uiState.avatarUrl
+                        )
+                        Spacer(modifier = Modifier.height(60.dp))
+                        UserNameContent(
+                            username = uiState.username,
+                            name = uiState.name,
+                            host = uiState.host
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        BioContent(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            description = uiState.description,
+                            fields = uiState.fields
+                        )
+                        Spacer(modifier = Modifier.height(24.dp))
+                        PostInfoContent(
+                            notesCount = uiState.notesCount,
+                            followingCount = uiState.followingCount,
+                            followersCount = uiState.followersCount,
+                            modifier = Modifier
+                                .fillMaxWidth(0.8f)
+                                .align(Alignment.CenterHorizontally)
+                        )
+                    }
+                }
             }
         }
     }
