@@ -39,6 +39,13 @@ import me.sanao1006.core.model.notes.TimelineItem
 import me.sanao1006.core.model.notes.User
 import me.sanao1006.core.model.notes.Visibility
 
+typealias Id = String
+typealias UserId = String
+typealias Username = String
+typealias Host = String
+typealias Uri = String
+typealias OnOptionClick = (Id, UserId?, Username?, Host?, Uri) -> Unit
+
 @Composable
 fun TimelineColumn(
     modifier: Modifier = Modifier,
@@ -47,7 +54,7 @@ fun TimelineColumn(
     onReplyClick: (String, String, String?) -> Unit,
     onRepostClick: (String) -> Unit,
     onReactionClick: (String) -> Unit,
-    onOptionClick: (String) -> Unit
+    onOptionClick: OnOptionClick
 ) {
     LazyColumn(
         modifier = modifier,
@@ -75,7 +82,15 @@ fun TimelineColumn(
                     },
                     onRepostClick = { onRepostClick(it.id) },
                     onReactionClick = { onReactionClick(it.id) },
-                    onOptionClick = { onOptionClick(it.id) }
+                    onOptionClick = {
+                        onOptionClick(
+                            it.id,
+                            it.user?.id,
+                            it.user?.username,
+                            it.user?.host,
+                            it.uri
+                        )
+                    }
                 )
                 HorizontalDivider()
             }
@@ -278,7 +293,8 @@ fun PreviewTimeLineItem() {
             ),
             text = "Hello, World!",
             id = "1",
-            visibility = Visibility.get("public")
+            visibility = Visibility.get("public"),
+            ""
         ),
         onIconClick = { _, _, _ -> },
         onReplyClick = {},

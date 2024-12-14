@@ -73,7 +73,8 @@ data class NotesTimeline(
             user = user,
             text = text.orEmpty(),
             id = id,
-            visibility = Visibility.get(visibility)
+            visibility = Visibility.get(visibility),
+            uri = uri
         )
     }
 }

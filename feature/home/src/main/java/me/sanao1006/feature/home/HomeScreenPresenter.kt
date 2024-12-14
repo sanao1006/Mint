@@ -149,6 +149,26 @@ class HomeScreenPresenter @AssistedInject constructor(
                         timelineUiState = timelineUiState.copy(showBottomSheet = false)
                         nav.goTo(NoteScreen(idForQuote = event.id))
                     }
+
+                    is TimelineItemEvent.OnDetailClicked -> {
+                        timelineUiState = timelineUiState.copy(showBottomSheet = false)
+                    }
+
+                    is TimelineItemEvent.OnCopyClicked -> {
+                        timelineUiState = timelineUiState.copy(showBottomSheet = false)
+                    }
+
+                    is TimelineItemEvent.OnCopyLinkClicked -> {
+                        timelineUiState = timelineUiState.copy(showBottomSheet = false)
+                    }
+
+                    is TimelineItemEvent.OnShareClicked -> {
+                        timelineUiState = timelineUiState.copy(showBottomSheet = false)
+                    }
+
+                    is TimelineItemEvent.OnFavoriteClicked -> {
+                        timelineUiState = timelineUiState.copy(showBottomSheet = false)
+                    }
                 }
             },
             drawerEventSink = { event -> event.handleDrawerEvent(navigator, loginUserInfo) },
