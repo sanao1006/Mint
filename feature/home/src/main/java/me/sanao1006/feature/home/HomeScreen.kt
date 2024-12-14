@@ -164,7 +164,7 @@ private fun HomeScreenUiContent(
                     state = pagerState
                 ) { page ->
                     TimelineColumn(
-                        state = state,
+                        timelineItems = state.timelineUiState.timelineItems,
                         modifier = Modifier.fillMaxSize(),
                         onIconClick = { id, username, host ->
                             state.timelineEventSink(

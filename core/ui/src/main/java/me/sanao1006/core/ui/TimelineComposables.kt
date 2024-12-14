@@ -33,12 +33,11 @@ import coil3.compose.rememberAsyncImagePainter
 import ir.alirezaivaz.tablericons.TablerIcons
 import me.sanao1006.core.model.notes.TimelineItem
 import me.sanao1006.core.model.notes.User
-import me.sanao1006.screens.HomeScreen
 
 @Composable
 fun TimelineColumn(
     modifier: Modifier = Modifier,
-    state: HomeScreen.State,
+    timelineItems: List<TimelineItem?>,
     onIconClick: (String, String?, String?) -> Unit,
     onReplyClick: (String, String, String?) -> Unit,
     onRepostClick: (String) -> Unit,
@@ -49,7 +48,7 @@ fun TimelineColumn(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        itemsIndexed(state.timelineUiState.timelineItems) { index, it ->
+        itemsIndexed(timelineItems) { index, it ->
             it?.let { timelineUiState ->
                 TimelineItem(
                     modifier = Modifier
