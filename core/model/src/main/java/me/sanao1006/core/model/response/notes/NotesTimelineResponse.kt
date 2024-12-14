@@ -1,10 +1,19 @@
-package me.sanao1006.core.model.notes
+package me.sanao1006.core.model.response.notes
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import me.sanao1006.core.model.notes.Channel
+import me.sanao1006.core.model.notes.File
+import me.sanao1006.core.model.notes.Poll
+import me.sanao1006.core.model.notes.Reactions
+import me.sanao1006.core.model.notes.Renote
+import me.sanao1006.core.model.notes.Reply
+import me.sanao1006.core.model.notes.TimelineItem
+import me.sanao1006.core.model.notes.User
+import me.sanao1006.core.model.notes.Visibility
 
 @Serializable
-data class NotesTimeline(
+data class NotesTimelineResponse(
     @SerialName("channel")
     val channel: Channel = Channel(),
     @SerialName("channelId")
