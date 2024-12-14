@@ -112,7 +112,7 @@ private fun TimelineItem(
         modifier = modifier
             .fillMaxWidth()
     ) {
-        TimelineUserInfo(
+        TimelineUserInfoRow(
             timelineItem = timelineItem,
             modifier = Modifier.fillMaxWidth(),
             onIconClick = onIconClick
@@ -135,12 +135,13 @@ private fun TimelineItem(
 }
 
 @Composable
-private fun TimelineUserInfo(
+private fun TimelineUserInfoRow(
     timelineItem: TimelineItem,
     modifier: Modifier = Modifier,
     onIconClick: (String, String?, String?) -> Unit
 ) {
     Row(modifier = modifier) {
+        // user icon
         Image(
             modifier = Modifier
                 .size(40.dp)
@@ -158,86 +159,122 @@ private fun TimelineUserInfo(
         )
 
         Spacer(modifier = Modifier.width(8.dp))
-        Column(modifier = Modifier.fillMaxWidth()) {
-            Row(verticalAlignment = Alignment.Bottom) {
-                Text(
-                    text = timelineItem.user?.name ?: timelineItem.user?.username ?: "",
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.SemiBold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                val username =
-                    timelineItem.user?.username?.takeIf { it.isNotBlank() }?.let { "@$it" }
-                        ?: ""
-                val host =
-                    timelineItem.user?.host?.takeIf { it.isNotBlank() }?.let { "@$it" } ?: ""
+        UserInfoColumn(
+            timelineItem = timelineItem,
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
+}
 
-                if (username.isNotEmpty() && host.isNotEmpty()) {
-                    Text(
-                        text = "$username$host",
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
-                Spacer(modifier = Modifier.weight(1f))
-                val icon = when (timelineItem.visibility) {
-                    Visibility.PUBLIC -> null
-                    Visibility.HOME -> TablerIcons.Home
-                    Visibility.FOLLOWERS -> TablerIcons.Lock
-                    Visibility.SPECIFIED -> TablerIcons.Mail
-                }
-                icon?.let {
-                    Icon(
-                        modifier = Modifier.size(20.dp),
-                        painter = painterResource(it),
-                        contentDescription = ""
-                    )
-                }
-            }
+@Composable
+private fun UserInfoColumn(
+    timelineItem: TimelineItem,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier) {
+        UserNameRow(
+            timelineItem = timelineItem,
+            modifier = Modifier.fillMaxWidth()
+        )
 
-            val instance = timelineItem.user?.instance
-            if (instance != null) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(4.dp))
-                        .then(
-                            if (!timelineItem.user?.instance?.themeColor.isNullOrEmpty()) {
-                                Modifier.background(
-                                    Color(
-                                        android.graphics.Color.parseColor(
-                                            timelineItem.user?.instance?.themeColor!!
-                                        )
-                                    )
-                                )
-                            } else {
-                                Modifier
-                            }
-                        )
-                ) {
-                    Spacer(modifier = Modifier.width(4.dp))
-                    AsyncImage(
-                        modifier = Modifier
-                            .size(16.dp)
-                            .clip(RoundedCornerShape(4.dp)),
-                        model = timelineItem.user?.instance?.faviconUrl,
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        text = timelineItem.user?.instance?.name ?: "",
-                        style = MaterialTheme.typography.bodyMedium,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-            }
+        val instance = timelineItem.user?.instance
+        if (instance != null) {
+            InstanceInfoRow(
+                timelineItem = timelineItem,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(4.dp))
+            )
         }
+    }
+}
+
+@Composable
+private fun UserNameRow(
+    timelineItem: TimelineItem,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.Bottom
+    ) {
+        Text(
+            text = timelineItem.user?.name ?: timelineItem.user?.username ?: "",
+            style = MaterialTheme.typography.bodyLarge,
+            fontWeight = FontWeight.SemiBold,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        val username =
+            timelineItem.user?.username?.takeIf { it.isNotBlank() }?.let { "@$it" }
+                ?: ""
+        val host =
+            timelineItem.user?.host?.takeIf { it.isNotBlank() }?.let { "@$it" } ?: ""
+
+        if (username.isNotEmpty() && host.isNotEmpty()) {
+            Text(
+                text = "$username$host",
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+        Spacer(modifier = Modifier.weight(1f))
+        val icon = when (timelineItem.visibility) {
+            Visibility.PUBLIC -> null
+            Visibility.HOME -> TablerIcons.Home
+            Visibility.FOLLOWERS -> TablerIcons.Lock
+            Visibility.SPECIFIED -> TablerIcons.Mail
+        }
+        icon?.let {
+            Icon(
+                modifier = Modifier.size(20.dp),
+                painter = painterResource(it),
+                contentDescription = ""
+            )
+        }
+    }
+}
+
+@Composable
+private fun InstanceInfoRow(
+    timelineItem: TimelineItem,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .then(
+                if (!timelineItem.user?.instance?.themeColor.isNullOrEmpty()) {
+                    Modifier.background(
+                        Color(
+                            android.graphics.Color.parseColor(
+                                timelineItem.user?.instance?.themeColor!!
+                            )
+                        )
+                    )
+                } else {
+                    Modifier
+                }
+            )
+    ) {
+        Spacer(modifier = Modifier.width(4.dp))
+        AsyncImage(
+            modifier = Modifier
+                .size(16.dp)
+                .clip(RoundedCornerShape(4.dp)),
+            model = timelineItem.user?.instance?.faviconUrl,
+            contentDescription = null,
+            contentScale = ContentScale.Crop
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        Text(
+            text = timelineItem.user?.instance?.name ?: "",
+            style = MaterialTheme.typography.bodyMedium,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
     }
 }
 
