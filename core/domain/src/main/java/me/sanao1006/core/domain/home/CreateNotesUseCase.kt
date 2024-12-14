@@ -1,9 +1,9 @@
 package me.sanao1006.core.domain.home
 
-import me.sanao1006.core.data.repository.NotesRepository
-import me.sanao1006.core.model.requestbody.notes.NotesCreateRequestBody
 import javax.inject.Inject
 import javax.inject.Singleton
+import me.sanao1006.core.data.repository.NotesRepository
+import me.sanao1006.core.model.requestbody.notes.NotesCreateRequestBody
 
 @Singleton
 class CreateNotesUseCase @Inject constructor(
