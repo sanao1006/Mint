@@ -18,13 +18,13 @@ import dagger.hilt.components.SingletonComponent
 import me.sanao1006.core.domain.home.UpdateAccountUseCase
 import me.sanao1006.core.domain.notification.GetNotificationsUseCase
 import me.sanao1006.core.model.LoginUserInfo
+import me.sanao1006.core.model.uistate.NotificationUiState
 import me.sanao1006.screens.NoteScreen
 import me.sanao1006.screens.NotificationScreen
 import me.sanao1006.screens.event.handleBottomAppBarActionEvent
 import me.sanao1006.screens.event.handleDrawerEvent
 import me.sanao1006.screens.event.handleNavigationIconClicked
 import me.sanao1006.screens.event.handleNoteCreateEvent
-import timber.log.Timber
 
 class NotificationScreenPresenter @AssistedInject constructor(
     @Assisted private val navigator: Navigator,
@@ -43,11 +43,17 @@ class NotificationScreenPresenter @AssistedInject constructor(
         val nav = rememberAnsweringNavigator<NoteScreen.Result>(navigator) { result ->
             isSuccessCreateNote = result.success
         }
+
+        var notificationUiState: NotificationUiState by rememberRetained {
+            mutableStateOf(NotificationUiState.Loading)
+        }
+
         LaunchedImpressionEffect(Unit) {
             loginUserInfo = updateMyAccountUseCase()
-            Timber.tag("ray").d("notifi ${getNotificationsUseCase()}")
+            notificationUiState = getNotificationsUseCase()
         }
         return NotificationScreen.State(
+            notificationUiState = notificationUiState,
             isSuccessCreateNote = isSuccessCreateNote,
             navigator = navigator,
             drawerUserInfo = loginUserInfo,
