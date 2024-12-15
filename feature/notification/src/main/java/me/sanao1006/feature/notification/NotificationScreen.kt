@@ -140,7 +140,6 @@ private fun NotificationScreenContent(
                     }
 
                     false -> {
-
                     }
 
                     true -> {
