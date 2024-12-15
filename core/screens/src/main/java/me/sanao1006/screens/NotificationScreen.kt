@@ -10,6 +10,7 @@ import me.sanao1006.screens.event.BottomAppBarActionEvent
 import me.sanao1006.screens.event.DrawerEvent
 import me.sanao1006.screens.event.GlobalIconEvent
 import me.sanao1006.screens.event.NoteCreateEvent
+import me.sanao1006.screens.event.TimelineItemEvent
 
 @Parcelize
 data object NotificationScreen : Screen {
@@ -18,6 +19,7 @@ data object NotificationScreen : Screen {
         val isSuccessCreateNote: Boolean?,
         val navigator: Navigator,
         val drawerUserInfo: LoginUserInfo,
+        val timelineEventSink: (TimelineItemEvent) -> Unit,
         val noteCreateEventSink: (NoteCreateEvent) -> Unit,
         val drawerEventSink: (DrawerEvent) -> Unit,
         val globalIconEventSink: (GlobalIconEvent) -> Unit,
@@ -26,6 +28,6 @@ data object NotificationScreen : Screen {
     ) : CircuitUiState
 
     sealed class Event : CircuitUiState {
-        data object OnBackClicked : Event()
+        data object OnDismissRequest : Event()
     }
 }

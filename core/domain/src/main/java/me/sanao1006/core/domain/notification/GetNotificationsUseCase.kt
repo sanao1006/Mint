@@ -12,14 +12,15 @@ class GetNotificationsUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(): NotificationUiState {
         return try {
-            val response = repository
-                .notifications(INotificationsRequestBody())
-                .map { it.toNotificationUiState() }
-            NotificationUiState.Success(
-                response
+            val response = repository.notifications(INotificationsRequestBody())
+            NotificationUiState(
+                notificationUiStateObjects = response.map { it.toNotificationUiState() },
+                isSuccessLoading = true
             )
         } catch (e: Exception) {
-            NotificationUiState.Failure
+            NotificationUiState(
+                isSuccessLoading = false
+            )
         }
     }
 }

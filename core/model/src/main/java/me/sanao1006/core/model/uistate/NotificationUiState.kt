@@ -3,11 +3,16 @@ package me.sanao1006.core.model.uistate
 import me.sanao1006.core.model.common.User
 import me.sanao1006.core.model.notes.TimelineItem
 
-sealed interface NotificationUiState {
-    data object Loading : NotificationUiState
-    data object Failure : NotificationUiState
-    data class Success(val list: List<NotificationUiStateObject>) : NotificationUiState
-}
+data class NotificationUiState(
+    var notificationUiStateObjects: List<NotificationUiStateObject> = emptyList(),
+    var isSuccessLoading: Boolean? = null,
+    var isSuccessCreateNote: Boolean? = null,
+    var showBottomSheet: Boolean = false,
+    var timelineAction: TimelineItemAction = TimelineItemAction.Renote,
+    val selectedUserId: String? = null,
+    val selectedNoteText: String? = null,
+    val selectedNoteLink: String? = null
+)
 
 data class NotificationUiStateObject(
     val id: String,
