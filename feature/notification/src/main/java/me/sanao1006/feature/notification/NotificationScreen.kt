@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ContainedLoadingIndicator
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -33,6 +34,7 @@ import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
 import me.sanao1006.core.ui.MainScreenBottomAppBarWrapper
 import me.sanao1006.core.ui.MainScreenDrawerWrapper
+import me.sanao1006.core.ui.NotificationColumn
 import me.sanao1006.core.ui.OptionActionIcon
 import me.sanao1006.core.ui.RenoteActionIcon
 import me.sanao1006.core.ui.TimelineBottomSheet
@@ -127,10 +129,65 @@ private fun NotificationScreenContent(
                 modifier = Modifier
                     .fillMaxSize()
             ) {
-                when (state.notificationUiState.isSuccessCreateNote) {
-                    null -> {}
-                    true -> {}
-                    false -> {}
+                when (state.notificationUiState.isSuccessLoading) {
+                    null -> {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            ContainedLoadingIndicator()
+                        }
+                    }
+
+                    false -> {
+
+                    }
+
+                    true -> {
+                        NotificationColumn(
+                            modifier = Modifier.fillMaxSize(),
+                            notifications = state.notificationUiState.notificationUiStateObjects,
+                            onIconClick = { id, username, host ->
+                                state.timelineEventSink(
+                                    TimelineItemEvent.OnTimelineItemIconClicked(
+                                        id,
+                                        username,
+                                        host
+                                    )
+                                )
+                            },
+                            onReplyClick = { id, user, host ->
+                                state.timelineEventSink(
+                                    TimelineItemEvent.OnTimelineItemReplyClicked(id, user, host)
+                                )
+                            },
+                            onRepostClick = { userId ->
+                                state.timelineEventSink(
+                                    TimelineItemEvent.OnTimelineItemRepostClicked(
+                                        userId
+                                    )
+                                )
+                            },
+                            onReactionClick = { userId ->
+                                state.timelineEventSink(
+                                    TimelineItemEvent.OnTimelineItemReactionClicked(
+                                        userId
+                                    )
+                                )
+                            },
+                            onOptionClick = { noteId, userId, host, username, uri ->
+                                state.timelineEventSink(
+                                    TimelineItemEvent.OnTimelineItemOptionClicked(
+                                        noteId,
+                                        userId,
+                                        host,
+                                        username,
+                                        uri
+                                    )
+                                )
+                            }
+                        )
+                    }
                 }
             }
             TimelineBottomSheet(

@@ -45,6 +45,7 @@ import me.sanao1006.core.designsystem.LocalMintColors
 import me.sanao1006.core.model.common.User
 import me.sanao1006.core.model.notes.TimelineItem
 import me.sanao1006.core.model.notes.Visibility
+import me.sanao1006.core.model.uistate.NotificationUiStateObject
 import me.snao1006.res_value.ResString
 
 typealias NoteId = String
@@ -106,6 +107,116 @@ fun TimelineColumn(
 }
 
 @Composable
+fun NotificationColumn(
+    modifier: Modifier = Modifier,
+    notifications: List<NotificationUiStateObject>,
+    onIconClick: (String, String?, String?) -> Unit,
+    onReplyClick: (NoteId, Username, Host?) -> Unit,
+    onRepostClick: (NoteId) -> Unit,
+    onReactionClick: (NoteId) -> Unit,
+    onOptionClick: (NoteId, UserId?, Username?, Host?, Uri) -> Unit
+) {
+    LazyColumn(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        itemsIndexed(notifications) { index, it ->
+            when (it.type) {
+                "reply", "mention" -> {
+                    Column {
+                        Row(modifier = Modifier.fillMaxWidth()) {
+                            Icon(
+                                painterResource(
+                                    when (it.type) {
+                                        "reply" -> TablerIcons.ArrowBackUp
+                                        "mention" -> TablerIcons.At
+                                        else -> TablerIcons.ArrowBackUp
+                                    }
+                                ), ""
+                            )
+
+                            Text(
+                                text = it.user.username,
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.SemiBold,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
+
+                        TimelineItem(
+                            modifier = Modifier
+                                .padding(
+                                    top = if (index == 0) {
+                                        16.dp
+                                    } else {
+                                        0.dp
+                                    },
+                                    start = 16.dp,
+                                    end = 16.dp
+                                ),
+                            timelineItem = it.timelineItem,
+                            onIconClick = onIconClick,
+                            onReplyClick = {
+                                if (it.user.username.isNotEmpty()) {
+                                    onReplyClick(it.id, it.user.username, it.user.host)
+                                }
+                            },
+                            onRepostClick = { onRepostClick(it.id) },
+                            onReactionClick = { onReactionClick(it.id) },
+                            onOptionClick = {
+                                onOptionClick(
+                                    it.id,
+                                    it.user.id,
+                                    it.user.username,
+                                    it.user.host,
+                                    it.timelineItem.uri
+                                )
+                            }
+                        )
+                    }
+                }
+
+                else -> {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Row(modifier = Modifier.fillMaxWidth()) {
+                            Image(
+                                modifier = Modifier
+                                    .size(40.dp)
+                                    .clip(shape = CircleShape)
+                                    .clickable {
+                                        onIconClick(
+                                            it.user.id,
+                                            it.user.username,
+                                            it.user.host
+                                        )
+                                    },
+                                painter = rememberAsyncImagePainter(it.user.avatarUrl),
+                                contentDescription = null,
+                                contentScale = ContentScale.Crop
+                            )
+
+                            Text(
+                                text = it.user.username,
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.SemiBold,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(it.timelineItem.text)
+                    }
+                }
+            }
+            HorizontalDivider()
+        }
+    }
+}
+
+@Composable
 private fun TimelineItem(
     modifier: Modifier = Modifier,
     onIconClick: (String, String?, String?) -> Unit,
@@ -129,7 +240,7 @@ private fun TimelineItem(
         Spacer(modifier = Modifier.height(8.dp))
         val canRenote =
             timelineItem.visibility == Visibility.PUBLIC ||
-                timelineItem.visibility == Visibility.HOME
+                    timelineItem.visibility == Visibility.HOME
         TimelineActionRow(
             canRenote = canRenote,
             modifier = Modifier.fillMaxWidth(),
