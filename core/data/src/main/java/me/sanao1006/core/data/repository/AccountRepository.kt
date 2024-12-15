@@ -4,7 +4,7 @@ import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.POST
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
-import me.sanao1006.core.model.notes.User
+import me.sanao1006.core.model.common.User
 import me.sanao1006.core.model.requestbody.account.INotificationsRequestBody
 import me.sanao1006.core.model.response.notes.NotesTimelineResponse
 

@@ -1,5 +1,7 @@
 package me.sanao1006.core.model.notes
 
+import me.sanao1006.core.model.common.User
+
 data class TimelineItem(
     val user: User? = null,
     val text: String,

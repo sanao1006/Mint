@@ -1,7 +1,7 @@
 package me.sanao1006.core.model.uistate
 
-import me.sanao1006.core.model.notes.Field
-import me.sanao1006.core.model.notes.User
+import me.sanao1006.core.model.common.Field
+import me.sanao1006.core.model.common.User
 
 sealed interface UserScreenUiState {
     data object Loading : UserScreenUiState
@@ -21,7 +21,7 @@ sealed interface UserScreenUiState {
     ) : UserScreenUiState
 }
 
-fun User.toUserScreenUiState() = UserScreenUiState.Success(
+fun User.UserScreen.toUserScreenUiState() = UserScreenUiState.Success(
     username = username,
     name = name,
     avatarUrl = avatarUrl,

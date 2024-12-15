@@ -15,8 +15,8 @@ class UpdateAccountUseCase @Inject constructor(
             userName = user.username,
             name = user.name ?: "",
             avatarUrl = user.avatarUrl ?: "",
-            followersCount = user.followersCount,
-            followingCount = user.followingCount,
+            followersCount = user.followersCount ?: 0,
+            followingCount = user.followingCount ?: 0,
             userId = user.id,
             host = user.host ?: ""
         )

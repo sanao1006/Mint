@@ -42,8 +42,8 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import me.sanao1006.core.designsystem.LocalMintColors
+import me.sanao1006.core.model.common.User
 import me.sanao1006.core.model.notes.TimelineItem
-import me.sanao1006.core.model.notes.User
 import me.sanao1006.core.model.notes.Visibility
 import me.snao1006.res_value.ResString
 
@@ -129,7 +129,7 @@ private fun TimelineItem(
         Spacer(modifier = Modifier.height(8.dp))
         val canRenote =
             timelineItem.visibility == Visibility.PUBLIC ||
-                timelineItem.visibility == Visibility.HOME
+                    timelineItem.visibility == Visibility.HOME
         TimelineActionRow(
             canRenote = canRenote,
             modifier = Modifier.fillMaxWidth(),
@@ -353,9 +353,12 @@ private fun TimelineActionRow(
 fun PreviewTimeLineItem() {
     TimelineItem(
         timelineItem = TimelineItem(
-            user = User(
+            user = User.Timeline(
+                id = "1",
+                username = "sanao1006",
                 name = "sanao1006",
-                avatarUrl = ""
+                avatarUrl = "https://avatars.githubusercontent.com/u/20736526?v=4",
+                host = "misskey.io"
             ),
             text = "Hello, World!",
             id = "1",
