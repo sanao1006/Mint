@@ -4,6 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import me.sanao1006.core.model.common.User
 import me.sanao1006.core.model.response.notes.NotesTimelineResponse
+import me.sanao1006.core.model.uistate.NotificationUiState
 
 @Serializable
 data class NotificationResponse(
@@ -19,4 +20,15 @@ data class NotificationResponse(
     val user: User,
     @SerialName("userId")
     val userId: String
-)
+) {
+    fun toNotificationUiState(): NotificationUiState {
+        return NotificationUiState(
+            id = id,
+            type = type,
+            user = user,
+            userId = userId,
+            createdAt = createdAt,
+            timelineItem = note.toTimelineUiState()
+        )
+    }
+}
