@@ -3,7 +3,6 @@ package me.sanao1006.core.model.response.notes
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import me.sanao1006.core.model.common.User
-import me.sanao1006.core.model.common.UserSerializer
 import me.sanao1006.core.model.notes.Channel
 import me.sanao1006.core.model.notes.File
 import me.sanao1006.core.model.notes.Poll
@@ -70,7 +69,6 @@ data class NotesTimelineResponse(
     @SerialName("url")
     val url: String = "",
     @SerialName("user")
-    @Serializable(UserSerializer::class)
     val user: User? = null,
     @SerialName("userId")
     val userId: String = "",

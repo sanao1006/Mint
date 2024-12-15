@@ -353,7 +353,7 @@ private fun TimelineActionRow(
 fun PreviewTimeLineItem() {
     TimelineItem(
         timelineItem = TimelineItem(
-            user = User.Timeline(
+            user = User(
                 id = "1",
                 username = "sanao1006",
                 name = "sanao1006",

@@ -6,7 +6,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import me.sanao1006.core.model.common.User
 import me.sanao1006.core.model.requestbody.account.INotificationsRequestBody
-import me.sanao1006.core.model.response.notes.NotesTimelineResponse
+import me.sanao1006.core.model.response.notification.NotificationResponse
 
 interface AccountRepository {
     @POST("api/i")
@@ -17,5 +17,5 @@ interface AccountRepository {
     @POST("api/i/notifications")
     suspend fun notifications(
         @Body body: INotificationsRequestBody
-    ): List<NotesTimelineResponse>
+    ): List<NotificationResponse>
 }

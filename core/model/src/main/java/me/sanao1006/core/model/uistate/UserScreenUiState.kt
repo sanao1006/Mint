@@ -21,15 +21,15 @@ sealed interface UserScreenUiState {
     ) : UserScreenUiState
 }
 
-fun User.UserScreen.toUserScreenUiState() = UserScreenUiState.Success(
+fun User.toUserScreenUiState() = UserScreenUiState.Success(
     username = username,
     name = name,
     avatarUrl = avatarUrl,
     bannerUrl = bannerUrl,
     host = host,
-    followingCount = followingCount,
-    followersCount = followersCount,
+    followingCount = followingCount ?: 0,
+    followersCount = followersCount ?: 0,
     description = description,
     fields = fields,
-    notesCount = notesCount
+    notesCount = notesCount ?: 0
 )

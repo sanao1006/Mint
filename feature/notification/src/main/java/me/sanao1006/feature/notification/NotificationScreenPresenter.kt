@@ -16,6 +16,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
 import me.sanao1006.core.domain.home.UpdateAccountUseCase
+import me.sanao1006.core.domain.notification.GetNotificationsUseCase
 import me.sanao1006.core.model.LoginUserInfo
 import me.sanao1006.screens.NoteScreen
 import me.sanao1006.screens.NotificationScreen
@@ -23,10 +24,12 @@ import me.sanao1006.screens.event.handleBottomAppBarActionEvent
 import me.sanao1006.screens.event.handleDrawerEvent
 import me.sanao1006.screens.event.handleNavigationIconClicked
 import me.sanao1006.screens.event.handleNoteCreateEvent
+import timber.log.Timber
 
 class NotificationScreenPresenter @AssistedInject constructor(
     @Assisted private val navigator: Navigator,
-    private val updateMyAccountUseCase: UpdateAccountUseCase
+    private val updateMyAccountUseCase: UpdateAccountUseCase,
+    private val getNotificationsUseCase: GetNotificationsUseCase
 ) : Presenter<NotificationScreen.State> {
     @Composable
     override fun present(): NotificationScreen.State {
@@ -42,6 +45,7 @@ class NotificationScreenPresenter @AssistedInject constructor(
         }
         LaunchedImpressionEffect(Unit) {
             loginUserInfo = updateMyAccountUseCase()
+            Timber.tag("ray").d("notifi ${getNotificationsUseCase()}")
         }
         return NotificationScreen.State(
             isSuccessCreateNote = isSuccessCreateNote,
