@@ -2,11 +2,11 @@ package me.sanao1006.core.model.response.notes
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonObject
 import me.sanao1006.core.model.common.User
 import me.sanao1006.core.model.notes.Channel
 import me.sanao1006.core.model.notes.File
 import me.sanao1006.core.model.notes.Poll
-import me.sanao1006.core.model.notes.Reactions
 import me.sanao1006.core.model.notes.Renote
 import me.sanao1006.core.model.notes.Reply
 import me.sanao1006.core.model.notes.TimelineItem
@@ -47,7 +47,9 @@ data class NotesTimelineResponse(
     @SerialName("reactionAndUserPairCache")
     val reactionAndUserPairCache: List<String> = listOf(),
     @SerialName("reactions")
-    val reactions: Reactions? = null,
+    val reactions: JsonObject? = null,
+    @SerialName("reactionEmojis")
+    val reactionEmojis: JsonObject? = null,
     @SerialName("renote")
     val renote: Renote? = Renote(),
     @SerialName("renoteCount")
@@ -84,7 +86,9 @@ data class NotesTimelineResponse(
             id = id,
             visibility = Visibility.get(visibility),
             uri = uri,
-            createdAt = createdAt
+            createdAt = createdAt,
+            reactions = reactions,
+            reactionsEmojis = reactionEmojis
         )
     }
 }

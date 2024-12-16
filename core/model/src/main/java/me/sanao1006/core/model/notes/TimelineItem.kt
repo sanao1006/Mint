@@ -1,5 +1,6 @@
 package me.sanao1006.core.model.notes
 
+import kotlinx.serialization.json.JsonObject
 import me.sanao1006.core.model.common.User
 
 data class TimelineItem(
@@ -8,5 +9,7 @@ data class TimelineItem(
     val id: String,
     val visibility: Visibility,
     val uri: String,
-    val createdAt: String
+    val createdAt: String,
+    val reactions: JsonObject? = null,
+    val reactionsEmojis: JsonObject? = null
 )

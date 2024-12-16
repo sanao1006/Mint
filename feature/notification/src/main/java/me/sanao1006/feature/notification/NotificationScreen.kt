@@ -1,5 +1,6 @@
 package me.sanao1006.feature.notification
 
+import android.content.Context
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,6 +27,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.slack.circuit.codegen.annotations.CircuitInject
@@ -34,7 +36,6 @@ import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
 import me.sanao1006.core.ui.MainScreenBottomAppBarWrapper
 import me.sanao1006.core.ui.MainScreenDrawerWrapper
-import me.sanao1006.core.ui.NotificationColumn
 import me.sanao1006.core.ui.OptionActionIcon
 import me.sanao1006.core.ui.RenoteActionIcon
 import me.sanao1006.core.ui.TimelineBottomSheet
@@ -51,7 +52,7 @@ fun NotificationScreenUi(state: NotificationScreen.State, modifier: Modifier) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
-
+    val context = LocalContext.current
     LaunchedImpressionEffect(state.isSuccessCreateNote) {
         state.noteCreateEventSink(
             NoteCreateEvent.OnNoteCreated(
@@ -69,6 +70,7 @@ fun NotificationScreenUi(state: NotificationScreen.State, modifier: Modifier) {
         ) {
             NotificationScreenContent(
                 state = state,
+                context = context,
                 modifier = Modifier,
                 snackbarHost = { SnackbarHost(snackbarHostState) },
                 onGlobalIconClicked = {
@@ -96,6 +98,7 @@ fun NotificationScreenUi(state: NotificationScreen.State, modifier: Modifier) {
 @Composable
 private fun NotificationScreenContent(
     state: NotificationScreen.State,
+    context: Context,
     modifier: Modifier = Modifier,
     snackbarHost: @Composable () -> Unit,
     onGlobalIconClicked: () -> Unit,
@@ -145,6 +148,7 @@ private fun NotificationScreenContent(
                     true -> {
                         NotificationColumn(
                             modifier = Modifier.fillMaxSize(),
+                            context = context,
                             notifications = state.notificationUiState.notificationUiStateObjects,
                             onIconClick = { id, username, host ->
                                 state.timelineEventSink(
