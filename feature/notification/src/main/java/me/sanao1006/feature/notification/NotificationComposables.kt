@@ -39,7 +39,7 @@ import me.sanao1006.core.model.notes.Visibility
 import me.sanao1006.core.model.uistate.NotificationUiStateObject
 import me.sanao1006.core.ui.Host
 import me.sanao1006.core.ui.NoteId
-import me.sanao1006.core.ui.TimelineItem
+import me.sanao1006.core.ui.TimelineItemSection
 import me.sanao1006.core.ui.Uri
 import me.sanao1006.core.ui.UserId
 import me.sanao1006.core.ui.Username
@@ -91,7 +91,7 @@ fun NotificationColumn(
                         }
                         Spacer(modifier = Modifier.height(4.dp))
 
-                        TimelineItem(
+                        TimelineItemSection(
                             modifier = Modifier
                                 .padding(
                                     start = 16.dp,

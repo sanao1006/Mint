@@ -65,7 +65,7 @@ fun TimelineColumn(
     ) {
         itemsIndexed(timelineItems) { index, it ->
             it?.let { timelineUiState ->
-                TimelineItem(
+                TimelineItemSection(
                     modifier = Modifier
                         .padding(
                             top = if (index == 0) {
@@ -102,7 +102,7 @@ fun TimelineColumn(
 }
 
 @Composable
-fun TimelineItem(
+fun TimelineItemSection(
     modifier: Modifier = Modifier,
     onIconClick: (String, String?, String?) -> Unit,
     onReplyClick: () -> Unit,
@@ -125,7 +125,7 @@ fun TimelineItem(
         Spacer(modifier = Modifier.height(8.dp))
         val canRenote =
             timelineItem.visibility == Visibility.PUBLIC ||
-                timelineItem.visibility == Visibility.HOME
+                    timelineItem.visibility == Visibility.HOME
         TimelineActionRow(
             canRenote = canRenote,
             modifier = Modifier.fillMaxWidth(),
@@ -324,7 +324,7 @@ private fun TimelineActionRow(
 @PreviewLightDark
 @Composable
 fun PreviewTimeLineItem() {
-    TimelineItem(
+    TimelineItemSection(
         timelineItem = TimelineItem(
             user = User(
                 id = "1",
