@@ -185,73 +185,11 @@ private fun NotificationSectionReaction(
             reactionsEmojis = notificationUiState.timelineItem.reactionsEmojis
         )
         Spacer(modifier = Modifier.height(4.dp))
-        Row(modifier = Modifier.fillMaxWidth()) {
-            Image(
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(shape = CircleShape)
-                    .clickable {
-                        onIconClick(
-                            notificationUiState.user.id,
-                            notificationUiState.user.username,
-                            notificationUiState.user.host
-                        )
-                    },
-                painter = rememberAsyncImagePainter(notificationUiState.user.avatarUrl),
-                contentDescription = null,
-                contentScale = ContentScale.Crop
-            )
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-            ) {
-                Text(
-                    text = notificationUiState.user.name ?: notificationUiState.user.username,
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-
-                val host = if (notificationUiState.user.host.isNullOrEmpty()) {
-                    null
-                } else {
-                    "@${notificationUiState.user.host}"
-                }
-                Text(
-                    text = "@${notificationUiState.user.username}$host",
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = getRelativeTimeString(context, notificationUiState.createdAt),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = LocalMintColors.current.onBackground
-                )
-
-                when (notificationUiState.timelineItem.visibility) {
-                    Visibility.PUBLIC -> {}
-                    else -> {
-                        Icon(
-                            modifier = Modifier.size(20.dp),
-                            painter = painterResource(
-                                when (notificationUiState.timelineItem.visibility) {
-                                    Visibility.HOME -> TablerIcons.Home
-                                    Visibility.FOLLOWERS -> TablerIcons.Lock
-                                    Visibility.SPECIFIED -> TablerIcons.Mail
-                                    else -> TablerIcons.Home
-                                }
-                            ),
-                            contentDescription = ""
-                        )
-                    }
-                }
-            }
-        }
+        UserInfoRow(
+            notificationUiState = notificationUiState,
+            context = context,
+            onIconClick = onIconClick
+        )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = notificationUiState.timelineItem.text,
@@ -269,98 +207,19 @@ private fun NotificationSectionOthers(
     modifier: Modifier = Modifier,
     onIconClick: (String, String?, String?) -> Unit
 ) {
+    NotificationIcon(NotificationType.get(notificationUiState.type))
     Column(modifier = modifier) {
-        Icon(
-            painter = painterResource(
-                when (NotificationType.get(notificationUiState.type)) {
-                    NotificationType.NOTES -> TablerIcons.FileText
-                    NotificationType.FOLLOWS -> TablerIcons.UserPlus
-                    NotificationType.RENOTE -> TablerIcons.Repeat
-                    NotificationType.POLL_ENDED -> TablerIcons.ChartInfographic
-                    NotificationType.RECEIVE_FOLLOW_REQUEST -> TablerIcons.UserCheck
-                    NotificationType.FOLLOW_REQUEST_ACCEPTED -> TablerIcons.UserCheck
-                    NotificationType.ROLE_ASSIGNED -> TablerIcons.UserCheck
-                    NotificationType.ACHIEVEMENT_EARNED -> TablerIcons.Trophy
-                    NotificationType.EXPORT_COMPLETED -> TablerIcons.Download
-                    NotificationType.LOGIN -> TablerIcons.Login
-                    NotificationType.APP -> TablerIcons.Apps
-                    NotificationType.TEST -> TablerIcons.TestPipe
-                    NotificationType.POLL_VOTE -> TablerIcons.ChartBar
-                    NotificationType.GROUP_INVITED -> TablerIcons.UserPlus
-                    else -> TablerIcons.ExclamationMark
-                }
-            ),
-            contentDescription = ""
-        )
         Spacer(modifier = Modifier.height(4.dp))
         Column(
             modifier = Modifier
                 .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
                 .fillMaxWidth()
         ) {
-            Row(modifier = Modifier.fillMaxWidth()) {
-                Image(
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clip(shape = CircleShape)
-                        .clickable {
-                            onIconClick(
-                                notificationUiState.user.id,
-                                notificationUiState.user.username,
-                                notificationUiState.user.host
-                            )
-                        },
-                    painter = rememberAsyncImagePainter(notificationUiState.user.avatarUrl),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop
-                )
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                ) {
-                    Text(
-                        text = notificationUiState.user.name ?: notificationUiState.user.username,
-                        style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.SemiBold,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-
-                    val host = if (notificationUiState.user.host.isNullOrEmpty()) {
-                        null
-                    } else {
-                        "@${notificationUiState.user.host}"
-                    }
-                    Text(text = "@${notificationUiState.user.username}$host")
-                }
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = getRelativeTimeString(context, notificationUiState.createdAt),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = LocalMintColors.current.onBackground
-                    )
-
-                    when (notificationUiState.timelineItem.visibility) {
-                        Visibility.PUBLIC -> {}
-                        else -> {
-                            Icon(
-                                modifier = Modifier.size(20.dp),
-                                painter = painterResource(
-                                    when (notificationUiState.timelineItem.visibility) {
-                                        Visibility.HOME -> TablerIcons.Home
-                                        Visibility.FOLLOWERS -> TablerIcons.Lock
-                                        Visibility.SPECIFIED -> TablerIcons.Mail
-                                        else -> TablerIcons.Home
-                                    }
-                                ),
-                                contentDescription = ""
-                            )
-                        }
-                    }
-                }
-            }
+            UserInfoRow(
+                notificationUiState = notificationUiState,
+                context = context,
+                onIconClick = onIconClick
+            )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = notificationUiState.timelineItem.text,
@@ -368,6 +227,79 @@ private fun NotificationSectionOthers(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
+        }
+    }
+}
+
+@Composable
+private fun UserInfoRow(
+    notificationUiState: NotificationUiStateObject,
+    context: Context,
+    modifier: Modifier = Modifier,
+    onIconClick: (String, String?, String?) -> Unit
+) {
+    Row(modifier = modifier.fillMaxWidth()) {
+        Image(
+            modifier = Modifier
+                .size(40.dp)
+                .clip(shape = CircleShape)
+                .clickable {
+                    onIconClick(
+                        notificationUiState.user.id,
+                        notificationUiState.user.username,
+                        notificationUiState.user.host
+                    )
+                },
+            painter = rememberAsyncImagePainter(notificationUiState.user.avatarUrl),
+            contentDescription = null,
+            contentScale = ContentScale.Crop
+        )
+
+        Spacer(modifier = Modifier.width(8.dp))
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+        ) {
+            Text(
+                text = notificationUiState.user.name ?: notificationUiState.user.username,
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.SemiBold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+
+            val host = if (notificationUiState.user.host.isNullOrEmpty()) {
+                null
+            } else {
+                "@${notificationUiState.user.host}"
+            }
+            Text(text = "@${notificationUiState.user.username}$host")
+        }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = getRelativeTimeString(context, notificationUiState.createdAt),
+                style = MaterialTheme.typography.bodyMedium,
+                color = LocalMintColors.current.onBackground
+            )
+
+            when (notificationUiState.timelineItem.visibility) {
+                Visibility.PUBLIC -> {}
+                else -> {
+                    Icon(
+                        modifier = Modifier.size(20.dp),
+                        painter = painterResource(
+                            when (notificationUiState.timelineItem.visibility) {
+                                Visibility.HOME -> TablerIcons.Home
+                                Visibility.FOLLOWERS -> TablerIcons.Lock
+                                Visibility.SPECIFIED -> TablerIcons.Mail
+                                else -> TablerIcons.Home
+                            }
+                        ),
+                        contentDescription = ""
+                    )
+                }
+            }
         }
     }
 }
@@ -395,4 +327,30 @@ private fun ReactionItem(reactions: JsonObject?, reactionsEmojis: JsonObject?) {
             modifier = Modifier.padding(start = 4.dp)
         )
     }
+}
+
+@Composable
+private fun NotificationIcon(notificationType: NotificationType) {
+    Icon(
+        painter = painterResource(
+            when (notificationType) {
+                NotificationType.NOTES -> TablerIcons.FileText
+                NotificationType.FOLLOWS -> TablerIcons.UserPlus
+                NotificationType.RENOTE -> TablerIcons.Repeat
+                NotificationType.POLL_ENDED -> TablerIcons.ChartInfographic
+                NotificationType.RECEIVE_FOLLOW_REQUEST -> TablerIcons.UserCheck
+                NotificationType.FOLLOW_REQUEST_ACCEPTED -> TablerIcons.UserCheck
+                NotificationType.ROLE_ASSIGNED -> TablerIcons.UserCheck
+                NotificationType.ACHIEVEMENT_EARNED -> TablerIcons.Trophy
+                NotificationType.EXPORT_COMPLETED -> TablerIcons.Download
+                NotificationType.LOGIN -> TablerIcons.Login
+                NotificationType.APP -> TablerIcons.Apps
+                NotificationType.TEST -> TablerIcons.TestPipe
+                NotificationType.POLL_VOTE -> TablerIcons.ChartBar
+                NotificationType.GROUP_INVITED -> TablerIcons.UserPlus
+                else -> TablerIcons.ExclamationMark
+            }
+        ),
+        contentDescription = ""
+    )
 }
