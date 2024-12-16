@@ -82,16 +82,8 @@ fun NotificationColumn(
                         )
                     }
 
-                    NotificationType.REACTION -> {
-                        NotificationSectionReaction(
-                            notificationUiState = it,
-                            context = context,
-                            onIconClick = onIconClick
-                        )
-                    }
-
                     else -> {
-                        NotificationSectionOthers(
+                        NotificationSectionItem(
                             notificationUiState = it,
                             context = context,
                             onIconClick = onIconClick
@@ -173,13 +165,25 @@ private fun NotificationSectionMessage(
 }
 
 @Composable
-private fun NotificationSectionReaction(
+private fun NotificationSectionItem(
     notificationUiState: NotificationUiStateObject,
     context: Context,
     modifier: Modifier = Modifier,
     onIconClick: (String, String?, String?) -> Unit
 ) {
     Column(modifier = modifier) {
+        when (NotificationType.get(notificationUiState.type)) {
+            NotificationType.REACTION -> {
+                ReactionItem(
+                    reactions = notificationUiState.timelineItem.reactions,
+                    reactionsEmojis = notificationUiState.timelineItem.reactionsEmojis
+                )
+            }
+
+            else -> {
+                NotificationIcon(notificationType = NotificationType.get(notificationUiState.type))
+            }
+        }
         ReactionItem(
             reactions = notificationUiState.timelineItem.reactions,
             reactionsEmojis = notificationUiState.timelineItem.reactionsEmojis
@@ -197,37 +201,6 @@ private fun NotificationSectionReaction(
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
-    }
-}
-
-@Composable
-private fun NotificationSectionOthers(
-    notificationUiState: NotificationUiStateObject,
-    context: Context,
-    modifier: Modifier = Modifier,
-    onIconClick: (String, String?, String?) -> Unit
-) {
-    NotificationIcon(NotificationType.get(notificationUiState.type))
-    Column(modifier = modifier) {
-        Spacer(modifier = Modifier.height(4.dp))
-        Column(
-            modifier = Modifier
-                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
-                .fillMaxWidth()
-        ) {
-            UserInfoRow(
-                notificationUiState = notificationUiState,
-                context = context,
-                onIconClick = onIconClick
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = notificationUiState.timelineItem.text,
-                style = MaterialTheme.typography.bodyMedium,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
     }
 }
 
