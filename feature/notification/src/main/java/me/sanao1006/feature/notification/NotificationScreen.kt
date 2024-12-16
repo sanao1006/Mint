@@ -99,7 +99,8 @@ fun NotificationScreenUi(state: NotificationScreen.State, modifier: Modifier) {
 }
 
 @OptIn(
-    ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class,
+    ExperimentalMaterial3Api::class,
+    ExperimentalMaterial3ExpressiveApi::class,
     ExperimentalMaterialApi::class
 )
 @Composable

@@ -2,8 +2,6 @@ package me.sanao1006.screens
 
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshState
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.screen.Screen
@@ -18,7 +16,8 @@ import me.sanao1006.screens.event.TimelineItemEvent
 
 @Parcelize
 data object NotificationScreen : Screen {
-    data class State @OptIn(ExperimentalMaterialApi::class) constructor(
+    @OptIn(ExperimentalMaterialApi::class)
+    data class State(
         val notificationUiState: NotificationUiState,
         val isSuccessCreateNote: Boolean?,
         val navigator: Navigator,
