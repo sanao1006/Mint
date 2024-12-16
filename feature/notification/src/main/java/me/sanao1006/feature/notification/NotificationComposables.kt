@@ -184,10 +184,6 @@ private fun NotificationSectionItem(
                 NotificationIcon(notificationType = NotificationType.get(notificationUiState.type))
             }
         }
-        ReactionItem(
-            reactions = notificationUiState.timelineItem.reactions,
-            reactionsEmojis = notificationUiState.timelineItem.reactionsEmojis
-        )
         Spacer(modifier = Modifier.height(4.dp))
         UserInfoRow(
             notificationUiState = notificationUiState,
