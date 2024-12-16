@@ -32,10 +32,12 @@ import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import coil3.compose.rememberAsyncImagePainter
 import ir.alirezaivaz.tablericons.TablerIcons
+import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import me.sanao1006.core.data.util.getRelativeTimeString
 import me.sanao1006.core.designsystem.LocalMintColors
 import me.sanao1006.core.model.notes.Visibility
+import me.sanao1006.core.model.requestbody.account.NotificationType
 import me.sanao1006.core.model.uistate.NotificationUiStateObject
 import me.sanao1006.core.ui.Host
 import me.sanao1006.core.ui.NoteId
@@ -60,169 +62,337 @@ fun NotificationColumn(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         itemsIndexed(notifications) { index, it ->
-            when (it.type) {
-                "reply", "mention" -> {
-                    Column {
-                        if (index == 0) {
-                            Spacer(modifier = Modifier.height(16.dp))
-                        }
-                        Row(modifier = Modifier.fillMaxWidth()) {
-                            Icon(
-                                modifier = Modifier.padding(start = 16.dp),
-                                painter = painterResource(
-                                    when (it.type) {
-                                        "reply" -> TablerIcons.ArrowBackUp
-                                        "mention" -> TablerIcons.At
-                                        else -> TablerIcons.ArrowBackUp
-                                    }
-                                ),
-                                contentDescription = ""
-                            )
-                            Spacer(modifier = Modifier.width(4.dp))
-
-                            Text(
-                                text = it.user.name ?: it.user.username,
-                                style = MaterialTheme.typography.bodyMedium,
-                                fontWeight = FontWeight.SemiBold,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                                modifier = Modifier.weight(1f)
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(4.dp))
-
-                        TimelineItemSection(
-                            modifier = Modifier
-                                .padding(
-                                    start = 16.dp,
-                                    end = 16.dp
-                                ),
-                            timelineItem = it.timelineItem,
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+            ) {
+                if (index == 0) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+                when (NotificationType.get(it.type)) {
+                    NotificationType.REPLY, NotificationType.MENTION, NotificationType.QUOTE -> {
+                        NotificationSectionMessage(
+                            notificationUiState = it,
                             onIconClick = onIconClick,
-                            onReplyClick = {
-                                if (it.user.username.isNotEmpty()) {
-                                    onReplyClick(it.id, it.user.username, it.user.host)
-                                }
-                            },
-                            onRepostClick = { onRepostClick(it.id) },
-                            onReactionClick = { onReactionClick(it.id) },
-                            onOptionClick = {
-                                onOptionClick(
-                                    it.id,
-                                    it.user.id,
-                                    it.user.username,
-                                    it.user.host,
-                                    it.timelineItem.uri
-                                )
-                            }
+                            onReplyClick = onReplyClick,
+                            onRepostClick = onRepostClick,
+                            onReactionClick = onReactionClick,
+                            onOptionClick = onOptionClick
                         )
                     }
-                }
 
-                else -> {
-                    Column(
-                        modifier = Modifier
-                            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
-                            .fillMaxWidth()
-                    ) {
-                        val re = it.timelineItem.reactions?.keys?.last().toString()
-                        val emoji =
-                            it.timelineItem.reactionsEmojis?.get(
-                                re.drop(1).dropLast(1)
-                            )?.jsonPrimitive?.content
+                    NotificationType.REACTION -> {
+                        NotificationSectionReaction(
+                            notificationUiState = it,
+                            context = context,
+                            onIconClick = onIconClick
+                        )
+                    }
 
-                        emoji?.let {
-                            AsyncImage(
-                                model = it,
-                                contentDescription = "",
-                                modifier = Modifier
-                                    .size(32.dp)
-                                    .padding(start = 4.dp),
-                                contentScale = ContentScale.Fit
-                            )
-                        } ?: run {
-                            Text(
-                                text = re,
-                                fontSize = 24.sp,
-                                modifier = Modifier.padding(start = 4.dp)
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Row(modifier = Modifier.fillMaxWidth()) {
-                            Image(
-                                modifier = Modifier
-                                    .size(40.dp)
-                                    .clip(shape = CircleShape)
-                                    .clickable {
-                                        onIconClick(
-                                            it.user.id,
-                                            it.user.username,
-                                            it.user.host
-                                        )
-                                    },
-                                painter = rememberAsyncImagePainter(it.user.avatarUrl),
-                                contentDescription = null,
-                                contentScale = ContentScale.Crop
-                            )
-
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .weight(1f)
-                            ) {
-                                Text(
-                                    text = it.user.name ?: it.user.username,
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    fontWeight = FontWeight.SemiBold,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                                )
-
-                                val host = if (it.user.host.isNullOrEmpty()) {
-                                    null
-                                } else {
-                                    "@${it.user.host}"
-                                }
-                                Text(text = "@${it.user.username}$host")
-                            }
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Text(
-                                    text = getRelativeTimeString(context, it.createdAt),
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = LocalMintColors.current.onBackground
-                                )
-
-                                when (it.timelineItem.visibility) {
-                                    Visibility.PUBLIC -> {}
-                                    else -> {
-                                        Icon(
-                                            modifier = Modifier.size(20.dp),
-                                            painter = painterResource(
-                                                when (it.timelineItem.visibility) {
-                                                    Visibility.HOME -> TablerIcons.Home
-                                                    Visibility.FOLLOWERS -> TablerIcons.Lock
-                                                    Visibility.SPECIFIED -> TablerIcons.Mail
-                                                    else -> TablerIcons.Home
-                                                }
-                                            ),
-                                            contentDescription = ""
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text(
-                            text = it.timelineItem.text,
-                            style = MaterialTheme.typography.bodyMedium,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
+                    else -> {
+                        NotificationSectionOthers(
+                            notificationUiState = it,
+                            context = context,
+                            onIconClick = onIconClick
                         )
                     }
                 }
             }
             HorizontalDivider()
         }
+    }
+}
+
+@Composable
+private fun NotificationSectionMessage(
+    notificationUiState: NotificationUiStateObject,
+    modifier: Modifier = Modifier,
+    onIconClick: (String, String?, String?) -> Unit,
+    onReplyClick: (NoteId, Username, Host?) -> Unit,
+    onRepostClick: (NoteId) -> Unit,
+    onReactionClick: (NoteId) -> Unit,
+    onOptionClick: (NoteId, UserId?, Username?, Host?, Uri) -> Unit
+) {
+    Column(modifier = modifier) {
+        Row(modifier = Modifier.fillMaxWidth()) {
+            Icon(
+                modifier = Modifier.padding(start = 16.dp),
+                painter = painterResource(
+                    when (NotificationType.get(notificationUiState.type)) {
+                        NotificationType.REPLY -> TablerIcons.ArrowBackUp
+                        NotificationType.MENTION -> TablerIcons.At
+                        else -> TablerIcons.ArrowBackUp
+                    }
+                ),
+                contentDescription = ""
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+
+            Text(
+                text = notificationUiState.user.name ?: notificationUiState.user.username,
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.SemiBold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(1f)
+            )
+        }
+        Spacer(modifier = Modifier.height(4.dp))
+
+        TimelineItemSection(
+            modifier = Modifier
+                .padding(
+                    start = 16.dp,
+                    end = 16.dp
+                ),
+            timelineItem = notificationUiState.timelineItem,
+            onIconClick = onIconClick,
+            onReplyClick = {
+                if (notificationUiState.user.username.isNotEmpty()) {
+                    onReplyClick(
+                        notificationUiState.id,
+                        notificationUiState.user.username,
+                        notificationUiState.user.host
+                    )
+                }
+            },
+            onRepostClick = { onRepostClick(notificationUiState.id) },
+            onReactionClick = { onReactionClick(notificationUiState.id) },
+            onOptionClick = {
+                onOptionClick(
+                    notificationUiState.id,
+                    notificationUiState.user.id,
+                    notificationUiState.user.username,
+                    notificationUiState.user.host,
+                    notificationUiState.timelineItem.uri
+                )
+            }
+        )
+    }
+}
+
+@Composable
+private fun NotificationSectionReaction(
+    notificationUiState: NotificationUiStateObject,
+    context: Context,
+    modifier: Modifier = Modifier,
+    onIconClick: (String, String?, String?) -> Unit
+) {
+    Column(modifier = modifier) {
+        ReactionItem(
+            reactions = notificationUiState.timelineItem.reactions,
+            reactionsEmojis = notificationUiState.timelineItem.reactionsEmojis
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Row(modifier = Modifier.fillMaxWidth()) {
+            Image(
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(shape = CircleShape)
+                    .clickable {
+                        onIconClick(
+                            notificationUiState.user.id,
+                            notificationUiState.user.username,
+                            notificationUiState.user.host
+                        )
+                    },
+                painter = rememberAsyncImagePainter(notificationUiState.user.avatarUrl),
+                contentDescription = null,
+                contentScale = ContentScale.Crop
+            )
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            ) {
+                Text(
+                    text = notificationUiState.user.name ?: notificationUiState.user.username,
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                val host = if (notificationUiState.user.host.isNullOrEmpty()) {
+                    null
+                } else {
+                    "@${notificationUiState.user.host}"
+                }
+                Text(
+                    text = "@${notificationUiState.user.username}$host",
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = getRelativeTimeString(context, notificationUiState.createdAt),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = LocalMintColors.current.onBackground
+                )
+
+                when (notificationUiState.timelineItem.visibility) {
+                    Visibility.PUBLIC -> {}
+                    else -> {
+                        Icon(
+                            modifier = Modifier.size(20.dp),
+                            painter = painterResource(
+                                when (notificationUiState.timelineItem.visibility) {
+                                    Visibility.HOME -> TablerIcons.Home
+                                    Visibility.FOLLOWERS -> TablerIcons.Lock
+                                    Visibility.SPECIFIED -> TablerIcons.Mail
+                                    else -> TablerIcons.Home
+                                }
+                            ),
+                            contentDescription = ""
+                        )
+                    }
+                }
+            }
+        }
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = notificationUiState.timelineItem.text,
+            style = MaterialTheme.typography.bodyMedium,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+    }
+}
+
+@Composable
+private fun NotificationSectionOthers(
+    notificationUiState: NotificationUiStateObject,
+    context: Context,
+    modifier: Modifier = Modifier,
+    onIconClick: (String, String?, String?) -> Unit
+) {
+    Column(modifier = modifier) {
+        Icon(
+            painter = painterResource(
+                when (NotificationType.get(notificationUiState.type)) {
+                    NotificationType.NOTES -> TablerIcons.FileText
+                    NotificationType.FOLLOWS -> TablerIcons.UserPlus
+                    NotificationType.RENOTE -> TablerIcons.Repeat
+                    NotificationType.POLL_ENDED -> TablerIcons.ChartInfographic
+                    NotificationType.RECEIVE_FOLLOW_REQUEST -> TablerIcons.UserCheck
+                    NotificationType.FOLLOW_REQUEST_ACCEPTED -> TablerIcons.UserCheck
+                    NotificationType.ROLE_ASSIGNED -> TablerIcons.UserCheck
+                    NotificationType.ACHIEVEMENT_EARNED -> TablerIcons.Trophy
+                    NotificationType.EXPORT_COMPLETED -> TablerIcons.Download
+                    NotificationType.LOGIN -> TablerIcons.Login
+                    NotificationType.APP -> TablerIcons.Apps
+                    NotificationType.TEST -> TablerIcons.TestPipe
+                    NotificationType.POLL_VOTE -> TablerIcons.ChartBar
+                    NotificationType.GROUP_INVITED -> TablerIcons.UserPlus
+                    else -> TablerIcons.ExclamationMark
+                }
+            ),
+            contentDescription = ""
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Column(
+            modifier = Modifier
+                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+                .fillMaxWidth()
+        ) {
+            Row(modifier = Modifier.fillMaxWidth()) {
+                Image(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(shape = CircleShape)
+                        .clickable {
+                            onIconClick(
+                                notificationUiState.user.id,
+                                notificationUiState.user.username,
+                                notificationUiState.user.host
+                            )
+                        },
+                    painter = rememberAsyncImagePainter(notificationUiState.user.avatarUrl),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop
+                )
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                ) {
+                    Text(
+                        text = notificationUiState.user.name ?: notificationUiState.user.username,
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+
+                    val host = if (notificationUiState.user.host.isNullOrEmpty()) {
+                        null
+                    } else {
+                        "@${notificationUiState.user.host}"
+                    }
+                    Text(text = "@${notificationUiState.user.username}$host")
+                }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = getRelativeTimeString(context, notificationUiState.createdAt),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = LocalMintColors.current.onBackground
+                    )
+
+                    when (notificationUiState.timelineItem.visibility) {
+                        Visibility.PUBLIC -> {}
+                        else -> {
+                            Icon(
+                                modifier = Modifier.size(20.dp),
+                                painter = painterResource(
+                                    when (notificationUiState.timelineItem.visibility) {
+                                        Visibility.HOME -> TablerIcons.Home
+                                        Visibility.FOLLOWERS -> TablerIcons.Lock
+                                        Visibility.SPECIFIED -> TablerIcons.Mail
+                                        else -> TablerIcons.Home
+                                    }
+                                ),
+                                contentDescription = ""
+                            )
+                        }
+                    }
+                }
+            }
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = notificationUiState.timelineItem.text,
+                style = MaterialTheme.typography.bodyMedium,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+    }
+}
+
+@Composable
+private fun ReactionItem(reactions: JsonObject?, reactionsEmojis: JsonObject?) {
+    val reaction = reactions?.keys?.last().toString()
+    val emoji = reactionsEmojis?.get(
+        reaction.drop(1).dropLast(1)
+    )?.jsonPrimitive?.content
+
+    emoji?.let {
+        AsyncImage(
+            model = it,
+            contentDescription = "",
+            modifier = Modifier
+                .size(32.dp)
+                .padding(start = 4.dp),
+            contentScale = ContentScale.Fit
+        )
+    } ?: run {
+        Text(
+            text = reaction,
+            fontSize = 24.sp,
+            modifier = Modifier.padding(start = 4.dp)
+        )
     }
 }

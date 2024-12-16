@@ -12,6 +12,32 @@ data class INotificationsRequestBody(
     val excludeTypes: List<ExcludeType> = emptyList()
 )
 
+enum class NotificationType(val value: String) {
+    NOTES("note"),
+    FOLLOWS("follow"),
+    MENTION("mention"),
+    REPLY("reply"),
+    RENOTE("renote"),
+    QUOTE("quote"),
+    REACTION("reaction"),
+    POLL_ENDED("pollEnded"),
+    RECEIVE_FOLLOW_REQUEST("receiveFollowRequest"),
+    FOLLOW_REQUEST_ACCEPTED("followRequestAccepted"),
+    ROLE_ASSIGNED("roleAssigned"),
+    ACHIEVEMENT_EARNED("achievementEarned"),
+    EXPORT_COMPLETED("exportCompleted"),
+    LOGIN("login"),
+    APP("app"),
+    TEST("test"),
+    POLL_VOTE("pollVote"),
+    GROUP_INVITED("groupInvited");
+
+    companion object {
+        fun get(value: String): NotificationType =
+            entries.first { it.value == value }
+    }
+}
+
 @Serializable
 enum class IncludeType(val value: String) {
     NOTES("note"),
