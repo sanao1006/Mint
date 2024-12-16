@@ -164,50 +164,65 @@ private fun NotificationScreenContent(
                     }
 
                     true -> {
-                        NotificationColumn(
-                            modifier = Modifier.fillMaxSize(),
-                            context = context,
-                            notifications = state.notificationUiState.notificationUiStateObjects,
-                            onIconClick = { id, username, host ->
-                                state.timelineEventSink(
-                                    TimelineItemEvent.OnTimelineItemIconClicked(
-                                        id,
-                                        username,
-                                        host
-                                    )
-                                )
-                            },
-                            onReplyClick = { id, user, host ->
-                                state.timelineEventSink(
-                                    TimelineItemEvent.OnTimelineItemReplyClicked(id, user, host)
-                                )
-                            },
-                            onRepostClick = { userId ->
-                                state.timelineEventSink(
-                                    TimelineItemEvent.OnTimelineItemRepostClicked(
-                                        userId
-                                    )
-                                )
-                            },
-                            onReactionClick = { userId ->
-                                state.timelineEventSink(
-                                    TimelineItemEvent.OnTimelineItemReactionClicked(
-                                        userId
-                                    )
-                                )
-                            },
-                            onOptionClick = { noteId, userId, host, username, uri ->
-                                state.timelineEventSink(
-                                    TimelineItemEvent.OnTimelineItemOptionClicked(
-                                        noteId,
-                                        userId,
-                                        host,
-                                        username,
-                                        uri
-                                    )
+                        if (state.notificationUiState.notificationUiStateObjects.isEmpty()) {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = stringResource(ResString.no_notification),
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                    style = MaterialTheme.typography.titleLarge
                                 )
                             }
-                        )
+                        } else {
+                            NotificationColumn(
+                                modifier = Modifier.fillMaxSize(),
+                                context = context,
+                                notifications = state
+                                    .notificationUiState
+                                    .notificationUiStateObjects,
+                                onIconClick = { id, username, host ->
+                                    state.timelineEventSink(
+                                        TimelineItemEvent.OnTimelineItemIconClicked(
+                                            id,
+                                            username,
+                                            host
+                                        )
+                                    )
+                                },
+                                onReplyClick = { id, user, host ->
+                                    state.timelineEventSink(
+                                        TimelineItemEvent.OnTimelineItemReplyClicked(id, user, host)
+                                    )
+                                },
+                                onRepostClick = { userId ->
+                                    state.timelineEventSink(
+                                        TimelineItemEvent.OnTimelineItemRepostClicked(
+                                            userId
+                                        )
+                                    )
+                                },
+                                onReactionClick = { userId ->
+                                    state.timelineEventSink(
+                                        TimelineItemEvent.OnTimelineItemReactionClicked(
+                                            userId
+                                        )
+                                    )
+                                },
+                                onOptionClick = { noteId, userId, host, username, uri ->
+                                    state.timelineEventSink(
+                                        TimelineItemEvent.OnTimelineItemOptionClicked(
+                                            noteId,
+                                            userId,
+                                            host,
+                                            username,
+                                            uri
+                                        )
+                                    )
+                                }
+                            )
+                        }
                     }
                 }
             }
