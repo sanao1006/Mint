@@ -6,7 +6,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ContainedLoadingIndicator
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -30,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.zIndex
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuitx.effects.LaunchedImpressionEffect
 import dagger.hilt.components.SingletonComponent
@@ -94,7 +98,10 @@ fun NotificationScreenUi(state: NotificationScreen.State, modifier: Modifier) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
+@OptIn(
+    ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class,
+    ExperimentalMaterialApi::class
+)
 @Composable
 private fun NotificationScreenContent(
     state: NotificationScreen.State,
@@ -126,8 +133,18 @@ private fun NotificationScreenContent(
     ) {
         Box(
             contentAlignment = Alignment.TopCenter,
-            modifier = Modifier.padding(it)
+            modifier = Modifier
+                .padding(it)
+                .pullRefresh(state = state.pullToRefreshState)
         ) {
+            PullRefreshIndicator(
+                refreshing = state.isRefreshed,
+                state = state.pullToRefreshState,
+                modifier = Modifier
+                    .zIndex(1f)
+                    .align(Alignment.TopCenter),
+                scale = true
+            )
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -138,7 +155,7 @@ private fun NotificationScreenContent(
                             modifier = Modifier.fillMaxSize(),
                             contentAlignment = Alignment.Center
                         ) {
-                            ContainedLoadingIndicator()
+                            CircularProgressIndicator()
                         }
                     }
 

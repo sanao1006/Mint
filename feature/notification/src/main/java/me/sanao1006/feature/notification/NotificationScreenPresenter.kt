@@ -1,11 +1,15 @@
 package me.sanao1006.feature.notification
 
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.foundation.rememberAnsweringNavigator
 import com.slack.circuit.retained.rememberRetained
@@ -16,6 +20,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.sanao1006.core.domain.home.CreateNotesUseCase
 import me.sanao1006.core.domain.home.UpdateAccountUseCase
@@ -40,6 +45,7 @@ class NotificationScreenPresenter @AssistedInject constructor(
     private val getNotificationsUseCase: GetNotificationsUseCase,
     private val createNotesUseCase: CreateNotesUseCase
 ) : Presenter<NotificationScreen.State> {
+    @OptIn(ExperimentalMaterialApi::class)
     @Composable
     override fun present(): NotificationScreen.State {
         var isSuccessCreateNote: Boolean? by rememberRetained { mutableStateOf(null) }
@@ -48,6 +54,7 @@ class NotificationScreenPresenter @AssistedInject constructor(
                 LoginUserInfo()
             )
         }
+
         val context = LocalContext.current
         val scope = rememberCoroutineScope()
         val nav = rememberAnsweringNavigator<NoteScreen.Result>(navigator) { result ->
@@ -58,6 +65,21 @@ class NotificationScreenPresenter @AssistedInject constructor(
             mutableStateOf(NotificationUiState())
         }
 
+        var isRefreshed by remember { mutableStateOf(false) }
+        val pullRefreshState = rememberPullRefreshState(
+            refreshing = isRefreshed,
+            onRefresh = {
+                scope.launch {
+                    isRefreshed = true
+                    notificationUiState = getNotificationsUseCase()
+                    delay(1500L)
+                    isRefreshed = false
+                }
+            },
+            refreshThreshold = 50.dp,
+            refreshingOffset = 50.dp
+        )
+
         LaunchedImpressionEffect(Unit) {
             loginUserInfo = updateMyAccountUseCase()
             notificationUiState = getNotificationsUseCase()
@@ -67,6 +89,8 @@ class NotificationScreenPresenter @AssistedInject constructor(
             isSuccessCreateNote = isSuccessCreateNote,
             navigator = navigator,
             drawerUserInfo = loginUserInfo,
+            pullToRefreshState = pullRefreshState,
+            isRefreshed = isRefreshed,
             timelineEventSink = { event ->
                 when (event) {
                     is TimelineItemEvent.OnTimelineItemIconClicked ->
