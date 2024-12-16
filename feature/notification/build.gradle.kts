@@ -12,6 +12,7 @@ dependencies {
     implementation(projects.core.data)
     implementation(projects.core.domain)
     implementation(projects.core.model)
+    implementation(projects.core.designsystem)
 }
 
 android.namespace = "me.sanao1006.feature.notification"

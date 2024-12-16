@@ -2,6 +2,7 @@ package me.sanao1006.core.model.notes
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import me.sanao1006.core.model.common.User
 
 @Serializable
 data class File(
@@ -24,7 +25,7 @@ data class File(
     @SerialName("name")
     val name: String = "",
     @SerialName("properties")
-    val properties: Properties? = Properties(),
+    val properties: Properties? = null,
     @SerialName("size")
     val size: Int = 0,
     @SerialName("thumbnailUrl")
@@ -34,7 +35,7 @@ data class File(
     @SerialName("url")
     val url: String = "",
     @SerialName("user")
-    val user: User? = User(),
+    val user: User? = null,
     @SerialName("userId")
     val userId: String? = null
 )

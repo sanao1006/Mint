@@ -49,4 +49,5 @@
     <string name="date_day_ago">%1$s 日前</string>
     <string name="date_month_ago">%1$s ヶ月前</string>
     <string name="date_year_ago">%1$s 年前</string>
+    <string name="no_notification">通知はありません</string>
 </resources>

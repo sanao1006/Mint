@@ -37,15 +37,11 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.compose.rememberAsyncImagePainter
 import ir.alirezaivaz.tablericons.TablerIcons
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
+import me.sanao1006.core.data.util.getRelativeTimeString
 import me.sanao1006.core.designsystem.LocalMintColors
+import me.sanao1006.core.model.common.User
 import me.sanao1006.core.model.notes.TimelineItem
-import me.sanao1006.core.model.notes.User
 import me.sanao1006.core.model.notes.Visibility
-import me.snao1006.res_value.ResString
 
 typealias NoteId = String
 typealias UserId = String
@@ -69,7 +65,7 @@ fun TimelineColumn(
     ) {
         itemsIndexed(timelineItems) { index, it ->
             it?.let { timelineUiState ->
-                TimelineItem(
+                TimelineItemSection(
                     modifier = Modifier
                         .padding(
                             top = if (index == 0) {
@@ -106,7 +102,7 @@ fun TimelineColumn(
 }
 
 @Composable
-private fun TimelineItem(
+fun TimelineItemSection(
     modifier: Modifier = Modifier,
     onIconClick: (String, String?, String?) -> Unit,
     onReplyClick: () -> Unit,
@@ -279,31 +275,8 @@ private fun InstanceInfoRow(
             style = MaterialTheme.typography.bodyMedium,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            color = LocalMintColors.current.background
+            color = Color.Black
         )
-    }
-}
-
-private fun getRelativeTimeString(context: Context, isoDateString: String): String {
-    val dateTime = Instant.parse(isoDateString).toLocalDateTime(TimeZone.currentSystemDefault())
-    val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-
-    val yearsBetween = now.year - dateTime.year
-    val monthsBetween = (now.year - dateTime.year) * 12 + (now.monthNumber - dateTime.monthNumber)
-    val daysBetween = now.date.dayOfYear - dateTime.date.dayOfYear
-    val hoursBetween = now.hour - dateTime.hour
-    val minutesBetween = now.minute - dateTime.minute
-    return when {
-        yearsBetween > 0 -> context.getString(ResString.date_year_ago, yearsBetween.toString())
-        monthsBetween > 0 -> context.getString(ResString.date_month_ago, monthsBetween.toString())
-        daysBetween > 0 -> context.getString(ResString.date_day_ago, daysBetween.toString())
-        hoursBetween > 0 -> context.getString(ResString.date_hour_ago, hoursBetween.toString())
-        minutesBetween > 0 -> context.getString(
-            ResString.date_minute_ago,
-            minutesBetween.toString()
-        )
-
-        else -> context.getString(ResString.date_now)
     }
 }
 
@@ -351,11 +324,14 @@ private fun TimelineActionRow(
 @PreviewLightDark
 @Composable
 fun PreviewTimeLineItem() {
-    TimelineItem(
+    TimelineItemSection(
         timelineItem = TimelineItem(
             user = User(
+                id = "1",
+                username = "sanao1006",
                 name = "sanao1006",
-                avatarUrl = ""
+                avatarUrl = "https://avatars.githubusercontent.com/u/20736526?v=4",
+                host = "misskey.io"
             ),
             text = "Hello, World!",
             id = "1",

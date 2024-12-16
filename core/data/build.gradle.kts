@@ -9,4 +9,6 @@ plugins {
 dependencies {
     implementation(projects.core.network)
     implementation(projects.core.model)
+    implementation(projects.core.resValues)
+    implementation(libs.kotlinx.datetime)
 }

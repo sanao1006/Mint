@@ -1,7 +1,7 @@
 package me.sanao1006.core.model.uistate
 
-import me.sanao1006.core.model.notes.Field
-import me.sanao1006.core.model.notes.User
+import me.sanao1006.core.model.common.Field
+import me.sanao1006.core.model.common.User
 
 sealed interface UserScreenUiState {
     data object Loading : UserScreenUiState
@@ -27,9 +27,9 @@ fun User.toUserScreenUiState() = UserScreenUiState.Success(
     avatarUrl = avatarUrl,
     bannerUrl = bannerUrl,
     host = host,
-    followingCount = followingCount,
-    followersCount = followersCount,
+    followingCount = followingCount ?: 0,
+    followersCount = followersCount ?: 0,
     description = description,
     fields = fields,
-    notesCount = notesCount
+    notesCount = notesCount ?: 0
 )

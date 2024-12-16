@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Reactions(
+data class ReactionEmojis(
     @SerialName("ANY_ADDITIONAL_PROPERTY")
-    val aNYADDITIONALPROPERTY: Int = 0
+    val aNYADDITIONALPROPERTY: String
 )

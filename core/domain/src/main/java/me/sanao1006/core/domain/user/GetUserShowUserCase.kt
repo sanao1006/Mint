@@ -17,10 +17,12 @@ class GetUserShowUserCase @Inject constructor(
         isFromDrawer: Boolean,
         usersShowRequestBody: UsersShowRequestBody
     ): UserScreenUiState = try {
+        val response = accountRepository.i()
         if (isFromDrawer) {
-            accountRepository.i().toUserScreenUiState()
+            response.toUserScreenUiState()
         } else {
-            usersRepository.getUsersShow(usersShowRequestBody).toUserScreenUiState()
+            val user = usersRepository.getUsersShow(usersShowRequestBody)
+            user.toUserScreenUiState()
         }
     } catch (e: Exception) {
         UserScreenUiState.Failed

@@ -47,7 +47,7 @@ import coil3.gif.GifDecoder
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
-import me.sanao1006.core.model.notes.Field
+import me.sanao1006.core.model.common.Field
 import me.sanao1006.core.model.uistate.UserScreenUiState
 import me.sanao1006.screens.UserScreen
 import me.snao1006.res_value.ResString

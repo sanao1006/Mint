@@ -2,14 +2,14 @@ package me.sanao1006.core.model.response.notes
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonObject
+import me.sanao1006.core.model.common.User
 import me.sanao1006.core.model.notes.Channel
 import me.sanao1006.core.model.notes.File
 import me.sanao1006.core.model.notes.Poll
-import me.sanao1006.core.model.notes.Reactions
 import me.sanao1006.core.model.notes.Renote
 import me.sanao1006.core.model.notes.Reply
 import me.sanao1006.core.model.notes.TimelineItem
-import me.sanao1006.core.model.notes.User
 import me.sanao1006.core.model.notes.Visibility
 
 @Serializable
@@ -41,13 +41,15 @@ data class NotesTimelineResponse(
     @SerialName("myReaction")
     val myReaction: String? = null,
     @SerialName("poll")
-    val poll: Poll? = Poll(),
+    val poll: Poll? = null,
     @SerialName("reactionAcceptance")
     val reactionAcceptance: String? = null,
     @SerialName("reactionAndUserPairCache")
     val reactionAndUserPairCache: List<String> = listOf(),
     @SerialName("reactions")
-    val reactions: Reactions? = Reactions(),
+    val reactions: JsonObject? = null,
+    @SerialName("reactionEmojis")
+    val reactionEmojis: JsonObject? = null,
     @SerialName("renote")
     val renote: Renote? = Renote(),
     @SerialName("renoteCount")
@@ -69,7 +71,7 @@ data class NotesTimelineResponse(
     @SerialName("url")
     val url: String = "",
     @SerialName("user")
-    val user: User? = User(),
+    val user: User? = null,
     @SerialName("userId")
     val userId: String = "",
     @SerialName("visibility")
@@ -84,7 +86,9 @@ data class NotesTimelineResponse(
             id = id,
             visibility = Visibility.get(visibility),
             uri = uri,
-            createdAt = createdAt
+            createdAt = createdAt,
+            reactions = reactions,
+            reactionsEmojis = reactionEmojis
         )
     }
 }
