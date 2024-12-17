@@ -22,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,9 +43,8 @@ import me.snao1006.res_value.ResString
 @CircuitInject(LoginScreen::class, SingletonComponent::class)
 @Composable
 fun LoginScreenUi(state: LoginScreen.State, modifier: Modifier) {
-    var showIcon by remember { mutableStateOf(false) }
     LaunchedImpressionEffect(Unit) {
-        showIcon = true
+        state.eventSink(LoginScreen.Event.OnEnterLoginScreen)
     }
     Column(
         modifier = modifier
@@ -54,7 +54,7 @@ fun LoginScreenUi(state: LoginScreen.State, modifier: Modifier) {
         verticalArrangement = Arrangement.Center
     ) {
         AnimatedVisibility(
-            visible = showIcon,
+            visible = state.showIcon,
             enter = fadeIn(animationSpec = tween(durationMillis = 1500))
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -87,7 +87,7 @@ private fun LoginContent(state: LoginScreen.State, modifier: Modifier = Modifier
         Text(
             text = stringResource(ResString.enter_misskey_server_url),
             style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.secondary
+            color = MaterialTheme.colorScheme.onBackground
         )
         Spacer(modifier = Modifier.padding(6.dp))
         TextField(

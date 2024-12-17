@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.retained.rememberRetained
@@ -55,11 +56,13 @@ class LoginScreenPresenter @Inject constructor(
         var buttonEnabled by rememberRetained { mutableStateOf(false) }
         var authState by rememberRetained { mutableStateOf(AuthStateType.FIXED) }
         val scope = rememberCoroutineScope()
+        var showIcon by rememberSaveable { mutableStateOf(false) }
 
         return LoginScreen.State(
             domain = domain,
             buttonEnabled = buttonEnabled,
-            authState = authState
+            authState = authState,
+            showIcon = showIcon
         ) { event ->
             when (event) {
                 is LoginScreen.Event.OnTextChanged -> {
@@ -168,6 +171,9 @@ class LoginScreenPresenter @Inject constructor(
                                 authState = AuthStateType.FIXED
                             }
                     }
+                }
+                LoginScreen.Event.OnEnterLoginScreen -> {
+                    showIcon = true
                 }
             }
         }
