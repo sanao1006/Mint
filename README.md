@@ -1,7 +1,7 @@
 <h1 align="center">Mint</h1>
 
 <p align="center">
-<img src="./assset/ic_main_icon.webp">
+<img width="10%"  src="./assset/ic_main_icon.webp">
 <p align="center">🌿 A lightweight Misskey Android client built by Circuit ⚡️</p>
 </p>
 
