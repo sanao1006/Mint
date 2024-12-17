@@ -115,12 +115,16 @@ private fun LoginContent(state: LoginScreen.State, modifier: Modifier = Modifier
             if (state.authState == AuthStateType.WAITING) {
                 Text(
                     text = stringResource(ResString.login_re_authentication),
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             } else {
                 Text(
                     text = stringResource(ResString.login_authentication),
-                    color = Color.White
+                    color = if (state.buttonEnabled) {
+                        MaterialTheme.colorScheme.onPrimary
+                    } else {
+                        Color.Gray
+                    }
                 )
             }
         }
@@ -138,7 +142,11 @@ private fun LoginContent(state: LoginScreen.State, modifier: Modifier = Modifier
             ) {
                 Text(
                     text = stringResource(ResString.login),
-                    color = Color.White
+                    color = if (state.buttonEnabled) {
+                        MaterialTheme.colorScheme.onPrimary
+                    } else {
+                        Color.Gray
+                    }
                 )
             }
         }
