@@ -18,11 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -42,9 +38,8 @@ import me.snao1006.res_value.ResString
 @CircuitInject(LoginScreen::class, SingletonComponent::class)
 @Composable
 fun LoginScreenUi(state: LoginScreen.State, modifier: Modifier) {
-    var showIcon by remember { mutableStateOf(false) }
     LaunchedImpressionEffect(Unit) {
-        showIcon = true
+        state.eventSink(LoginScreen.Event.OnEnterLoginScreen)
     }
     Column(
         modifier = modifier
@@ -54,7 +49,7 @@ fun LoginScreenUi(state: LoginScreen.State, modifier: Modifier) {
         verticalArrangement = Arrangement.Center
     ) {
         AnimatedVisibility(
-            visible = showIcon,
+            visible = state.showIcon,
             enter = fadeIn(animationSpec = tween(durationMillis = 1500))
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -87,7 +82,7 @@ private fun LoginContent(state: LoginScreen.State, modifier: Modifier = Modifier
         Text(
             text = stringResource(ResString.enter_misskey_server_url),
             style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.secondary
+            color = MaterialTheme.colorScheme.onBackground
         )
         Spacer(modifier = Modifier.padding(6.dp))
         TextField(
@@ -120,12 +115,16 @@ private fun LoginContent(state: LoginScreen.State, modifier: Modifier = Modifier
             if (state.authState == AuthStateType.WAITING) {
                 Text(
                     text = stringResource(ResString.login_re_authentication),
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             } else {
                 Text(
                     text = stringResource(ResString.login_authentication),
-                    color = Color.White
+                    color = if (state.buttonEnabled) {
+                        MaterialTheme.colorScheme.onPrimary
+                    } else {
+                        Color.Gray
+                    }
                 )
             }
         }
@@ -143,7 +142,11 @@ private fun LoginContent(state: LoginScreen.State, modifier: Modifier = Modifier
             ) {
                 Text(
                     text = stringResource(ResString.login),
-                    color = Color.White
+                    color = if (state.buttonEnabled) {
+                        MaterialTheme.colorScheme.onPrimary
+                    } else {
+                        Color.Gray
+                    }
                 )
             }
         }

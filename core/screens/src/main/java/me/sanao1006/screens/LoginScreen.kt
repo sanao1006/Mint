@@ -12,6 +12,7 @@ data object LoginScreen : Screen {
     data class State(
         val domain: String = "",
         val error: String = "",
+        val showIcon: Boolean = false,
         val buttonEnabled: Boolean = false,
         val authState: AuthStateType = AuthStateType.FIXED,
         val eventSink: (Event) -> Unit
@@ -21,6 +22,7 @@ data object LoginScreen : Screen {
         data class OnTextChanged(val text: String) : Event()
         data class OnButtonClicked(val scope: CoroutineScope, val context: Context) : Event()
         data class OnAuthButtonClicked(val scope: CoroutineScope, val context: Context) : Event()
+        data object OnEnterLoginScreen : Event()
     }
 }
 
