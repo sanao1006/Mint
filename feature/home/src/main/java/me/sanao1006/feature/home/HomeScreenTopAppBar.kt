@@ -14,6 +14,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import ir.alirezaivaz.tablericons.TablerIcons
 import me.sanao1006.core.ui.modifier.bottomBorder
+import me.sanao1006.feature.home.TopAppBarTimelineState.values
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,8 +53,8 @@ internal fun HomeScreenTopAppBar(
                             painter = painterResource(
                                 when (state) {
                                     TopAppBarTimelineState.HOME -> TablerIcons.Home
-                                    TopAppBarTimelineState.SOCIAL -> TablerIcons.Planet
-                                    TopAppBarTimelineState.GLOBAL -> TablerIcons.Universe
+                                    TopAppBarTimelineState.SOCIAL -> TablerIcons.Universe
+                                    TopAppBarTimelineState.GLOBAL -> TablerIcons.Whirl
                                 }
                             ),
                             contentDescription = state.name
