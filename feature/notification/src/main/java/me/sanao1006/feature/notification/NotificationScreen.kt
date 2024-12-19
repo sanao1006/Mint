@@ -210,13 +210,14 @@ private fun NotificationScreenContent(
                                         )
                                     )
                                 },
-                                onOptionClick = { noteId, userId, host, username, uri ->
+                                onOptionClick = { noteId, userId, host, username, text, uri ->
                                     state.timelineEventSink(
                                         TimelineItemEvent.OnTimelineItemOptionClicked(
                                             noteId,
                                             userId,
                                             host,
                                             username,
+                                            text,
                                             uri
                                         )
                                     )
@@ -264,7 +265,7 @@ private fun NotificationScreenContent(
                         OptionActionIcon.Copy -> {
                             state.timelineEventSink(
                                 TimelineItemEvent.OnCopyClicked(
-                                    state.notificationUiState.selectedUserId ?: ""
+                                    state.notificationUiState.selectedNoteText ?: ""
                                 )
                             )
                         }

@@ -41,8 +41,9 @@ import me.sanao1006.core.model.requestbody.account.NotificationType
 import me.sanao1006.core.model.uistate.NotificationUiStateObject
 import me.sanao1006.core.ui.Host
 import me.sanao1006.core.ui.NoteId
+import me.sanao1006.core.ui.NoteText
+import me.sanao1006.core.ui.NoteUri
 import me.sanao1006.core.ui.TimelineItemSection
-import me.sanao1006.core.ui.Uri
 import me.sanao1006.core.ui.UserId
 import me.sanao1006.core.ui.Username
 
@@ -55,7 +56,7 @@ fun NotificationColumn(
     onReplyClick: (NoteId, Username, Host?) -> Unit,
     onRepostClick: (NoteId) -> Unit,
     onReactionClick: (NoteId) -> Unit,
-    onOptionClick: (NoteId, UserId?, Username?, Host?, Uri) -> Unit
+    onOptionClick: (NoteId, UserId?, Username?, Host?, NoteText, NoteUri) -> Unit
 ) {
     LazyColumn(
         modifier = modifier,
@@ -104,7 +105,7 @@ private fun NotificationSectionMessage(
     onReplyClick: (NoteId, Username, Host?) -> Unit,
     onRepostClick: (NoteId) -> Unit,
     onReactionClick: (NoteId) -> Unit,
-    onOptionClick: (NoteId, UserId?, Username?, Host?, Uri) -> Unit
+    onOptionClick: (NoteId, UserId?, Username?, Host?, NoteText, NoteUri) -> Unit
 ) {
     Column(modifier = modifier) {
         Row(modifier = Modifier.fillMaxWidth()) {
@@ -157,6 +158,7 @@ private fun NotificationSectionMessage(
                     notificationUiState.user.id,
                     notificationUiState.user.username,
                     notificationUiState.user.host,
+                    notificationUiState.timelineItem.text,
                     notificationUiState.timelineItem.uri
                 )
             }

@@ -195,13 +195,14 @@ private fun HomeScreenUiContent(
                                 )
                             )
                         },
-                        onOptionClick = { noteId, userId, host, username, uri ->
+                        onOptionClick = { noteId, userId, host, username, text, uri ->
                             state.timelineEventSink(
                                 TimelineItemEvent.OnTimelineItemOptionClicked(
                                     noteId,
                                     userId,
                                     host,
                                     username,
+                                    text,
                                     uri
                                 )
                             )
@@ -246,7 +247,7 @@ private fun HomeScreenUiContent(
                             OptionActionIcon.Copy -> {
                                 state.timelineEventSink(
                                     TimelineItemEvent.OnCopyClicked(
-                                        state.timelineUiState.selectedUserId ?: ""
+                                        state.timelineUiState.selectedNoteText ?: ""
                                     )
                                 )
                             }
