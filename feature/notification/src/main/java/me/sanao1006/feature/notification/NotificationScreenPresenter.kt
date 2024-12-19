@@ -150,6 +150,7 @@ class NotificationScreenPresenter @AssistedInject constructor(
 
                     is TimelineItemEvent.OnCopyLinkClicked -> {
                         notificationUiState = notificationUiState.copy(showBottomSheet = false)
+                        clipboardManager.setText(AnnotatedString(event.link))
                     }
 
                     is TimelineItemEvent.OnShareClicked -> {

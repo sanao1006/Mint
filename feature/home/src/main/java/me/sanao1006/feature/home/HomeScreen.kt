@@ -255,7 +255,7 @@ private fun HomeScreenUiContent(
                             OptionActionIcon.CopyLink -> {
                                 state.timelineEventSink(
                                     TimelineItemEvent.OnCopyLinkClicked(
-                                        state.timelineUiState.selectedUserId ?: ""
+                                        state.timelineUiState.selectedNoteLink ?: ""
                                     )
                                 )
                             }

@@ -132,7 +132,8 @@ class HomeScreenPresenter @AssistedInject constructor(
                                 showBottomSheet = true,
                                 timelineAction = TimelineItemAction.Option,
                                 selectedUserId = event.id,
-                                selectedNoteText = event.text
+                                selectedNoteText = event.text,
+                                selectedNoteLink = event.uri
                             )
                     }
 
@@ -167,6 +168,7 @@ class HomeScreenPresenter @AssistedInject constructor(
 
                     is TimelineItemEvent.OnCopyLinkClicked -> {
                         timelineUiState = timelineUiState.copy(showBottomSheet = false)
+                        clipBoardManager.setText(AnnotatedString(event.link))
                     }
 
                     is TimelineItemEvent.OnShareClicked -> {

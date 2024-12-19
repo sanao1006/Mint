@@ -273,7 +273,7 @@ private fun NotificationScreenContent(
                         OptionActionIcon.CopyLink -> {
                             state.timelineEventSink(
                                 TimelineItemEvent.OnCopyLinkClicked(
-                                    state.notificationUiState.selectedUserId ?: ""
+                                    state.notificationUiState.selectedNoteLink ?: ""
                                 )
                             )
                         }
