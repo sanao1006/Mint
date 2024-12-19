@@ -8,7 +8,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.foundation.rememberAnsweringNavigator
@@ -48,6 +50,7 @@ class NotificationScreenPresenter @AssistedInject constructor(
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     override fun present(): NotificationScreen.State {
+        val clipboardManager = LocalClipboardManager.current
         var isSuccessCreateNote: Boolean? by rememberRetained { mutableStateOf(null) }
         var loginUserInfo: LoginUserInfo by rememberRetained {
             mutableStateOf(
@@ -142,6 +145,7 @@ class NotificationScreenPresenter @AssistedInject constructor(
 
                     is TimelineItemEvent.OnCopyClicked -> {
                         notificationUiState = notificationUiState.copy(showBottomSheet = false)
+                        clipboardManager.setText(AnnotatedString(event.text))
                     }
 
                     is TimelineItemEvent.OnCopyLinkClicked -> {

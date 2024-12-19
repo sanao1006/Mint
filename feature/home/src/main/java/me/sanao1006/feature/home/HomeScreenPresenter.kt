@@ -160,7 +160,7 @@ class HomeScreenPresenter @AssistedInject constructor(
 
                     is TimelineItemEvent.OnCopyClicked -> {
                         timelineUiState = timelineUiState.copy(
-                            showBottomSheet = false,
+                            showBottomSheet = false
                         )
                         clipBoardManager.setText(AnnotatedString(event.text))
                     }
@@ -187,7 +187,7 @@ class HomeScreenPresenter @AssistedInject constructor(
                     timelineType = TimelineType.LOCAL
 
                 HomeScreen.Event.TimelineEvent.OnSocialTimelineClicked
-                    -> timelineType = TimelineType.SOCIAL
+                -> timelineType = TimelineType.SOCIAL
 
                 HomeScreen.Event.TimelineEvent.OnGlobalTimelineClicked ->
                     timelineType = TimelineType.GLOBAL
