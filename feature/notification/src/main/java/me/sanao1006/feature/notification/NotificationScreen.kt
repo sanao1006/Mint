@@ -281,7 +281,7 @@ private fun NotificationScreenContent(
                         OptionActionIcon.Share -> {
                             state.timelineEventSink(
                                 TimelineItemEvent.OnShareClicked(
-                                    state.notificationUiState.selectedUserId ?: ""
+                                    state.notificationUiState.selectedNoteLink ?: ""
                                 )
                             )
                         }

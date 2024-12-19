@@ -1,5 +1,6 @@
 package me.sanao1006.feature.notification
 
+import android.content.Intent
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
@@ -155,6 +156,12 @@ class NotificationScreenPresenter @AssistedInject constructor(
 
                     is TimelineItemEvent.OnShareClicked -> {
                         notificationUiState = notificationUiState.copy(showBottomSheet = false)
+                        val sendIntent = Intent().apply {
+                            action = Intent.ACTION_SEND
+                            putExtra(Intent.EXTRA_TEXT, event.link)
+                            type = "text/plain"
+                        }
+                        Intent.createChooser(sendIntent, null).also { context.startActivity(it) }
                     }
 
                     is TimelineItemEvent.OnFavoriteClicked -> {

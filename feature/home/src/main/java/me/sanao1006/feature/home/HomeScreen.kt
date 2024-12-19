@@ -263,7 +263,7 @@ private fun HomeScreenUiContent(
                             OptionActionIcon.Share -> {
                                 state.timelineEventSink(
                                     TimelineItemEvent.OnShareClicked(
-                                        state.timelineUiState.selectedUserId ?: ""
+                                        state.timelineUiState.selectedNoteLink ?: ""
                                     )
                                 )
                             }
