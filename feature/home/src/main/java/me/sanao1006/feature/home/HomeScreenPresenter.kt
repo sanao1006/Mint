@@ -1,5 +1,6 @@
 package me.sanao1006.feature.home
 
+import android.content.Intent
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
@@ -173,6 +174,12 @@ class HomeScreenPresenter @AssistedInject constructor(
 
                     is TimelineItemEvent.OnShareClicked -> {
                         timelineUiState = timelineUiState.copy(showBottomSheet = false)
+                        val sendIntent = Intent().apply {
+                            action = Intent.ACTION_SEND
+                            putExtra(Intent.EXTRA_TEXT, event.link)
+                            type = "text/plain"
+                        }
+                        Intent.createChooser(sendIntent, null).also { context.startActivity(it) }
                     }
 
                     is TimelineItemEvent.OnFavoriteClicked -> {
