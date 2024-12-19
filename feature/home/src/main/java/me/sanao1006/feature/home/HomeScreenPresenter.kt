@@ -8,7 +8,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.foundation.rememberAnsweringNavigator
@@ -50,6 +52,7 @@ class HomeScreenPresenter @AssistedInject constructor(
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     override fun present(): HomeScreen.State {
+        val clipBoardManager = LocalClipboardManager.current
         var isSuccessCreateNote: Boolean? by rememberRetained { mutableStateOf(null) }
         var loginUserInfo: LoginUserInfo by rememberRetained {
             mutableStateOf(
@@ -128,7 +131,9 @@ class HomeScreenPresenter @AssistedInject constructor(
                             timelineUiState.copy(
                                 showBottomSheet = true,
                                 timelineAction = TimelineItemAction.Option,
-                                selectedUserId = event.id
+                                selectedUserId = event.id,
+                                selectedNoteText = event.text,
+                                selectedNoteLink = event.uri
                             )
                     }
 
@@ -155,11 +160,15 @@ class HomeScreenPresenter @AssistedInject constructor(
                     }
 
                     is TimelineItemEvent.OnCopyClicked -> {
-                        timelineUiState = timelineUiState.copy(showBottomSheet = false)
+                        timelineUiState = timelineUiState.copy(
+                            showBottomSheet = false
+                        )
+                        clipBoardManager.setText(AnnotatedString(event.text))
                     }
 
                     is TimelineItemEvent.OnCopyLinkClicked -> {
                         timelineUiState = timelineUiState.copy(showBottomSheet = false)
+                        clipBoardManager.setText(AnnotatedString(event.link))
                     }
 
                     is TimelineItemEvent.OnShareClicked -> {

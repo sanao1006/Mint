@@ -17,8 +17,8 @@ data class NotificationUiState(
 data class NotificationUiStateObject(
     val id: String,
     val type: String,
-    val user: User,
-    val userId: String,
+    val user: User? = null,
+    val userId: String? = null,
     val createdAt: String,
-    val timelineItem: TimelineItem
+    val timelineItem: TimelineItem? = null
 )

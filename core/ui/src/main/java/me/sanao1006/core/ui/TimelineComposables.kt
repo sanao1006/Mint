@@ -47,7 +47,8 @@ typealias NoteId = String
 typealias UserId = String
 typealias Username = String
 typealias Host = String
-typealias Uri = String
+typealias NoteText = String
+typealias NoteUri = String
 
 @Composable
 fun TimelineColumn(
@@ -57,7 +58,7 @@ fun TimelineColumn(
     onReplyClick: (NoteId, Username, Host?) -> Unit,
     onRepostClick: (NoteId) -> Unit,
     onReactionClick: (NoteId) -> Unit,
-    onOptionClick: (NoteId, UserId?, Username?, Host?, Uri) -> Unit
+    onOptionClick: (NoteId, UserId?, Username?, Host?, NoteText, NoteUri) -> Unit
 ) {
     LazyColumn(
         modifier = modifier,
@@ -91,6 +92,7 @@ fun TimelineColumn(
                             it.user?.id,
                             it.user?.username,
                             it.user?.host,
+                            it.text,
                             it.uri
                         )
                     }

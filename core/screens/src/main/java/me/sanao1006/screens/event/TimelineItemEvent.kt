@@ -26,7 +26,8 @@ sealed class TimelineItemEvent : CircuitUiEvent {
         val userId: String?,
         val host: String?,
         val username: String?,
-        val text: String
+        val text: String,
+        val uri: String
     ) : TimelineItemEvent()
 
     data class OnRenoteClicked(

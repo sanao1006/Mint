@@ -36,13 +36,16 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import me.sanao1006.core.data.util.getRelativeTimeString
 import me.sanao1006.core.designsystem.LocalMintColors
+import me.sanao1006.core.model.common.User
+import me.sanao1006.core.model.notes.TimelineItem
 import me.sanao1006.core.model.notes.Visibility
 import me.sanao1006.core.model.requestbody.account.NotificationType
 import me.sanao1006.core.model.uistate.NotificationUiStateObject
 import me.sanao1006.core.ui.Host
 import me.sanao1006.core.ui.NoteId
+import me.sanao1006.core.ui.NoteText
+import me.sanao1006.core.ui.NoteUri
 import me.sanao1006.core.ui.TimelineItemSection
-import me.sanao1006.core.ui.Uri
 import me.sanao1006.core.ui.UserId
 import me.sanao1006.core.ui.Username
 
@@ -55,7 +58,7 @@ fun NotificationColumn(
     onReplyClick: (NoteId, Username, Host?) -> Unit,
     onRepostClick: (NoteId) -> Unit,
     onReactionClick: (NoteId) -> Unit,
-    onOptionClick: (NoteId, UserId?, Username?, Host?, Uri) -> Unit
+    onOptionClick: (NoteId, UserId?, Username?, Host?, NoteText, NoteUri) -> Unit
 ) {
     LazyColumn(
         modifier = modifier,
@@ -104,7 +107,7 @@ private fun NotificationSectionMessage(
     onReplyClick: (NoteId, Username, Host?) -> Unit,
     onRepostClick: (NoteId) -> Unit,
     onReactionClick: (NoteId) -> Unit,
-    onOptionClick: (NoteId, UserId?, Username?, Host?, Uri) -> Unit
+    onOptionClick: (NoteId, UserId?, Username?, Host?, NoteText, NoteUri) -> Unit
 ) {
     Column(modifier = modifier) {
         Row(modifier = Modifier.fillMaxWidth()) {
@@ -121,46 +124,51 @@ private fun NotificationSectionMessage(
             )
             Spacer(modifier = Modifier.width(4.dp))
 
-            Text(
-                text = notificationUiState.user.name ?: notificationUiState.user.username,
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.SemiBold,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.weight(1f)
-            )
+            notificationUiState.user?.let {
+                Text(
+                    text = it.name ?: it.username,
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f)
+                )
+            }
         }
         Spacer(modifier = Modifier.height(4.dp))
 
-        TimelineItemSection(
-            modifier = Modifier
-                .padding(
-                    start = 16.dp,
-                    end = 16.dp
-                ),
-            timelineItem = notificationUiState.timelineItem,
-            onIconClick = onIconClick,
-            onReplyClick = {
-                if (notificationUiState.user.username.isNotEmpty()) {
-                    onReplyClick(
+        if (notificationUiState.timelineItem != null) {
+            TimelineItemSection(
+                modifier = Modifier
+                    .padding(
+                        start = 16.dp,
+                        end = 16.dp
+                    ),
+                timelineItem = notificationUiState.timelineItem!!,
+                onIconClick = onIconClick,
+                onReplyClick = {
+                    if (!notificationUiState.user?.username.isNullOrEmpty()) {
+                        onReplyClick(
+                            notificationUiState.timelineItem!!.id,
+                            notificationUiState.timelineItem!!.user!!.username,
+                            notificationUiState.user?.host
+                        )
+                    }
+                },
+                onRepostClick = { onRepostClick(notificationUiState.id) },
+                onReactionClick = { onReactionClick(notificationUiState.id) },
+                onOptionClick = {
+                    onOptionClick(
                         notificationUiState.id,
-                        notificationUiState.user.username,
-                        notificationUiState.user.host
+                        notificationUiState.user?.id,
+                        notificationUiState.user?.username,
+                        notificationUiState.user?.host,
+                        notificationUiState.timelineItem!!.text,
+                        notificationUiState.timelineItem!!.uri
                     )
                 }
-            },
-            onRepostClick = { onRepostClick(notificationUiState.id) },
-            onReactionClick = { onReactionClick(notificationUiState.id) },
-            onOptionClick = {
-                onOptionClick(
-                    notificationUiState.id,
-                    notificationUiState.user.id,
-                    notificationUiState.user.username,
-                    notificationUiState.user.host,
-                    notificationUiState.timelineItem.uri
-                )
-            }
-        )
+            )
+        }
     }
 }
 
@@ -174,10 +182,12 @@ private fun NotificationSectionItem(
     Column(modifier = modifier) {
         when (NotificationType.get(notificationUiState.type)) {
             NotificationType.REACTION -> {
-                ReactionItem(
-                    reactions = notificationUiState.timelineItem.reactions,
-                    reactionsEmojis = notificationUiState.timelineItem.reactionsEmojis
-                )
+                notificationUiState.timelineItem?.let {
+                    ReactionItem(
+                        reactions = it.reactions,
+                        reactionsEmojis = it.reactionsEmojis
+                    )
+                }
             }
 
             else -> {
@@ -185,25 +195,33 @@ private fun NotificationSectionItem(
             }
         }
         Spacer(modifier = Modifier.height(4.dp))
-        UserInfoRow(
-            notificationUiState = notificationUiState,
-            context = context,
-            onIconClick = onIconClick
-        )
+        if (notificationUiState.user != null && notificationUiState.timelineItem != null) {
+            UserInfoRow(
+                user = notificationUiState.user!!,
+                timelineItem = notificationUiState.timelineItem!!,
+                context = context,
+                createdAt = notificationUiState.createdAt,
+                onIconClick = onIconClick
+            )
+        }
         Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = notificationUiState.timelineItem.text,
-            style = MaterialTheme.typography.bodyMedium,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
+        notificationUiState.timelineItem?.let {
+            Text(
+                text = it.text,
+                style = MaterialTheme.typography.bodyMedium,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
     }
 }
 
 @Composable
 private fun UserInfoRow(
-    notificationUiState: NotificationUiStateObject,
+    user: User,
+    timelineItem: TimelineItem,
     context: Context,
+    createdAt: String,
     modifier: Modifier = Modifier,
     onIconClick: (String, String?, String?) -> Unit
 ) {
@@ -214,12 +232,12 @@ private fun UserInfoRow(
                 .clip(shape = CircleShape)
                 .clickable {
                     onIconClick(
-                        notificationUiState.user.id,
-                        notificationUiState.user.username,
-                        notificationUiState.user.host
+                        user.id,
+                        user.username,
+                        user.host
                     )
                 },
-            painter = rememberAsyncImagePainter(notificationUiState.user.avatarUrl),
+            painter = rememberAsyncImagePainter(user.avatarUrl),
             contentDescription = null,
             contentScale = ContentScale.Crop
         )
@@ -231,34 +249,34 @@ private fun UserInfoRow(
                 .weight(1f)
         ) {
             Text(
-                text = notificationUiState.user.name ?: notificationUiState.user.username,
+                text = user.name ?: user.username,
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.SemiBold,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
 
-            val host = if (notificationUiState.user.host.isNullOrEmpty()) {
+            val host = if (user.host.isNullOrEmpty()) {
                 null
             } else {
-                "@${notificationUiState.user.host}"
+                "@${user.host}"
             }
-            Text(text = "@${notificationUiState.user.username}$host")
+            Text(text = "@${user.username}$host")
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = getRelativeTimeString(context, notificationUiState.createdAt),
+                text = getRelativeTimeString(context, createdAt),
                 style = MaterialTheme.typography.bodyMedium,
                 color = LocalMintColors.current.onBackground
             )
 
-            when (notificationUiState.timelineItem.visibility) {
+            when (timelineItem.visibility) {
                 Visibility.PUBLIC -> {}
                 else -> {
                     Icon(
                         modifier = Modifier.size(20.dp),
                         painter = painterResource(
-                            when (notificationUiState.timelineItem.visibility) {
+                            when (timelineItem.visibility) {
                                 Visibility.HOME -> TablerIcons.Home
                                 Visibility.FOLLOWERS -> TablerIcons.Lock
                                 Visibility.SPECIFIED -> TablerIcons.Mail

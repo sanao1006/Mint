@@ -13,13 +13,13 @@ data class NotificationResponse(
     @SerialName("id")
     val id: String,
     @SerialName("note")
-    val note: NotesTimelineResponse,
+    val note: NotesTimelineResponse? = null,
     @SerialName("type")
     val type: String,
     @SerialName("user")
-    val user: User,
+    val user: User? = null,
     @SerialName("userId")
-    val userId: String
+    val userId: String? = null
 ) {
     fun toNotificationUiState(): NotificationUiStateObject =
         NotificationUiStateObject(
@@ -28,6 +28,6 @@ data class NotificationResponse(
             user = user,
             userId = userId,
             createdAt = createdAt,
-            timelineItem = note.toTimelineUiState()
+            timelineItem = note?.toTimelineUiState()
         )
 }
