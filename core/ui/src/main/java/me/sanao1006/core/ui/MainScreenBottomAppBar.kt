@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import ir.alirezaivaz.tablericons.TablerIcons
-import me.sanao1006.core.designsystem.LocalMintColors
 import me.sanao1006.screens.MainScreenType
 import me.sanao1006.screens.event.BottomAppBarActionEvent
 
@@ -43,7 +42,6 @@ private fun MainScreenBottomAppBar(
     HorizontalFloatingAppBar(
         expanded = true,
         modifier = modifier,
-        containerColor = LocalMintColors.current.primary,
         leadingContent = {
             IconButton(
                 modifier = Modifier.padding(start = 8.dp, end = 16.dp),
@@ -57,12 +55,7 @@ private fun MainScreenBottomAppBar(
                             TablerIcons.Home
                         }
                     ),
-                    contentDescription = null,
-                    tint = if (mainSheetType == MainScreenType.HOME) {
-                        LocalMintColors.current.onBackground
-                    } else {
-                        LocalMintColors.current.onPrimary
-                    }
+                    contentDescription = null
                 )
             }
         },
@@ -79,12 +72,7 @@ private fun MainScreenBottomAppBar(
                             TablerIcons.Bell
                         }
                     ),
-                    contentDescription = null,
-                    tint = if (mainSheetType == MainScreenType.NOTIFICATION) {
-                        LocalMintColors.current.onBackground
-                    } else {
-                        LocalMintColors.current.onPrimary
-                    }
+                    contentDescription = null
                 )
             }
         },

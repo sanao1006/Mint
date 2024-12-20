@@ -7,12 +7,11 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import me.sanao1006.core.designsystem.LocalMintColors
 
 @Composable
 fun Modifier.bottomBorder(
     width: Dp = 3.dp,
-    color: Color = LocalMintColors.current.onPrimary
+    color: Color = Color.Unspecified
 ): Modifier = this.then(
     Modifier.drawBehind {
         val strokeWidth = width.toPx()
