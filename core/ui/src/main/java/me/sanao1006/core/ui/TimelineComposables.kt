@@ -38,7 +38,6 @@ import coil3.compose.AsyncImage
 import coil3.compose.rememberAsyncImagePainter
 import ir.alirezaivaz.tablericons.TablerIcons
 import me.sanao1006.core.data.util.getRelativeTimeString
-import me.sanao1006.core.designsystem.LocalMintColors
 import me.sanao1006.core.model.common.User
 import me.sanao1006.core.model.notes.TimelineItem
 import me.sanao1006.core.model.notes.Visibility
@@ -224,8 +223,7 @@ private fun UserNameRow(
         Row {
             Text(
                 text = getRelativeTimeString(context, timelineItem.createdAt),
-                style = MaterialTheme.typography.bodyMedium,
-                color = LocalMintColors.current.onBackground
+                style = MaterialTheme.typography.bodyMedium
             )
 
             icon?.let {

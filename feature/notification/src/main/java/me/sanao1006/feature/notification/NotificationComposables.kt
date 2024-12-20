@@ -35,7 +35,6 @@ import ir.alirezaivaz.tablericons.TablerIcons
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import me.sanao1006.core.data.util.getRelativeTimeString
-import me.sanao1006.core.designsystem.LocalMintColors
 import me.sanao1006.core.model.common.User
 import me.sanao1006.core.model.notes.TimelineItem
 import me.sanao1006.core.model.notes.Visibility
@@ -266,8 +265,7 @@ private fun UserInfoRow(
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = getRelativeTimeString(context, createdAt),
-                style = MaterialTheme.typography.bodyMedium,
-                color = LocalMintColors.current.onBackground
+                style = MaterialTheme.typography.bodyMedium
             )
 
             when (timelineItem.visibility) {
