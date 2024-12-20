@@ -1,5 +1,6 @@
 package me.sanao1006.core.ui.modifier
 
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -11,7 +12,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun Modifier.bottomBorder(
     width: Dp = 3.dp,
-    color: Color = Color.Unspecified
+    color: Color = MaterialTheme.colorScheme.primary
 ): Modifier = this.then(
     Modifier.drawBehind {
         val strokeWidth = width.toPx()
