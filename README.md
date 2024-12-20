@@ -3,6 +3,7 @@
 <p align="center">
 <img width="10%"  src="./assset/ic_main_icon.webp">
 <p align="center">🌿 A lightweight Misskey Android client built by Circuit ⚡️</p>
+<p align="center">🚧 <b>This app is still a work in progress</b> ⚠️</p>
 </p>
 
 ## Tech stack & Open-source libraries
@@ -28,3 +29,7 @@
 - Architecture
     - Compose driven architecture
     - [Circuit Framework](https://slackhq.github.io/circuit/)
+
+
+## License
+**Mint** is distributed under the terms of the Apache License (Version 2.0). See the [license](LICENSE) for more information.
