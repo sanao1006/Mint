@@ -138,7 +138,7 @@ private fun HomeScreenUiContent(
             isEmptyContent = state.timelineUiState.timelineItems.isEmpty(),
             floatingActionButton = floatingActionButton
         ) {
-            HomeScreenTimeline(
+            TimelineColumn(
                 state = state,
                 pagerState = pagerState,
                 modifier = Modifier.zIndex(0f)
@@ -148,7 +148,7 @@ private fun HomeScreenUiContent(
 }
 
 @Composable
-private fun HomeScreenTimeline(
+private fun TimelineColumn(
     state: HomeScreen.State,
     pagerState: PagerState,
     modifier: Modifier = Modifier
