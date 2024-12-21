@@ -1,7 +1,6 @@
 package me.sanao1006.core.ui
 
 import android.content.Context
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -10,16 +9,16 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,7 +34,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import coil3.compose.rememberAsyncImagePainter
 import ir.alirezaivaz.tablericons.TablerIcons
 import me.sanao1006.core.data.util.getRelativeTimeString
 import me.sanao1006.core.model.common.User
@@ -60,22 +58,12 @@ fun TimelineColumn(
     onOptionClick: (NoteId, UserId?, Username?, Host?, NoteText, NoteUri) -> Unit
 ) {
     LazyColumn(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        modifier = modifier
     ) {
         itemsIndexed(timelineItems) { index, it ->
             it?.let { timelineUiState ->
                 TimelineItemSection(
-                    modifier = Modifier
-                        .padding(
-                            top = if (index == 0) {
-                                16.dp
-                            } else {
-                                0.dp
-                            },
-                            start = 16.dp,
-                            end = 16.dp
-                        ),
+                    modifier = Modifier,
                     timelineItem = timelineUiState,
                     onIconClick = onIconClick,
                     onReplyClick = {
@@ -116,82 +104,58 @@ fun TimelineItemSection(
         modifier = modifier
             .fillMaxWidth()
     ) {
-        TimelineUserInfoRow(
-            timelineItem = timelineItem,
-            modifier = Modifier.fillMaxWidth(),
-            onIconClick = onIconClick
-        )
-        Spacer(modifier = Modifier.height(2.dp))
-        Text(text = timelineItem.text)
-        Spacer(modifier = Modifier.height(8.dp))
-        val canRenote =
-            timelineItem.visibility == Visibility.PUBLIC ||
-                timelineItem.visibility == Visibility.HOME
-        TimelineActionRow(
-            canRenote = canRenote,
-            modifier = Modifier.fillMaxWidth(),
-            onReplyClick = onReplyClick,
-            onRepostClick = onRepostClick,
-            onReactionClick = onReactionClick,
-            onOptionClick = onOptionClick
-        )
-    }
-}
-
-@Composable
-private fun TimelineUserInfoRow(
-    timelineItem: TimelineItem,
-    modifier: Modifier = Modifier,
-    onIconClick: (String, String?, String?) -> Unit
-) {
-    Row(modifier = modifier) {
-        // user icon
-        Image(
+        ListItem(
             modifier = Modifier
-                .size(40.dp)
-                .clip(shape = CircleShape)
-                .clickable {
-                    onIconClick(
-                        timelineItem.user?.id ?: "",
-                        timelineItem.user?.username,
-                        timelineItem.user?.host
+                .fillMaxWidth(),
+            leadingContent = {
+                AsyncImage(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(shape = CircleShape)
+                        .clickable {
+                            onIconClick(
+                                timelineItem.user?.id ?: "",
+                                timelineItem.user?.username,
+                                timelineItem.user?.host
+                            )
+                        },
+                    model = timelineItem.user?.avatarUrl,
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop
+                )
+            },
+            headlineContent = {
+                UserNameRow(
+                    timelineItem = timelineItem,
+                    context = LocalContext.current,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            },
+            supportingContent = {
+                Column {
+                    InstanceInfoRow(
+                        timelineItem = timelineItem,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(4.dp))
                     )
-                },
-            painter = rememberAsyncImagePainter(timelineItem.user?.avatarUrl),
-            contentDescription = null,
-            contentScale = ContentScale.Crop
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(text = timelineItem.text)
+                    Spacer(modifier = Modifier.height(12.dp))
+                    val canRenote =
+                        timelineItem.visibility == Visibility.PUBLIC ||
+                                timelineItem.visibility == Visibility.HOME
+                    TimelineActionRow(
+                        canRenote = canRenote,
+                        modifier = Modifier.fillMaxWidth(),
+                        onReplyClick = onReplyClick,
+                        onRepostClick = onRepostClick,
+                        onReactionClick = onReactionClick,
+                        onOptionClick = onOptionClick
+                    )
+                }
+            }
         )
-
-        Spacer(modifier = Modifier.width(8.dp))
-        UserInfoColumn(
-            timelineItem = timelineItem,
-            modifier = Modifier.fillMaxWidth()
-        )
-    }
-}
-
-@Composable
-private fun UserInfoColumn(
-    timelineItem: TimelineItem,
-    modifier: Modifier = Modifier
-) {
-    val context = LocalContext.current
-    Column(modifier = modifier) {
-        UserNameRow(
-            timelineItem = timelineItem,
-            context = context,
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        val instance = timelineItem.user?.instance
-        if (instance != null) {
-            InstanceInfoRow(
-                timelineItem = timelineItem,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(4.dp))
-            )
-        }
     }
 }
 
@@ -207,7 +171,7 @@ private fun UserNameRow(
     ) {
         Text(
             text = timelineItem.user?.name ?: timelineItem.user?.username ?: "",
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.titleSmall,
             fontWeight = FontWeight.SemiBold,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -290,34 +254,42 @@ private fun TimelineActionRow(
     onOptionClick: () -> Unit
 ) {
     Row(
-        modifier = modifier,
+        modifier = modifier.wrapContentHeight(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        IconButton(onClick = onReplyClick) {
-            Icon(
-                painterResource(TablerIcons.MessageCirclePlus),
-                "",
-                modifier = Modifier.size(22.dp)
-            )
-        }
+        Icon(
+            painterResource(TablerIcons.MessageCirclePlus),
+            "",
+            modifier = Modifier
+                .size(18.dp)
+                .clickable { onReplyClick() }
+        )
 
-        IconButton(onClick = { if (canRenote) onRepostClick() else Unit }) {
-            Icon(
-                painterResource(
-                    if (canRenote) TablerIcons.Repeat else TablerIcons.RepeatOff
-                ),
-                "",
-                modifier = Modifier.size(22.dp)
-            )
-        }
+        Icon(
+            painterResource(
+                if (canRenote) TablerIcons.Repeat else TablerIcons.RepeatOff
+            ),
+            "",
+            modifier = Modifier
+                .size(18.dp)
+                .clickable { if (canRenote) onRepostClick() }
+        )
 
-        IconButton(onClick = onReactionClick) {
-            Icon(painterResource(TablerIcons.MoodPlus), "", modifier = Modifier.size(22.dp))
-        }
+        Icon(
+            painterResource(TablerIcons.MoodPlus),
+            "",
+            modifier = Modifier
+                .size(18.dp)
+                .clickable { onReactionClick() }
+        )
 
-        IconButton(onClick = onOptionClick) {
-            Icon(painterResource(TablerIcons.Dots), "", modifier = Modifier.size(22.dp))
-        }
+        Icon(
+            painterResource(TablerIcons.Dots),
+            "",
+            modifier = Modifier
+                .size(18.dp)
+                .clickable { onOptionClick() }
+        )
     }
 }
 
