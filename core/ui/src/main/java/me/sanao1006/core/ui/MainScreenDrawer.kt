@@ -54,13 +54,11 @@ fun MainScreenDrawerWrapper(
     scope = scope,
     onDrawerFavoriteClick = { event(DrawerEvent.OnDrawerFavoriteClicked) },
     onDrawerAnnouncementClick = { event(DrawerEvent.OnDrawerAnnouncementClicked) },
-    onDrawerClipClick = { event(DrawerEvent.OnDrawerClipClicked) },
     onDrawerAntennaClick = { event(DrawerEvent.OnDrawerAntennaClicked) },
     onDrawerExploreClick = { event(DrawerEvent.OnDrawerExploreClicked) },
     onDrawerChannelClick = { event(DrawerEvent.OnDrawerChannelClicked) },
     onDrawerSearchClick = { event(DrawerEvent.OnDrawerSearchClicked) },
     onDrawerDriveClick = { event(DrawerEvent.OnDrawerDriveClicked) },
-    onDrawerAboutClick = { event(DrawerEvent.OnDrawerAboutClicked) },
     onDrawerAccountPreferencesClick = { event(DrawerEvent.OnDrawerAccountPreferencesClicked) },
     onDrawerSettingsClick = { event(DrawerEvent.OnDrawerSettingsClicked) },
     onIconClick = { event(DrawerEvent.OnDrawerIconClicked) },
@@ -77,13 +75,11 @@ private fun MainScreenDrawer(
     drawerState: DrawerState,
     onDrawerFavoriteClick: () -> Unit,
     onDrawerAnnouncementClick: () -> Unit,
-    onDrawerClipClick: () -> Unit,
     onDrawerAntennaClick: () -> Unit,
     onDrawerExploreClick: () -> Unit,
     onDrawerChannelClick: () -> Unit,
     onDrawerSearchClick: () -> Unit,
     onDrawerDriveClick: () -> Unit,
-    onDrawerAboutClick: () -> Unit,
     onDrawerAccountPreferencesClick: () -> Unit,
     onDrawerSettingsClick: () -> Unit,
     onIconClick: () -> Unit,
@@ -131,13 +127,11 @@ private fun MainScreenDrawer(
                                 when (it) {
                                     DrawerItem.FAVORITE -> onDrawerFavoriteClick()
                                     DrawerItem.ANNOUNCEMENT -> onDrawerAnnouncementClick()
-                                    DrawerItem.CLIP -> onDrawerClipClick()
                                     DrawerItem.ANTENNA -> onDrawerAntennaClick()
                                     DrawerItem.EXPLORE -> onDrawerExploreClick()
                                     DrawerItem.CHANNEL -> onDrawerChannelClick()
                                     DrawerItem.SEARCH -> onDrawerSearchClick()
                                     DrawerItem.DRIVE -> onDrawerDriveClick()
-                                    DrawerItem.ABOUT -> onDrawerAboutClick()
                                     DrawerItem.ACCOUNT_PREFERENCES ->
                                         onDrawerAccountPreferencesClick()
 
@@ -242,13 +236,11 @@ private fun FollowCount(count: Int, labelResId: Int, onClick: () -> Unit) {
 enum class DrawerItem(@DrawableRes val iconId: Int, @StringRes val titleId: Int) {
     FAVORITE(TablerIcons.Star, ResString.drawer_item_favorite),
     ANNOUNCEMENT(TablerIcons.Speakerphone, ResString.drawer_item_announcement),
-    CLIP(TablerIcons.Paperclip, ResString.drawer_item_clip),
     ANTENNA(TablerIcons.Antenna, ResString.drawer_item_antenna),
     EXPLORE(TablerIcons.Hash, ResString.drawer_item_explore),
     CHANNEL(TablerIcons.DeviceTv, ResString.drawer_item_channel),
     SEARCH(TablerIcons.Search, ResString.drawer_item_search),
     DRIVE(TablerIcons.BrandOnedrive, ResString.drawer_item_drive),
-    ABOUT(TablerIcons.InfoCircle, ResString.drawer_item_about),
     ACCOUNT_PREFERENCES(TablerIcons.User, ResString.drawer_item_account_preferences),
     SETTINGS(TablerIcons.Settings, ResString.drawer_item_settings);
 }
