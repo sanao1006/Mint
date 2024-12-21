@@ -140,155 +140,186 @@ private fun HomeScreenUiContent(
         },
         snackbarHost = snackbarHostState
     ) {
-        Box(
-            contentAlignment = if (state.timelineUiState.timelineItems.isEmpty()) {
-                Alignment.Center
-            } else {
-                Alignment.TopCenter
-            },
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(it)
-                .pullRefresh(state = state.pullToRefreshState)
+        HomeScreenTimelineBox(
+            state = state,
+            modifier = Modifier.padding(it),
+            floatingActionButton = floatingActionButton
         ) {
-            if (state.timelineUiState.timelineItems.isEmpty()) {
-                CircularProgressIndicator()
-            } else {
-                PullRefreshIndicator(
-                    refreshing = state.isRefreshed,
-                    state = state.pullToRefreshState,
-                    modifier = Modifier
-                        .zIndex(1f)
-                        .align(Alignment.TopCenter),
-                    scale = true
-                )
-                HorizontalPager(
-                    modifier = Modifier.zIndex(0f),
-                    state = pagerState
-                ) { page ->
-                    TimelineColumn(
-                        timelineItems = state.timelineUiState.timelineItems,
-                        modifier = Modifier.fillMaxSize(),
-                        onIconClick = { id, username, host ->
+            HomeScreenTimeline(
+                state = state,
+                pagerState = pagerState,
+                modifier = Modifier.zIndex(0f)
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+private fun HomeScreenTimelineBox(
+    state: HomeScreen.State,
+    modifier: Modifier = Modifier,
+    floatingActionButton: @Composable () -> Unit,
+    homeScreenUiContent: @Composable () -> Unit
+) {
+    Box(
+        contentAlignment = if (state.timelineUiState.timelineItems.isEmpty()) {
+            Alignment.Center
+        } else {
+            Alignment.TopCenter
+        },
+        modifier = modifier
+            .fillMaxSize()
+            .pullRefresh(state = state.pullToRefreshState)
+    ) {
+        if (state.timelineUiState.timelineItems.isEmpty()) {
+            CircularProgressIndicator()
+        } else {
+            PullRefreshIndicator(
+                refreshing = state.isRefreshed,
+                state = state.pullToRefreshState,
+                modifier = Modifier
+                    .zIndex(1f)
+                    .align(Alignment.TopCenter),
+                scale = true
+            )
+
+            homeScreenUiContent()
+
+            TimelineBottomSheet(
+                isShowBottomSheet = state.timelineUiState.showBottomSheet,
+                timelineItemAction = state.timelineUiState.timelineAction,
+                onDismissRequest = { state.eventSink(HomeScreen.Event.OnDismissRequest) },
+                onRenoteIconCLick = { event ->
+                    when (event) {
+                        RenoteActionIcon.Renote -> {
                             state.timelineEventSink(
-                                TimelineItemEvent.OnTimelineItemIconClicked(
-                                    id,
-                                    username,
-                                    host
-                                )
-                            )
-                        },
-                        onReplyClick = { id, user, host ->
-                            state.timelineEventSink(
-                                TimelineItemEvent.OnTimelineItemReplyClicked(id, user, host)
-                            )
-                        },
-                        onRepostClick = { userId ->
-                            state.timelineEventSink(
-                                TimelineItemEvent.OnTimelineItemRepostClicked(
-                                    userId
-                                )
-                            )
-                        },
-                        onReactionClick = { userId ->
-                            state.timelineEventSink(
-                                TimelineItemEvent.OnTimelineItemReactionClicked(
-                                    userId
-                                )
-                            )
-                        },
-                        onOptionClick = { noteId, userId, host, username, text, uri ->
-                            state.timelineEventSink(
-                                TimelineItemEvent.OnTimelineItemOptionClicked(
-                                    noteId,
-                                    userId,
-                                    host,
-                                    username,
-                                    text,
-                                    uri
+                                TimelineItemEvent.OnRenoteClicked(
+                                    state.timelineUiState.selectedUserId ?: ""
                                 )
                             )
                         }
-                    )
-                }
-                TimelineBottomSheet(
-                    isShowBottomSheet = state.timelineUiState.showBottomSheet,
-                    timelineItemAction = state.timelineUiState.timelineAction,
-                    onDismissRequest = { state.eventSink(HomeScreen.Event.OnDismissRequest) },
-                    onRenoteIconCLick = { event ->
-                        when (event) {
-                            RenoteActionIcon.Renote -> {
-                                state.timelineEventSink(
-                                    TimelineItemEvent.OnRenoteClicked(
-                                        state.timelineUiState.selectedUserId ?: ""
-                                    )
-                                )
-                            }
 
-                            RenoteActionIcon.Quote -> {
-                                state.timelineEventSink(
-                                    TimelineItemEvent.OnQuoteClicked(
-                                        state.timelineUiState.selectedUserId ?: ""
-                                    )
+                        RenoteActionIcon.Quote -> {
+                            state.timelineEventSink(
+                                TimelineItemEvent.OnQuoteClicked(
+                                    state.timelineUiState.selectedUserId ?: ""
                                 )
-                            }
-                        }
-                    },
-                    onOptionIconCLick = { event ->
-                        when (event) {
-                            OptionActionIcon.Detail -> {
-                                state.timelineEventSink(
-                                    TimelineItemEvent.OnDetailClicked(
-                                        state.timelineUiState.selectedUserId ?: "",
-                                        null,
-                                        null
-                                    )
-                                )
-                            }
-
-                            OptionActionIcon.Copy -> {
-                                state.timelineEventSink(
-                                    TimelineItemEvent.OnCopyClicked(
-                                        state.timelineUiState.selectedNoteText ?: ""
-                                    )
-                                )
-                            }
-
-                            OptionActionIcon.CopyLink -> {
-                                state.timelineEventSink(
-                                    TimelineItemEvent.OnCopyLinkClicked(
-                                        state.timelineUiState.selectedNoteLink ?: ""
-                                    )
-                                )
-                            }
-
-                            OptionActionIcon.Share -> {
-                                state.timelineEventSink(
-                                    TimelineItemEvent.OnShareClicked(
-                                        state.timelineUiState.selectedNoteLink ?: ""
-                                    )
-                                )
-                            }
-
-                            OptionActionIcon.Favorite -> {
-                                state.timelineEventSink(
-                                    TimelineItemEvent.OnFavoriteClicked(
-                                        state.timelineUiState.selectedUserId ?: ""
-                                    )
-                                )
-                            }
+                            )
                         }
                     }
+                },
+                onOptionIconCLick = { event ->
+                    when (event) {
+                        OptionActionIcon.Detail -> {
+                            state.timelineEventSink(
+                                TimelineItemEvent.OnDetailClicked(
+                                    state.timelineUiState.selectedUserId ?: "",
+                                    null,
+                                    null
+                                )
+                            )
+                        }
+
+                        OptionActionIcon.Copy -> {
+                            state.timelineEventSink(
+                                TimelineItemEvent.OnCopyClicked(
+                                    state.timelineUiState.selectedNoteText ?: ""
+                                )
+                            )
+                        }
+
+                        OptionActionIcon.CopyLink -> {
+                            state.timelineEventSink(
+                                TimelineItemEvent.OnCopyLinkClicked(
+                                    state.timelineUiState.selectedNoteLink ?: ""
+                                )
+                            )
+                        }
+
+                        OptionActionIcon.Share -> {
+                            state.timelineEventSink(
+                                TimelineItemEvent.OnShareClicked(
+                                    state.timelineUiState.selectedNoteLink ?: ""
+                                )
+                            )
+                        }
+
+                        OptionActionIcon.Favorite -> {
+                            state.timelineEventSink(
+                                TimelineItemEvent.OnFavoriteClicked(
+                                    state.timelineUiState.selectedUserId ?: ""
+                                )
+                            )
+                        }
+                    }
+                }
+            )
+            MainScreenBottomAppBarWrapper(
+                modifier = Modifier
+                    .align(BottomCenter)
+                    .offset(y = -(ScreenOffset)),
+                mainScreenType = MainScreenType.HOME,
+                event = state.bottomAppBarEventSInk,
+                floatingActionButton = { floatingActionButton() }
+            )
+        }
+    }
+}
+
+@Composable
+private fun HomeScreenTimeline(
+    state: HomeScreen.State,
+    pagerState: PagerState,
+    modifier: Modifier = Modifier
+) {
+    HorizontalPager(
+        modifier = modifier,
+        state = pagerState
+    ) { page ->
+        TimelineColumn(
+            timelineItems = state.timelineUiState.timelineItems,
+            modifier = Modifier.fillMaxSize(),
+            onIconClick = { id, username, host ->
+                state.timelineEventSink(
+                    TimelineItemEvent.OnTimelineItemIconClicked(
+                        id,
+                        username,
+                        host
+                    )
                 )
-                MainScreenBottomAppBarWrapper(
-                    modifier = Modifier
-                        .align(BottomCenter)
-                        .offset(y = -(ScreenOffset)),
-                    mainScreenType = MainScreenType.HOME,
-                    event = state.bottomAppBarEventSInk,
-                    floatingActionButton = { floatingActionButton() }
+            },
+            onReplyClick = { id, user, host ->
+                state.timelineEventSink(
+                    TimelineItemEvent.OnTimelineItemReplyClicked(id, user, host)
+                )
+            },
+            onRepostClick = { userId ->
+                state.timelineEventSink(
+                    TimelineItemEvent.OnTimelineItemRepostClicked(
+                        userId
+                    )
+                )
+            },
+            onReactionClick = { userId ->
+                state.timelineEventSink(
+                    TimelineItemEvent.OnTimelineItemReactionClicked(
+                        userId
+                    )
+                )
+            },
+            onOptionClick = { noteId, userId, host, username, text, uri ->
+                state.timelineEventSink(
+                    TimelineItemEvent.OnTimelineItemOptionClicked(
+                        noteId,
+                        userId,
+                        host,
+                        username,
+                        text,
+                        uri
+                    )
                 )
             }
-        }
+        )
     }
 }
