@@ -33,4 +33,3 @@ data class UiState(
     val tokenLoadingState: Boolean,
     val isLoggedIn: Boolean
 )
-
