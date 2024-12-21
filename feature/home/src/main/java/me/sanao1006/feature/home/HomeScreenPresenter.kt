@@ -229,7 +229,7 @@ class HomeScreenPresenter @AssistedInject constructor(
                     timelineType = TimelineType.HOME
 
                 HomeScreen.Event.TimelineEvent.OnSocialTimelineClicked
-                    -> timelineType = TimelineType.SOCIAL
+                -> timelineType = TimelineType.SOCIAL
 
                 HomeScreen.Event.TimelineEvent.OnGlobalTimelineClicked ->
                     timelineType = TimelineType.GLOBAL
