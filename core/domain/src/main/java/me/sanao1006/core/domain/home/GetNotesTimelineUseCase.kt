@@ -9,26 +9,30 @@ class GetNotesTimelineUseCase @Inject constructor(
     private val notesRepository: NotesRepository
 ) {
     suspend operator fun invoke(timelineType: TimelineType): List<TimelineItem> {
-        val response = when (timelineType) {
-            TimelineType.LOCAL -> notesRepository.getNotesLocalTimeline(
-                notesTimeLineRequestBody = NotesTimeLineRequestBody(
-                    limit = LIMIT
+        return try {
+            val response = when (timelineType) {
+                TimelineType.LOCAL -> notesRepository.getNotesLocalTimeline(
+                    notesTimeLineRequestBody = NotesTimeLineRequestBody(
+                        limit = LIMIT
+                    )
                 )
-            )
 
-            TimelineType.SOCIAL -> notesRepository.getNotesHybridTimeline(
-                notesTimeLineRequestBody = NotesTimeLineRequestBody(
-                    limit = LIMIT
+                TimelineType.SOCIAL -> notesRepository.getNotesHybridTimeline(
+                    notesTimeLineRequestBody = NotesTimeLineRequestBody(
+                        limit = LIMIT
+                    )
                 )
-            )
 
-            TimelineType.GLOBAL -> notesRepository.getNotesGlobalTimeline(
-                notesTimeLineRequestBody = NotesTimeLineRequestBody(
-                    limit = LIMIT
+                TimelineType.GLOBAL -> notesRepository.getNotesGlobalTimeline(
+                    notesTimeLineRequestBody = NotesTimeLineRequestBody(
+                        limit = LIMIT
+                    )
                 )
-            )
+            }
+            response.map { it.toTimelineUiState() }
+        } catch (e: Exception) {
+            emptyList()
         }
-        return response.map { it.toTimelineUiState() }
     }
 
     companion object {

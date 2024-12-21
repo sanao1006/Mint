@@ -2,19 +2,14 @@ package me.sanao1006.feature.home
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingAppBarDefaults.ScreenOffset
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -24,8 +19,6 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.zIndex
@@ -34,12 +27,9 @@ import com.slack.circuitx.effects.LaunchedImpressionEffect
 import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
 import kotlinx.coroutines.launch
-import me.sanao1006.core.ui.MainScreenBottomAppBarWrapper
 import me.sanao1006.core.ui.MainScreenDrawerWrapper
-import me.sanao1006.core.ui.OptionActionIcon
-import me.sanao1006.core.ui.RenoteActionIcon
-import me.sanao1006.core.ui.TimelineBottomSheet
 import me.sanao1006.core.ui.TimelineColumn
+import me.sanao1006.core.ui.TimelineContentBox
 import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.MainScreenType
 import me.sanao1006.screens.event.GlobalIconEvent
@@ -140,155 +130,78 @@ private fun HomeScreenUiContent(
         },
         snackbarHost = snackbarHostState
     ) {
-        Box(
-            contentAlignment = if (state.timelineUiState.timelineItems.isEmpty()) {
-                Alignment.Center
-            } else {
-                Alignment.TopCenter
-            },
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(it)
-                .pullRefresh(state = state.pullToRefreshState)
+        TimelineContentBox(
+            state = state,
+            modifier = Modifier.padding(it),
+            mainScreenType = MainScreenType.HOME,
+            pullRefreshState = state.pullToRefreshState,
+            isRefreshed = state.isRefreshed,
+            contentLoadingState = state.timelineUiState.isSuccessLoading,
+            isEmptyContent = state.timelineUiState.timelineItems.isEmpty(),
+            floatingActionButton = floatingActionButton
         ) {
-            if (state.timelineUiState.timelineItems.isEmpty()) {
-                CircularProgressIndicator()
-            } else {
-                PullRefreshIndicator(
-                    refreshing = state.isRefreshed,
-                    state = state.pullToRefreshState,
-                    modifier = Modifier
-                        .zIndex(1f)
-                        .align(Alignment.TopCenter),
-                    scale = true
-                )
-                HorizontalPager(
-                    modifier = Modifier.zIndex(0f),
-                    state = pagerState
-                ) { page ->
-                    TimelineColumn(
-                        timelineItems = state.timelineUiState.timelineItems,
-                        modifier = Modifier.fillMaxSize(),
-                        onIconClick = { id, username, host ->
-                            state.timelineEventSink(
-                                TimelineItemEvent.OnTimelineItemIconClicked(
-                                    id,
-                                    username,
-                                    host
-                                )
-                            )
-                        },
-                        onReplyClick = { id, user, host ->
-                            state.timelineEventSink(
-                                TimelineItemEvent.OnTimelineItemReplyClicked(id, user, host)
-                            )
-                        },
-                        onRepostClick = { userId ->
-                            state.timelineEventSink(
-                                TimelineItemEvent.OnTimelineItemRepostClicked(
-                                    userId
-                                )
-                            )
-                        },
-                        onReactionClick = { userId ->
-                            state.timelineEventSink(
-                                TimelineItemEvent.OnTimelineItemReactionClicked(
-                                    userId
-                                )
-                            )
-                        },
-                        onOptionClick = { noteId, userId, host, username, text, uri ->
-                            state.timelineEventSink(
-                                TimelineItemEvent.OnTimelineItemOptionClicked(
-                                    noteId,
-                                    userId,
-                                    host,
-                                    username,
-                                    text,
-                                    uri
-                                )
-                            )
-                        }
+            TimelineColumn(
+                state = state,
+                pagerState = pagerState,
+                modifier = Modifier.zIndex(0f)
+            )
+        }
+    }
+}
+
+@Composable
+private fun TimelineColumn(
+    state: HomeScreen.State,
+    pagerState: PagerState,
+    modifier: Modifier = Modifier
+) {
+    HorizontalPager(
+        modifier = modifier,
+        state = pagerState
+    ) { page ->
+        TimelineColumn(
+            timelineItems = state.timelineUiState.timelineItems,
+            modifier = Modifier.fillMaxSize(),
+            onIconClick = { id, username, host ->
+                state.timelineEventSink(
+                    TimelineItemEvent.OnTimelineItemIconClicked(
+                        id,
+                        username,
+                        host
                     )
-                }
-                TimelineBottomSheet(
-                    isShowBottomSheet = state.timelineUiState.showBottomSheet,
-                    timelineItemAction = state.timelineUiState.timelineAction,
-                    onDismissRequest = { state.eventSink(HomeScreen.Event.OnDismissRequest) },
-                    onRenoteIconCLick = { event ->
-                        when (event) {
-                            RenoteActionIcon.Renote -> {
-                                state.timelineEventSink(
-                                    TimelineItemEvent.OnRenoteClicked(
-                                        state.timelineUiState.selectedUserId ?: ""
-                                    )
-                                )
-                            }
-
-                            RenoteActionIcon.Quote -> {
-                                state.timelineEventSink(
-                                    TimelineItemEvent.OnQuoteClicked(
-                                        state.timelineUiState.selectedUserId ?: ""
-                                    )
-                                )
-                            }
-                        }
-                    },
-                    onOptionIconCLick = { event ->
-                        when (event) {
-                            OptionActionIcon.Detail -> {
-                                state.timelineEventSink(
-                                    TimelineItemEvent.OnDetailClicked(
-                                        state.timelineUiState.selectedUserId ?: "",
-                                        null,
-                                        null
-                                    )
-                                )
-                            }
-
-                            OptionActionIcon.Copy -> {
-                                state.timelineEventSink(
-                                    TimelineItemEvent.OnCopyClicked(
-                                        state.timelineUiState.selectedNoteText ?: ""
-                                    )
-                                )
-                            }
-
-                            OptionActionIcon.CopyLink -> {
-                                state.timelineEventSink(
-                                    TimelineItemEvent.OnCopyLinkClicked(
-                                        state.timelineUiState.selectedNoteLink ?: ""
-                                    )
-                                )
-                            }
-
-                            OptionActionIcon.Share -> {
-                                state.timelineEventSink(
-                                    TimelineItemEvent.OnShareClicked(
-                                        state.timelineUiState.selectedNoteLink ?: ""
-                                    )
-                                )
-                            }
-
-                            OptionActionIcon.Favorite -> {
-                                state.timelineEventSink(
-                                    TimelineItemEvent.OnFavoriteClicked(
-                                        state.timelineUiState.selectedUserId ?: ""
-                                    )
-                                )
-                            }
-                        }
-                    }
                 )
-                MainScreenBottomAppBarWrapper(
-                    modifier = Modifier
-                        .align(BottomCenter)
-                        .offset(y = -(ScreenOffset)),
-                    mainScreenType = MainScreenType.HOME,
-                    event = state.bottomAppBarEventSInk,
-                    floatingActionButton = { floatingActionButton() }
+            },
+            onReplyClick = { id, user, host ->
+                state.timelineEventSink(
+                    TimelineItemEvent.OnTimelineItemReplyClicked(id, user, host)
+                )
+            },
+            onRepostClick = { userId ->
+                state.timelineEventSink(
+                    TimelineItemEvent.OnTimelineItemRepostClicked(
+                        userId
+                    )
+                )
+            },
+            onReactionClick = { userId ->
+                state.timelineEventSink(
+                    TimelineItemEvent.OnTimelineItemReactionClicked(
+                        userId
+                    )
+                )
+            },
+            onOptionClick = { noteId, userId, host, username, text, uri ->
+                state.timelineEventSink(
+                    TimelineItemEvent.OnTimelineItemOptionClicked(
+                        noteId,
+                        userId,
+                        host,
+                        username,
+                        text,
+                        uri
+                    )
                 )
             }
-        }
+        )
     }
 }

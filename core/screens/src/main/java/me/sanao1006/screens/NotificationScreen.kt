@@ -20,17 +20,17 @@ data object NotificationScreen : Screen {
     data class State(
         val notificationUiState: NotificationUiState,
         val isSuccessCreateNote: Boolean?,
-        val navigator: Navigator,
-        val drawerUserInfo: LoginUserInfo,
-        val pullToRefreshState: PullRefreshState,
-        val isRefreshed: Boolean,
-        val timelineEventSink: (TimelineItemEvent) -> Unit,
-        val noteCreateEventSink: (NoteCreateEvent) -> Unit,
-        val drawerEventSink: (DrawerEvent) -> Unit,
-        val globalIconEventSink: (GlobalIconEvent) -> Unit,
-        val bottomAppBarEventSInk: (BottomAppBarActionEvent) -> Unit,
+        override val navigator: Navigator,
+        override val drawerUserInfo: LoginUserInfo,
+        override val pullToRefreshState: PullRefreshState,
+        override val isRefreshed: Boolean,
+        override val timelineEventSink: (TimelineItemEvent) -> Unit,
+        override val noteCreateEventSink: (NoteCreateEvent) -> Unit,
+        override val drawerEventSink: (DrawerEvent) -> Unit,
+        override val globalIconEventSink: (GlobalIconEvent) -> Unit,
+        override val bottomAppBarEventSink: (BottomAppBarActionEvent) -> Unit,
         val eventSink: (Event) -> Unit
-    ) : CircuitUiState
+    ) : CircuitUiState, MainScreenState
 
     sealed class Event : CircuitUiState {
         data object OnDismissRequest : Event()
