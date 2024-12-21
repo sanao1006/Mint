@@ -88,6 +88,7 @@ fun NotificationScreenUi(state: NotificationScreen.State, modifier: Modifier) {
                 floatingActionButton = {
                     FloatingActionButton(
                         modifier = Modifier,
+                        containerColor = MaterialTheme.colorScheme.primary,
                         onClick = { state.noteCreateEventSink(NoteCreateEvent.OnNoteCreateClicked) }
                     ) {
                         Icon(painter = painterResource(TablerIcons.Pencil), "")

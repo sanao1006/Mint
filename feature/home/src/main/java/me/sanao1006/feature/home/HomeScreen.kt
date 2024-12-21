@@ -16,6 +16,7 @@ import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingAppBarDefaults.ScreenOffset
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -102,6 +103,7 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
                 floatingActionButton = {
                     FloatingActionButton(
                         modifier = Modifier,
+                        containerColor = MaterialTheme.colorScheme.primary,
                         onClick = { state.noteCreateEventSink(NoteCreateEvent.OnNoteCreateClicked) }
                     ) {
                         Icon(painter = painterResource(TablerIcons.Pencil), "")
