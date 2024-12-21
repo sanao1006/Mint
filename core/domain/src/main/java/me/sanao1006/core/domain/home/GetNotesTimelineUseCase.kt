@@ -11,7 +11,7 @@ class GetNotesTimelineUseCase @Inject constructor(
     suspend operator fun invoke(timelineType: TimelineType): List<TimelineItem> {
         return try {
             val response = when (timelineType) {
-                TimelineType.LOCAL -> notesRepository.getNotesLocalTimeline(
+                TimelineType.HOME -> notesRepository.getNotesHomeTimeline(
                     notesTimeLineRequestBody = NotesTimeLineRequestBody(
                         limit = LIMIT
                     )
@@ -41,7 +41,7 @@ class GetNotesTimelineUseCase @Inject constructor(
 }
 
 enum class TimelineType {
-    LOCAL,
+    HOME,
     SOCIAL,
     GLOBAL
 }

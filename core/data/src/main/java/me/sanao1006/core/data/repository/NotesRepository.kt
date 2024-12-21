@@ -19,6 +19,11 @@ interface NotesRepository {
         @Body notesTimeLineRequestBody: NotesTimeLineRequestBody
     ): Flow<List<NotesTimelineResponse>>
 
+    @POST("api/notes/timeline")
+    suspend fun getNotesHomeTimeline(
+        @Body notesTimeLineRequestBody: NotesTimeLineRequestBody
+    ): List<NotesTimelineResponse>
+
     @POST("api/notes/local-timeline")
     suspend fun getNotesLocalTimeline(
         @Body notesTimeLineRequestBody: NotesTimeLineRequestBody
