@@ -32,6 +32,7 @@ import me.snao1006.res_value.ResString
 fun TimelineContentBox(
     state: MainScreenState,
     modifier: Modifier = Modifier,
+    mainScreenType: MainScreenType,
     pullRefreshState: PullRefreshState,
     isRefreshed: Boolean,
     contentLoadingState: Boolean?,
@@ -241,7 +242,7 @@ fun TimelineContentBox(
             modifier = Modifier
                 .align(BottomCenter)
                 .offset(y = -(ScreenOffset)),
-            mainScreenType = MainScreenType.NOTIFICATION,
+            mainScreenType = mainScreenType,
             event = {
                 when (state) {
                     is HomeScreen.State -> state.bottomAppBarEventSink(it)

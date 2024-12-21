@@ -31,6 +31,7 @@ import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
 import me.sanao1006.core.ui.MainScreenDrawerWrapper
 import me.sanao1006.core.ui.TimelineContentBox
+import me.sanao1006.screens.MainScreenType
 import me.sanao1006.screens.NotificationScreen
 import me.sanao1006.screens.event.GlobalIconEvent
 import me.sanao1006.screens.event.NoteCreateEvent
@@ -123,6 +124,7 @@ private fun NotificationScreenContent(
         TimelineContentBox(
             state = state,
             modifier = Modifier.padding(it),
+            mainScreenType = MainScreenType.NOTIFICATION,
             pullRefreshState = state.pullToRefreshState,
             isRefreshed = state.isRefreshed,
             contentLoadingState = state.notificationUiState.isSuccessLoading,

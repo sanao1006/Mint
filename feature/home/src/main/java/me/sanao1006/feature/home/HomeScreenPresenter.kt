@@ -30,6 +30,7 @@ import me.sanao1006.core.domain.home.GetNotesTimelineUseCase
 import me.sanao1006.core.domain.home.TimelineType
 import me.sanao1006.core.domain.home.UpdateAccountUseCase
 import me.sanao1006.core.model.LoginUserInfo
+import me.sanao1006.core.model.notes.TimelineItem
 import me.sanao1006.core.model.notes.Visibility
 import me.sanao1006.core.model.uistate.TimelineItemAction
 import me.sanao1006.core.model.uistate.TimelineUiState
@@ -77,8 +78,19 @@ class HomeScreenPresenter @AssistedInject constructor(
             onRefresh = {
                 scope.launch {
                     isRefreshed = true
-                    timelineUiState.timelineItems = getNotesTimelineUseCase(timelineType)
-                    delay(1500L)
+                    val timelineItems: List<TimelineItem> = getNotesTimelineUseCase(timelineType)
+                    timelineUiState = if (timelineItems.isEmpty()) {
+                        timelineUiState.copy(
+                            timelineItems = emptyList(),
+                            isSuccessLoading = false
+                        )
+                    } else {
+                        timelineUiState.copy(
+                            timelineItems = timelineItems,
+                            isSuccessLoading = true
+                        )
+                    }
+                    delay(1000L)
                     isRefreshed = false
                 }
             },
@@ -86,13 +98,34 @@ class HomeScreenPresenter @AssistedInject constructor(
             refreshingOffset = 50.dp
         )
         LaunchedImpressionEffect {
-            timelineUiState.timelineItems = getNotesTimelineUseCase(timelineType)
+            val timelineItems: List<TimelineItem> = getNotesTimelineUseCase(timelineType)
+            timelineUiState = if (timelineItems.isEmpty()) {
+                timelineUiState.copy(
+                    timelineItems = emptyList(),
+                    isSuccessLoading = false
+                )
+            } else {
+                timelineUiState.copy(
+                    timelineItems = timelineItems,
+                    isSuccessLoading = true
+                )
+            }
             loginUserInfo = updateMyAccountUseCase()
         }
 
         LaunchedImpressionEffect(timelineType) {
-            timelineUiState =
-                timelineUiState.copy(timelineItems = getNotesTimelineUseCase(timelineType))
+            val timelineItems: List<TimelineItem> = getNotesTimelineUseCase(timelineType)
+            timelineUiState = if (timelineItems.isEmpty()) {
+                timelineUiState.copy(
+                    timelineItems = emptyList(),
+                    isSuccessLoading = false
+                )
+            } else {
+                timelineUiState.copy(
+                    timelineItems = timelineItems,
+                    isSuccessLoading = true
+                )
+            }
         }
 
         return HomeScreen.State(
@@ -196,7 +229,7 @@ class HomeScreenPresenter @AssistedInject constructor(
                     timelineType = TimelineType.LOCAL
 
                 HomeScreen.Event.TimelineEvent.OnSocialTimelineClicked
-                -> timelineType = TimelineType.SOCIAL
+                    -> timelineType = TimelineType.SOCIAL
 
                 HomeScreen.Event.TimelineEvent.OnGlobalTimelineClicked ->
                     timelineType = TimelineType.GLOBAL

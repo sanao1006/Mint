@@ -31,6 +31,7 @@ import me.sanao1006.core.ui.MainScreenDrawerWrapper
 import me.sanao1006.core.ui.TimelineColumn
 import me.sanao1006.core.ui.TimelineContentBox
 import me.sanao1006.screens.HomeScreen
+import me.sanao1006.screens.MainScreenType
 import me.sanao1006.screens.event.GlobalIconEvent
 import me.sanao1006.screens.event.NoteCreateEvent
 import me.sanao1006.screens.event.TimelineItemEvent
@@ -132,9 +133,10 @@ private fun HomeScreenUiContent(
         TimelineContentBox(
             state = state,
             modifier = Modifier.padding(it),
+            mainScreenType = MainScreenType.HOME,
             pullRefreshState = state.pullToRefreshState,
             isRefreshed = state.isRefreshed,
-            contentLoadingState = true,
+            contentLoadingState = state.timelineUiState.isSuccessLoading,
             isEmptyContent = state.timelineUiState.timelineItems.isEmpty(),
             floatingActionButton = floatingActionButton
         ) {
