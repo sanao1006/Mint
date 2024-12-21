@@ -14,5 +14,6 @@ data class TimelineUiState(
 
 enum class TimelineItemAction {
     Renote,
-    Option
+    Option,
+    None
 }

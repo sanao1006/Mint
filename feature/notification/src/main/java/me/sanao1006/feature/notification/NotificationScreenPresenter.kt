@@ -178,7 +178,7 @@ class NotificationScreenPresenter @AssistedInject constructor(
             },
             drawerEventSink = { event -> event.handleDrawerEvent(navigator, loginUserInfo) },
             globalIconEventSink = { event -> event.handleNavigationIconClicked(navigator) },
-            bottomAppBarEventSInk = { event -> event.handleBottomAppBarActionEvent(navigator) },
+            bottomAppBarEventSink = { event -> event.handleBottomAppBarActionEvent(navigator) },
             eventSink = { event ->
                 when (event) {
                     NotificationScreen.Event.OnDismissRequest -> {

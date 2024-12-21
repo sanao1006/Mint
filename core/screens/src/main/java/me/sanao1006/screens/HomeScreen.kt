@@ -20,17 +20,17 @@ data object HomeScreen : Screen {
     @OptIn(ExperimentalMaterialApi::class)
     data class State(
         val timelineUiState: TimelineUiState,
-        val navigator: Navigator,
-        val pullToRefreshState: PullRefreshState,
-        val isRefreshed: Boolean = false,
-        val drawerUserInfo: LoginUserInfo,
-        val timelineEventSink: (TimelineItemEvent) -> Unit,
-        val noteCreateEventSink: (NoteCreateEvent) -> Unit,
-        val drawerEventSink: (DrawerEvent) -> Unit,
-        val globalIconEventSink: (GlobalIconEvent) -> Unit,
-        val bottomAppBarEventSInk: (BottomAppBarActionEvent) -> Unit,
+        override val navigator: Navigator,
+        override val pullToRefreshState: PullRefreshState,
+        override val isRefreshed: Boolean = false,
+        override val drawerUserInfo: LoginUserInfo,
+        override val timelineEventSink: (TimelineItemEvent) -> Unit,
+        override val noteCreateEventSink: (NoteCreateEvent) -> Unit,
+        override val drawerEventSink: (DrawerEvent) -> Unit,
+        override val globalIconEventSink: (GlobalIconEvent) -> Unit,
+        override val bottomAppBarEventSink: (BottomAppBarActionEvent) -> Unit,
         val eventSink: (Event) -> Unit
-    ) : CircuitUiState
+    ) : CircuitUiState, MainScreenState
 
     sealed class Event : CircuitUiEvent {
         data object OnDismissRequest : Event()
@@ -41,3 +41,61 @@ data object HomeScreen : Screen {
         }
     }
 }
+
+@OptIn(ExperimentalMaterialApi::class)
+interface MainScreenState {
+    val navigator: Navigator
+    val pullToRefreshState: PullRefreshState
+    val isRefreshed: Boolean
+    val drawerUserInfo: LoginUserInfo
+    val timelineEventSink: (TimelineItemEvent) -> Unit
+    val noteCreateEventSink: (NoteCreateEvent) -> Unit
+    val drawerEventSink: (DrawerEvent) -> Unit
+    val globalIconEventSink: (GlobalIconEvent) -> Unit
+    val bottomAppBarEventSink: (BottomAppBarActionEvent) -> Unit
+}
+
+// sealed interface MainScreenState {
+//    val navigator: Navigator
+//
+//    @OptIn(ExperimentalMaterialApi::class)
+//    val pullToRefreshState: PullRefreshState
+//    val isRefreshed: Boolean
+//    val drawerUserInfo: LoginUserInfo
+//    val timelineEventSink: (TimelineItemEvent) -> Unit
+//    val noteCreateEventSink: (NoteCreateEvent) -> Unit
+//    val drawerEventSink: (DrawerEvent) -> Unit
+//    val globalIconEventSink: (GlobalIconEvent) -> Unit
+//    val bottomAppBarEventSInk: (BottomAppBarActionEvent) -> Unit
+//
+//    @OptIn(ExperimentalMaterialApi::class)
+//    data class Home(
+//        val timelineUiState: TimelineUiState,
+//        val eventSink: (Event) -> Unit,
+//        override val navigator: Navigator,
+//        override val pullToRefreshState: PullRefreshState,
+//        override val isRefreshed: Boolean,
+//        override val drawerUserInfo: LoginUserInfo,
+//        override val timelineEventSink: (TimelineItemEvent) -> Unit,
+//        override val noteCreateEventSink: (NoteCreateEvent) -> Unit,
+//        override val drawerEventSink: (DrawerEvent) -> Unit,
+//        override val globalIconEventSink: (GlobalIconEvent) -> Unit,
+//        override val bottomAppBarEventSInk: (BottomAppBarActionEvent) -> Unit
+//    ) : MainScreenState
+//
+//    @OptIn(ExperimentalMaterialApi::class)
+//    data class Notification(
+//        val notificationUiState: NotificationUiState,
+//        val isSuccessCreateNote: Boolean?,
+//        val eventSink: (NotificationScreen.Event) -> Unit,
+//        override val navigator: Navigator,
+//        override val drawerUserInfo: LoginUserInfo,
+//        override val pullToRefreshState: PullRefreshState,
+//        override val isRefreshed: Boolean,
+//        override val timelineEventSink: (TimelineItemEvent) -> Unit,
+//        override val noteCreateEventSink: (NoteCreateEvent) -> Unit,
+//        override val drawerEventSink: (DrawerEvent) -> Unit,
+//        override val globalIconEventSink: (GlobalIconEvent) -> Unit,
+//        override val bottomAppBarEventSInk: (BottomAppBarActionEvent) -> Unit
+//    ) : MainScreenState
+// }

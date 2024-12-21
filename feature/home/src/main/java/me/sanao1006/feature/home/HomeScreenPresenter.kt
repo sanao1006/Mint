@@ -188,7 +188,7 @@ class HomeScreenPresenter @AssistedInject constructor(
                 }
             },
             drawerEventSink = { event -> event.handleDrawerEvent(navigator, loginUserInfo) },
-            bottomAppBarEventSInk = { event -> event.handleBottomAppBarActionEvent(navigator) },
+            bottomAppBarEventSink = { event -> event.handleBottomAppBarActionEvent(navigator) },
             globalIconEventSink = { event -> event.handleNavigationIconClicked(navigator) }
         ) { event ->
             when (event) {

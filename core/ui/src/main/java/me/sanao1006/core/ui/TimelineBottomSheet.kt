@@ -85,7 +85,7 @@ enum class OptionActionIcon(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TimelineBottomSheet(
-    isShowBottomSheet: Boolean,
+    isShowBottomSheet: Boolean = false,
     timelineItemAction: TimelineItemAction,
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit,
@@ -96,6 +96,7 @@ fun TimelineBottomSheet(
         val model = when (timelineItemAction) {
             TimelineItemAction.Renote -> RenoteActionIcon.getAllItems()
             TimelineItemAction.Option -> OptionActionIcon.getAllItems()
+            TimelineItemAction.None -> emptyList()
         }
         ModalBottomSheet(
             modifier = modifier,
@@ -117,9 +118,13 @@ fun TimelineBottomSheet(
                                     TimelineItemAction.Renote -> onRenoteIconCLick(
                                         it as RenoteActionIcon
                                     )
+
                                     TimelineItemAction.Option -> onOptionIconCLick(
                                         it as OptionActionIcon
                                     )
+
+                                    TimelineItemAction.None -> {
+                                    }
                                 }
                             }
                     ) {
