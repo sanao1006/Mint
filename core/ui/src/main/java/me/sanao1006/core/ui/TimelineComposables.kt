@@ -1,6 +1,7 @@
 package me.sanao1006.core.ui
 
 import android.content.Context
+import android.os.Vibrator
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -33,9 +34,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import androidx.core.content.getSystemService
 import coil3.compose.AsyncImage
 import ir.alirezaivaz.tablericons.TablerIcons
 import me.sanao1006.core.data.util.getRelativeTimeString
+import me.sanao1006.core.data.util.vibrate
 import me.sanao1006.core.model.common.User
 import me.sanao1006.core.model.notes.TimelineItem
 import me.sanao1006.core.model.notes.Visibility
@@ -57,6 +60,9 @@ fun TimelineColumn(
     onReactionClick: (NoteId) -> Unit,
     onOptionClick: (NoteId, UserId?, Username?, Host?, NoteText, NoteUri) -> Unit
 ) {
+    val context = LocalContext.current
+    val vibrator = context.getSystemService<Vibrator>()
+
     LazyColumn(
         modifier = modifier
     ) {
@@ -65,15 +71,26 @@ fun TimelineColumn(
                 TimelineItemSection(
                     modifier = Modifier,
                     timelineItem = timelineUiState,
-                    onIconClick = onIconClick,
+                    onIconClick = { id, username, host ->
+                        vibrator?.vibrate()
+                        onIconClick(id, username, host)
+                    },
                     onReplyClick = {
                         if (!it.user?.username.isNullOrEmpty()) {
+                            vibrator?.vibrate()
                             onReplyClick(it.id, it.user?.username.orEmpty(), it.user?.host)
                         }
                     },
-                    onRepostClick = { onRepostClick(it.id) },
-                    onReactionClick = { onReactionClick(it.id) },
+                    onRepostClick = {
+                        vibrator?.vibrate()
+                        onRepostClick(it.id)
+                    },
+                    onReactionClick = {
+                        vibrator?.vibrate()
+                        onReactionClick(it.id)
+                    },
                     onOptionClick = {
+                        vibrator?.vibrate()
                         onOptionClick(
                             it.id,
                             it.user?.id,

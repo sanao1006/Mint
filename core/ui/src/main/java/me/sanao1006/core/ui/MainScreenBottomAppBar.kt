@@ -1,5 +1,7 @@
 package me.sanao1006.core.ui
 
+import android.annotation.SuppressLint
+import android.os.Vibrator
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -9,9 +11,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.core.content.getSystemService
 import ir.alirezaivaz.tablericons.TablerIcons
+import me.sanao1006.core.data.util.vibrate
 import me.sanao1006.screens.MainScreenType
 import me.sanao1006.screens.event.BottomAppBarActionEvent
 
@@ -30,6 +35,7 @@ fun MainScreenBottomAppBarWrapper(
     floatingActionButton = floatingActionButton
 )
 
+@SuppressLint("MissingPermission")
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun MainScreenBottomAppBar(
@@ -39,13 +45,18 @@ private fun MainScreenBottomAppBar(
     modifier: Modifier = Modifier,
     floatingActionButton: @Composable RowScope.() -> Unit = {}
 ) {
+    val context = LocalContext.current
+    val vibrator = context.getSystemService<Vibrator>()
     HorizontalFloatingAppBar(
         expanded = true,
         modifier = modifier,
         leadingContent = {
             IconButton(
                 modifier = Modifier.padding(start = 8.dp, end = 16.dp),
-                onClick = onHomeClick
+                onClick = {
+                    vibrator?.vibrate()
+                    onHomeClick()
+                }
             ) {
                 Icon(
                     painter = painterResource(
@@ -62,7 +73,10 @@ private fun MainScreenBottomAppBar(
         trailingContent = {
             IconButton(
                 modifier = Modifier.padding(start = 16.dp, end = 8.dp),
-                onClick = onNotificationClick
+                onClick = {
+                    vibrator?.vibrate()
+                    onNotificationClick()
+                }
             ) {
                 Icon(
                     painter = painterResource(
