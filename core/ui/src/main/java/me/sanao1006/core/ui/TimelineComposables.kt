@@ -144,7 +144,7 @@ fun TimelineItemSection(
                     Spacer(modifier = Modifier.height(12.dp))
                     val canRenote =
                         timelineItem.visibility == Visibility.PUBLIC ||
-                                timelineItem.visibility == Visibility.HOME
+                            timelineItem.visibility == Visibility.HOME
                     TimelineActionRow(
                         canRenote = canRenote,
                         modifier = Modifier.fillMaxWidth(),
