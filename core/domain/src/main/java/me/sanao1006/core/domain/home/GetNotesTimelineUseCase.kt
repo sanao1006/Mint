@@ -1,9 +1,9 @@
 package me.sanao1006.core.domain.home
 
-import javax.inject.Inject
 import me.sanao1006.core.data.repository.NotesRepository
 import me.sanao1006.core.model.notes.TimelineItem
 import me.sanao1006.core.model.requestbody.notes.NotesTimeLineRequestBody
+import javax.inject.Inject
 
 class GetNotesTimelineUseCase @Inject constructor(
     private val notesRepository: NotesRepository
@@ -11,7 +11,7 @@ class GetNotesTimelineUseCase @Inject constructor(
     suspend operator fun invoke(timelineType: TimelineType): List<TimelineItem> {
         return try {
             val response = when (timelineType) {
-                TimelineType.LOCAL -> notesRepository.getNotesLocalTimeline(
+                TimelineType.HOME -> notesRepository.getNotesHomeTimeline(
                     notesTimeLineRequestBody = NotesTimeLineRequestBody(
                         limit = LIMIT
                     )
@@ -41,7 +41,7 @@ class GetNotesTimelineUseCase @Inject constructor(
 }
 
 enum class TimelineType {
-    LOCAL,
+    HOME,
     SOCIAL,
     GLOBAL
 }

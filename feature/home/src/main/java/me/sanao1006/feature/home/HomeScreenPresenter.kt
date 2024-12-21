@@ -226,10 +226,10 @@ class HomeScreenPresenter @AssistedInject constructor(
         ) { event ->
             when (event) {
                 HomeScreen.Event.TimelineEvent.OnLocalTimelineClicked ->
-                    timelineType = TimelineType.LOCAL
+                    timelineType = TimelineType.HOME
 
                 HomeScreen.Event.TimelineEvent.OnSocialTimelineClicked
-                -> timelineType = TimelineType.SOCIAL
+                    -> timelineType = TimelineType.SOCIAL
 
                 HomeScreen.Event.TimelineEvent.OnGlobalTimelineClicked ->
                     timelineType = TimelineType.GLOBAL
