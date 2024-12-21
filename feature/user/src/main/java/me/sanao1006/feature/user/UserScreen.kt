@@ -77,7 +77,9 @@ fun UserScreenUi(state: UserScreen.State, modifier: Modifier) {
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        ContainedLoadingIndicator()
+                        ContainedLoadingIndicator(
+                            indicatorColor = MaterialTheme.colorScheme.primary
+                        )
                     }
                 }
 
