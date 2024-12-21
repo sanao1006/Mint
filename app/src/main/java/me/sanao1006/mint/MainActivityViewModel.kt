@@ -16,13 +16,13 @@ class MainActivityViewModel @Inject constructor(
 ) : ViewModel() {
     val uiState: StateFlow<UiState> = dataStoreRepository.flowAccessToken().map {
         UiState(
-            tokenState = TokenState.SUCCESS,
+            tokenLoadingState = true,
             isLoggedIn = it.isNotBlank()
         )
     }.stateIn(
         scope = viewModelScope,
         initialValue = UiState(
-            tokenState = TokenState.LOADING,
+            tokenLoadingState = false,
             isLoggedIn = false
         ),
         started = SharingStarted.WhileSubscribed(5_000)
@@ -30,11 +30,7 @@ class MainActivityViewModel @Inject constructor(
 }
 
 data class UiState(
-    val tokenState: TokenState,
+    val tokenLoadingState: Boolean,
     val isLoggedIn: Boolean
 )
 
-enum class TokenState {
-    LOADING,
-    SUCCESS;
-}

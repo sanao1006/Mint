@@ -38,6 +38,7 @@ android {
         implementation(projects.core.screens)
         implementation(projects.core.domain)
         implementation(projects.misskeyStreaming)
+        implementation(libs.androidx.splashscreen)
     }
 }
 

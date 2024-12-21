@@ -12,6 +12,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.slack.circuit.backstack.rememberSaveableBackStack
 import com.slack.circuit.foundation.Circuit
 import com.slack.circuit.foundation.CircuitCompositionLocals
@@ -34,39 +35,35 @@ class MainActivity : ComponentActivity() {
     private val viewModel: MainActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashscreen = installSplashScreen()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
         setContent {
             MintTheme {
                 val uiState = viewModel.uiState.collectAsState()
-                when (uiState.value.tokenState) {
-                    TokenState.LOADING -> {
-                        /* Display nothing while loading. */
-                    }
+                splashscreen.setKeepOnScreenCondition { !uiState.value.tokenLoadingState }
 
-                    TokenState.SUCCESS -> {
-                        val backstack = rememberSaveableBackStack(
-                            if (uiState.value.isLoggedIn) HomeScreen
-                            else LoginScreen
-                        )
-                        val circuitNavigator = rememberCircuitNavigator(backstack)
-                        val navigator = rememberAndroidScreenAwareNavigator(circuitNavigator, this)
+                if (uiState.value.tokenLoadingState) {
+                    val backstack = rememberSaveableBackStack(
+                        if (uiState.value.isLoggedIn) HomeScreen
+                        else LoginScreen
+                    )
+                    val circuitNavigator = rememberCircuitNavigator(backstack)
+                    val navigator = rememberAndroidScreenAwareNavigator(circuitNavigator, this)
 
-                        CompositionLocalProvider(
-                            LocalContext provides this
-                        ) {
-                            CircuitCompositionLocals(circuit) {
-                                ContentWithOverlays {
-                                    NavigableCircuitContent(
-                                        navigator = navigator,
-                                        backStack = backstack,
-                                        circuit = circuit,
-                                        decoration = GestureNavigationDecoration {
-                                            navigator.pop()
-                                        }
-                                    )
-                                }
+                    CompositionLocalProvider(
+                        LocalContext provides this
+                    ) {
+                        CircuitCompositionLocals(circuit) {
+                            ContentWithOverlays {
+                                NavigableCircuitContent(
+                                    navigator = navigator,
+                                    backStack = backstack,
+                                    circuit = circuit,
+                                    decoration = GestureNavigationDecoration {
+                                        navigator.pop()
+                                    }
+                                )
                             }
                         }
                     }
