@@ -206,7 +206,7 @@ fun TimelineContentBox(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = stringResource(ResString.no_notification),
+                                text = stringResource(ResString.no_contents),
                                 color = MaterialTheme.colorScheme.onSurface,
                                 style = MaterialTheme.typography.titleLarge
                             )
