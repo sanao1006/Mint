@@ -18,3 +18,12 @@ data class Instance(
     @SerialName("themeColor")
     val themeColor: String = ""
 )
+
+fun Instance.isEmpty(): Boolean {
+    return this.faviconUrl.isEmpty() &&
+            this.iconUrl.isEmpty() &&
+            this.name.isEmpty() &&
+            this.softwareName.isEmpty() &&
+            this.softwareVersion.isEmpty() &&
+            this.themeColor.isEmpty()
+}

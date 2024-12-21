@@ -132,19 +132,22 @@ fun TimelineItemSection(
                 )
             },
             supportingContent = {
-                Column {
-                    InstanceInfoRow(
-                        timelineItem = timelineItem,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(4.dp))
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
+                val instance = timelineItem.user?.instance
+                Column(modifier = Modifier.wrapContentHeight()) {
+                    if (instance != null) {
+                        InstanceInfoRow(
+                            timelineItem = timelineItem,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(4.dp))
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                    }
                     Text(text = timelineItem.text)
                     Spacer(modifier = Modifier.height(12.dp))
                     val canRenote =
                         timelineItem.visibility == Visibility.PUBLIC ||
-                            timelineItem.visibility == Visibility.HOME
+                                timelineItem.visibility == Visibility.HOME
                     TimelineActionRow(
                         canRenote = canRenote,
                         modifier = Modifier.fillMaxWidth(),

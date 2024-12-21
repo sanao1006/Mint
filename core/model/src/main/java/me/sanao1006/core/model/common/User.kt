@@ -16,7 +16,7 @@ data class User(
     val emojis: Emojis = Emojis(),
     val host: String? = null,
     val id: String = "",
-    val instance: Instance = Instance(),
+    val instance: Instance? = null,
     val isBot: Boolean = false,
     val isCat: Boolean = false,
     val name: String? = null,
