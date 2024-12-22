@@ -3,7 +3,6 @@ package me.sanao1006.core.model.meta
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonObject
 
 @Serializable
 data class Announcement(
@@ -18,7 +17,7 @@ data class Announcement(
     @SerialName("id")
     val id: String,
     @SerialName("imageUrl")
-    val imageUrl: JsonObject?,
+    val imageUrl: String? = null,
     @SerialName("isRead")
     val isRead: Boolean,
     @SerialName("needConfirmationToRead")
@@ -30,5 +29,5 @@ data class Announcement(
     @SerialName("title")
     val title: String,
     @SerialName("updatedAt")
-    val updatedAt: String?
+    val updatedAt: String? = null,
 )

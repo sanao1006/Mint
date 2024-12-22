@@ -10,8 +10,8 @@ class GetAnnouncementsUseCaseImpl @Inject constructor(
 ) : GetAnnouncementsUseCase {
     override suspend operator fun invoke(
         limit: Int,
-        sinceId: String,
-        untilId: String,
+        sinceId: String?,
+        untilId: String?,
         isActive: Boolean
     ) = metaRepository.getAnnouncements(
         body = MetaAnnouncementsRequestBody(
@@ -26,8 +26,8 @@ class GetAnnouncementsUseCaseImpl @Inject constructor(
 interface GetAnnouncementsUseCase {
     suspend operator fun invoke(
         limit: Int = 10,
-        sinceId: String = "",
-        untilId: String = "",
+        sinceId: String? = null,
+        untilId: String? = null,
         isActive: Boolean = true
     ): List<Announcement>
 }

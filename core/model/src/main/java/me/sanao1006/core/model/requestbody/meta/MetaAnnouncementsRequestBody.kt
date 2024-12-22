@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class MetaAnnouncementsRequestBody(
     val limit: Int,
-    val sinceId: String,
-    val untilId: String,
+    val sinceId: String? = null,
+    val untilId: String? = null,
     val isActive: Boolean
 )
