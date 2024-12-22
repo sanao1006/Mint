@@ -22,11 +22,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
@@ -103,8 +105,10 @@ private fun AnnouncementScreenUiContent(
                 AnnouncementItemSection(
                     announcementTitle = announcement.title,
                     announcementIconRes = AnnouncementIcon.getIcon(announcement.icon),
+                    announcementImageUrl = announcement.imageUrl,
                     announcementText = announcement.text,
-                    announcementCreatedAt = TimeUtils.formatCreatedAt(announcement.createdAt),
+                    announcementCreatedAt = announcement.createdAt,
+                    announcementUpdatedAt = announcement.updatedAt,
                     modifier = Modifier.padding(12.dp)
                 )
             }
@@ -117,7 +121,9 @@ private fun AnnouncementItemSection(
     announcementTitle: String,
     announcementIconRes: Int,
     announcementText: String,
+    announcementImageUrl: String?,
     announcementCreatedAt: String,
+    announcementUpdatedAt: String?,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
@@ -140,12 +146,33 @@ private fun AnnouncementItemSection(
             maxLines = 5,
             overflow = TextOverflow.Ellipsis
         )
+        announcementImageUrl?.let {
+            Spacer(modifier = Modifier.height(4.dp))
+            AsyncImage(
+                model = it,
+                contentDescription = null,
+                contentScale = ContentScale.Crop
+            )
+        }
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = announcementCreatedAt,
+            text = stringResource(
+                ResString.announcement_created_at,
+                TimeUtils.formatCreatedAt(announcementCreatedAt)
+            ),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.outline
         )
+        announcementUpdatedAt?.let {
+            Text(
+                text = stringResource(
+                    ResString.announcement_created_at,
+                    TimeUtils.formatCreatedAt(it)
+                ),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.outline
+            )
+        }
     }
 }
 

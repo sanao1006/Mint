@@ -50,4 +50,6 @@
     <string name="date_month_ago">%1$s ヶ月前</string>
     <string name="date_year_ago">%1$s 年前</string>
     <string name="no_contents">表示する内容がありません</string>
+    <string name="announcement_created_at">作成日時: %1$s</string>
+    <string name="announcement_updated_at">更新日時: %1$s</string>
 </resources>
