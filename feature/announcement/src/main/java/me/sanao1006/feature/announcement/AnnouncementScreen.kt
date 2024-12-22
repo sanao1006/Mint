@@ -98,7 +98,7 @@ private fun AnnouncementScreenUiContent(
                     state.eventSink(AnnouncementScreen.Event.OnTabClicked(0))
                     selectedTabIndex = 0
                 },
-                text = { Text("Current Announcements") }
+                text = { Text(stringResource(ResString.announcement_current_announcements)) }
             )
             Tab(
                 selected = selectedTabIndex == 1,
@@ -106,7 +106,7 @@ private fun AnnouncementScreenUiContent(
                     state.eventSink(AnnouncementScreen.Event.OnTabClicked(1))
                     selectedTabIndex = 1
                 },
-                text = { Text("Past Announcements") }
+                text = { Text(stringResource(ResString.announcement_past_announcements)) }
             )
         }
         Spacer(modifier = Modifier.height(16.dp))

@@ -52,4 +52,6 @@
     <string name="no_contents">表示する内容がありません</string>
     <string name="announcement_created_at">作成日時: %1$s</string>
     <string name="announcement_updated_at">更新日時: %1$s</string>
+    <string name="announcement_current_announcements">現在のお知らせ</string>
+    <string name="announcement_past_announcements">過去のお知らせ</string>
 </resources>

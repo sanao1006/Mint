@@ -52,4 +52,6 @@
     <string name="no_contents">No Contents!</string>
     <string name="announcement_created_at">Created at: %1$s</string>
     <string name="announcement_updated_at">Updated at: %1$s</string>
+    <string name="announcement_current_announcements">Current Announcements</string>
+    <string name="announcement_past_announcements">Past Announcements</string>
 </resources>
