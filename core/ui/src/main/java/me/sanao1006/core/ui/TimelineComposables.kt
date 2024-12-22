@@ -127,7 +127,7 @@ fun TimelineItemSection(
             leadingContent = {
                 AsyncImage(
                     modifier = Modifier
-                        .size(40.dp)
+                        .size(48.dp)
                         .clip(shape = CircleShape)
                         .clickable {
                             onIconClick(
