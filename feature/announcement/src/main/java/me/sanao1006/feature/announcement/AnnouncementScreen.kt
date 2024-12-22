@@ -1,6 +1,5 @@
 package me.sanao1006.feature.announcement
 
-import android.os.Vibrator
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,19 +25,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.core.content.getSystemService
 import coil3.compose.AsyncImage
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
 import me.sanao1006.core.data.util.TimeUtils
-import me.sanao1006.core.data.util.vibrate
 import me.sanao1006.core.model.meta.Announcement
 import me.sanao1006.core.model.uistate.AnnouncementUiState
 import me.sanao1006.core.ui.DrawerItem
@@ -97,7 +93,6 @@ private fun AnnouncementScreenUiContent(
     modifier: Modifier = Modifier
 ) {
     val expandedStates = remember { mutableStateMapOf<String, Boolean>() }
-    val vibrator = LocalContext.current.getSystemService<Vibrator>()
     LazyColumn(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(24.dp)
@@ -110,7 +105,6 @@ private fun AnnouncementScreenUiContent(
             ElevatedCard(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
-                    vibrator?.vibrate()
                     expandedStates[announcement.id] = !isExpanded
                 }
             ) {
