@@ -86,7 +86,7 @@ fun AnnouncementScreen(state: AnnouncementScreen.State, modifier: Modifier) {
 @Composable
 private fun AnnouncementScreenUiContent(
     announcements: List<Announcement>,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     LazyColumn(
         modifier = modifier,
@@ -118,7 +118,7 @@ private fun AnnouncementItemSection(
     announcementIconRes: Int,
     announcementText: String,
     announcementCreatedAt: String,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
         Row(modifier = Modifier.fillMaxWidth()) {
@@ -130,7 +130,7 @@ private fun AnnouncementItemSection(
             Text(
                 text = announcementTitle,
                 fontWeight = FontWeight.SemiBold,
-                overflow = TextOverflow.Ellipsis,
+                overflow = TextOverflow.Ellipsis
             )
         }
         Spacer(modifier = Modifier.height(8.dp))
@@ -138,7 +138,7 @@ private fun AnnouncementItemSection(
         Text(
             text = announcementText,
             maxLines = 5,
-            overflow = TextOverflow.Ellipsis,
+            overflow = TextOverflow.Ellipsis
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(

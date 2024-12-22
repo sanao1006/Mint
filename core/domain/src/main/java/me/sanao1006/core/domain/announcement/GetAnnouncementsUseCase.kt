@@ -1,10 +1,10 @@
 package me.sanao1006.core.domain.announcement
 
+import javax.inject.Inject
 import me.sanao1006.core.data.repository.MetaRepository
 import me.sanao1006.core.model.requestbody.meta.MetaAnnouncementsRequestBody
 import me.sanao1006.core.model.uistate.AnnouncementUiState
 import timber.log.Timber
-import javax.inject.Inject
 
 class GetAnnouncementsUseCaseImpl @Inject constructor(
     private val metaRepository: MetaRepository
