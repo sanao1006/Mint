@@ -12,12 +12,10 @@ import androidx.compose.material3.ContainedLoadingIndicator
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FloatingAppBarDefaults.ScreenOffset
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.zIndex
 import me.sanao1006.core.model.uistate.TimelineItemAction
 import me.sanao1006.screens.HomeScreen
@@ -26,7 +24,6 @@ import me.sanao1006.screens.MainScreenType
 import me.sanao1006.screens.NotificationScreen
 import me.sanao1006.screens.event.NoteCreateEvent
 import me.sanao1006.screens.event.TimelineItemEvent
-import me.snao1006.res_value.ResString
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterialApi::class)
 @Composable
@@ -204,16 +201,7 @@ fun TimelineContentBox(
 
                 true -> {
                     if (isEmptyContent) {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = stringResource(ResString.no_contents),
-                                color = MaterialTheme.colorScheme.onSurface,
-                                style = MaterialTheme.typography.titleLarge
-                            )
-                        }
+                        NoContentsPlaceHolder()
                     } else {
                         notificationScreenTimelineContent()
                     }

@@ -28,7 +28,8 @@ include(
     "feature:home",
     "feature:user",
     "feature:search",
-    "feature:notification"
+    "feature:notification",
+    "feature:announcement"
 )
 include(
     "core:network",
