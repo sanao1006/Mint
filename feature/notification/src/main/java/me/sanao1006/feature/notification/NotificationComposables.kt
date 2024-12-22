@@ -34,7 +34,7 @@ import coil3.compose.rememberAsyncImagePainter
 import ir.alirezaivaz.tablericons.TablerIcons
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonPrimitive
-import me.sanao1006.core.data.util.getRelativeTimeString
+import me.sanao1006.core.data.util.TimeUtils.getRelativeTimeString
 import me.sanao1006.core.model.common.User
 import me.sanao1006.core.model.notes.TimelineItem
 import me.sanao1006.core.model.notes.Visibility

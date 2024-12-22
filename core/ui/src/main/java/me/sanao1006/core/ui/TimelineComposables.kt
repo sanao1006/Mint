@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
 import coil3.compose.AsyncImage
 import ir.alirezaivaz.tablericons.TablerIcons
-import me.sanao1006.core.data.util.getRelativeTimeString
+import me.sanao1006.core.data.util.TimeUtils.getRelativeTimeString
 import me.sanao1006.core.data.util.vibrate
 import me.sanao1006.core.model.common.User
 import me.sanao1006.core.model.notes.TimelineItem
@@ -164,7 +164,7 @@ fun TimelineItemSection(
                     Spacer(modifier = Modifier.height(12.dp))
                     val canRenote =
                         timelineItem.visibility == Visibility.PUBLIC ||
-                            timelineItem.visibility == Visibility.HOME
+                                timelineItem.visibility == Visibility.HOME
                     TimelineActionRow(
                         canRenote = canRenote,
                         modifier = Modifier.fillMaxWidth(),
