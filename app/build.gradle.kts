@@ -31,6 +31,7 @@ android {
         implementation(projects.feature.home)
         implementation(projects.feature.user)
         implementation(projects.feature.search)
+        implementation(projects.feature.announcement)
         implementation(projects.feature.notification)
         implementation(projects.core.network)
         implementation(projects.core.dataStore)

@@ -3,6 +3,7 @@ package me.sanao1006.screens.event
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.Navigator
 import me.sanao1006.core.model.LoginUserInfo
+import me.sanao1006.screens.AnnouncementScreen
 import me.sanao1006.screens.SearchScreen
 import me.sanao1006.screens.UserScreen
 
@@ -39,6 +40,10 @@ fun DrawerEvent.handleDrawerEvent(
 
         DrawerEvent.OnDrawerSearchClicked -> {
             navigator.goTo(SearchScreen)
+        }
+
+        DrawerEvent.OnDrawerAnnouncementClicked -> {
+            navigator.goTo(AnnouncementScreen)
         }
 
         else -> {}
