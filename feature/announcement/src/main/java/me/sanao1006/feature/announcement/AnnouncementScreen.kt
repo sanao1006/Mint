@@ -29,12 +29,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
 import me.sanao1006.core.data.util.TimeUtils
+import me.sanao1006.core.designsystem.MintTheme
 import me.sanao1006.core.model.meta.Announcement
 import me.sanao1006.core.model.uistate.AnnouncementUiState
 import me.sanao1006.core.ui.DrawerItem
@@ -249,5 +251,57 @@ enum class AnnouncementIcon(val value: String, @DrawableRes val iconRes: Int) {
     companion object {
         fun getIcon(value: String): Int =
             AnnouncementIcon.entries.find { it.value == value }?.iconRes ?: INFO.iconRes
+    }
+}
+
+@PreviewLightDark
+@Composable
+private fun PreviewAnnouncementScreenUiContent() {
+    MintTheme {
+        val announcements = listOf<Announcement>(
+            Announcement(
+                id = "1",
+                title = "Title 1",
+                icon = "info",
+                imageUrl = null,
+                text = "Text 1",
+                createdAt = "2022-01-01T00:00:00Z",
+                updatedAt = null,
+                display = "test",
+                forYou = true,
+                isRead = false,
+                needConfirmationToRead = true,
+                silence = true
+            ),
+            Announcement(
+                id = "2",
+                title = "Test Title 1",
+                icon = "info",
+                imageUrl = null,
+                text = """
+                    | Test Text2 Test Text2Test
+                    | Text2Test
+                    | Text2Test Text2Test
+                    | Text2Test
+                    | Text2Test Text2Test
+                    | Text2Test Text2
+                """.trimMargin(),
+                createdAt = "2022-01-01T00:00:00Z",
+                updatedAt = null,
+                display = "test",
+                forYou = true,
+                isRead = false,
+                needConfirmationToRead = true,
+                silence = true
+            )
+        )
+        AnnouncementScreenUiContent(
+            selectedTabIndex = 0,
+            announcements = announcements,
+            announcementItemExpandedStates = mapOf(),
+            onCurrentTabClick = {},
+            onPastTabClick = {},
+            onCardClick = {}
+        )
     }
 }
