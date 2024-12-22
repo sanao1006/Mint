@@ -18,7 +18,7 @@ fun NoContentsPlaceHolder(modifier: Modifier = Modifier) {
     ) {
         Text(
             text = stringResource(ResString.no_contents),
-            style = MaterialTheme.typography.headlineSmall
+            style = MaterialTheme.typography.bodyLarge
         )
     }
 }
