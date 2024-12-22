@@ -68,9 +68,34 @@ fun AnnouncementScreen(state: AnnouncementScreen.State, modifier: Modifier) {
                     }
 
                     is AnnouncementUiState.Success -> {
+                        val announcements =
+                            (state.uiState as AnnouncementUiState.Success).announcements
                         AnnouncementScreenUiContent(
-                            state = state,
-                            modifier = Modifier.fillMaxSize()
+                            selectedTabIndex = state.selectedTabIndex,
+                            announcements = announcements,
+                            announcementItemExpandedStates = state.announcementItemExpandedStates,
+                            modifier = Modifier.fillMaxSize(),
+                            onCurrentTabClick = {
+                                state.eventSink(
+                                    AnnouncementScreen.Event.OnTabClicked(
+                                        0
+                                    )
+                                )
+                            },
+                            onPastTabClick = {
+                                state.eventSink(
+                                    AnnouncementScreen.Event.OnTabClicked(
+                                        1
+                                    )
+                                )
+                            },
+                            onCardClick = {
+                                state.eventSink(
+                                    AnnouncementScreen.Event.OnCardClicked(
+                                        it
+                                    )
+                                )
+                            }
                         )
                     }
                 }
@@ -81,34 +106,38 @@ fun AnnouncementScreen(state: AnnouncementScreen.State, modifier: Modifier) {
 
 @Composable
 private fun AnnouncementScreenUiContent(
-    state: AnnouncementScreen.State,
-    modifier: Modifier = Modifier
+    announcements: List<Announcement>,
+    selectedTabIndex: Int,
+    announcementItemExpandedStates: Map<String, Boolean>,
+    modifier: Modifier = Modifier,
+    onCurrentTabClick: () -> Unit,
+    onPastTabClick: () -> Unit,
+    onCardClick: (String) -> Unit
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
-        TabRow(selectedTabIndex = state.selectedTabIndex) {
+        TabRow(selectedTabIndex = selectedTabIndex) {
             Tab(
-                selected = state.selectedTabIndex == 0,
-                onClick = { state.eventSink(AnnouncementScreen.Event.OnTabClicked(0)) },
+                selected = selectedTabIndex == 0,
+                onClick = onCurrentTabClick,
                 text = { Text(stringResource(ResString.announcement_current_announcements)) }
             )
             Tab(
-                selected = state.selectedTabIndex == 1,
-                onClick = { state.eventSink(AnnouncementScreen.Event.OnTabClicked(1)) },
+                selected = selectedTabIndex == 1,
+                onClick = onPastTabClick,
                 text = { Text(stringResource(ResString.announcement_past_announcements)) }
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
-        val announcements = (state.uiState as AnnouncementUiState.Success).announcements
         if (announcements.isEmpty()) {
             NoContentsPlaceHolder()
         } else {
             AnnouncementsView(
                 announcements = announcements,
-                expandedStates = state.announcementItemExpandedStates,
+                expandedStates = announcementItemExpandedStates,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 8.dp),
-                onClick = { state.eventSink(AnnouncementScreen.Event.OnCardClicked(it)) }
+                onClick = onCardClick
             )
         }
     }
