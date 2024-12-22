@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -22,10 +23,10 @@ import com.slack.circuit.overlay.ContentWithOverlays
 import com.slack.circuitx.android.rememberAndroidScreenAwareNavigator
 import com.slack.circuitx.gesturenavigation.GestureNavigationDecoration
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import me.sanao1006.core.designsystem.MintTheme
 import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.LoginScreen
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -56,14 +57,16 @@ class MainActivity : ComponentActivity() {
                     ) {
                         CircuitCompositionLocals(circuit) {
                             ContentWithOverlays {
-                                NavigableCircuitContent(
-                                    navigator = navigator,
-                                    backStack = backstack,
-                                    circuit = circuit,
-                                    decoration = GestureNavigationDecoration {
-                                        navigator.pop()
-                                    }
-                                )
+                                Surface {
+                                    NavigableCircuitContent(
+                                        navigator = navigator,
+                                        backStack = backstack,
+                                        circuit = circuit,
+                                        decoration = GestureNavigationDecoration {
+                                            navigator.pop()
+                                        }
+                                    )
+                                }
                             }
                         }
                     }
