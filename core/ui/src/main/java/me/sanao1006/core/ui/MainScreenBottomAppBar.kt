@@ -2,13 +2,14 @@ package me.sanao1006.core.ui
 
 import android.annotation.SuppressLint
 import android.os.Vibrator
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalFloatingAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -26,13 +27,13 @@ fun MainScreenBottomAppBarWrapper(
     mainScreenType: MainScreenType,
     modifier: Modifier = Modifier,
     event: (BottomAppBarActionEvent) -> Unit,
-    floatingActionButton: @Composable RowScope.() -> Unit
+    onFabClick: () -> Unit
 ) = MainScreenBottomAppBar(
     mainSheetType = mainScreenType,
     onHomeClick = { event(BottomAppBarActionEvent.OnHomeIconClicked) },
     onNotificationClick = { event(BottomAppBarActionEvent.OnNotificationIconClicked) },
     modifier = modifier,
-    floatingActionButton = floatingActionButton
+    onFabClick = onFabClick
 )
 
 @SuppressLint("MissingPermission")
@@ -43,7 +44,7 @@ private fun MainScreenBottomAppBar(
     onHomeClick: () -> Unit,
     onNotificationClick: () -> Unit,
     modifier: Modifier = Modifier,
-    floatingActionButton: @Composable RowScope.() -> Unit = {}
+    onFabClick: () -> Unit
 ) {
     val context = LocalContext.current
     val vibrator = context.getSystemService<Vibrator>()
@@ -90,7 +91,15 @@ private fun MainScreenBottomAppBar(
                 )
             }
         },
-        content = floatingActionButton
+        content = {
+            FloatingActionButton(
+                modifier = Modifier,
+                containerColor = MaterialTheme.colorScheme.primary,
+                onClick = onFabClick
+            ) {
+                Icon(painter = painterResource(TablerIcons.Pencil), "")
+            }
+        }
     )
 }
 

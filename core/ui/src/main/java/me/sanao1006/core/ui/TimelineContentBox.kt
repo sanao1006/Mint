@@ -24,6 +24,7 @@ import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.MainScreenState
 import me.sanao1006.screens.MainScreenType
 import me.sanao1006.screens.NotificationScreen
+import me.sanao1006.screens.event.NoteCreateEvent
 import me.sanao1006.screens.event.TimelineItemEvent
 import me.snao1006.res_value.ResString
 
@@ -37,7 +38,7 @@ fun TimelineContentBox(
     isRefreshed: Boolean,
     contentLoadingState: Boolean?,
     isEmptyContent: Boolean,
-    floatingActionButton: @Composable () -> Unit,
+    onFabClick: () -> Unit = { state.noteCreateEventSink(NoteCreateEvent.OnNoteCreateClicked) },
     onRenoteIconClick: (RenoteActionIcon) -> Unit = { event ->
         when (event) {
             RenoteActionIcon.Renote -> {
@@ -251,7 +252,7 @@ fun TimelineContentBox(
                     is NotificationScreen.State -> state.bottomAppBarEventSink(it)
                 }
             },
-            floatingActionButton = { floatingActionButton() }
+            onFabClick = onFabClick
         )
     }
 }

@@ -128,8 +128,7 @@ private fun NotificationScreenContent(
             pullRefreshState = state.pullToRefreshState,
             isRefreshed = state.isRefreshed,
             contentLoadingState = state.notificationUiState.isSuccessLoading,
-            isEmptyContent = state.notificationUiState.notificationUiStateObjects.isEmpty(),
-            floatingActionButton = floatingActionButton
+            isEmptyContent = state.notificationUiState.notificationUiStateObjects.isEmpty()
         ) {
             NotificationColumn(
                 modifier = Modifier.fillMaxSize(),

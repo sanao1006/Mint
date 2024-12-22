@@ -137,8 +137,7 @@ private fun HomeScreenUiContent(
             pullRefreshState = state.pullToRefreshState,
             isRefreshed = state.isRefreshed,
             contentLoadingState = state.timelineUiState.isSuccessLoading,
-            isEmptyContent = state.timelineUiState.timelineItems.isEmpty(),
-            floatingActionButton = floatingActionButton
+            isEmptyContent = state.timelineUiState.timelineItems.isEmpty()
         ) {
             TimelineColumn(
                 state = state,
