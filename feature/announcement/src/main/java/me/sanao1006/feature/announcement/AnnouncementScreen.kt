@@ -17,6 +17,7 @@ import androidx.compose.material3.ContainedLoadingIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -29,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
+import me.sanao1006.core.data.util.TimeUtils
 import me.sanao1006.core.model.meta.Announcement
 import me.sanao1006.core.model.uistate.AnnouncementUiState
 import me.sanao1006.core.ui.DrawerItem
@@ -102,6 +104,7 @@ private fun AnnouncementScreenUiContent(
                     announcementTitle = announcement.title,
                     announcementIconRes = AnnouncementIcon.getIcon(announcement.icon),
                     announcementText = announcement.text,
+                    announcementCreatedAt = TimeUtils.formatCreatedAt(announcement.createdAt),
                     modifier = Modifier.padding(12.dp)
                 )
             }
@@ -114,6 +117,7 @@ private fun AnnouncementItemSection(
     announcementTitle: String,
     announcementIconRes: Int,
     announcementText: String,
+    announcementCreatedAt: String,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -135,6 +139,12 @@ private fun AnnouncementItemSection(
             text = announcementText,
             maxLines = 5,
             overflow = TextOverflow.Ellipsis,
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = announcementCreatedAt,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.outline
         )
     }
 }

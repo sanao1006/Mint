@@ -4,8 +4,19 @@ import android.content.Context
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.datetime.toLocalDateTime
 import me.snao1006.res_value.ResString
+import java.time.format.DateTimeFormatter
+
+object TimeUtils {
+    fun formatCreatedAt(createdAt: String): String {
+        val instant = Instant.parse(createdAt)
+        val localDateTime = instant.toLocalDateTime(TimeZone.currentSystemDefault())
+        val formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")
+        return localDateTime.toJavaLocalDateTime().format(formatter)
+    }
+}
 
 fun getRelativeTimeString(context: Context, isoDateString: String): String {
     val dateTime = Instant.parse(isoDateString).toLocalDateTime(TimeZone.currentSystemDefault())
