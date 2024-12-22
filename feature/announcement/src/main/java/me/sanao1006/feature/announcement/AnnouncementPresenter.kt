@@ -24,6 +24,8 @@ class AnnouncementPresenter @AssistedInject constructor(
 ) : Presenter<AnnouncementScreen.State> {
     @Composable
     override fun present(): AnnouncementScreen.State {
+        var isActive by rememberRetained { mutableStateOf(true) }
+
         var uiState: AnnouncementUiState by rememberRetained {
             mutableStateOf(AnnouncementUiState.Loading)
         }
@@ -32,10 +34,20 @@ class AnnouncementPresenter @AssistedInject constructor(
             uiState = getAnnouncementsUseCase()
         }
 
+        LaunchedImpressionEffect(isActive) {
+            uiState = getAnnouncementsUseCase(isActive = isActive)
+        }
+
         return AnnouncementScreen.State(
             uiState = uiState,
             globalIconEventSink = { event -> event.handleNavigationIconClicked(navigator) }
-        )
+        ) { event ->
+            when (event) {
+                is AnnouncementScreen.Event.OnTabClicked -> {
+                    isActive = event.index == 0
+                }
+            }
+        }
     }
 }
 

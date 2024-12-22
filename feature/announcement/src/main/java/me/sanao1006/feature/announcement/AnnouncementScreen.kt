@@ -18,10 +18,15 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -72,13 +77,9 @@ fun AnnouncementScreen(state: AnnouncementScreen.State, modifier: Modifier) {
                     }
 
                     is AnnouncementUiState.Success -> {
-                        val announcements =
-                            (state.uiState as AnnouncementUiState.Success).announcements
                         AnnouncementScreenUiContent(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(horizontal = 8.dp),
-                            announcements = announcements
+                            state = state,
+                            modifier = Modifier.fillMaxSize()
                         )
                     }
                 }
@@ -89,6 +90,54 @@ fun AnnouncementScreen(state: AnnouncementScreen.State, modifier: Modifier) {
 
 @Composable
 private fun AnnouncementScreenUiContent(
+    state: AnnouncementScreen.State,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier.fillMaxWidth()) {
+        var selectedTabIndex by remember { mutableIntStateOf(0) }
+        TabRow(selectedTabIndex = selectedTabIndex) {
+            Tab(
+                selected = selectedTabIndex == 0,
+                onClick = {
+                    state.eventSink(AnnouncementScreen.Event.OnTabClicked(0))
+                    selectedTabIndex = 0
+                },
+                text = { Text("Current Announcements") }
+            )
+            Tab(
+                selected = selectedTabIndex == 1,
+                onClick = {
+                    state.eventSink(AnnouncementScreen.Event.OnTabClicked(1))
+                    selectedTabIndex = 1
+                },
+                text = { Text("Past Announcements") }
+            )
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        val announcements = (state.uiState as AnnouncementUiState.Success).announcements
+        if (announcements.isEmpty()) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = stringResource(ResString.no_contents),
+                    style = MaterialTheme.typography.headlineSmall
+                )
+            }
+        } else {
+            AnnouncementsView(
+                announcements = announcements,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp)
+            )
+        }
+    }
+}
+
+@Composable
+private fun AnnouncementsView(
     announcements: List<Announcement>,
     modifier: Modifier = Modifier
 ) {
