@@ -44,6 +44,7 @@ import me.sanao1006.core.model.meta.Announcement
 import me.sanao1006.core.model.uistate.AnnouncementUiState
 import me.sanao1006.core.ui.DrawerItem
 import me.sanao1006.core.ui.DrawerItemScreenWrapper
+import me.sanao1006.core.ui.NoContentsPlaceHolder
 import me.sanao1006.screens.AnnouncementScreen
 import me.snao1006.res_value.ResString
 
@@ -68,12 +69,7 @@ fun AnnouncementScreen(state: AnnouncementScreen.State, modifier: Modifier) {
                     }
 
                     is AnnouncementUiState.Failed -> {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(stringResource(ResString.no_contents))
-                        }
+                        NoContentsPlaceHolder()
                     }
 
                     is AnnouncementUiState.Success -> {
@@ -116,15 +112,7 @@ private fun AnnouncementScreenUiContent(
         Spacer(modifier = Modifier.height(16.dp))
         val announcements = (state.uiState as AnnouncementUiState.Success).announcements
         if (announcements.isEmpty()) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = stringResource(ResString.no_contents),
-                    style = MaterialTheme.typography.headlineSmall
-                )
-            }
+            NoContentsPlaceHolder()
         } else {
             AnnouncementsView(
                 announcements = announcements,
