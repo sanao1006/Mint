@@ -11,7 +11,7 @@ import me.sanao1006.screens.event.GlobalIconEvent
 object AnnouncementScreen : Screen {
     data class State(
         val uiState: AnnouncementUiState,
-        val globalIconEventSink: (GlobalIconEvent) -> Unit,
+        val globalIconEventSink: (GlobalIconEvent) -> Unit
     ) : CircuitUiState
 
     sealed class Event : CircuitUiEvent

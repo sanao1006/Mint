@@ -1,6 +1,5 @@
 package me.sanao1006.core.model.meta
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -29,5 +28,5 @@ data class Announcement(
     @SerialName("title")
     val title: String,
     @SerialName("updatedAt")
-    val updatedAt: String? = null,
+    val updatedAt: String? = null
 )
