@@ -22,11 +22,6 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -90,22 +85,15 @@ private fun AnnouncementScreenUiContent(
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
-        var selectedTabIndex by remember { mutableIntStateOf(0) }
-        TabRow(selectedTabIndex = selectedTabIndex) {
+        TabRow(selectedTabIndex = state.selectedTabIndex) {
             Tab(
-                selected = selectedTabIndex == 0,
-                onClick = {
-                    state.eventSink(AnnouncementScreen.Event.OnTabClicked(0))
-                    selectedTabIndex = 0
-                },
+                selected = state.selectedTabIndex == 0,
+                onClick = { state.eventSink(AnnouncementScreen.Event.OnTabClicked(0)) },
                 text = { Text(stringResource(ResString.announcement_current_announcements)) }
             )
             Tab(
-                selected = selectedTabIndex == 1,
-                onClick = {
-                    state.eventSink(AnnouncementScreen.Event.OnTabClicked(1))
-                    selectedTabIndex = 1
-                },
+                selected = state.selectedTabIndex == 1,
+                onClick = { state.eventSink(AnnouncementScreen.Event.OnTabClicked(1)) },
                 text = { Text(stringResource(ResString.announcement_past_announcements)) }
             )
         }
@@ -116,9 +104,11 @@ private fun AnnouncementScreenUiContent(
         } else {
             AnnouncementsView(
                 announcements = announcements,
+                expandedStates = state.announcementItemExpandedStates,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 8.dp)
+                    .padding(horizontal = 8.dp),
+                onClick = { state.eventSink(AnnouncementScreen.Event.OnCardClicked(it)) }
             )
         }
     }
@@ -127,9 +117,10 @@ private fun AnnouncementScreenUiContent(
 @Composable
 private fun AnnouncementsView(
     announcements: List<Announcement>,
-    modifier: Modifier = Modifier
+    expandedStates: Map<String, Boolean>,
+    modifier: Modifier = Modifier,
+    onClick: (String) -> Unit
 ) {
-    val expandedStates = remember { mutableStateMapOf<String, Boolean>() }
     LazyColumn(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(24.dp)
@@ -138,12 +129,11 @@ private fun AnnouncementsView(
             items = announcements,
             key = { it.id }
         ) { announcement ->
-            val isExpanded = expandedStates[announcement.id] ?: false
+            val isExpanded = expandedStates[announcement.id] == true
+
             ElevatedCard(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = {
-                    expandedStates[announcement.id] = !isExpanded
-                }
+                onClick = { onClick(announcement.id) }
             ) {
                 AnnouncementItemSection(
                     announcementTitle = announcement.title,

@@ -2,7 +2,10 @@ package me.sanao1006.feature.announcement
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.retained.rememberRetained
@@ -25,7 +28,9 @@ class AnnouncementPresenter @AssistedInject constructor(
     @Composable
     override fun present(): AnnouncementScreen.State {
         var isActive by rememberRetained { mutableStateOf(true) }
-
+        var selectedTabIndex by remember { mutableIntStateOf(0) }
+        val announcementItemExpandedStates =
+            rememberRetained { mutableStateMapOf<String, Boolean>() }
         var uiState: AnnouncementUiState by rememberRetained {
             mutableStateOf(AnnouncementUiState.Loading)
         }
@@ -40,11 +45,21 @@ class AnnouncementPresenter @AssistedInject constructor(
 
         return AnnouncementScreen.State(
             uiState = uiState,
+            selectedTabIndex = selectedTabIndex,
+            announcementItemExpandedStates = announcementItemExpandedStates,
             globalIconEventSink = { event -> event.handleNavigationIconClicked(navigator) }
         ) { event ->
             when (event) {
                 is AnnouncementScreen.Event.OnTabClicked -> {
+                    selectedTabIndex = event.index
                     isActive = event.index == 0
+                }
+
+                is AnnouncementScreen.Event.OnCardClicked -> {
+                    // Whether the tapped announcement is expanded or not
+                    val isExpanded = announcementItemExpandedStates[event.id] == true
+                    // Update the expanded state of the tapped announcement
+                    announcementItemExpandedStates[event.id] = !isExpanded
                 }
             }
         }
