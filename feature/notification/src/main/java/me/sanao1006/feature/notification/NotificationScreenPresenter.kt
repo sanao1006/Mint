@@ -26,6 +26,8 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.sanao1006.core.domain.favorites.CreateFavoritesUseCase
+import me.sanao1006.core.domain.favorites.DeleteFavoritesUseCase
+import me.sanao1006.core.domain.favorites.GetNoteStateUseCase
 import me.sanao1006.core.domain.home.CreateNotesUseCase
 import me.sanao1006.core.domain.home.UpdateAccountUseCase
 import me.sanao1006.core.domain.notification.GetNotificationsUseCase
@@ -36,6 +38,7 @@ import me.sanao1006.core.model.uistate.TimelineItemAction
 import me.sanao1006.screens.NoteScreen
 import me.sanao1006.screens.NotificationScreen
 import me.sanao1006.screens.event.TimelineItemEvent
+import me.sanao1006.screens.event.favorite
 import me.sanao1006.screens.event.handleBottomAppBarActionEvent
 import me.sanao1006.screens.event.handleDrawerEvent
 import me.sanao1006.screens.event.handleNavigationIconClicked
@@ -48,7 +51,9 @@ class NotificationScreenPresenter @AssistedInject constructor(
     private val updateMyAccountUseCase: UpdateAccountUseCase,
     private val getNotificationsUseCase: GetNotificationsUseCase,
     private val createNotesUseCase: CreateNotesUseCase,
-    private val createFavoritesUseCase: CreateFavoritesUseCase
+    private val createFavoritesUseCase: CreateFavoritesUseCase,
+    private val deleteFavoritesUseCase: DeleteFavoritesUseCase,
+    private val getNoteStateUseCase: GetNoteStateUseCase
 ) : Presenter<NotificationScreen.State> {
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
@@ -117,11 +122,31 @@ class NotificationScreenPresenter @AssistedInject constructor(
                     is TimelineItemEvent.OnTimelineItemReactionClicked -> {}
 
                     is TimelineItemEvent.OnTimelineItemOptionClicked -> {
-                        notificationUiState = notificationUiState.copy(
-                            showBottomSheet = true,
-                            timelineAction = TimelineItemAction.Option,
-                            selectedUserId = event.userId
-                        )
+                        scope.launch {
+                            getNoteStateUseCase.invoke(event.id)
+                                .onSuccess {
+                                    notificationUiState =
+                                        notificationUiState.copy(
+                                            showBottomSheet = true,
+                                            timelineAction = TimelineItemAction.Option,
+                                            isFavorite = it.isFavorited,
+                                            selectedUserId = event.id,
+                                            selectedNoteText = event.text,
+                                            selectedNoteLink = event.uri
+                                        )
+                                }
+                                .onFailure {
+                                    notificationUiState =
+                                        notificationUiState.copy(
+                                            showBottomSheet = true,
+                                            timelineAction = TimelineItemAction.Option,
+                                            isFavorite = false,
+                                            selectedUserId = event.id,
+                                            selectedNoteText = event.text,
+                                            selectedNoteLink = event.uri
+                                        )
+                                }
+                        }
                     }
 
                     is TimelineItemEvent.OnRenoteClicked -> {
@@ -169,17 +194,15 @@ class NotificationScreenPresenter @AssistedInject constructor(
                     is TimelineItemEvent.OnFavoriteClicked -> {
                         notificationUiState = notificationUiState.copy(showBottomSheet = false)
                         scope.launch {
-                            createFavoritesUseCase.invoke(event.noteId)
-                                .onSuccess { value ->
-                                    event.snackbarHostState.showSnackbar(
-                                        "Success"
-                                    )
-                                }
-                                .onFailure { exception ->
-                                    event.snackbarHostState.showSnackbar(
-                                        "Failed"
-                                    )
-                                }
+                            favorite(
+                                isFavorite = notificationUiState.isFavorite,
+                                snackbarHostState = event.snackbarHostState,
+                                context = context,
+                                notFavoriteCallBack = {
+                                    deleteFavoritesUseCase.invoke(event.noteId)
+                                },
+                                isFavoriteCallBack = { createFavoritesUseCase.invoke(event.noteId) }
+                            )
                         }
                     }
                 }

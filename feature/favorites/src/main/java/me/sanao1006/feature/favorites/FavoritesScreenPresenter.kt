@@ -26,7 +26,9 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.sanao1006.core.domain.favorites.CreateFavoritesUseCase
+import me.sanao1006.core.domain.favorites.DeleteFavoritesUseCase
 import me.sanao1006.core.domain.favorites.GetMyFavoriteUseCase
+import me.sanao1006.core.domain.favorites.GetNoteStateUseCase
 import me.sanao1006.core.domain.home.CreateNotesUseCase
 import me.sanao1006.core.model.notes.Visibility
 import me.sanao1006.core.model.uistate.FavoritesScreenUiState
@@ -34,6 +36,7 @@ import me.sanao1006.core.model.uistate.TimelineItemAction
 import me.sanao1006.screens.FavoritesScreen
 import me.sanao1006.screens.NoteScreen
 import me.sanao1006.screens.event.TimelineItemEvent
+import me.sanao1006.screens.event.favorite
 import me.sanao1006.screens.event.handleNavigationIconClicked
 import me.sanao1006.screens.event.handleTimelineItemIconClicked
 import me.sanao1006.screens.event.handleTimelineItemReplyClicked
@@ -42,7 +45,9 @@ class FavoritesScreenPresenter @AssistedInject constructor(
     @Assisted private val navigator: Navigator,
     private val createNotesUseCase: CreateNotesUseCase,
     private val getMyFavoriteUseCase: GetMyFavoriteUseCase,
-    private val createFavoritesUseCase: CreateFavoritesUseCase
+    private val createFavoritesUseCase: CreateFavoritesUseCase,
+    private val deleteFavoritesUseCase: DeleteFavoritesUseCase,
+    private val getNoteStateUseCase: GetNoteStateUseCase
 ) : Presenter<FavoritesScreen.State> {
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
@@ -103,14 +108,31 @@ class FavoritesScreenPresenter @AssistedInject constructor(
                     is TimelineItemEvent.OnTimelineItemReactionClicked -> {}
 
                     is TimelineItemEvent.OnTimelineItemOptionClicked -> {
-                        favoritesScreenUiState =
-                            favoritesScreenUiState.copy(
-                                showBottomSheet = true,
-                                timelineAction = TimelineItemAction.Option,
-                                selectedUserId = event.id,
-                                selectedNoteText = event.text,
-                                selectedNoteLink = event.uri
-                            )
+                        scope.launch {
+                            getNoteStateUseCase.invoke(event.id)
+                                .onSuccess {
+                                    favoritesScreenUiState =
+                                        favoritesScreenUiState.copy(
+                                            showBottomSheet = true,
+                                            timelineAction = TimelineItemAction.Option,
+                                            isFavorite = it.isFavorited,
+                                            selectedUserId = event.id,
+                                            selectedNoteText = event.text,
+                                            selectedNoteLink = event.uri
+                                        )
+                                }
+                                .onFailure {
+                                    favoritesScreenUiState =
+                                        favoritesScreenUiState.copy(
+                                            showBottomSheet = true,
+                                            timelineAction = TimelineItemAction.Option,
+                                            isFavorite = false,
+                                            selectedUserId = event.id,
+                                            selectedNoteText = event.text,
+                                            selectedNoteLink = event.uri
+                                        )
+                                }
+                        }
                     }
 
                     is TimelineItemEvent.OnRenoteClicked -> {
@@ -166,17 +188,15 @@ class FavoritesScreenPresenter @AssistedInject constructor(
                         favoritesScreenUiState =
                             favoritesScreenUiState.copy(showBottomSheet = false)
                         scope.launch {
-                            createFavoritesUseCase.invoke(event.noteId)
-                                .onSuccess { value ->
-                                    event.snackbarHostState.showSnackbar(
-                                        "Success"
-                                    )
-                                }
-                                .onFailure { exception ->
-                                    event.snackbarHostState.showSnackbar(
-                                        "Failed"
-                                    )
-                                }
+                            favorite(
+                                isFavorite = favoritesScreenUiState.isFavorite,
+                                snackbarHostState = event.snackbarHostState,
+                                context = context,
+                                notFavoriteCallBack = {
+                                    deleteFavoritesUseCase.invoke(event.noteId)
+                                },
+                                isFavoriteCallBack = { createFavoritesUseCase.invoke(event.noteId) }
+                            )
                         }
                     }
                 }
