@@ -7,7 +7,7 @@ import kotlinx.serialization.json.JsonObject
 import me.sanao1006.core.model.common.User
 import me.sanao1006.core.model.requestbody.account.IFavoritesRequestBody
 import me.sanao1006.core.model.requestbody.account.INotificationsRequestBody
-import me.sanao1006.core.model.response.notes.NotesTimelineResponse
+import me.sanao1006.core.model.response.account.IFavoritesResponse
 import me.sanao1006.core.model.response.notification.NotificationResponse
 
 interface AccountRepository {
@@ -24,5 +24,5 @@ interface AccountRepository {
     @POST("api/i/favorites")
     suspend fun getMyFavorites(
         @Body body: IFavoritesRequestBody
-    ): List<NotesTimelineResponse>
+    ): List<IFavoritesResponse>
 }

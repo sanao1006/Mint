@@ -1,9 +1,9 @@
 package me.sanao1006.core.domain.favorites
 
-import javax.inject.Inject
 import me.sanao1006.core.data.repository.AccountRepository
 import me.sanao1006.core.model.requestbody.account.IFavoritesRequestBody
 import me.sanao1006.core.model.response.notes.NotesTimelineResponse
+import javax.inject.Inject
 
 class GetMyFavoriteUseCase @Inject constructor(
     private val accountRepository: AccountRepository
@@ -19,6 +19,6 @@ class GetMyFavoriteUseCase @Inject constructor(
                 sinceId = sinceId,
                 untilId = untilId
             )
-        )
+        ).map { it.note }
     }
 }
