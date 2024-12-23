@@ -4,6 +4,7 @@ import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.Navigator
 import me.sanao1006.core.model.LoginUserInfo
 import me.sanao1006.screens.AnnouncementScreen
+import me.sanao1006.screens.FavoritesScreen
 import me.sanao1006.screens.SearchScreen
 import me.sanao1006.screens.UserScreen
 
@@ -44,6 +45,10 @@ fun DrawerEvent.handleDrawerEvent(
 
         DrawerEvent.OnDrawerAnnouncementClicked -> {
             navigator.goTo(AnnouncementScreen)
+        }
+
+        DrawerEvent.OnDrawerFavoriteClicked -> {
+            navigator.goTo(FavoritesScreen)
         }
 
         else -> {}

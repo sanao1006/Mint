@@ -54,3 +54,12 @@ interface MainScreenState {
     val globalIconEventSink: (GlobalIconEvent) -> Unit
     val bottomAppBarEventSink: (BottomAppBarActionEvent) -> Unit
 }
+
+@OptIn(ExperimentalMaterialApi::class)
+interface SubScreenState {
+    val navigator: Navigator
+    val pullToRefreshState: PullRefreshState
+    val isRefreshed: Boolean
+    val timelineEventSink: (TimelineItemEvent) -> Unit
+    val globalIconEventSink: (GlobalIconEvent) -> Unit
+}

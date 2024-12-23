@@ -30,7 +30,7 @@ import com.slack.circuitx.effects.LaunchedImpressionEffect
 import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
 import me.sanao1006.core.ui.MainScreenDrawerWrapper
-import me.sanao1006.core.ui.TimelineContentBox
+import me.sanao1006.core.ui.MainScreenTimelineContentBox
 import me.sanao1006.screens.MainScreenType
 import me.sanao1006.screens.NotificationScreen
 import me.sanao1006.screens.event.GlobalIconEvent
@@ -64,7 +64,7 @@ fun NotificationScreenUi(state: NotificationScreen.State, modifier: Modifier) {
                 state = state,
                 context = context,
                 modifier = Modifier,
-                snackbarHost = { SnackbarHost(snackbarHostState) },
+                snackbarHostState = snackbarHostState,
                 onGlobalIconClicked = {
                     state.globalIconEventSink(
                         GlobalIconEvent.OnGlobalIconClicked(
@@ -97,7 +97,7 @@ private fun NotificationScreenContent(
     state: NotificationScreen.State,
     context: Context,
     modifier: Modifier = Modifier,
-    snackbarHost: @Composable () -> Unit,
+    snackbarHostState: SnackbarHostState,
     onGlobalIconClicked: () -> Unit,
     floatingActionButton: @Composable () -> Unit
 ) {
@@ -119,15 +119,16 @@ private fun NotificationScreenContent(
                 }
             )
         },
-        snackbarHost = snackbarHost
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) {
-        TimelineContentBox(
+        MainScreenTimelineContentBox(
             state = state,
-            modifier = Modifier.padding(it),
             mainScreenType = MainScreenType.NOTIFICATION,
+            snackbarHostState = snackbarHostState,
             pullRefreshState = state.pullToRefreshState,
             isRefreshed = state.isRefreshed,
             contentLoadingState = state.notificationUiState.isSuccessLoading,
+            modifier = Modifier.padding(it),
             isEmptyContent = state.notificationUiState.notificationUiStateObjects.isEmpty()
         ) {
             NotificationColumn(

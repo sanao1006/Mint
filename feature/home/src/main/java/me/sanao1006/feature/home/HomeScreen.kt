@@ -28,8 +28,8 @@ import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
 import kotlinx.coroutines.launch
 import me.sanao1006.core.ui.MainScreenDrawerWrapper
+import me.sanao1006.core.ui.MainScreenTimelineContentBox
 import me.sanao1006.core.ui.TimelineColumn
-import me.sanao1006.core.ui.TimelineContentBox
 import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.MainScreenType
 import me.sanao1006.screens.event.GlobalIconEvent
@@ -63,7 +63,7 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
                 state = state,
                 pagerState = pagerState,
                 modifier = Modifier,
-                snackbarHostState = { SnackbarHost(hostState = snackbarHostState) },
+                snackbarHostState = snackbarHostState,
                 onGlobalIconClicked = {
                     state.globalIconEventSink(
                         GlobalIconEvent.OnGlobalIconClicked(
@@ -110,7 +110,7 @@ private fun HomeScreenUiContent(
     state: HomeScreen.State,
     pagerState: PagerState,
     modifier: Modifier = Modifier,
-    snackbarHostState: @Composable () -> Unit,
+    snackbarHostState: SnackbarHostState,
     onGlobalIconClicked: () -> Unit,
     onHomeClick: () -> Unit,
     onSocialClick: () -> Unit,
@@ -128,14 +128,15 @@ private fun HomeScreenUiContent(
                 onGlobalClick = onGlobalClick
             )
         },
-        snackbarHost = snackbarHostState
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) {
-        TimelineContentBox(
+        MainScreenTimelineContentBox(
             state = state,
-            modifier = Modifier.padding(it),
             mainScreenType = MainScreenType.HOME,
+            snackbarHostState = snackbarHostState,
             pullRefreshState = state.pullToRefreshState,
             isRefreshed = state.isRefreshed,
+            modifier = Modifier.padding(it),
             contentLoadingState = state.timelineUiState.isSuccessLoading,
             isEmptyContent = state.timelineUiState.timelineItems.isEmpty()
         ) {

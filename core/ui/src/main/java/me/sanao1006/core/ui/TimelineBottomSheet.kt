@@ -68,16 +68,20 @@ enum class OptionActionIcon(
     Favorite(
         TablerIcons.Star,
         ResString.description_favorite
+    ),
+    UnFavorite(
+        TablerIcons.StarOff,
+        ResString.description_remove_favorite
     )
     ;
 
     companion object {
-        fun getAllItems(): List<OptionActionIcon> = listOf(
+        fun getAllItems(isFavorite: Boolean): List<OptionActionIcon> = listOf(
             Detail,
             Copy,
             CopyLink,
             Share,
-            Favorite
+            if (isFavorite) UnFavorite else Favorite
         )
     }
 }
@@ -87,6 +91,7 @@ enum class OptionActionIcon(
 fun TimelineBottomSheet(
     isShowBottomSheet: Boolean = false,
     timelineItemAction: TimelineItemAction,
+    isFavorite: Boolean = false,
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit,
     onRenoteIconCLick: (RenoteActionIcon) -> Unit,
@@ -95,7 +100,7 @@ fun TimelineBottomSheet(
     if (isShowBottomSheet) {
         val model = when (timelineItemAction) {
             TimelineItemAction.Renote -> RenoteActionIcon.getAllItems()
-            TimelineItemAction.Option -> OptionActionIcon.getAllItems()
+            TimelineItemAction.Option -> OptionActionIcon.getAllItems(isFavorite)
             TimelineItemAction.None -> emptyList()
         }
         ModalBottomSheet(

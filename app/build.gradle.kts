@@ -33,6 +33,7 @@ android {
         implementation(projects.feature.search)
         implementation(projects.feature.announcement)
         implementation(projects.feature.notification)
+        implementation(projects.feature.favorites)
         implementation(projects.core.network)
         implementation(projects.core.dataStore)
         implementation(projects.core.designsystem)

@@ -7,6 +7,7 @@ data class NotificationUiState(
     var notificationUiStateObjects: List<NotificationUiStateObject> = emptyList(),
     var isSuccessLoading: Boolean? = null,
     var isSuccessCreateNote: Boolean? = null,
+    var isFavorite: Boolean = false,
     var showBottomSheet: Boolean = false,
     var timelineAction: TimelineItemAction = TimelineItemAction.Renote,
     val selectedUserId: String? = null,
