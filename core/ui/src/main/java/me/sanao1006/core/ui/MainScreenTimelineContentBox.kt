@@ -262,8 +262,9 @@ fun SubScreenTimelineContentBox(
                 state.timelineEventSink(
                     TimelineItemEvent.OnRenoteClicked(
                         when (state) {
-                            is FavoritesScreen.State -> state.favoritesScreenUiState.selectedUserId
-                                ?: ""
+                            is FavoritesScreen.State ->
+                                state.favoritesScreenUiState.selectedUserId
+                                    ?: ""
 
                             else -> ""
                         }
@@ -374,6 +375,7 @@ fun SubScreenTimelineContentBox(
                 }
 
                 false -> {
+                    NoContentsPlaceHolder()
                 }
 
                 true -> {

@@ -24,15 +24,15 @@ fun FavoritesScreen(state: FavoritesScreen.State, modifier: Modifier) {
             globalIconEventSink = state.globalIconEventSink
         ) {
             SubScreenTimelineContentBox(
+                modifier = it,
                 state = state,
                 pullRefreshState = state.pullToRefreshState,
                 isRefreshed = state.isRefreshed,
                 contentLoadingState = state.favoritesScreenUiState.isSuccessLoading,
-                isEmptyContent = state.favoritesScreenUiState.timelineItems.isEmpty(),
+                isEmptyContent = state.favoritesScreenUiState.timelineItems.isEmpty()
             ) {
                 TimelineColumn(
                     timelineItems = state.favoritesScreenUiState.timelineItems,
-                    modifier = Modifier.fillMaxSize(),
                     onIconClick = { id, username, host ->
                         state.timelineEventSink(
                             TimelineItemEvent.OnTimelineItemIconClicked(
