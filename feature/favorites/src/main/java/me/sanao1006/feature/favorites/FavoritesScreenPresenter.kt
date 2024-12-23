@@ -19,10 +19,13 @@ import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuitx.effects.LaunchedImpressionEffect
+import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import me.sanao1006.core.domain.favorites.GetMyFavoriteUseCase
 import me.sanao1006.core.domain.home.CreateNotesUseCase
 import me.sanao1006.core.model.notes.Visibility
 import me.sanao1006.core.model.uistate.FavoritesScreenUiState
@@ -35,8 +38,9 @@ import me.sanao1006.screens.event.handleTimelineItemIconClicked
 import me.sanao1006.screens.event.handleTimelineItemReplyClicked
 
 class FavoritesScreenPresenter @AssistedInject constructor(
-    private val navigator: Navigator,
-    private val createNotesUseCase: CreateNotesUseCase
+    @Assisted private val navigator: Navigator,
+    private val createNotesUseCase: CreateNotesUseCase,
+    private val getMyFavoriteUseCase: GetMyFavoriteUseCase
 ) : Presenter<FavoritesScreen.State> {
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
@@ -55,11 +59,23 @@ class FavoritesScreenPresenter @AssistedInject constructor(
 
         val pullRefreshState = rememberPullRefreshState(
             refreshing = isRefreshed,
-            onRefresh = { },
+            onRefresh = {
+                scope.launch {
+                    isRefreshed = true
+                    favoritesScreenUiState = favoritesScreenUiState.copy(
+                        timelineItems = getMyFavoriteUseCase.invoke().map { it.toTimelineUiState() }
+                    )
+                    delay(1000L)
+                    isRefreshed = false
+                }
+            },
             refreshThreshold = 50.dp,
             refreshingOffset = 50.dp
         )
         LaunchedImpressionEffect(Unit) {
+            favoritesScreenUiState = favoritesScreenUiState.copy(
+                timelineItems = getMyFavoriteUseCase.invoke().map { it.toTimelineUiState() }
+            )
         }
 
         return FavoritesScreen.State(
