@@ -144,7 +144,7 @@ fun MainScreenTimelineContentBox(
                 }
             }
 
-            OptionActionIcon.Favorite -> {
+            OptionActionIcon.Favorite, OptionActionIcon.UnFavorite -> {
                 when (state) {
                     is HomeScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnFavoriteClicked(
@@ -230,6 +230,11 @@ fun MainScreenTimelineContentBox(
                 is HomeScreen.State -> state.timelineUiState.timelineAction
                 is NotificationScreen.State -> state.notificationUiState.timelineAction
                 else -> TimelineItemAction.None
+            },
+            isFavorite = when (state) {
+                is HomeScreen.State -> state.timelineUiState.isFavorite
+                is NotificationScreen.State -> state.notificationUiState.isFavorite
+                else -> false
             },
             onDismissRequest = onDismissRequest,
             onRenoteIconCLick = onRenoteIconClick,
@@ -332,7 +337,7 @@ fun SubScreenTimelineContentBox(
                 }
             }
 
-            OptionActionIcon.Favorite -> {
+            OptionActionIcon.Favorite, OptionActionIcon.UnFavorite -> {
                 when (state) {
                     is FavoritesScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnFavoriteClicked(
@@ -404,6 +409,10 @@ fun SubScreenTimelineContentBox(
             timelineItemAction = when (state) {
                 is FavoritesScreen.State -> state.favoritesScreenUiState.timelineAction
                 else -> TimelineItemAction.None
+            },
+            isFavorite = when (state) {
+                is FavoritesScreen.State -> state.favoritesScreenUiState.isFavorite
+                else -> false
             },
             onDismissRequest = onDismissRequest,
             onRenoteIconCLick = onRenoteIconClick,

@@ -42,7 +42,8 @@
     <string name="description_copy">Copy</string>
     <string name="description_copy_link">Copy Link</string>
     <string name="description_share">Share</string>
-    <string name="description_favorite">Favorite</string>
+    <string name="description_favorite">Favorites</string>
+    <string name="description_remove_favorite">Remove favorites</string>
     <string name="date_now">Now</string>
     <string name="date_minute_ago">%1$sm ago</string>
     <string name="date_hour_ago">%1$sh ago</string>
