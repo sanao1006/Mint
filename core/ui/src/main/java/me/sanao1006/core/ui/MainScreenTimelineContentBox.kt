@@ -12,6 +12,7 @@ import androidx.compose.material3.ContainedLoadingIndicator
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FloatingAppBarDefaults.ScreenOffset
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.BottomCenter
@@ -31,12 +32,13 @@ import me.sanao1006.screens.event.TimelineItemEvent
 @Composable
 fun MainScreenTimelineContentBox(
     state: MainScreenState,
-    modifier: Modifier = Modifier,
     mainScreenType: MainScreenType,
+    snackbarHostState: SnackbarHostState,
     pullRefreshState: PullRefreshState,
     isRefreshed: Boolean,
     contentLoadingState: Boolean?,
     isEmptyContent: Boolean,
+    modifier: Modifier = Modifier,
     onFabClick: () -> Unit = { state.noteCreateEventSink(NoteCreateEvent.OnNoteCreateClicked) },
     onRenoteIconClick: (RenoteActionIcon) -> Unit = { event ->
         when (event) {
@@ -146,13 +148,15 @@ fun MainScreenTimelineContentBox(
                 when (state) {
                     is HomeScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnFavoriteClicked(
-                            state.timelineUiState.selectedUserId ?: ""
+                            state.timelineUiState.selectedUserId ?: "",
+                            snackbarHostState
                         )
                     )
 
                     is NotificationScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnFavoriteClicked(
-                            state.notificationUiState.selectedUserId ?: ""
+                            state.notificationUiState.selectedUserId ?: "",
+                            snackbarHostState
                         )
                     )
                 }
@@ -251,11 +255,12 @@ fun MainScreenTimelineContentBox(
 @Composable
 fun SubScreenTimelineContentBox(
     state: SubScreenState,
-    modifier: Modifier = Modifier,
+    snackbarHostState: SnackbarHostState,
     pullRefreshState: PullRefreshState,
     isRefreshed: Boolean,
     contentLoadingState: Boolean?,
     isEmptyContent: Boolean,
+    modifier: Modifier = Modifier,
     onRenoteIconClick: (RenoteActionIcon) -> Unit = { event ->
         when (event) {
             RenoteActionIcon.Renote -> {
@@ -331,7 +336,8 @@ fun SubScreenTimelineContentBox(
                 when (state) {
                     is FavoritesScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnFavoriteClicked(
-                            state.favoritesScreenUiState.selectedUserId ?: ""
+                            state.favoritesScreenUiState.selectedUserId ?: "",
+                            snackbarHostState
                         )
                     )
                 }

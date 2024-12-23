@@ -3,7 +3,9 @@ package me.sanao1006.feature.favorites
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
@@ -19,6 +21,7 @@ import me.sanao1006.screens.event.TimelineItemEvent
 @Composable
 fun FavoritesScreen(state: FavoritesScreen.State, modifier: Modifier) {
     Box(modifier = modifier.fillMaxSize()) {
+        val snackbarHostState = remember { SnackbarHostState() }
         DrawerItemScreenWrapper(
             drawerItem = DrawerItem.FAVORITE,
             globalIconEventSink = state.globalIconEventSink
@@ -26,6 +29,7 @@ fun FavoritesScreen(state: FavoritesScreen.State, modifier: Modifier) {
             SubScreenTimelineContentBox(
                 modifier = it,
                 state = state,
+                snackbarHostState = snackbarHostState,
                 pullRefreshState = state.pullToRefreshState,
                 isRefreshed = state.isRefreshed,
                 contentLoadingState = state.favoritesScreenUiState.isSuccessLoading,

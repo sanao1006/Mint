@@ -1,5 +1,6 @@
 package me.sanao1006.screens.event
 
+import androidx.compose.material3.SnackbarHostState
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.GoToNavigator
 import me.sanao1006.screens.NoteScreen
@@ -57,7 +58,8 @@ sealed class TimelineItemEvent : CircuitUiEvent {
     ) : TimelineItemEvent()
 
     data class OnFavoriteClicked(
-        val noteId: String
+        val noteId: String,
+        val snackbarHostState: SnackbarHostState
     ) : TimelineItemEvent()
 }
 

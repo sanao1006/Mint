@@ -25,6 +25,7 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import me.sanao1006.core.domain.favorites.CreateFavoritesUseCase
 import me.sanao1006.core.domain.favorites.GetMyFavoriteUseCase
 import me.sanao1006.core.domain.home.CreateNotesUseCase
 import me.sanao1006.core.model.notes.Visibility
@@ -40,7 +41,8 @@ import me.sanao1006.screens.event.handleTimelineItemReplyClicked
 class FavoritesScreenPresenter @AssistedInject constructor(
     @Assisted private val navigator: Navigator,
     private val createNotesUseCase: CreateNotesUseCase,
-    private val getMyFavoriteUseCase: GetMyFavoriteUseCase
+    private val getMyFavoriteUseCase: GetMyFavoriteUseCase,
+    private val createFavoritesUseCase: CreateFavoritesUseCase
 ) : Presenter<FavoritesScreen.State> {
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
@@ -163,6 +165,19 @@ class FavoritesScreenPresenter @AssistedInject constructor(
                     is TimelineItemEvent.OnFavoriteClicked -> {
                         favoritesScreenUiState =
                             favoritesScreenUiState.copy(showBottomSheet = false)
+                        scope.launch {
+                            createFavoritesUseCase.invoke(event.noteId)
+                                .onSuccess { value ->
+                                    event.snackbarHostState.showSnackbar(
+                                        "Success"
+                                    )
+                                }
+                                .onFailure { exception ->
+                                    event.snackbarHostState.showSnackbar(
+                                        "Failed"
+                                    )
+                                }
+                        }
                     }
                 }
             },

@@ -25,6 +25,7 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import me.sanao1006.core.domain.favorites.CreateFavoritesUseCase
 import me.sanao1006.core.domain.home.CreateNotesUseCase
 import me.sanao1006.core.domain.home.UpdateAccountUseCase
 import me.sanao1006.core.domain.notification.GetNotificationsUseCase
@@ -46,7 +47,8 @@ class NotificationScreenPresenter @AssistedInject constructor(
     @Assisted private val navigator: Navigator,
     private val updateMyAccountUseCase: UpdateAccountUseCase,
     private val getNotificationsUseCase: GetNotificationsUseCase,
-    private val createNotesUseCase: CreateNotesUseCase
+    private val createNotesUseCase: CreateNotesUseCase,
+    private val createFavoritesUseCase: CreateFavoritesUseCase
 ) : Presenter<NotificationScreen.State> {
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
@@ -166,6 +168,19 @@ class NotificationScreenPresenter @AssistedInject constructor(
 
                     is TimelineItemEvent.OnFavoriteClicked -> {
                         notificationUiState = notificationUiState.copy(showBottomSheet = false)
+                        scope.launch {
+                            createFavoritesUseCase.invoke(event.noteId)
+                                .onSuccess { value ->
+                                    event.snackbarHostState.showSnackbar(
+                                        "Success"
+                                    )
+                                }
+                                .onFailure { exception ->
+                                    event.snackbarHostState.showSnackbar(
+                                        "Failed"
+                                    )
+                                }
+                        }
                     }
                 }
             },
