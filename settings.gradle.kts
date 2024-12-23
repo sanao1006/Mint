@@ -29,7 +29,8 @@ include(
     "feature:user",
     "feature:search",
     "feature:notification",
-    "feature:announcement"
+    "feature:announcement",
+    "feature:favorites"
 )
 include(
     "core:network",
