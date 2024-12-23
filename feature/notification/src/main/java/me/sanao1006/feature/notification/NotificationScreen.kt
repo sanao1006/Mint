@@ -30,7 +30,7 @@ import com.slack.circuitx.effects.LaunchedImpressionEffect
 import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
 import me.sanao1006.core.ui.MainScreenDrawerWrapper
-import me.sanao1006.core.ui.TimelineContentBox
+import me.sanao1006.core.ui.MainScreenTimelineContentBox
 import me.sanao1006.screens.MainScreenType
 import me.sanao1006.screens.NotificationScreen
 import me.sanao1006.screens.event.GlobalIconEvent
@@ -121,7 +121,7 @@ private fun NotificationScreenContent(
         },
         snackbarHost = snackbarHost
     ) {
-        TimelineContentBox(
+        MainScreenTimelineContentBox(
             state = state,
             modifier = Modifier.padding(it),
             mainScreenType = MainScreenType.NOTIFICATION,

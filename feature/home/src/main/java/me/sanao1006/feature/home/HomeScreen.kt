@@ -28,8 +28,8 @@ import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
 import kotlinx.coroutines.launch
 import me.sanao1006.core.ui.MainScreenDrawerWrapper
+import me.sanao1006.core.ui.MainScreenTimelineContentBox
 import me.sanao1006.core.ui.TimelineColumn
-import me.sanao1006.core.ui.TimelineContentBox
 import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.MainScreenType
 import me.sanao1006.screens.event.GlobalIconEvent
@@ -130,7 +130,7 @@ private fun HomeScreenUiContent(
         },
         snackbarHost = snackbarHostState
     ) {
-        TimelineContentBox(
+        MainScreenTimelineContentBox(
             state = state,
             modifier = Modifier.padding(it),
             mainScreenType = MainScreenType.HOME,

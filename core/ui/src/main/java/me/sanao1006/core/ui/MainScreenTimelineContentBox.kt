@@ -18,16 +18,18 @@ import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.zIndex
 import me.sanao1006.core.model.uistate.TimelineItemAction
+import me.sanao1006.screens.FavoritesScreen
 import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.MainScreenState
 import me.sanao1006.screens.MainScreenType
 import me.sanao1006.screens.NotificationScreen
+import me.sanao1006.screens.SubScreenState
 import me.sanao1006.screens.event.NoteCreateEvent
 import me.sanao1006.screens.event.TimelineItemEvent
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterialApi::class)
 @Composable
-fun TimelineContentBox(
+fun MainScreenTimelineContentBox(
     state: MainScreenState,
     modifier: Modifier = Modifier,
     mainScreenType: MainScreenType,
@@ -241,6 +243,163 @@ fun TimelineContentBox(
                 }
             },
             onFabClick = onFabClick
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterialApi::class)
+@Composable
+fun SubScreenTimelineContentBox(
+    state: SubScreenState,
+    modifier: Modifier = Modifier,
+    pullRefreshState: PullRefreshState,
+    isRefreshed: Boolean,
+    contentLoadingState: Boolean?,
+    isEmptyContent: Boolean,
+    onRenoteIconClick: (RenoteActionIcon) -> Unit = { event ->
+        when (event) {
+            RenoteActionIcon.Renote -> {
+                state.timelineEventSink(
+                    TimelineItemEvent.OnRenoteClicked(
+                        when (state) {
+                            is FavoritesScreen.State -> state.favoritesScreenUiState.selectedUserId
+                                ?: ""
+
+                            else -> ""
+                        }
+                    )
+                )
+            }
+
+            RenoteActionIcon.Quote -> {
+                when (state) {
+                    is FavoritesScreen.State -> state.timelineEventSink(
+                        TimelineItemEvent.OnQuoteClicked(
+                            state.favoritesScreenUiState.selectedUserId ?: ""
+                        )
+                    )
+                }
+            }
+        }
+    },
+    onOptionIconClick: (OptionActionIcon) -> Unit = { event ->
+        when (event) {
+            OptionActionIcon.Detail -> {
+                when (state) {
+                    is FavoritesScreen.State -> state.timelineEventSink(
+                        TimelineItemEvent.OnDetailClicked(
+                            state.favoritesScreenUiState.selectedUserId ?: "",
+                            null,
+                            null
+                        )
+                    )
+                }
+            }
+
+            OptionActionIcon.Copy -> {
+                when (state) {
+                    is FavoritesScreen.State -> state.timelineEventSink(
+                        TimelineItemEvent.OnCopyClicked(
+                            state.favoritesScreenUiState.selectedNoteText ?: ""
+                        )
+                    )
+                }
+            }
+
+            OptionActionIcon.CopyLink -> {
+                when (state) {
+                    is FavoritesScreen.State -> state.timelineEventSink(
+                        TimelineItemEvent.OnCopyLinkClicked(
+                            state.favoritesScreenUiState.selectedNoteLink ?: ""
+                        )
+                    )
+                }
+            }
+
+            OptionActionIcon.Share -> {
+                when (state) {
+                    is FavoritesScreen.State -> state.timelineEventSink(
+                        TimelineItemEvent.OnShareClicked(
+                            state.favoritesScreenUiState.selectedNoteLink ?: ""
+                        )
+                    )
+                }
+            }
+
+            OptionActionIcon.Favorite -> {
+                when (state) {
+                    is FavoritesScreen.State -> state.timelineEventSink(
+                        TimelineItemEvent.OnFavoriteClicked(
+                            state.favoritesScreenUiState.selectedUserId ?: ""
+                        )
+                    )
+                }
+            }
+        }
+    },
+    onDismissRequest: () -> Unit = {
+        when (state) {
+            is FavoritesScreen.State -> state.eventSink(FavoritesScreen.Event.OnDismissRequest)
+        }
+    },
+    timelineContent: @Composable () -> Unit
+) {
+    Box(
+        contentAlignment = Alignment.TopCenter,
+        modifier = modifier
+            .pullRefresh(state = pullRefreshState)
+    ) {
+        PullRefreshIndicator(
+            refreshing = isRefreshed,
+            state = pullRefreshState,
+            modifier = Modifier
+                .zIndex(1f)
+                .align(Alignment.TopCenter),
+            scale = true
+        )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            when (contentLoadingState) {
+                null -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        ContainedLoadingIndicator(
+                            indicatorColor = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
+
+                false -> {
+                }
+
+                true -> {
+                    if (isEmptyContent) {
+                        NoContentsPlaceHolder()
+                    } else {
+                        timelineContent()
+                    }
+                }
+            }
+        }
+        TimelineBottomSheet(
+            isShowBottomSheet = when (state) {
+                is FavoritesScreen.State -> {
+                    state.favoritesScreenUiState.showBottomSheet
+                }
+
+                else -> false
+            },
+            timelineItemAction = when (state) {
+                is FavoritesScreen.State -> state.favoritesScreenUiState.timelineAction
+                else -> TimelineItemAction.None
+            },
+            onDismissRequest = onDismissRequest,
+            onRenoteIconCLick = onRenoteIconClick,
+            onOptionIconCLick = onOptionIconClick
         )
     }
 }

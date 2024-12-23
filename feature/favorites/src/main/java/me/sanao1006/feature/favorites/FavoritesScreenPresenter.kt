@@ -63,7 +63,9 @@ class FavoritesScreenPresenter @AssistedInject constructor(
                 scope.launch {
                     isRefreshed = true
                     favoritesScreenUiState = favoritesScreenUiState.copy(
-                        timelineItems = getMyFavoriteUseCase.invoke().map { it.toTimelineUiState() }
+                        timelineItems = getMyFavoriteUseCase.invoke()
+                            .map { it.toTimelineUiState() },
+                        isSuccessLoading = true
                     )
                     delay(1000L)
                     isRefreshed = false
@@ -72,9 +74,11 @@ class FavoritesScreenPresenter @AssistedInject constructor(
             refreshThreshold = 50.dp,
             refreshingOffset = 50.dp
         )
+
         LaunchedImpressionEffect(Unit) {
             favoritesScreenUiState = favoritesScreenUiState.copy(
-                timelineItems = getMyFavoriteUseCase.invoke().map { it.toTimelineUiState() }
+                timelineItems = getMyFavoriteUseCase.invoke().map { it.toTimelineUiState() },
+                isSuccessLoading = true
             )
         }
 

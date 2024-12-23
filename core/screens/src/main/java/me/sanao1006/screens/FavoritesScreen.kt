@@ -16,13 +16,13 @@ object FavoritesScreen : Screen {
     @OptIn(ExperimentalMaterialApi::class)
     data class State(
         val favoritesScreenUiState: FavoritesScreenUiState,
-        val navigator: Navigator,
-        val pullToRefreshState: PullRefreshState,
-        val isRefreshed: Boolean = false,
-        val timelineEventSink: (TimelineItemEvent) -> Unit,
-        val globalIconEventSink: (GlobalIconEvent) -> Unit,
+        override val navigator: Navigator,
+        override val pullToRefreshState: PullRefreshState,
+        override val isRefreshed: Boolean = false,
+        override val timelineEventSink: (TimelineItemEvent) -> Unit,
+        override val globalIconEventSink: (GlobalIconEvent) -> Unit,
         val eventSink: (Event) -> Unit
-    ) : CircuitUiState
+    ) : CircuitUiState, SubScreenState
 
     sealed class Event : CircuitUiEvent {
         data object OnDismissRequest : Event()
