@@ -54,4 +54,8 @@
     <string name="announcement_updated_at">Updated at: %1$s</string>
     <string name="announcement_current_announcements">Current Announcements</string>
     <string name="announcement_past_announcements">Past Announcements</string>
+    <string name="add_favorite_success">Added to favorites</string>
+    <string name="add_favorite_failed">Failed to add to favorites</string>
+    <string name="delete_favorite_success">Removed from favorites</string>
+    <string name="delete_favorite_failed">Failed to remove from favorites</string>
 </resources>

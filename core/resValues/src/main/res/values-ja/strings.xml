@@ -54,4 +54,8 @@
     <string name="announcement_updated_at">更新日時: %1$s</string>
     <string name="announcement_current_announcements">現在のお知らせ</string>
     <string name="announcement_past_announcements">過去のお知らせ</string>
+    <string name="add_favorite_success">お気に入りに追加しました</string>
+    <string name="add_favorite_failed">お気に入りに追加できませんでした</string>
+    <string name="delete_favorite_success">お気に入りから削除しました</string>
+    <string name="delete_favorite_failed">お気に入りから削除できませんでした</string>
 </resources>

@@ -7,6 +7,7 @@ data class TimelineUiState(
     var isSuccessLoading: Boolean? = null,
     var isSuccessCreateNote: Boolean? = null,
     var showBottomSheet: Boolean = false,
+    var isFavorite: Boolean = false,
     var timelineAction: TimelineItemAction = TimelineItemAction.Renote,
     val selectedUserId: String? = null,
     val selectedNoteText: String? = null,

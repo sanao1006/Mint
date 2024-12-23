@@ -1,11 +1,13 @@
 package me.sanao1006.screens.event
 
+import android.content.Context
 import androidx.compose.material3.SnackbarHostState
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.GoToNavigator
 import me.sanao1006.screens.NoteScreen
 import me.sanao1006.screens.ReplyObject
 import me.sanao1006.screens.UserScreen
+import me.snao1006.res_value.ResString
 
 sealed class TimelineItemEvent : CircuitUiEvent {
     data class OnTimelineItemIconClicked(
@@ -92,4 +94,38 @@ fun TimelineItemEvent.OnTimelineItemReplyClicked.handleTimelineItemReplyClicked(
             )
         )
     )
+}
+
+suspend fun favorite(
+    isFavorite: Boolean,
+    snackbarHostState: SnackbarHostState,
+    context: Context,
+    notFavoriteCallBack: suspend () -> Result<Unit>,
+    isFavoriteCallBack: suspend () -> Result<Unit>
+) {
+    if (isFavorite) {
+        notFavoriteCallBack()
+            .onSuccess { value ->
+                snackbarHostState.showSnackbar(
+                    context.getString(ResString.delete_favorite_success)
+                )
+            }
+            .onFailure { exception ->
+                snackbarHostState.showSnackbar(
+                    context.getString(ResString.delete_favorite_failed)
+                )
+            }
+    } else {
+        isFavoriteCallBack()
+            .onSuccess { value ->
+                snackbarHostState.showSnackbar(
+                    context.getString(ResString.add_favorite_success)
+                )
+            }
+            .onFailure { exception ->
+                snackbarHostState.showSnackbar(
+                    context.getString(ResString.add_favorite_failed)
+                )
+            }
+    }
 }
