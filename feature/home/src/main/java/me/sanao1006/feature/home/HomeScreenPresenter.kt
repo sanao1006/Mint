@@ -39,9 +39,9 @@ import me.sanao1006.core.model.uistate.TimelineItemAction
 import me.sanao1006.core.model.uistate.TimelineUiState
 import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.NoteScreen
+import me.sanao1006.screens.event.BottomAppBarPresenter
 import me.sanao1006.screens.event.TimelineItemEvent
 import me.sanao1006.screens.event.favorite
-import me.sanao1006.screens.event.handleBottomAppBarActionEvent
 import me.sanao1006.screens.event.handleDrawerEvent
 import me.sanao1006.screens.event.handleNavigationIconClicked
 import me.sanao1006.screens.event.handleNoteCreateEvent
@@ -55,12 +55,14 @@ class HomeScreenPresenter @AssistedInject constructor(
     private val createNotesUseCase: CreateNotesUseCase,
     private val createFavoritesUseCase: CreateFavoritesUseCase,
     private val deleteFavoritesUseCase: DeleteFavoritesUseCase,
-    private val getNoteStateUseCase: GetNoteStateUseCase
+    private val getNoteStateUseCase: GetNoteStateUseCase,
+    private val bottomAppBarPresenter: BottomAppBarPresenter
 ) : Presenter<HomeScreen.State> {
 
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     override fun present(): HomeScreen.State {
+        val bottomAppBarPresenter = bottomAppBarPresenter.present()
         val clipBoardManager = LocalClipboardManager.current
         var isSuccessCreateNote: Boolean? by rememberRetained { mutableStateOf(null) }
         var loginUserInfo: LoginUserInfo by rememberRetained {
@@ -256,7 +258,7 @@ class HomeScreenPresenter @AssistedInject constructor(
                 }
             },
             drawerEventSink = { event -> event.handleDrawerEvent(navigator, loginUserInfo) },
-            bottomAppBarEventSink = { event -> event.handleBottomAppBarActionEvent(navigator) },
+            bottomAppBarEventSink = bottomAppBarPresenter.eventSink,
             globalIconEventSink = { event -> event.handleNavigationIconClicked(navigator) }
         ) { event ->
             when (event) {
