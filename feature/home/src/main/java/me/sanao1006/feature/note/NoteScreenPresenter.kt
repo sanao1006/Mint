@@ -121,6 +121,6 @@ class NoteScreenPresenter @AssistedInject constructor(
 
 @CircuitInject(NoteScreen::class, SingletonComponent::class)
 @AssistedFactory
-fun interface NoteScreenFactory {
+fun interface Factory {
     fun create(screen: NoteScreen): NoteScreenPresenter
 }

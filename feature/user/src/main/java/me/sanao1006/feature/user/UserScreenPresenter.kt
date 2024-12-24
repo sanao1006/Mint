@@ -61,6 +61,6 @@ class UserScreenPresenter @AssistedInject constructor(
 
 @CircuitInject(UserScreen::class, SingletonComponent::class)
 @AssistedFactory
-interface Factory {
+fun interface Factory {
     fun create(screen: UserScreen): UserScreenPresenter
 }
