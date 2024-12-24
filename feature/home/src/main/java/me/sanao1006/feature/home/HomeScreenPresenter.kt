@@ -16,15 +16,13 @@ import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.foundation.rememberAnsweringNavigator
 import com.slack.circuit.retained.rememberRetained
-import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuitx.effects.LaunchedImpressionEffect
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import me.sanao1006.core.data.compositionLocal.LocalNavigator
 import me.sanao1006.core.domain.favorites.CreateFavoritesUseCase
 import me.sanao1006.core.domain.favorites.DeleteFavoritesUseCase
 import me.sanao1006.core.domain.favorites.GetNoteStateUseCase
@@ -48,8 +46,8 @@ import me.sanao1006.screens.event.handleNoteCreateEvent
 import me.sanao1006.screens.event.handleTimelineItemIconClicked
 import me.sanao1006.screens.event.handleTimelineItemReplyClicked
 
-class HomeScreenPresenter @AssistedInject constructor(
-    @Assisted private val navigator: Navigator,
+@CircuitInject(HomeScreen::class, SingletonComponent::class)
+class HomeScreenPresenter @Inject constructor(
     private val getNotesTimelineUseCase: GetNotesTimelineUseCase,
     private val updateMyAccountUseCase: UpdateAccountUseCase,
     private val createNotesUseCase: CreateNotesUseCase,
@@ -62,6 +60,7 @@ class HomeScreenPresenter @AssistedInject constructor(
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     override fun present(): HomeScreen.State {
+        val navigator = LocalNavigator.current
         val bottomAppBarPresenter = bottomAppBarPresenter.present()
         val clipBoardManager = LocalClipboardManager.current
         var isSuccessCreateNote: Boolean? by rememberRetained { mutableStateOf(null) }
@@ -72,7 +71,7 @@ class HomeScreenPresenter @AssistedInject constructor(
         }
         val context = LocalContext.current
         val scope = rememberCoroutineScope()
-        val nav = rememberAnsweringNavigator<NoteScreen.Result>(navigator) { result ->
+        val resultNavigator = rememberAnsweringNavigator<NoteScreen.Result>(navigator) { result ->
             isSuccessCreateNote = result.success
         }
 
@@ -147,7 +146,7 @@ class HomeScreenPresenter @AssistedInject constructor(
                 event.handleNoteCreateEvent(
                     isSuccessCreateNote,
                     context,
-                    nav
+                    resultNavigator
                 )
             },
             timelineEventSink = { event ->
@@ -212,7 +211,7 @@ class HomeScreenPresenter @AssistedInject constructor(
 
                     is TimelineItemEvent.OnQuoteClicked -> {
                         timelineUiState = timelineUiState.copy(showBottomSheet = false)
-                        nav.goTo(NoteScreen(idForQuote = event.id))
+                        resultNavigator.goTo(NoteScreen(idForQuote = event.id))
                     }
 
                     is TimelineItemEvent.OnDetailClicked -> {
@@ -277,10 +276,4 @@ class HomeScreenPresenter @AssistedInject constructor(
             }
         }
     }
-}
-
-@CircuitInject(HomeScreen::class, SingletonComponent::class)
-@AssistedFactory
-fun interface Factory {
-    fun create(navigator: Navigator): HomeScreenPresenter
 }

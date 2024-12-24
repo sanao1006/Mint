@@ -9,24 +9,23 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.retained.rememberRetained
-import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuitx.effects.LaunchedImpressionEffect
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Inject
+import me.sanao1006.core.data.compositionLocal.LocalNavigator
 import me.sanao1006.core.domain.announcement.GetAnnouncementsUseCase
 import me.sanao1006.core.model.uistate.AnnouncementUiState
 import me.sanao1006.screens.AnnouncementScreen
 import me.sanao1006.screens.event.handleNavigationIconClicked
 
-class AnnouncementPresenter @AssistedInject constructor(
-    @Assisted private val navigator: Navigator,
+@CircuitInject(AnnouncementScreen::class, SingletonComponent::class)
+class AnnouncementPresenter @Inject constructor(
     private val getAnnouncementsUseCase: GetAnnouncementsUseCase
 ) : Presenter<AnnouncementScreen.State> {
     @Composable
     override fun present(): AnnouncementScreen.State {
+        val navigator = LocalNavigator.current
         var isActive by rememberRetained { mutableStateOf(true) }
         var selectedTabIndex by remember { mutableIntStateOf(0) }
         val announcementItemExpandedStates =
@@ -64,10 +63,4 @@ class AnnouncementPresenter @AssistedInject constructor(
             }
         }
     }
-}
-
-@AssistedFactory
-@CircuitInject(AnnouncementScreen::class, SingletonComponent::class)
-interface Factory {
-    fun create(navigator: Navigator): AnnouncementPresenter
 }

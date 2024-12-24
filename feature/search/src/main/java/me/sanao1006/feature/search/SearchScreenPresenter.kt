@@ -6,13 +6,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.retained.rememberRetained
-import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuitx.effects.LaunchedImpressionEffect
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Inject
+import me.sanao1006.core.data.compositionLocal.LocalNavigator
 import me.sanao1006.core.domain.home.UpdateAccountUseCase
 import me.sanao1006.core.model.LoginUserInfo
 import me.sanao1006.screens.SearchScreen
@@ -20,12 +18,13 @@ import me.sanao1006.screens.event.handleBottomAppBarActionEvent
 import me.sanao1006.screens.event.handleDrawerEvent
 import me.sanao1006.screens.event.handleNavigationIconClicked
 
-class SearchScreenPresenter @AssistedInject constructor(
-    @Assisted private val navigator: Navigator,
+@CircuitInject(SearchScreen::class, SingletonComponent::class)
+class SearchScreenPresenter @Inject constructor(
     private val updateMyAccountUseCase: UpdateAccountUseCase
 ) : Presenter<SearchScreen.State> {
     @Composable
     override fun present(): SearchScreen.State {
+        val navigator = LocalNavigator.current
         var loginUserInfo: LoginUserInfo by rememberRetained {
             mutableStateOf(
                 LoginUserInfo()
@@ -44,10 +43,4 @@ class SearchScreenPresenter @AssistedInject constructor(
             eventSink = { event -> }
         )
     }
-}
-
-@CircuitInject(SearchScreen::class, SingletonComponent::class)
-@AssistedFactory
-interface Factory {
-    fun create(navigator: Navigator): SearchScreenPresenter
 }
