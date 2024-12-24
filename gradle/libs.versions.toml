@@ -38,7 +38,7 @@ tablericons = "1.13.1"
 coil = "3.0.4"
 kotlinxDatetime = "0.6.1"
 spotless = "6.7.0"
-splashscreen = "1.0.0"
+splashscreen = "1.0.1"
 appcompat = "1.7.0"
 material = "1.12.0"
 
