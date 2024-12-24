@@ -16,15 +16,13 @@ import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.foundation.rememberAnsweringNavigator
 import com.slack.circuit.retained.rememberRetained
-import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuitx.effects.LaunchedImpressionEffect
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import me.sanao1006.core.data.compositionLocal.LocalNavigator
 import me.sanao1006.core.domain.favorites.CreateFavoritesUseCase
 import me.sanao1006.core.domain.favorites.DeleteFavoritesUseCase
 import me.sanao1006.core.domain.favorites.GetNoteStateUseCase
@@ -37,27 +35,30 @@ import me.sanao1006.core.model.uistate.NotificationUiState
 import me.sanao1006.core.model.uistate.TimelineItemAction
 import me.sanao1006.screens.NoteScreen
 import me.sanao1006.screens.NotificationScreen
+import me.sanao1006.screens.event.BottomAppBarPresenter
 import me.sanao1006.screens.event.TimelineItemEvent
 import me.sanao1006.screens.event.favorite
-import me.sanao1006.screens.event.handleBottomAppBarActionEvent
 import me.sanao1006.screens.event.handleDrawerEvent
 import me.sanao1006.screens.event.handleNavigationIconClicked
 import me.sanao1006.screens.event.handleNoteCreateEvent
 import me.sanao1006.screens.event.handleTimelineItemIconClicked
 import me.sanao1006.screens.event.handleTimelineItemReplyClicked
 
-class NotificationScreenPresenter @AssistedInject constructor(
-    @Assisted private val navigator: Navigator,
+@CircuitInject(NotificationScreen::class, SingletonComponent::class)
+class NotificationScreenPresenter @Inject constructor(
     private val updateMyAccountUseCase: UpdateAccountUseCase,
     private val getNotificationsUseCase: GetNotificationsUseCase,
     private val createNotesUseCase: CreateNotesUseCase,
     private val createFavoritesUseCase: CreateFavoritesUseCase,
     private val deleteFavoritesUseCase: DeleteFavoritesUseCase,
-    private val getNoteStateUseCase: GetNoteStateUseCase
+    private val getNoteStateUseCase: GetNoteStateUseCase,
+    private val bottomAppBarPresenter: BottomAppBarPresenter
 ) : Presenter<NotificationScreen.State> {
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     override fun present(): NotificationScreen.State {
+        val navigator = LocalNavigator.current
+        val bottomAppBarPresenter = bottomAppBarPresenter.present()
         val clipboardManager = LocalClipboardManager.current
         var isSuccessCreateNote: Boolean? by rememberRetained { mutableStateOf(null) }
         var loginUserInfo: LoginUserInfo by rememberRetained {
@@ -216,7 +217,7 @@ class NotificationScreenPresenter @AssistedInject constructor(
             },
             drawerEventSink = { event -> event.handleDrawerEvent(navigator, loginUserInfo) },
             globalIconEventSink = { event -> event.handleNavigationIconClicked(navigator) },
-            bottomAppBarEventSink = { event -> event.handleBottomAppBarActionEvent(navigator) },
+            bottomAppBarEventSink = bottomAppBarPresenter.eventSink,
             eventSink = { event ->
                 when (event) {
                     NotificationScreen.Event.OnDismissRequest -> {
@@ -226,10 +227,4 @@ class NotificationScreenPresenter @AssistedInject constructor(
             }
         )
     }
-}
-
-@AssistedFactory
-@CircuitInject(NotificationScreen::class, SingletonComponent::class)
-interface Factory {
-    fun create(navigator: Navigator): NotificationScreenPresenter
 }

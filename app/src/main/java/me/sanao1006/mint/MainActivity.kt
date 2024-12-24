@@ -24,6 +24,7 @@ import com.slack.circuitx.android.rememberAndroidScreenAwareNavigator
 import com.slack.circuitx.gesturenavigation.GestureNavigationDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import me.sanao1006.core.data.compositionLocal.LocalNavigator
 import me.sanao1006.core.designsystem.MintTheme
 import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.LoginScreen
@@ -53,7 +54,8 @@ class MainActivity : ComponentActivity() {
                     val navigator = rememberAndroidScreenAwareNavigator(circuitNavigator, this)
 
                     CompositionLocalProvider(
-                        LocalContext provides this
+                        LocalContext provides this,
+                        LocalNavigator provides navigator
                     ) {
                         CircuitCompositionLocals(circuit) {
                             ContentWithOverlays {

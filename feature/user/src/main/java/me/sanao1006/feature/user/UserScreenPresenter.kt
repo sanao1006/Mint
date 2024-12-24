@@ -6,25 +6,25 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.retained.rememberRetained
-import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuitx.effects.LaunchedImpressionEffect
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
+import me.sanao1006.core.data.compositionLocal.LocalNavigator
 import me.sanao1006.core.domain.user.GetUserShowUserCase
 import me.sanao1006.core.model.requestbody.users.UsersShowRequestBody
 import me.sanao1006.core.model.uistate.UserScreenUiState
 import me.sanao1006.screens.UserScreen
 
 class UserScreenPresenter @AssistedInject constructor(
-    @Assisted private val navigator: Navigator,
     @Assisted private val screen: UserScreen,
     private val getUserShowUserCase: GetUserShowUserCase
 ) : Presenter<UserScreen.State> {
     @Composable
     override fun present(): UserScreen.State {
+        val navigator = LocalNavigator.current
         var userUiState: UserScreenUiState by rememberRetained {
             mutableStateOf(UserScreenUiState.Loading)
         }
@@ -61,9 +61,6 @@ class UserScreenPresenter @AssistedInject constructor(
 
 @CircuitInject(UserScreen::class, SingletonComponent::class)
 @AssistedFactory
-interface Factory {
-    fun create(
-        navigator: Navigator,
-        screen: UserScreen
-    ): UserScreenPresenter
+fun interface Factory {
+    fun create(screen: UserScreen): UserScreenPresenter
 }

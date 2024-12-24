@@ -6,25 +6,25 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.retained.rememberRetained
-import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.launch
+import me.sanao1006.core.data.compositionLocal.LocalNavigator
 import me.sanao1006.core.data.util.suspendRunCatching
 import me.sanao1006.core.domain.home.CreateNotesUseCase
 import me.sanao1006.core.model.uistate.NoteScreenUiState
 import me.sanao1006.screens.NoteScreen
 
 class NoteScreenPresenter @AssistedInject constructor(
-    @Assisted private val navigator: Navigator,
     @Assisted private val screen: NoteScreen,
     private val createNotesUseCase: CreateNotesUseCase
 ) : Presenter<NoteScreen.State> {
     @Composable
     override fun present(): NoteScreen.State {
+        val navigator = LocalNavigator.current
         var uiState by rememberRetained {
             mutableStateOf(
                 NoteScreenUiState(
@@ -121,6 +121,6 @@ class NoteScreenPresenter @AssistedInject constructor(
 
 @CircuitInject(NoteScreen::class, SingletonComponent::class)
 @AssistedFactory
-fun interface NoteScreenFactory {
-    fun create(navigator: Navigator, screen: NoteScreen): NoteScreenPresenter
+fun interface Factory {
+    fun create(screen: NoteScreen): NoteScreenPresenter
 }
