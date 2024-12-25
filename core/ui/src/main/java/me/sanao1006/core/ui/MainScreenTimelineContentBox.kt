@@ -273,7 +273,7 @@ fun SubScreenTimelineContentBox(
                     TimelineItemEvent.OnRenoteClicked(
                         when (state) {
                             is FavoritesScreen.State ->
-                                state.favoritesScreenUiState.selectedUserId
+                                state.timelineUiState.selectedUserId
                                     ?: ""
 
                             else -> ""
@@ -286,7 +286,7 @@ fun SubScreenTimelineContentBox(
                 when (state) {
                     is FavoritesScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnQuoteClicked(
-                            state.favoritesScreenUiState.selectedUserId ?: ""
+                            state.timelineUiState.selectedUserId ?: ""
                         )
                     )
                 }
@@ -299,7 +299,7 @@ fun SubScreenTimelineContentBox(
                 when (state) {
                     is FavoritesScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnDetailClicked(
-                            state.favoritesScreenUiState.selectedUserId ?: "",
+                            state.timelineUiState.selectedUserId ?: "",
                             null,
                             null
                         )
@@ -311,7 +311,7 @@ fun SubScreenTimelineContentBox(
                 when (state) {
                     is FavoritesScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnCopyClicked(
-                            state.favoritesScreenUiState.selectedNoteText ?: ""
+                            state.timelineUiState.selectedNoteText ?: ""
                         )
                     )
                 }
@@ -321,7 +321,7 @@ fun SubScreenTimelineContentBox(
                 when (state) {
                     is FavoritesScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnCopyLinkClicked(
-                            state.favoritesScreenUiState.selectedNoteLink ?: ""
+                            state.timelineUiState.selectedNoteLink ?: ""
                         )
                     )
                 }
@@ -331,7 +331,7 @@ fun SubScreenTimelineContentBox(
                 when (state) {
                     is FavoritesScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnShareClicked(
-                            state.favoritesScreenUiState.selectedNoteLink ?: ""
+                            state.timelineUiState.selectedNoteLink ?: ""
                         )
                     )
                 }
@@ -341,7 +341,7 @@ fun SubScreenTimelineContentBox(
                 when (state) {
                     is FavoritesScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnFavoriteClicked(
-                            state.favoritesScreenUiState.selectedUserId ?: "",
+                            state.timelineUiState.selectedUserId ?: "",
                             snackbarHostState
                         )
                     )
@@ -401,17 +401,17 @@ fun SubScreenTimelineContentBox(
         TimelineBottomSheet(
             isShowBottomSheet = when (state) {
                 is FavoritesScreen.State -> {
-                    state.favoritesScreenUiState.showBottomSheet
+                    state.timelineUiState.showBottomSheet
                 }
 
                 else -> false
             },
             timelineItemAction = when (state) {
-                is FavoritesScreen.State -> state.favoritesScreenUiState.timelineAction
+                is FavoritesScreen.State -> state.timelineUiState.timelineAction
                 else -> TimelineItemAction.None
             },
             isFavorite = when (state) {
-                is FavoritesScreen.State -> state.favoritesScreenUiState.isFavorite
+                is FavoritesScreen.State -> state.timelineUiState.isFavorite
                 else -> false
             },
             onDismissRequest = onDismissRequest,

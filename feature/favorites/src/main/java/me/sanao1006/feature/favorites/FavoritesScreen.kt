@@ -32,7 +32,7 @@ fun FavoritesScreen(state: FavoritesScreen.State, modifier: Modifier) {
                 snackbarHostState = snackbarHostState,
                 pullRefreshState = state.pullToRefreshState,
                 isRefreshed = state.isRefreshed,
-                contentLoadingState = state.favoritesScreenUiState.isSuccessLoading,
+                contentLoadingState = state.timelineUiState.isSuccessLoading,
                 isEmptyContent = state.favoritesScreenUiState.timelineItems.isEmpty()
             ) {
                 TimelineColumn(
