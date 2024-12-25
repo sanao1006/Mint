@@ -36,7 +36,6 @@ coil = "3.0.4"
 kotlinxDatetime = "0.6.1"
 spotless = "6.7.0"
 splashscreen = "1.0.0"
-appcompat = "1.7.0"
 
 [libraries]
 androidGradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
@@ -119,7 +118,6 @@ coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version
 coil-gif = { module = "io.coil-kt.coil3:coil-gif", version.ref = "coil" }
 
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 
 [plugins]
 androidApplicationGradlePlugin = { id = "com.android.application", version.ref = "agp" }
