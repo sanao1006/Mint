@@ -8,7 +8,6 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -72,15 +71,6 @@ fun NotificationScreenUi(state: NotificationScreen.State, modifier: Modifier) {
                             scope
                         )
                     )
-                },
-                floatingActionButton = {
-                    FloatingActionButton(
-                        modifier = Modifier,
-                        containerColor = MaterialTheme.colorScheme.primary,
-                        onClick = { state.noteCreateEventSink(NoteCreateEvent.OnNoteCreateClicked) }
-                    ) {
-                        Icon(painter = painterResource(TablerIcons.Pencil), "")
-                    }
                 }
             )
         }
@@ -98,8 +88,7 @@ private fun NotificationScreenContent(
     context: Context,
     modifier: Modifier = Modifier,
     snackbarHostState: SnackbarHostState,
-    onGlobalIconClicked: () -> Unit,
-    floatingActionButton: @Composable () -> Unit
+    onGlobalIconClicked: () -> Unit
 ) {
     Scaffold(
         modifier = modifier,
