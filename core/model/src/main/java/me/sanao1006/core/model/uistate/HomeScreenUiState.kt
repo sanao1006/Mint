@@ -2,7 +2,7 @@ package me.sanao1006.core.model.uistate
 
 import me.sanao1006.core.model.notes.TimelineItem
 
-data class TimelineUiState(
+data class HomeScreenUiState(
     var timelineItems: List<TimelineItem?> = listOf(),
     var isSuccessLoading: Boolean? = null,
     var isSuccessCreateNote: Boolean? = null,

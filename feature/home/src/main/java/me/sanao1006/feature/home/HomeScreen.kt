@@ -44,7 +44,7 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
         val scope = rememberCoroutineScope()
         val drawerState = rememberDrawerState(DrawerValue.Closed)
         val snackbarHostState = remember { SnackbarHostState() }
-        LaunchedImpressionEffect(state.timelineUiState.isSuccessCreateNote) {
+        LaunchedImpressionEffect(state.homeScreenUiState.isSuccessCreateNote) {
             state.noteCreateEventSink(
                 NoteCreateEvent.OnNoteCreated(
                     snackbarHostState = snackbarHostState,
@@ -137,8 +137,8 @@ private fun HomeScreenUiContent(
             pullRefreshState = state.pullToRefreshState,
             isRefreshed = state.isRefreshed,
             modifier = Modifier.padding(it),
-            contentLoadingState = state.timelineUiState.isSuccessLoading,
-            isEmptyContent = state.timelineUiState.timelineItems.isEmpty()
+            contentLoadingState = state.homeScreenUiState.isSuccessLoading,
+            isEmptyContent = state.homeScreenUiState.timelineItems.isEmpty()
         ) {
             TimelineColumn(
                 state = state,
@@ -160,7 +160,7 @@ private fun TimelineColumn(
         state = pagerState
     ) { page ->
         TimelineColumn(
-            timelineItems = state.timelineUiState.timelineItems,
+            timelineItems = state.homeScreenUiState.timelineItems,
             modifier = Modifier.fillMaxSize(),
             onIconClick = { id, username, host ->
                 state.timelineEventSink(

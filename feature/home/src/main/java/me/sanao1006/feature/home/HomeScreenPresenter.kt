@@ -19,7 +19,6 @@ import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuitx.effects.LaunchedImpressionEffect
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.sanao1006.core.data.compositionLocal.LocalNavigator
@@ -33,8 +32,8 @@ import me.sanao1006.core.domain.home.UpdateAccountUseCase
 import me.sanao1006.core.model.LoginUserInfo
 import me.sanao1006.core.model.notes.TimelineItem
 import me.sanao1006.core.model.notes.Visibility
+import me.sanao1006.core.model.uistate.HomeScreenUiState
 import me.sanao1006.core.model.uistate.TimelineItemAction
-import me.sanao1006.core.model.uistate.TimelineUiState
 import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.NoteScreen
 import me.sanao1006.screens.event.BottomAppBarPresenter
@@ -45,6 +44,7 @@ import me.sanao1006.screens.event.handleNavigationIconClicked
 import me.sanao1006.screens.event.handleNoteCreateEvent
 import me.sanao1006.screens.event.handleTimelineItemIconClicked
 import me.sanao1006.screens.event.handleTimelineItemReplyClicked
+import javax.inject.Inject
 
 @CircuitInject(HomeScreen::class, SingletonComponent::class)
 class HomeScreenPresenter @Inject constructor(
@@ -76,8 +76,8 @@ class HomeScreenPresenter @Inject constructor(
         }
 
         var timelineType by rememberRetained { mutableStateOf(TimelineType.SOCIAL) }
-        var timelineUiState: TimelineUiState by rememberRetained(timelineType) {
-            mutableStateOf(TimelineUiState())
+        var homeScreenUiState: HomeScreenUiState by rememberRetained(timelineType) {
+            mutableStateOf(HomeScreenUiState())
         }
 
         var isRefreshed by remember { mutableStateOf(false) }
@@ -87,13 +87,13 @@ class HomeScreenPresenter @Inject constructor(
                 scope.launch {
                     isRefreshed = true
                     val timelineItems: List<TimelineItem> = getNotesTimelineUseCase(timelineType)
-                    timelineUiState = if (timelineItems.isEmpty()) {
-                        timelineUiState.copy(
+                    homeScreenUiState = if (timelineItems.isEmpty()) {
+                        homeScreenUiState.copy(
                             timelineItems = emptyList(),
                             isSuccessLoading = false
                         )
                     } else {
-                        timelineUiState.copy(
+                        homeScreenUiState.copy(
                             timelineItems = timelineItems,
                             isSuccessLoading = true
                         )
@@ -107,13 +107,13 @@ class HomeScreenPresenter @Inject constructor(
         )
         LaunchedImpressionEffect {
             val timelineItems: List<TimelineItem> = getNotesTimelineUseCase(timelineType)
-            timelineUiState = if (timelineItems.isEmpty()) {
-                timelineUiState.copy(
+            homeScreenUiState = if (timelineItems.isEmpty()) {
+                homeScreenUiState.copy(
                     timelineItems = emptyList(),
                     isSuccessLoading = false
                 )
             } else {
-                timelineUiState.copy(
+                homeScreenUiState.copy(
                     timelineItems = timelineItems,
                     isSuccessLoading = true
                 )
@@ -123,13 +123,13 @@ class HomeScreenPresenter @Inject constructor(
 
         LaunchedImpressionEffect(timelineType) {
             val timelineItems: List<TimelineItem> = getNotesTimelineUseCase(timelineType)
-            timelineUiState = if (timelineItems.isEmpty()) {
-                timelineUiState.copy(
+            homeScreenUiState = if (timelineItems.isEmpty()) {
+                homeScreenUiState.copy(
                     timelineItems = emptyList(),
                     isSuccessLoading = false
                 )
             } else {
-                timelineUiState.copy(
+                homeScreenUiState.copy(
                     timelineItems = timelineItems,
                     isSuccessLoading = true
                 )
@@ -137,7 +137,7 @@ class HomeScreenPresenter @Inject constructor(
         }
 
         return HomeScreen.State(
-            timelineUiState = timelineUiState,
+            homeScreenUiState = homeScreenUiState,
             navigator = navigator,
             pullToRefreshState = pullRefreshState,
             isRefreshed = isRefreshed,
@@ -158,8 +158,8 @@ class HomeScreenPresenter @Inject constructor(
                         event.handleTimelineItemReplyClicked(navigator)
 
                     is TimelineItemEvent.OnTimelineItemRepostClicked -> {
-                        timelineUiState =
-                            timelineUiState.copy(
+                        homeScreenUiState =
+                            homeScreenUiState.copy(
                                 showBottomSheet = true,
                                 timelineAction = TimelineItemAction.Renote,
                                 selectedUserId = event.id
@@ -172,8 +172,8 @@ class HomeScreenPresenter @Inject constructor(
                         scope.launch {
                             getNoteStateUseCase.invoke(event.id)
                                 .onSuccess {
-                                    timelineUiState =
-                                        timelineUiState.copy(
+                                    homeScreenUiState =
+                                        homeScreenUiState.copy(
                                             showBottomSheet = true,
                                             timelineAction = TimelineItemAction.Option,
                                             isFavorite = it.isFavorited,
@@ -183,8 +183,8 @@ class HomeScreenPresenter @Inject constructor(
                                         )
                                 }
                                 .onFailure {
-                                    timelineUiState =
-                                        timelineUiState.copy(
+                                    homeScreenUiState =
+                                        homeScreenUiState.copy(
                                             showBottomSheet = true,
                                             timelineAction = TimelineItemAction.Option,
                                             isFavorite = false,
@@ -205,33 +205,33 @@ class HomeScreenPresenter @Inject constructor(
                                 reactionAcceptance = null,
                                 renoteId = event.id
                             )
-                            timelineUiState = timelineUiState.copy(showBottomSheet = false)
+                            homeScreenUiState = homeScreenUiState.copy(showBottomSheet = false)
                         }
                     }
 
                     is TimelineItemEvent.OnQuoteClicked -> {
-                        timelineUiState = timelineUiState.copy(showBottomSheet = false)
+                        homeScreenUiState = homeScreenUiState.copy(showBottomSheet = false)
                         resultNavigator.goTo(NoteScreen(idForQuote = event.id))
                     }
 
                     is TimelineItemEvent.OnDetailClicked -> {
-                        timelineUiState = timelineUiState.copy(showBottomSheet = false)
+                        homeScreenUiState = homeScreenUiState.copy(showBottomSheet = false)
                     }
 
                     is TimelineItemEvent.OnCopyClicked -> {
-                        timelineUiState = timelineUiState.copy(
+                        homeScreenUiState = homeScreenUiState.copy(
                             showBottomSheet = false
                         )
                         clipBoardManager.setText(AnnotatedString(event.text))
                     }
 
                     is TimelineItemEvent.OnCopyLinkClicked -> {
-                        timelineUiState = timelineUiState.copy(showBottomSheet = false)
+                        homeScreenUiState = homeScreenUiState.copy(showBottomSheet = false)
                         clipBoardManager.setText(AnnotatedString(event.link))
                     }
 
                     is TimelineItemEvent.OnShareClicked -> {
-                        timelineUiState = timelineUiState.copy(showBottomSheet = false)
+                        homeScreenUiState = homeScreenUiState.copy(showBottomSheet = false)
                         val sendIntent = Intent().apply {
                             action = Intent.ACTION_SEND
                             putExtra(Intent.EXTRA_TEXT, event.link)
@@ -241,10 +241,10 @@ class HomeScreenPresenter @Inject constructor(
                     }
 
                     is TimelineItemEvent.OnFavoriteClicked -> {
-                        timelineUiState = timelineUiState.copy(showBottomSheet = false)
+                        homeScreenUiState = homeScreenUiState.copy(showBottomSheet = false)
                         scope.launch {
                             favorite(
-                                isFavorite = timelineUiState.isFavorite,
+                                isFavorite = homeScreenUiState.isFavorite,
                                 snackbarHostState = event.snackbarHostState,
                                 context = context,
                                 notFavoriteCallBack = {
@@ -265,13 +265,13 @@ class HomeScreenPresenter @Inject constructor(
                     timelineType = TimelineType.HOME
 
                 HomeScreen.Event.TimelineEvent.OnSocialTimelineClicked
-                -> timelineType = TimelineType.SOCIAL
+                    -> timelineType = TimelineType.SOCIAL
 
                 HomeScreen.Event.TimelineEvent.OnGlobalTimelineClicked ->
                     timelineType = TimelineType.GLOBAL
 
                 HomeScreen.Event.OnDismissRequest -> {
-                    timelineUiState = timelineUiState.copy(showBottomSheet = false)
+                    homeScreenUiState = homeScreenUiState.copy(showBottomSheet = false)
                 }
             }
         }
