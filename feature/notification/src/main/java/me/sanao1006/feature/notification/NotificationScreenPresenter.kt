@@ -63,7 +63,18 @@ class NotificationScreenPresenter @Inject constructor(
             onRefresh = {
                 scope.launch {
                     isRefreshed = true
-                    notificationUiState = getNotificationsUseCase()
+                    val notifications = getNotificationsUseCase.invoke()
+                    if (notifications.notificationUiStateObjects.isEmpty()) {
+                        notificationUiState = notificationUiState.copy(
+                            notificationUiStateObjects = emptyList()
+                        )
+                        timelineEventState.setSuccessLoading(false)
+                    } else {
+                        notificationUiState = notificationUiState.copy(
+                            notificationUiStateObjects = notifications.notificationUiStateObjects
+                        )
+                        timelineEventState.setSuccessLoading(true)
+                    }
                     delay(1500L)
                     isRefreshed = false
                 }
@@ -74,7 +85,18 @@ class NotificationScreenPresenter @Inject constructor(
 
         LaunchedImpressionEffect(Unit) {
             loginUserInfo = updateMyAccountUseCase()
-            notificationUiState = getNotificationsUseCase()
+            val notifications = getNotificationsUseCase.invoke()
+            if (notifications.notificationUiStateObjects.isEmpty()) {
+                notificationUiState = notificationUiState.copy(
+                    notificationUiStateObjects = emptyList()
+                )
+                timelineEventState.setSuccessLoading(false)
+            } else {
+                notificationUiState = notificationUiState.copy(
+                    notificationUiStateObjects = notifications.notificationUiStateObjects
+                )
+                timelineEventState.setSuccessLoading(true)
+            }
         }
         return NotificationScreen.State(
             notificationUiState = notificationUiState,
