@@ -13,8 +13,7 @@ class AndroidHiltPlugin : Plugin<Project> {
             }
 
             dependencies {
-                implementation( libs.library("hilt.android"))
-                implementation(libs.library("androidx.hilt.navigation.compose"))
+                implementation(libs.library("hilt.android"))
                 ksp(libs.library("hilt.compiler"))
             }
         }

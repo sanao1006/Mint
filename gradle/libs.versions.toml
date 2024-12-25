@@ -19,9 +19,7 @@ androidxActivity = "1.9.1"
 androidxCompose = "1.7.6"
 androidxComposeMaterial3 = "1.4.0-alpha04"
 androidxComposeConstraintLayout = "1.0.1"
-androidxComposeNavigation = "2.8.0-rc01"
 androidxCore = "1.13.1"
-androidxHiltNavigationCompose = "1.2.0"
 androidxLifecycle = "2.8.7"
 androidxProfileinstaller = "1.3.1"
 androidxStartup = "1.1.1"
@@ -31,7 +29,6 @@ circuit = "0.25.0"
 hilt = "2.52"
 kotlinxCoroutines = "1.9.0"
 timber = "5.0.1"
-arrow = "1.2.4"
 kotlinxSerialization = "1.7.3"
 dataStore = "1.1.1"
 tablericons = "1.13.1"
@@ -39,8 +36,6 @@ coil = "3.0.4"
 kotlinxDatetime = "0.6.1"
 spotless = "6.7.0"
 splashscreen = "1.0.0"
-appcompat = "1.7.0"
-material = "1.12.0"
 
 [libraries]
 androidGradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
@@ -61,7 +56,6 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "androidxCompose" }
 androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout", version.ref = "androidxCompose" }
-androidx-compose-material-iconsExtended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "androidxCompose" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "androidxComposeMaterial3" }
 androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "androidxCompose" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "androidxCompose" }
@@ -72,10 +66,8 @@ androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-
 androidx-compose-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version.ref = "androidxComposeConstraintLayout" }
 
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
-androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxComposeNavigation" }
 
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
-androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHiltNavigationCompose" }
 androidx-lifecycle-runtimeCompose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
 androidx-lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
@@ -114,8 +106,7 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
-arrow-core = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
-arrow-fx-coroutines = { module = "io.arrow-kt:arrow-fx-coroutines", version.ref = "arrow" }
+
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 
 dataStore = { module = "androidx.datastore:datastore-preferences", version.ref = "dataStore" }
@@ -127,8 +118,6 @@ coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version
 coil-gif = { module = "io.coil-kt.coil3:coil-gif", version.ref = "coil" }
 
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 androidApplicationGradlePlugin = { id = "com.android.application", version.ref = "agp" }
