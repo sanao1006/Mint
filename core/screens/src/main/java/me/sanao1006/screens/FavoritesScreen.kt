@@ -8,6 +8,7 @@ import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.screen.Screen
 import kotlinx.parcelize.Parcelize
 import me.sanao1006.core.model.uistate.FavoritesScreenUiState
+import me.sanao1006.core.model.uistate.TimelineUiState
 import me.sanao1006.screens.event.GlobalIconEvent
 import me.sanao1006.screens.event.TimelineItemEvent
 
@@ -16,6 +17,7 @@ object FavoritesScreen : Screen {
     @OptIn(ExperimentalMaterialApi::class)
     data class State(
         val favoritesScreenUiState: FavoritesScreenUiState,
+        val timelineUiState: TimelineUiState,
         override val navigator: Navigator,
         override val pullToRefreshState: PullRefreshState,
         override val isRefreshed: Boolean = false,

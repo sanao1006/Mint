@@ -10,4 +10,5 @@ dependencies {
     implementation(projects.core.model)
     implementation(projects.core.resValues)
     implementation(projects.core.data)
+    implementation(projects.core.domain)
 }

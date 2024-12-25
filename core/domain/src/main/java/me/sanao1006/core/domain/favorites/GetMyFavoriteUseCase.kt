@@ -23,14 +23,12 @@ class GetMyFavoriteUseCase @Inject constructor(
                 )
             )
             FavoritesScreenUiState(
-                timelineItems = response.map { it.note.toTimelineUiState() },
-                isSuccessLoading = true
+                timelineItems = response.map { it.note.toTimelineUiState() }
             )
         } catch (e: Exception) {
             Timber.e(e)
             FavoritesScreenUiState(
-                timelineItems = emptyList(),
-                isSuccessLoading = false
+                timelineItems = emptyList()
             )
         }
     }

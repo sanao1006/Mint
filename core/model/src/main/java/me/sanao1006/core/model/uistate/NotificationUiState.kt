@@ -5,14 +5,7 @@ import me.sanao1006.core.model.notes.TimelineItem
 
 data class NotificationUiState(
     var notificationUiStateObjects: List<NotificationUiStateObject> = emptyList(),
-    var isSuccessLoading: Boolean? = null,
-    var isSuccessCreateNote: Boolean? = null,
-    var isFavorite: Boolean = false,
-    var showBottomSheet: Boolean = false,
-    var timelineAction: TimelineItemAction = TimelineItemAction.Renote,
-    val selectedUserId: String? = null,
-    val selectedNoteText: String? = null,
-    val selectedNoteLink: String? = null
+    var isSuccessCreateNote: Boolean? = null
 )
 
 data class NotificationUiStateObject(

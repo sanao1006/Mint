@@ -9,9 +9,6 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -20,12 +17,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.zIndex
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuitx.effects.LaunchedImpressionEffect
 import dagger.hilt.components.SingletonComponent
-import ir.alirezaivaz.tablericons.TablerIcons
 import kotlinx.coroutines.launch
 import me.sanao1006.core.ui.MainScreenDrawerWrapper
 import me.sanao1006.core.ui.MainScreenTimelineContentBox
@@ -44,7 +39,7 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
         val scope = rememberCoroutineScope()
         val drawerState = rememberDrawerState(DrawerValue.Closed)
         val snackbarHostState = remember { SnackbarHostState() }
-        LaunchedImpressionEffect(state.timelineUiState.isSuccessCreateNote) {
+        LaunchedImpressionEffect(state.homeScreenUiState.isSuccessCreateNote) {
             state.noteCreateEventSink(
                 NoteCreateEvent.OnNoteCreated(
                     snackbarHostState = snackbarHostState,
@@ -89,15 +84,6 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
                         pagerState.animateScrollToPage(2)
                         state.eventSink(HomeScreen.Event.TimelineEvent.OnGlobalTimelineClicked)
                     }
-                },
-                floatingActionButton = {
-                    FloatingActionButton(
-                        modifier = Modifier,
-                        containerColor = MaterialTheme.colorScheme.primary,
-                        onClick = { state.noteCreateEventSink(NoteCreateEvent.OnNoteCreateClicked) }
-                    ) {
-                        Icon(painter = painterResource(TablerIcons.Pencil), "")
-                    }
                 }
             )
         }
@@ -114,8 +100,7 @@ private fun HomeScreenUiContent(
     onGlobalIconClicked: () -> Unit,
     onHomeClick: () -> Unit,
     onSocialClick: () -> Unit,
-    onGlobalClick: () -> Unit,
-    floatingActionButton: @Composable () -> Unit
+    onGlobalClick: () -> Unit
 ) {
     Scaffold(
         modifier = modifier,
@@ -138,7 +123,7 @@ private fun HomeScreenUiContent(
             isRefreshed = state.isRefreshed,
             modifier = Modifier.padding(it),
             contentLoadingState = state.timelineUiState.isSuccessLoading,
-            isEmptyContent = state.timelineUiState.timelineItems.isEmpty()
+            isEmptyContent = state.homeScreenUiState.timelineItems.isEmpty()
         ) {
             TimelineColumn(
                 state = state,
@@ -160,7 +145,7 @@ private fun TimelineColumn(
         state = pagerState
     ) { page ->
         TimelineColumn(
-            timelineItems = state.timelineUiState.timelineItems,
+            timelineItems = state.homeScreenUiState.timelineItems,
             modifier = Modifier.fillMaxSize(),
             onIconClick = { id, username, host ->
                 state.timelineEventSink(
