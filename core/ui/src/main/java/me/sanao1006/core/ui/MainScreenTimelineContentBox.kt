@@ -46,9 +46,9 @@ fun MainScreenTimelineContentBox(
                 state.timelineEventSink(
                     TimelineItemEvent.OnRenoteClicked(
                         when (state) {
-                            is HomeScreen.State -> state.homeScreenUiState.selectedUserId ?: ""
+                            is HomeScreen.State -> state.timelineUiState.selectedUserId ?: ""
                             is NotificationScreen.State ->
-                                state.notificationUiState.selectedUserId
+                                state.timelineUiState.selectedUserId
                                     ?: ""
 
                             else -> ""
@@ -61,13 +61,13 @@ fun MainScreenTimelineContentBox(
                 when (state) {
                     is HomeScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnQuoteClicked(
-                            state.homeScreenUiState.selectedUserId ?: ""
+                            state.timelineUiState.selectedUserId ?: ""
                         )
                     )
 
                     is NotificationScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnQuoteClicked(
-                            state.notificationUiState.selectedUserId ?: ""
+                            state.timelineUiState.selectedUserId ?: ""
                         )
                     )
                 }
@@ -80,7 +80,7 @@ fun MainScreenTimelineContentBox(
                 when (state) {
                     is HomeScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnDetailClicked(
-                            state.homeScreenUiState.selectedUserId ?: "",
+                            state.timelineUiState.selectedUserId ?: "",
                             null,
                             null
                         )
@@ -88,7 +88,7 @@ fun MainScreenTimelineContentBox(
 
                     is NotificationScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnDetailClicked(
-                            state.notificationUiState.selectedUserId ?: "",
+                            state.timelineUiState.selectedUserId ?: "",
                             null,
                             null
                         )
@@ -100,13 +100,13 @@ fun MainScreenTimelineContentBox(
                 when (state) {
                     is HomeScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnCopyClicked(
-                            state.homeScreenUiState.selectedNoteText ?: ""
+                            state.timelineUiState.selectedNoteText ?: ""
                         )
                     )
 
                     is NotificationScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnCopyClicked(
-                            state.notificationUiState.selectedNoteText ?: ""
+                            state.timelineUiState.selectedNoteText ?: ""
                         )
                     )
                 }
@@ -116,13 +116,13 @@ fun MainScreenTimelineContentBox(
                 when (state) {
                     is HomeScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnCopyLinkClicked(
-                            state.homeScreenUiState.selectedNoteLink ?: ""
+                            state.timelineUiState.selectedNoteLink ?: ""
                         )
                     )
 
                     is NotificationScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnCopyLinkClicked(
-                            state.notificationUiState.selectedNoteLink ?: ""
+                            state.timelineUiState.selectedNoteLink ?: ""
                         )
                     )
                 }
@@ -132,13 +132,13 @@ fun MainScreenTimelineContentBox(
                 when (state) {
                     is HomeScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnShareClicked(
-                            state.homeScreenUiState.selectedNoteLink ?: ""
+                            state.timelineUiState.selectedNoteLink ?: ""
                         )
                     )
 
                     is NotificationScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnShareClicked(
-                            state.notificationUiState.selectedNoteLink ?: ""
+                            state.timelineUiState.selectedNoteLink ?: ""
                         )
                     )
                 }
@@ -148,14 +148,14 @@ fun MainScreenTimelineContentBox(
                 when (state) {
                     is HomeScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnFavoriteClicked(
-                            state.homeScreenUiState.selectedUserId ?: "",
+                            state.timelineUiState.selectedUserId ?: "",
                             snackbarHostState
                         )
                     )
 
                     is NotificationScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnFavoriteClicked(
-                            state.notificationUiState.selectedUserId ?: "",
+                            state.timelineUiState.selectedUserId ?: "",
                             snackbarHostState
                         )
                     )
@@ -217,23 +217,23 @@ fun MainScreenTimelineContentBox(
         TimelineBottomSheet(
             isShowBottomSheet = when (state) {
                 is HomeScreen.State -> {
-                    state.homeScreenUiState.showBottomSheet
+                    state.timelineUiState.showBottomSheet
                 }
 
                 is NotificationScreen.State -> {
-                    state.notificationUiState.showBottomSheet
+                    state.timelineUiState.showBottomSheet
                 }
 
                 else -> false
             },
             timelineItemAction = when (state) {
-                is HomeScreen.State -> state.homeScreenUiState.timelineAction
-                is NotificationScreen.State -> state.notificationUiState.timelineAction
+                is HomeScreen.State -> state.timelineUiState.timelineAction
+                is NotificationScreen.State -> state.timelineUiState.timelineAction
                 else -> TimelineItemAction.None
             },
             isFavorite = when (state) {
-                is HomeScreen.State -> state.homeScreenUiState.isFavorite
-                is NotificationScreen.State -> state.notificationUiState.isFavorite
+                is HomeScreen.State -> state.timelineUiState.isFavorite
+                is NotificationScreen.State -> state.timelineUiState.isFavorite
                 else -> false
             },
             onDismissRequest = onDismissRequest,

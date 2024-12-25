@@ -127,7 +127,7 @@ private fun NotificationScreenContent(
             snackbarHostState = snackbarHostState,
             pullRefreshState = state.pullToRefreshState,
             isRefreshed = state.isRefreshed,
-            contentLoadingState = state.notificationUiState.isSuccessLoading,
+            contentLoadingState = state.timelineUiState.isSuccessLoading,
             modifier = Modifier.padding(it),
             isEmptyContent = state.notificationUiState.notificationUiStateObjects.isEmpty()
         ) {

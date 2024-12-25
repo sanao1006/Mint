@@ -137,7 +137,7 @@ private fun HomeScreenUiContent(
             pullRefreshState = state.pullToRefreshState,
             isRefreshed = state.isRefreshed,
             modifier = Modifier.padding(it),
-            contentLoadingState = state.homeScreenUiState.isSuccessLoading,
+            contentLoadingState = state.timelineUiState.isSuccessLoading,
             isEmptyContent = state.homeScreenUiState.timelineItems.isEmpty()
         ) {
             TimelineColumn(

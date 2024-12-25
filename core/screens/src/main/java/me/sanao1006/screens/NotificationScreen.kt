@@ -8,6 +8,7 @@ import com.slack.circuit.runtime.screen.Screen
 import kotlinx.parcelize.Parcelize
 import me.sanao1006.core.model.LoginUserInfo
 import me.sanao1006.core.model.uistate.NotificationUiState
+import me.sanao1006.core.model.uistate.TimelineUiState
 import me.sanao1006.screens.event.BottomAppBarActionEvent
 import me.sanao1006.screens.event.DrawerEvent
 import me.sanao1006.screens.event.GlobalIconEvent
@@ -20,6 +21,7 @@ data object NotificationScreen : Screen {
     data class State(
         val notificationUiState: NotificationUiState,
         val isSuccessCreateNote: Boolean?,
+        override val timelineUiState: TimelineUiState,
         override val navigator: Navigator,
         override val drawerUserInfo: LoginUserInfo,
         override val pullToRefreshState: PullRefreshState,

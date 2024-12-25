@@ -14,13 +14,10 @@ class GetNotificationsUseCase @Inject constructor(
         return try {
             val response = repository.notifications(INotificationsRequestBody())
             NotificationUiState(
-                notificationUiStateObjects = response.map { it.toNotificationUiState() },
-                isSuccessLoading = true
+                notificationUiStateObjects = response.map { it.toNotificationUiState() }
             )
         } catch (e: Exception) {
-            NotificationUiState(
-                isSuccessLoading = false
-            )
+            NotificationUiState()
         }
     }
 }
