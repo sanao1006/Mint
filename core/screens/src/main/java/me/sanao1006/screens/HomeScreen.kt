@@ -4,7 +4,6 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshState
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
-import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.screen.Screen
 import kotlinx.parcelize.Parcelize
 import me.sanao1006.core.model.LoginUserInfo
@@ -22,7 +21,6 @@ data object HomeScreen : Screen {
     data class State(
         val homeScreenUiState: HomeScreenUiState,
         override val timelineUiState: TimelineUiState,
-        override val navigator: Navigator,
         override val pullToRefreshState: PullRefreshState,
         override val isRefreshed: Boolean = false,
         override val drawerUserInfo: LoginUserInfo,
@@ -47,7 +45,6 @@ data object HomeScreen : Screen {
 @OptIn(ExperimentalMaterialApi::class)
 interface MainScreenState {
     val timelineUiState: TimelineUiState
-    val navigator: Navigator
     val pullToRefreshState: PullRefreshState
     val isRefreshed: Boolean
     val drawerUserInfo: LoginUserInfo
@@ -60,7 +57,6 @@ interface MainScreenState {
 
 @OptIn(ExperimentalMaterialApi::class)
 interface SubScreenState {
-    val navigator: Navigator
     val pullToRefreshState: PullRefreshState
     val isRefreshed: Boolean
     val timelineEventSink: (TimelineItemEvent) -> Unit

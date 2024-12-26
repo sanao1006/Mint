@@ -15,6 +15,7 @@ import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuitx.effects.LaunchedImpressionEffect
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.sanao1006.core.data.compositionLocal.LocalNavigator
@@ -26,7 +27,6 @@ import me.sanao1006.screens.event.DrawerEventPresenter
 import me.sanao1006.screens.event.GlobalIconEventPresenter
 import me.sanao1006.screens.event.TimelineEventPresenter
 import me.sanao1006.screens.event.handleNoteCreateEvent
-import javax.inject.Inject
 
 @CircuitInject(NotificationScreen::class, SingletonComponent::class)
 class NotificationScreenPresenter @Inject constructor(
@@ -98,7 +98,6 @@ class NotificationScreenPresenter @Inject constructor(
             notificationUiState = notificationUiState,
             timelineUiState = timelineEventState.uiState,
             isSuccessCreateNote = isSuccessCreateNote,
-            navigator = navigator,
             drawerUserInfo = drawerEventState.loginUserInfo,
             pullToRefreshState = pullRefreshState,
             isRefreshed = isRefreshed,

@@ -12,11 +12,11 @@ import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuitx.effects.LaunchedImpressionEffect
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Inject
 import me.sanao1006.core.domain.announcement.GetAnnouncementsUseCase
 import me.sanao1006.core.model.uistate.AnnouncementUiState
 import me.sanao1006.screens.AnnouncementScreen
 import me.sanao1006.screens.event.GlobalIconEventPresenter
-import javax.inject.Inject
 
 @CircuitInject(AnnouncementScreen::class, SingletonComponent::class)
 class AnnouncementPresenter @Inject constructor(

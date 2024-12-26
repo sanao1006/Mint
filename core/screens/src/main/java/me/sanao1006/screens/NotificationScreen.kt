@@ -3,7 +3,6 @@ package me.sanao1006.screens
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshState
 import com.slack.circuit.runtime.CircuitUiState
-import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.screen.Screen
 import kotlinx.parcelize.Parcelize
 import me.sanao1006.core.model.LoginUserInfo
@@ -22,7 +21,6 @@ data object NotificationScreen : Screen {
         val notificationUiState: NotificationUiState,
         val isSuccessCreateNote: Boolean?,
         override val timelineUiState: TimelineUiState,
-        override val navigator: Navigator,
         override val drawerUserInfo: LoginUserInfo,
         override val pullToRefreshState: PullRefreshState,
         override val isRefreshed: Boolean,

@@ -14,15 +14,14 @@ import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuitx.effects.LaunchedImpressionEffect
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import me.sanao1006.core.data.compositionLocal.LocalNavigator
 import me.sanao1006.core.domain.favorites.GetMyFavoriteUseCase
 import me.sanao1006.core.model.uistate.FavoritesScreenUiState
 import me.sanao1006.screens.FavoritesScreen
 import me.sanao1006.screens.event.GlobalIconEventPresenter
 import me.sanao1006.screens.event.TimelineEventPresenter
-import javax.inject.Inject
 
 @CircuitInject(FavoritesScreen::class, SingletonComponent::class)
 class FavoritesScreenPresenter @Inject constructor(
@@ -33,7 +32,6 @@ class FavoritesScreenPresenter @Inject constructor(
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     override fun present(): FavoritesScreen.State {
-        val navigator = LocalNavigator.current
         val timelineEventState = timelineEventPresenter.present()
         val globalIconEventState = globalIconEventPresenter.present()
 
@@ -84,7 +82,6 @@ class FavoritesScreenPresenter @Inject constructor(
         }
 
         return FavoritesScreen.State(
-            navigator = navigator,
             favoritesScreenUiState = favoritesScreenUiState,
             timelineUiState = timelineEventState.uiState,
             pullToRefreshState = pullRefreshState,
