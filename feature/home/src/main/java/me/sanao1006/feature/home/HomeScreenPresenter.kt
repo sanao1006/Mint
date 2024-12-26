@@ -50,16 +50,17 @@ class HomeScreenPresenter @Inject constructor(
         val drawerEventState = drawerEventPresenter.present()
         val globalIconEventState = globalIconEventPresenter.present()
 
-        var isSuccessCreateNote: Boolean? by rememberRetained { mutableStateOf(null) }
         val context = LocalContext.current
         val scope = rememberCoroutineScope()
-        val resultNavigator = rememberAnsweringNavigator<NoteScreen.Result>(navigator) { result ->
-            isSuccessCreateNote = result.success
-        }
 
         var timelineType by rememberRetained { mutableStateOf(TimelineType.SOCIAL) }
         var homeScreenUiState: HomeScreenUiState by rememberRetained(timelineType) {
             mutableStateOf(HomeScreenUiState())
+        }
+        val resultNavigator = rememberAnsweringNavigator<NoteScreen.Result>(navigator) { result ->
+            homeScreenUiState = homeScreenUiState.copy(
+                isSuccessCreateNote = result.success
+            )
         }
 
         var isRefreshed by remember { mutableStateOf(false) }
@@ -125,7 +126,7 @@ class HomeScreenPresenter @Inject constructor(
             drawerUserInfo = drawerEventState.loginUserInfo,
             noteCreateEventSink = { event ->
                 event.handleNoteCreateEvent(
-                    isSuccessCreateNote,
+                    homeScreenUiState.isSuccessCreateNote,
                     context,
                     resultNavigator
                 )
