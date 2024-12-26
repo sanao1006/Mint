@@ -22,24 +22,22 @@ import kotlinx.coroutines.launch
 import me.sanao1006.core.data.compositionLocal.LocalNavigator
 import me.sanao1006.core.domain.home.GetNotesTimelineUseCase
 import me.sanao1006.core.domain.home.TimelineType
-import me.sanao1006.core.domain.home.UpdateAccountUseCase
-import me.sanao1006.core.model.LoginUserInfo
 import me.sanao1006.core.model.notes.TimelineItem
 import me.sanao1006.core.model.uistate.HomeScreenUiState
 import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.NoteScreen
 import me.sanao1006.screens.event.BottomAppBarPresenter
+import me.sanao1006.screens.event.DrawerEventPresenter
 import me.sanao1006.screens.event.TimelineEventPresenter
-import me.sanao1006.screens.event.handleDrawerEvent
 import me.sanao1006.screens.event.handleNavigationIconClicked
 import me.sanao1006.screens.event.handleNoteCreateEvent
 
 @CircuitInject(HomeScreen::class, SingletonComponent::class)
 class HomeScreenPresenter @Inject constructor(
     private val getNotesTimelineUseCase: GetNotesTimelineUseCase,
-    private val updateMyAccountUseCase: UpdateAccountUseCase,
     private val bottomAppBarPresenter: BottomAppBarPresenter,
-    private val timelineEventPresenter: TimelineEventPresenter
+    private val timelineEventPresenter: TimelineEventPresenter,
+    private val drawerEventPresenter: DrawerEventPresenter
 ) : Presenter<HomeScreen.State> {
 
     @OptIn(ExperimentalMaterialApi::class)
@@ -48,12 +46,8 @@ class HomeScreenPresenter @Inject constructor(
         val navigator = LocalNavigator.current
         val bottomAppBarPresenter = bottomAppBarPresenter.present()
         val timelineEventPresenter = timelineEventPresenter.present()
+        val drawerEventState = drawerEventPresenter.present()
         var isSuccessCreateNote: Boolean? by rememberRetained { mutableStateOf(null) }
-        var loginUserInfo: LoginUserInfo by rememberRetained {
-            mutableStateOf(
-                LoginUserInfo()
-            )
-        }
         val context = LocalContext.current
         val scope = rememberCoroutineScope()
         val resultNavigator = rememberAnsweringNavigator<NoteScreen.Result>(navigator) { result ->
@@ -103,7 +97,6 @@ class HomeScreenPresenter @Inject constructor(
                 )
                 timelineEventPresenter.setSuccessLoading(true)
             }
-            loginUserInfo = updateMyAccountUseCase()
         }
 
         LaunchedImpressionEffect(timelineType) {
@@ -127,7 +120,7 @@ class HomeScreenPresenter @Inject constructor(
             navigator = navigator,
             pullToRefreshState = pullRefreshState,
             isRefreshed = isRefreshed,
-            drawerUserInfo = loginUserInfo,
+            drawerUserInfo = drawerEventState.loginUserInfo,
             noteCreateEventSink = { event ->
                 event.handleNoteCreateEvent(
                     isSuccessCreateNote,
@@ -136,7 +129,7 @@ class HomeScreenPresenter @Inject constructor(
                 )
             },
             timelineEventSink = timelineEventPresenter.eventSink,
-            drawerEventSink = { event -> event.handleDrawerEvent(navigator, loginUserInfo) },
+            drawerEventSink = drawerEventState.eventSink,
             bottomAppBarEventSink = bottomAppBarPresenter.eventSink,
             globalIconEventSink = { event -> event.handleNavigationIconClicked(navigator) }
         ) { event ->

@@ -19,23 +19,21 @@ import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.sanao1006.core.data.compositionLocal.LocalNavigator
-import me.sanao1006.core.domain.home.UpdateAccountUseCase
 import me.sanao1006.core.domain.notification.GetNotificationsUseCase
-import me.sanao1006.core.model.LoginUserInfo
 import me.sanao1006.core.model.uistate.NotificationUiState
 import me.sanao1006.screens.NotificationScreen
 import me.sanao1006.screens.event.BottomAppBarPresenter
+import me.sanao1006.screens.event.DrawerEventPresenter
 import me.sanao1006.screens.event.TimelineEventPresenter
-import me.sanao1006.screens.event.handleDrawerEvent
 import me.sanao1006.screens.event.handleNavigationIconClicked
 import me.sanao1006.screens.event.handleNoteCreateEvent
 
 @CircuitInject(NotificationScreen::class, SingletonComponent::class)
 class NotificationScreenPresenter @Inject constructor(
-    private val updateMyAccountUseCase: UpdateAccountUseCase,
     private val getNotificationsUseCase: GetNotificationsUseCase,
     private val bottomAppBarPresenter: BottomAppBarPresenter,
-    private val timelineEventPresenter: TimelineEventPresenter
+    private val timelineEventPresenter: TimelineEventPresenter,
+    private val drawerEventPresenter: DrawerEventPresenter
 ) : Presenter<NotificationScreen.State> {
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
@@ -43,12 +41,8 @@ class NotificationScreenPresenter @Inject constructor(
         val navigator = LocalNavigator.current
         val bottomAppBarState = bottomAppBarPresenter.present()
         val timelineEventState = timelineEventPresenter.present()
+        val drawerEventState = drawerEventPresenter.present()
         var isSuccessCreateNote: Boolean? by rememberRetained { mutableStateOf(null) }
-        var loginUserInfo: LoginUserInfo by rememberRetained {
-            mutableStateOf(
-                LoginUserInfo()
-            )
-        }
 
         val context = LocalContext.current
         val scope = rememberCoroutineScope()
@@ -84,7 +78,6 @@ class NotificationScreenPresenter @Inject constructor(
         )
 
         LaunchedImpressionEffect(Unit) {
-            loginUserInfo = updateMyAccountUseCase()
             val notifications = getNotificationsUseCase.invoke()
             if (notifications.notificationUiStateObjects.isEmpty()) {
                 notificationUiState = notificationUiState.copy(
@@ -103,7 +96,7 @@ class NotificationScreenPresenter @Inject constructor(
             timelineUiState = timelineEventState.uiState,
             isSuccessCreateNote = isSuccessCreateNote,
             navigator = navigator,
-            drawerUserInfo = loginUserInfo,
+            drawerUserInfo = drawerEventState.loginUserInfo,
             pullToRefreshState = pullRefreshState,
             isRefreshed = isRefreshed,
             timelineEventSink = timelineEventState.eventSink,
@@ -114,7 +107,7 @@ class NotificationScreenPresenter @Inject constructor(
                     navigator
                 )
             },
-            drawerEventSink = { event -> event.handleDrawerEvent(navigator, loginUserInfo) },
+            drawerEventSink = drawerEventState.eventSink,
             globalIconEventSink = { event -> event.handleNavigationIconClicked(navigator) },
             bottomAppBarEventSink = bottomAppBarState.eventSink,
             eventSink = { event ->
