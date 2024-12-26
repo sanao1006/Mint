@@ -31,7 +31,7 @@ jobs:
           distribution: zulu
           java-version: 21
 
-      - uses: gradle/gradle-build-action@v2.7.1
+      - uses: gradle/gradle-build-action@v2.12.0
       - name: Make Gradle executable
         run: chmod +x ./gradlew
 
