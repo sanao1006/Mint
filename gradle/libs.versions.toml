@@ -35,7 +35,7 @@ tablericons = "1.13.1"
 coil = "3.0.4"
 kotlinxDatetime = "0.6.1"
 spotless = "6.7.0"
-splashscreen = "1.0.0"
+splashscreen = "1.0.1"
 
 [libraries]
 androidGradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
