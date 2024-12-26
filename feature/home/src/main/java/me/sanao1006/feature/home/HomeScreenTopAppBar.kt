@@ -1,5 +1,6 @@
 package me.sanao1006.feature.home
 
+import android.os.Vibrator
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,10 +10,13 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import androidx.core.content.getSystemService
 import ir.alirezaivaz.tablericons.TablerIcons
+import me.sanao1006.core.data.util.vibrate
 import me.sanao1006.core.ui.modifier.bottomBorder
 import me.sanao1006.feature.home.TopAppBarTimelineState.values
 
@@ -26,6 +30,7 @@ internal fun HomeScreenTopAppBar(
     onSocialClick: () -> Unit,
     onGlobalClick: () -> Unit
 ) {
+    val vibrator = LocalContext.current.getSystemService<Vibrator>()
     TopAppBar(
         modifier = modifier,
         title = {
@@ -42,6 +47,7 @@ internal fun HomeScreenTopAppBar(
                             }
                         ),
                         onClick = {
+                            vibrator?.vibrate()
                             when (state) {
                                 TopAppBarTimelineState.HOME -> onHomeClick()
                                 TopAppBarTimelineState.SOCIAL -> onSocialClick()
