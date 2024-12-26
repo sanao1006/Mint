@@ -17,7 +17,6 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import me.sanao1006.core.data.compositionLocal.LocalNavigator
 import me.sanao1006.core.domain.home.GetNotesTimelineUseCase
 import me.sanao1006.core.domain.home.TimelineType
 import me.sanao1006.core.model.notes.TimelineItem
@@ -42,7 +41,6 @@ class HomeScreenPresenter @Inject constructor(
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     override fun present(): HomeScreen.State {
-        val navigator = LocalNavigator.current
         val bottomAppBarPresenter = bottomAppBarPresenter.present()
         val timelineEventPresenter = timelineEventPresenter.present()
         val drawerEventState = drawerEventPresenter.present()

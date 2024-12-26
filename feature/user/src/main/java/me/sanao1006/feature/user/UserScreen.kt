@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ContainedLoadingIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.HorizontalDivider
@@ -49,6 +48,7 @@ import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
 import me.sanao1006.core.model.common.Field
 import me.sanao1006.core.model.uistate.UserScreenUiState
+import me.sanao1006.core.ui.common.ContentLoadingIndicator
 import me.sanao1006.screens.UserScreen
 import me.sanao1006.screens.event.globalIcon.GlobalIconEvent
 import me.snao1006.res_value.ResString
@@ -76,14 +76,7 @@ fun UserScreenUi(state: UserScreen.State, modifier: Modifier) {
         ) {
             when (val uiState = state.uiState) {
                 is UserScreenUiState.Loading -> {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        ContainedLoadingIndicator(
-                            indicatorColor = MaterialTheme.colorScheme.primary
-                        )
-                    }
+                    ContentLoadingIndicator()
                 }
 
                 is UserScreenUiState.Failed -> {
