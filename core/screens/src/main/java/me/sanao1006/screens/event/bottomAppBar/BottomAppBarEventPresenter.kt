@@ -1,4 +1,4 @@
-package me.sanao1006.screens.event
+package me.sanao1006.screens.event.bottomAppBar
 
 import androidx.compose.runtime.Composable
 import com.slack.circuit.runtime.CircuitUiState

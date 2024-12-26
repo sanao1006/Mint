@@ -14,7 +14,7 @@ import me.sanao1006.core.ui.DrawerItemScreenWrapper
 import me.sanao1006.core.ui.SubScreenTimelineContentBox
 import me.sanao1006.core.ui.TimelineColumn
 import me.sanao1006.screens.FavoritesScreen
-import me.sanao1006.screens.event.TimelineItemEvent
+import me.sanao1006.screens.event.timeline.TimelineItemEvent
 
 @OptIn(ExperimentalMaterialApi::class)
 @CircuitInject(FavoritesScreen::class, SingletonComponent::class)

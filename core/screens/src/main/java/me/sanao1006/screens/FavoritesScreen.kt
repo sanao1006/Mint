@@ -4,13 +4,12 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshState
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
-import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.screen.Screen
 import kotlinx.parcelize.Parcelize
 import me.sanao1006.core.model.uistate.FavoritesScreenUiState
 import me.sanao1006.core.model.uistate.TimelineUiState
-import me.sanao1006.screens.event.GlobalIconEvent
-import me.sanao1006.screens.event.TimelineItemEvent
+import me.sanao1006.screens.event.globalIcon.GlobalIconEvent
+import me.sanao1006.screens.event.timeline.TimelineItemEvent
 
 @Parcelize
 object FavoritesScreen : Screen {
@@ -18,7 +17,6 @@ object FavoritesScreen : Screen {
     data class State(
         val favoritesScreenUiState: FavoritesScreenUiState,
         val timelineUiState: TimelineUiState,
-        override val navigator: Navigator,
         override val pullToRefreshState: PullRefreshState,
         override val isRefreshed: Boolean = false,
         override val timelineEventSink: (TimelineItemEvent) -> Unit,

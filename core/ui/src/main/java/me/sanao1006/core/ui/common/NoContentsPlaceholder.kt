@@ -1,4 +1,4 @@
-package me.sanao1006.core.ui
+package me.sanao1006.core.ui.common
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

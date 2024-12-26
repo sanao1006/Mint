@@ -8,10 +8,8 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material3.ContainedLoadingIndicator
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FloatingAppBarDefaults.ScreenOffset
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,14 +17,16 @@ import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.zIndex
 import me.sanao1006.core.model.uistate.TimelineItemAction
+import me.sanao1006.core.ui.common.ContentLoadingIndicator
+import me.sanao1006.core.ui.common.NoContentsPlaceHolder
 import me.sanao1006.screens.FavoritesScreen
 import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.MainScreenState
 import me.sanao1006.screens.MainScreenType
 import me.sanao1006.screens.NotificationScreen
 import me.sanao1006.screens.SubScreenState
-import me.sanao1006.screens.event.NoteCreateEvent
-import me.sanao1006.screens.event.TimelineItemEvent
+import me.sanao1006.screens.event.notecreate.NoteCreateEvent
+import me.sanao1006.screens.event.timeline.TimelineItemEvent
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterialApi::class)
 @Composable
@@ -171,7 +171,7 @@ fun MainScreenTimelineContentBox(
             )
         }
     },
-    notificationScreenTimelineContent: @Composable () -> Unit
+    timelineContent: @Composable () -> Unit
 ) {
     Box(
         contentAlignment = Alignment.TopCenter,
@@ -192,24 +192,18 @@ fun MainScreenTimelineContentBox(
         ) {
             when (contentLoadingState) {
                 null -> {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        ContainedLoadingIndicator(
-                            indicatorColor = MaterialTheme.colorScheme.primary
-                        )
-                    }
+                    ContentLoadingIndicator()
                 }
 
                 false -> {
+                    NoContentsPlaceHolder()
                 }
 
                 true -> {
                     if (isEmptyContent) {
-                        NoContentsPlaceHolder()
+                        ContentLoadingIndicator()
                     } else {
-                        notificationScreenTimelineContent()
+                        timelineContent()
                     }
                 }
             }
@@ -375,14 +369,7 @@ fun SubScreenTimelineContentBox(
         ) {
             when (contentLoadingState) {
                 null -> {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        ContainedLoadingIndicator(
-                            indicatorColor = MaterialTheme.colorScheme.primary
-                        )
-                    }
+                    ContentLoadingIndicator()
                 }
 
                 false -> {

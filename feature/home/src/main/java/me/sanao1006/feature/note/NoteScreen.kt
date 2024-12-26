@@ -15,6 +15,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import com.slack.circuit.codegen.annotations.CircuitInject
@@ -31,6 +32,7 @@ import me.snao1006.res_value.ResString
 fun NoteScreenUi(state: NoteScreen.State, modifier: Modifier) {
     MintTheme {
         val scope = rememberCoroutineScope()
+        val focusManager = LocalFocusManager.current
         val focusRequester = rememberRetained { FocusRequester() }
         LaunchedImpressionEffect(Unit) {
             focusRequester.requestFocus()
@@ -43,6 +45,7 @@ fun NoteScreenUi(state: NoteScreen.State, modifier: Modifier) {
                     NoteScreenTopAppBar(
                         onBackClicked = { state.eventSink(NoteScreen.Event.OnBackClicked) },
                         onNotePostClicked = {
+                            focusManager.clearFocus()
                             state.eventSink(
                                 NoteScreen.Event.OnNotePostClicked(
                                     scope

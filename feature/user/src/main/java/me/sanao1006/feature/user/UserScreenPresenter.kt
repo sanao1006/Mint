@@ -17,13 +17,17 @@ import me.sanao1006.core.domain.user.GetUserShowUserCase
 import me.sanao1006.core.model.requestbody.users.UsersShowRequestBody
 import me.sanao1006.core.model.uistate.UserScreenUiState
 import me.sanao1006.screens.UserScreen
+import me.sanao1006.screens.event.globalIcon.GlobalIconEventPresenter
 
 class UserScreenPresenter @AssistedInject constructor(
     @Assisted private val screen: UserScreen,
-    private val getUserShowUserCase: GetUserShowUserCase
+    private val getUserShowUserCase: GetUserShowUserCase,
+    private val globalIconEventPresenter: GlobalIconEventPresenter
 ) : Presenter<UserScreen.State> {
     @Composable
     override fun present(): UserScreen.State {
+        val globalIconEventState = globalIconEventPresenter.present()
+
         val navigator = LocalNavigator.current
         var userUiState: UserScreenUiState by rememberRetained {
             mutableStateOf(UserScreenUiState.Loading)
@@ -41,13 +45,10 @@ class UserScreenPresenter @AssistedInject constructor(
         }
 
         return UserScreen.State(
+            globalIconEventSink = globalIconEventState.eventSink,
             uiState = userUiState
         ) { event ->
             when (event) {
-                UserScreen.Event.OnNavigationIconClicked -> {
-                    navigator.pop()
-                }
-
                 UserScreen.Event.OnNotesCountClicked -> {}
                 UserScreen.Event.OnFollowersCountClicked -> {}
                 UserScreen.Event.OnFollowingCountClicked -> {}

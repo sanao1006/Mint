@@ -38,7 +38,7 @@ import ir.alirezaivaz.tablericons.TablerIcons
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import me.sanao1006.core.model.LoginUserInfo
-import me.sanao1006.screens.event.DrawerEvent
+import me.sanao1006.screens.event.drawer.DrawerEvent
 import me.snao1006.res_value.ResString
 
 @Composable

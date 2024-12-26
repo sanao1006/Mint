@@ -1,4 +1,4 @@
-package me.sanao1006.screens.event
+package me.sanao1006.screens.event.notecreate
 
 import android.content.Context
 import androidx.compose.material3.SnackbarHostState

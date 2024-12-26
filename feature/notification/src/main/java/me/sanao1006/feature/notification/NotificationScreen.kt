@@ -32,9 +32,9 @@ import me.sanao1006.core.ui.MainScreenDrawerWrapper
 import me.sanao1006.core.ui.MainScreenTimelineContentBox
 import me.sanao1006.screens.MainScreenType
 import me.sanao1006.screens.NotificationScreen
-import me.sanao1006.screens.event.GlobalIconEvent
-import me.sanao1006.screens.event.NoteCreateEvent
-import me.sanao1006.screens.event.TimelineItemEvent
+import me.sanao1006.screens.event.globalIcon.GlobalIconEvent
+import me.sanao1006.screens.event.notecreate.NoteCreateEvent
+import me.sanao1006.screens.event.timeline.TimelineItemEvent
 import me.snao1006.res_value.ResString
 
 @CircuitInject(NotificationScreen::class, SingletonComponent::class)

@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.ContainedLoadingIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
@@ -22,7 +21,6 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -41,7 +39,8 @@ import me.sanao1006.core.model.meta.Announcement
 import me.sanao1006.core.model.uistate.AnnouncementUiState
 import me.sanao1006.core.ui.DrawerItem
 import me.sanao1006.core.ui.DrawerItemScreenWrapper
-import me.sanao1006.core.ui.NoContentsPlaceHolder
+import me.sanao1006.core.ui.common.ContentLoadingIndicator
+import me.sanao1006.core.ui.common.NoContentsPlaceHolder
 import me.sanao1006.screens.AnnouncementScreen
 import me.snao1006.res_value.ResString
 
@@ -57,12 +56,7 @@ fun AnnouncementScreen(state: AnnouncementScreen.State, modifier: Modifier) {
             Column(modifier = it.fillMaxSize()) {
                 when (state.uiState) {
                     is AnnouncementUiState.Loading -> {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            ContainedLoadingIndicator()
-                        }
+                        ContentLoadingIndicator()
                     }
 
                     is AnnouncementUiState.Failed -> {

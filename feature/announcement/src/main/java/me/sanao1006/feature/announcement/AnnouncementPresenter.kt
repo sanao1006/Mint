@@ -13,19 +13,20 @@ import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuitx.effects.LaunchedImpressionEffect
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Inject
-import me.sanao1006.core.data.compositionLocal.LocalNavigator
 import me.sanao1006.core.domain.announcement.GetAnnouncementsUseCase
 import me.sanao1006.core.model.uistate.AnnouncementUiState
 import me.sanao1006.screens.AnnouncementScreen
-import me.sanao1006.screens.event.handleNavigationIconClicked
+import me.sanao1006.screens.event.globalIcon.GlobalIconEventPresenter
 
 @CircuitInject(AnnouncementScreen::class, SingletonComponent::class)
 class AnnouncementPresenter @Inject constructor(
-    private val getAnnouncementsUseCase: GetAnnouncementsUseCase
+    private val getAnnouncementsUseCase: GetAnnouncementsUseCase,
+    private val globalIconEventPresenter: GlobalIconEventPresenter
 ) : Presenter<AnnouncementScreen.State> {
     @Composable
     override fun present(): AnnouncementScreen.State {
-        val navigator = LocalNavigator.current
+        val globalIconEventState = globalIconEventPresenter.present()
+
         var isActive by rememberRetained { mutableStateOf(true) }
         var selectedTabIndex by remember { mutableIntStateOf(0) }
         val announcementItemExpandedStates =
@@ -46,7 +47,7 @@ class AnnouncementPresenter @Inject constructor(
             uiState = uiState,
             selectedTabIndex = selectedTabIndex,
             announcementItemExpandedStates = announcementItemExpandedStates,
-            globalIconEventSink = { event -> event.handleNavigationIconClicked(navigator) }
+            globalIconEventSink = globalIconEventState.eventSink
         ) { event ->
             when (event) {
                 is AnnouncementScreen.Event.OnTabClicked -> {
