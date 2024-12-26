@@ -22,11 +22,11 @@ import me.sanao1006.core.data.compositionLocal.LocalNavigator
 import me.sanao1006.core.domain.notification.GetNotificationsUseCase
 import me.sanao1006.core.model.uistate.NotificationUiState
 import me.sanao1006.screens.NotificationScreen
-import me.sanao1006.screens.event.BottomAppBarPresenter
-import me.sanao1006.screens.event.DrawerEventPresenter
-import me.sanao1006.screens.event.GlobalIconEventPresenter
-import me.sanao1006.screens.event.TimelineEventPresenter
+import me.sanao1006.screens.event.bottomAppBar.BottomAppBarPresenter
+import me.sanao1006.screens.event.drawer.DrawerEventPresenter
+import me.sanao1006.screens.event.globalIcon.GlobalIconEventPresenter
 import me.sanao1006.screens.event.handleNoteCreateEvent
+import me.sanao1006.screens.event.timeline.TimelineEventPresenter
 
 @CircuitInject(NotificationScreen::class, SingletonComponent::class)
 class NotificationScreenPresenter @Inject constructor(

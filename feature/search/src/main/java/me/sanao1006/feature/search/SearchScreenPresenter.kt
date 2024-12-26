@@ -6,7 +6,7 @@ import com.slack.circuit.runtime.presenter.Presenter
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Inject
 import me.sanao1006.screens.SearchScreen
-import me.sanao1006.screens.event.GlobalIconEventPresenter
+import me.sanao1006.screens.event.globalIcon.GlobalIconEventPresenter
 
 @CircuitInject(SearchScreen::class, SingletonComponent::class)
 class SearchScreenPresenter @Inject constructor(

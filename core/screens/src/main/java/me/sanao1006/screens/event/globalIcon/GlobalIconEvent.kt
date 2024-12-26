@@ -1,4 +1,4 @@
-package me.sanao1006.screens.event
+package me.sanao1006.screens.event.globalIcon
 
 import androidx.compose.material3.DrawerState
 import com.slack.circuit.runtime.CircuitUiEvent

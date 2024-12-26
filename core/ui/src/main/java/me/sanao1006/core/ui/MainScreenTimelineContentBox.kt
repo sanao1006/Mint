@@ -26,7 +26,7 @@ import me.sanao1006.screens.MainScreenType
 import me.sanao1006.screens.NotificationScreen
 import me.sanao1006.screens.SubScreenState
 import me.sanao1006.screens.event.NoteCreateEvent
-import me.sanao1006.screens.event.TimelineItemEvent
+import me.sanao1006.screens.event.timeline.TimelineItemEvent
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterialApi::class)
 @Composable

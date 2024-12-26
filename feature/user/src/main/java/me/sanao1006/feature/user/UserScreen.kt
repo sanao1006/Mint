@@ -50,7 +50,7 @@ import ir.alirezaivaz.tablericons.TablerIcons
 import me.sanao1006.core.model.common.Field
 import me.sanao1006.core.model.uistate.UserScreenUiState
 import me.sanao1006.screens.UserScreen
-import me.sanao1006.screens.event.GlobalIconEvent
+import me.sanao1006.screens.event.globalIcon.GlobalIconEvent
 import me.snao1006.res_value.ResString
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)

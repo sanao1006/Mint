@@ -27,9 +27,9 @@ import me.sanao1006.core.ui.MainScreenTimelineContentBox
 import me.sanao1006.core.ui.TimelineColumn
 import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.MainScreenType
-import me.sanao1006.screens.event.GlobalIconEvent
 import me.sanao1006.screens.event.NoteCreateEvent
-import me.sanao1006.screens.event.TimelineItemEvent
+import me.sanao1006.screens.event.globalIcon.GlobalIconEvent
+import me.sanao1006.screens.event.timeline.TimelineItemEvent
 
 @CircuitInject(HomeScreen::class, SingletonComponent::class)
 @Composable

@@ -1,4 +1,4 @@
-package me.sanao1006.screens.event
+package me.sanao1006.screens.event.timeline
 
 import android.content.Intent
 import androidx.compose.runtime.Composable

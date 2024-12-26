@@ -1,4 +1,4 @@
-package me.sanao1006.screens.event
+package me.sanao1006.screens.event.globalIcon
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope

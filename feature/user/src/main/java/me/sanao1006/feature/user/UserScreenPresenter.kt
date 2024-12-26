@@ -17,7 +17,7 @@ import me.sanao1006.core.domain.user.GetUserShowUserCase
 import me.sanao1006.core.model.requestbody.users.UsersShowRequestBody
 import me.sanao1006.core.model.uistate.UserScreenUiState
 import me.sanao1006.screens.UserScreen
-import me.sanao1006.screens.event.GlobalIconEventPresenter
+import me.sanao1006.screens.event.globalIcon.GlobalIconEventPresenter
 
 class UserScreenPresenter @AssistedInject constructor(
     @Assisted private val screen: UserScreen,

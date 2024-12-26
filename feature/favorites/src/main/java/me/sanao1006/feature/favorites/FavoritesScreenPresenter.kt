@@ -20,8 +20,8 @@ import kotlinx.coroutines.launch
 import me.sanao1006.core.domain.favorites.GetMyFavoriteUseCase
 import me.sanao1006.core.model.uistate.FavoritesScreenUiState
 import me.sanao1006.screens.FavoritesScreen
-import me.sanao1006.screens.event.GlobalIconEventPresenter
-import me.sanao1006.screens.event.TimelineEventPresenter
+import me.sanao1006.screens.event.globalIcon.GlobalIconEventPresenter
+import me.sanao1006.screens.event.timeline.TimelineEventPresenter
 
 @CircuitInject(FavoritesScreen::class, SingletonComponent::class)
 class FavoritesScreenPresenter @Inject constructor(
