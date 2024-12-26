@@ -44,7 +44,7 @@ fun NotificationScreenUi(state: NotificationScreen.State, modifier: Modifier) {
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
-    LaunchedImpressionEffect(state.isSuccessCreateNote) {
+    LaunchedImpressionEffect(state.notificationUiState.isSuccessCreateNote) {
         state.noteCreateEventSink(
             NoteCreateEvent.OnNoteCreated(
                 snackbarHostState = snackbarHostState,
