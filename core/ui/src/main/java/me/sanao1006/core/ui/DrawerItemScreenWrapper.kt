@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import ir.alirezaivaz.tablericons.TablerIcons
-import me.sanao1006.screens.event.GlobalIconEvent
+import me.sanao1006.screens.event.globalIcon.GlobalIconEvent
 import me.snao1006.res_value.ResString
 
 @OptIn(ExperimentalMaterial3Api::class)

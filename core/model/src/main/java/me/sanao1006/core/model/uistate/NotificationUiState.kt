@@ -4,8 +4,7 @@ import me.sanao1006.core.model.common.User
 import me.sanao1006.core.model.notes.TimelineItem
 
 data class NotificationUiState(
-    var notificationUiStateObjects: List<NotificationUiStateObject> = emptyList(),
-    var isSuccessCreateNote: Boolean? = null
+    var notificationUiStateObjects: List<NotificationUiStateObject> = emptyList()
 )
 
 data class NotificationUiStateObject(

@@ -19,7 +19,7 @@ import androidx.core.content.getSystemService
 import ir.alirezaivaz.tablericons.TablerIcons
 import me.sanao1006.core.data.util.vibrate
 import me.sanao1006.screens.MainScreenType
-import me.sanao1006.screens.event.BottomAppBarActionEvent
+import me.sanao1006.screens.event.bottomAppBar.BottomAppBarActionEvent
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable

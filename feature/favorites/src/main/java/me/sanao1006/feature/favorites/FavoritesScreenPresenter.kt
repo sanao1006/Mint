@@ -17,31 +17,24 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import me.sanao1006.core.data.compositionLocal.LocalNavigator
-import me.sanao1006.core.domain.favorites.CreateFavoritesUseCase
-import me.sanao1006.core.domain.favorites.DeleteFavoritesUseCase
 import me.sanao1006.core.domain.favorites.GetMyFavoriteUseCase
-import me.sanao1006.core.domain.favorites.GetNoteStateUseCase
-import me.sanao1006.core.domain.home.CreateNotesUseCase
+import me.sanao1006.core.model.notes.TimelineItem
 import me.sanao1006.core.model.uistate.FavoritesScreenUiState
 import me.sanao1006.screens.FavoritesScreen
-import me.sanao1006.screens.event.TimelineEventPresenter
-import me.sanao1006.screens.event.handleNavigationIconClicked
+import me.sanao1006.screens.event.globalIcon.GlobalIconEventPresenter
+import me.sanao1006.screens.event.timeline.TimelineEventPresenter
 
 @CircuitInject(FavoritesScreen::class, SingletonComponent::class)
 class FavoritesScreenPresenter @Inject constructor(
-    private val createNotesUseCase: CreateNotesUseCase,
     private val getMyFavoriteUseCase: GetMyFavoriteUseCase,
-    private val createFavoritesUseCase: CreateFavoritesUseCase,
-    private val deleteFavoritesUseCase: DeleteFavoritesUseCase,
-    private val getNoteStateUseCase: GetNoteStateUseCase,
-    private val timelineEventPresenter: TimelineEventPresenter
+    private val timelineEventPresenter: TimelineEventPresenter,
+    private val globalIconEventPresenter: GlobalIconEventPresenter
 ) : Presenter<FavoritesScreen.State> {
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     override fun present(): FavoritesScreen.State {
-        val navigator = LocalNavigator.current
         val timelineEventState = timelineEventPresenter.present()
+        val globalIconEventState = globalIconEventPresenter.present()
 
         var isRefreshed by remember { mutableStateOf(false) }
         var favoritesScreenUiState by rememberRetained {
@@ -54,18 +47,11 @@ class FavoritesScreenPresenter @Inject constructor(
             onRefresh = {
                 scope.launch {
                     isRefreshed = true
-                    val favorites = getMyFavoriteUseCase.invoke()
-                    if (favorites.timelineItems.isEmpty()) {
-                        favoritesScreenUiState = favoritesScreenUiState.copy(
-                            timelineItems = emptyList()
-                        )
-                        timelineEventState.setSuccessLoading(false)
-                    } else {
-                        favoritesScreenUiState = favoritesScreenUiState.copy(
-                            timelineItems = favorites.timelineItems
-                        )
-                        timelineEventState.setSuccessLoading(true)
-                    }
+                    favoritesScreenUiState = fetchFavoriteItems(
+                        uiState = favoritesScreenUiState,
+                        getItems = { getMyFavoriteUseCase.invoke().timelineItems },
+                        setSuccessLoading = { timelineEventState.setSuccessLoading(it) }
+                    )
                     delay(1000L)
                     isRefreshed = false
                 }
@@ -75,27 +61,19 @@ class FavoritesScreenPresenter @Inject constructor(
         )
 
         LaunchedImpressionEffect(Unit) {
-            val favorites = getMyFavoriteUseCase.invoke()
-            if (favorites.timelineItems.isEmpty()) {
-                favoritesScreenUiState = favoritesScreenUiState.copy(
-                    timelineItems = emptyList()
-                )
-                timelineEventState.setSuccessLoading(false)
-            } else {
-                favoritesScreenUiState = favoritesScreenUiState.copy(
-                    timelineItems = favorites.timelineItems
-                )
-                timelineEventState.setSuccessLoading(true)
-            }
+            favoritesScreenUiState = fetchFavoriteItems(
+                uiState = favoritesScreenUiState,
+                getItems = { getMyFavoriteUseCase.invoke().timelineItems },
+                setSuccessLoading = { timelineEventState.setSuccessLoading(it) }
+            )
         }
 
         return FavoritesScreen.State(
-            navigator = navigator,
             favoritesScreenUiState = favoritesScreenUiState,
             timelineUiState = timelineEventState.uiState,
             pullToRefreshState = pullRefreshState,
             timelineEventSink = timelineEventState.eventSink,
-            globalIconEventSink = { event -> event.handleNavigationIconClicked(navigator) }
+            globalIconEventSink = globalIconEventState.eventSink
         ) { event ->
             when (event) {
                 FavoritesScreen.Event.OnDismissRequest -> {
@@ -103,5 +81,20 @@ class FavoritesScreenPresenter @Inject constructor(
                 }
             }
         }
+    }
+}
+
+private suspend fun fetchFavoriteItems(
+    uiState: FavoritesScreenUiState,
+    getItems: suspend () -> List<TimelineItem?>,
+    setSuccessLoading: (Boolean) -> Unit
+): FavoritesScreenUiState {
+    val timelineItems: List<TimelineItem?> = getItems()
+    return if (timelineItems.isEmpty()) {
+        setSuccessLoading(false)
+        uiState.copy(timelineItems = emptyList())
+    } else {
+        setSuccessLoading(true)
+        uiState.copy(timelineItems = timelineItems)
     }
 }

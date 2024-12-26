@@ -8,10 +8,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
-import com.slack.circuit.foundation.rememberAnsweringNavigator
 import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuitx.effects.LaunchedImpressionEffect
@@ -19,47 +17,37 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import me.sanao1006.core.data.compositionLocal.LocalNavigator
 import me.sanao1006.core.domain.home.GetNotesTimelineUseCase
 import me.sanao1006.core.domain.home.TimelineType
-import me.sanao1006.core.domain.home.UpdateAccountUseCase
-import me.sanao1006.core.model.LoginUserInfo
 import me.sanao1006.core.model.notes.TimelineItem
 import me.sanao1006.core.model.uistate.HomeScreenUiState
 import me.sanao1006.screens.HomeScreen
-import me.sanao1006.screens.NoteScreen
-import me.sanao1006.screens.event.BottomAppBarPresenter
-import me.sanao1006.screens.event.TimelineEventPresenter
-import me.sanao1006.screens.event.handleDrawerEvent
-import me.sanao1006.screens.event.handleNavigationIconClicked
-import me.sanao1006.screens.event.handleNoteCreateEvent
+import me.sanao1006.screens.event.bottomAppBar.BottomAppBarPresenter
+import me.sanao1006.screens.event.drawer.DrawerEventPresenter
+import me.sanao1006.screens.event.globalIcon.GlobalIconEventPresenter
+import me.sanao1006.screens.event.notecreate.NoteCreatePresenter
+import me.sanao1006.screens.event.timeline.TimelineEventPresenter
 
 @CircuitInject(HomeScreen::class, SingletonComponent::class)
 class HomeScreenPresenter @Inject constructor(
     private val getNotesTimelineUseCase: GetNotesTimelineUseCase,
-    private val updateMyAccountUseCase: UpdateAccountUseCase,
     private val bottomAppBarPresenter: BottomAppBarPresenter,
-    private val timelineEventPresenter: TimelineEventPresenter
+    private val timelineEventPresenter: TimelineEventPresenter,
+    private val drawerEventPresenter: DrawerEventPresenter,
+    private val globalIconEventPresenter: GlobalIconEventPresenter,
+    private val noteCreatePresenter: NoteCreatePresenter
 ) : Presenter<HomeScreen.State> {
 
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     override fun present(): HomeScreen.State {
-        val navigator = LocalNavigator.current
         val bottomAppBarPresenter = bottomAppBarPresenter.present()
         val timelineEventPresenter = timelineEventPresenter.present()
-        var isSuccessCreateNote: Boolean? by rememberRetained { mutableStateOf(null) }
-        var loginUserInfo: LoginUserInfo by rememberRetained {
-            mutableStateOf(
-                LoginUserInfo()
-            )
-        }
-        val context = LocalContext.current
-        val scope = rememberCoroutineScope()
-        val resultNavigator = rememberAnsweringNavigator<NoteScreen.Result>(navigator) { result ->
-            isSuccessCreateNote = result.success
-        }
+        val drawerEventState = drawerEventPresenter.present()
+        val globalIconEventState = globalIconEventPresenter.present()
+        val noteCreateState = noteCreatePresenter.present()
 
+        val scope = rememberCoroutineScope()
         var timelineType by rememberRetained { mutableStateOf(TimelineType.SOCIAL) }
         var homeScreenUiState: HomeScreenUiState by rememberRetained(timelineType) {
             mutableStateOf(HomeScreenUiState())
@@ -71,18 +59,12 @@ class HomeScreenPresenter @Inject constructor(
             onRefresh = {
                 scope.launch {
                     isRefreshed = true
-                    val timelineItems: List<TimelineItem> = getNotesTimelineUseCase(timelineType)
-                    if (timelineItems.isEmpty()) {
-                        homeScreenUiState = homeScreenUiState.copy(
-                            timelineItems = emptyList()
-                        )
-                        timelineEventPresenter.setSuccessLoading(false)
-                    } else {
-                        homeScreenUiState = homeScreenUiState.copy(
-                            timelineItems = timelineItems
-                        )
-                        timelineEventPresenter.setSuccessLoading(true)
-                    }
+                    homeScreenUiState = fetchTimelineItems(
+                        timelineType = timelineType,
+                        uiState = homeScreenUiState,
+                        setSuccessLoading = { timelineEventPresenter.setSuccessLoading(it) },
+                        getItems = { getNotesTimelineUseCase(it) }
+                    )
                     delay(1000L)
                     isRefreshed = false
                 }
@@ -91,54 +73,35 @@ class HomeScreenPresenter @Inject constructor(
             refreshingOffset = 50.dp
         )
         LaunchedImpressionEffect {
-            val timelineItems: List<TimelineItem> = getNotesTimelineUseCase(timelineType)
-            if (timelineItems.isEmpty()) {
-                homeScreenUiState = homeScreenUiState.copy(
-                    timelineItems = emptyList()
-                )
-                timelineEventPresenter.setSuccessLoading(false)
-            } else {
-                homeScreenUiState = homeScreenUiState.copy(
-                    timelineItems = timelineItems
-                )
-                timelineEventPresenter.setSuccessLoading(true)
-            }
-            loginUserInfo = updateMyAccountUseCase()
+            homeScreenUiState = fetchTimelineItems(
+                timelineType = timelineType,
+                uiState = homeScreenUiState,
+                setSuccessLoading = { timelineEventPresenter.setSuccessLoading(it) },
+                getItems = { getNotesTimelineUseCase(it) }
+            )
         }
 
         LaunchedImpressionEffect(timelineType) {
-            val timelineItems: List<TimelineItem> = getNotesTimelineUseCase(timelineType)
-            if (timelineItems.isEmpty()) {
-                homeScreenUiState = homeScreenUiState.copy(
-                    timelineItems = emptyList()
-                )
-                timelineEventPresenter.setSuccessLoading(false)
-            } else {
-                homeScreenUiState = homeScreenUiState.copy(
-                    timelineItems = timelineItems
-                )
-                timelineEventPresenter.setSuccessLoading(true)
-            }
+            homeScreenUiState = fetchTimelineItems(
+                timelineType = timelineType,
+                uiState = homeScreenUiState,
+                setSuccessLoading = { timelineEventPresenter.setSuccessLoading(it) },
+                getItems = { getNotesTimelineUseCase(it) }
+            )
         }
 
         return HomeScreen.State(
             homeScreenUiState = homeScreenUiState,
             timelineUiState = timelineEventPresenter.uiState,
-            navigator = navigator,
+            isSuccessCreateNote = noteCreateState.isSuccessCreateNote,
             pullToRefreshState = pullRefreshState,
             isRefreshed = isRefreshed,
-            drawerUserInfo = loginUserInfo,
-            noteCreateEventSink = { event ->
-                event.handleNoteCreateEvent(
-                    isSuccessCreateNote,
-                    context,
-                    resultNavigator
-                )
-            },
+            drawerUserInfo = drawerEventState.loginUserInfo,
+            noteCreateEventSink = noteCreateState.eventSink,
             timelineEventSink = timelineEventPresenter.eventSink,
-            drawerEventSink = { event -> event.handleDrawerEvent(navigator, loginUserInfo) },
+            drawerEventSink = drawerEventState.eventSink,
             bottomAppBarEventSink = bottomAppBarPresenter.eventSink,
-            globalIconEventSink = { event -> event.handleNavigationIconClicked(navigator) }
+            globalIconEventSink = globalIconEventState.eventSink
         ) { event ->
             when (event) {
                 HomeScreen.Event.TimelineEvent.OnLocalTimelineClicked ->
@@ -155,5 +118,21 @@ class HomeScreenPresenter @Inject constructor(
                 }
             }
         }
+    }
+}
+
+private suspend fun fetchTimelineItems(
+    timelineType: TimelineType,
+    uiState: HomeScreenUiState,
+    getItems: suspend (TimelineType) -> List<TimelineItem>,
+    setSuccessLoading: (Boolean) -> Unit
+): HomeScreenUiState {
+    val timelineItems: List<TimelineItem> = getItems(timelineType)
+    return if (timelineItems.isEmpty()) {
+        setSuccessLoading(false)
+        uiState.copy(timelineItems = emptyList())
+    } else {
+        setSuccessLoading(true)
+        uiState.copy(timelineItems = timelineItems)
     }
 }
