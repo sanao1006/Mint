@@ -24,10 +24,10 @@ import me.sanao1006.core.domain.home.TimelineType
 import me.sanao1006.core.model.notes.TimelineItem
 import me.sanao1006.core.model.uistate.HomeScreenUiState
 import me.sanao1006.screens.HomeScreen
-import me.sanao1006.screens.event.NoteCreatePresenter
 import me.sanao1006.screens.event.bottomAppBar.BottomAppBarPresenter
 import me.sanao1006.screens.event.drawer.DrawerEventPresenter
 import me.sanao1006.screens.event.globalIcon.GlobalIconEventPresenter
+import me.sanao1006.screens.event.notecreate.NoteCreatePresenter
 import me.sanao1006.screens.event.timeline.TimelineEventPresenter
 
 @CircuitInject(HomeScreen::class, SingletonComponent::class)

@@ -20,10 +20,10 @@ import kotlinx.coroutines.launch
 import me.sanao1006.core.domain.notification.GetNotificationsUseCase
 import me.sanao1006.core.model.uistate.NotificationUiState
 import me.sanao1006.screens.NotificationScreen
-import me.sanao1006.screens.event.NoteCreatePresenter
 import me.sanao1006.screens.event.bottomAppBar.BottomAppBarPresenter
 import me.sanao1006.screens.event.drawer.DrawerEventPresenter
 import me.sanao1006.screens.event.globalIcon.GlobalIconEventPresenter
+import me.sanao1006.screens.event.notecreate.NoteCreatePresenter
 import me.sanao1006.screens.event.timeline.TimelineEventPresenter
 
 @CircuitInject(NotificationScreen::class, SingletonComponent::class)
