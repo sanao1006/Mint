@@ -21,6 +21,7 @@ data object HomeScreen : Screen {
     data class State(
         val homeScreenUiState: HomeScreenUiState,
         override val timelineUiState: TimelineUiState,
+        override val isSuccessCreateNote: Boolean?,
         override val pullToRefreshState: PullRefreshState,
         override val isRefreshed: Boolean = false,
         override val drawerUserInfo: LoginUserInfo,
@@ -45,6 +46,7 @@ data object HomeScreen : Screen {
 @OptIn(ExperimentalMaterialApi::class)
 interface MainScreenState {
     val timelineUiState: TimelineUiState
+    val isSuccessCreateNote: Boolean?
     val pullToRefreshState: PullRefreshState
     val isRefreshed: Boolean
     val drawerUserInfo: LoginUserInfo

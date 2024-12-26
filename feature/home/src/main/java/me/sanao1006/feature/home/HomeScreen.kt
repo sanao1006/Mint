@@ -39,7 +39,7 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
         val scope = rememberCoroutineScope()
         val drawerState = rememberDrawerState(DrawerValue.Closed)
         val snackbarHostState = remember { SnackbarHostState() }
-        LaunchedImpressionEffect(state.homeScreenUiState.isSuccessCreateNote) {
+        LaunchedImpressionEffect(state.isSuccessCreateNote) {
             state.noteCreateEventSink(
                 NoteCreateEvent.OnNoteCreated(
                     snackbarHostState = snackbarHostState,

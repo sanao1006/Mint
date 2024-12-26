@@ -20,6 +20,7 @@ data object NotificationScreen : Screen {
     data class State(
         val notificationUiState: NotificationUiState,
         override val timelineUiState: TimelineUiState,
+        override val isSuccessCreateNote: Boolean?,
         override val drawerUserInfo: LoginUserInfo,
         override val pullToRefreshState: PullRefreshState,
         override val isRefreshed: Boolean,

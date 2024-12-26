@@ -11,7 +11,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
-import com.slack.circuit.foundation.rememberAnsweringNavigator
 import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuitx.effects.LaunchedImpressionEffect
@@ -25,11 +24,10 @@ import me.sanao1006.core.domain.home.TimelineType
 import me.sanao1006.core.model.notes.TimelineItem
 import me.sanao1006.core.model.uistate.HomeScreenUiState
 import me.sanao1006.screens.HomeScreen
-import me.sanao1006.screens.NoteScreen
+import me.sanao1006.screens.event.NoteCreatePresenter
 import me.sanao1006.screens.event.bottomAppBar.BottomAppBarPresenter
 import me.sanao1006.screens.event.drawer.DrawerEventPresenter
 import me.sanao1006.screens.event.globalIcon.GlobalIconEventPresenter
-import me.sanao1006.screens.event.handleNoteCreateEvent
 import me.sanao1006.screens.event.timeline.TimelineEventPresenter
 
 @CircuitInject(HomeScreen::class, SingletonComponent::class)
@@ -38,7 +36,8 @@ class HomeScreenPresenter @Inject constructor(
     private val bottomAppBarPresenter: BottomAppBarPresenter,
     private val timelineEventPresenter: TimelineEventPresenter,
     private val drawerEventPresenter: DrawerEventPresenter,
-    private val globalIconEventPresenter: GlobalIconEventPresenter
+    private val globalIconEventPresenter: GlobalIconEventPresenter,
+    private val noteCreatePresenter: NoteCreatePresenter
 ) : Presenter<HomeScreen.State> {
 
     @OptIn(ExperimentalMaterialApi::class)
@@ -49,6 +48,7 @@ class HomeScreenPresenter @Inject constructor(
         val timelineEventPresenter = timelineEventPresenter.present()
         val drawerEventState = drawerEventPresenter.present()
         val globalIconEventState = globalIconEventPresenter.present()
+        val noteCreateState = noteCreatePresenter.present()
 
         val context = LocalContext.current
         val scope = rememberCoroutineScope()
@@ -56,11 +56,6 @@ class HomeScreenPresenter @Inject constructor(
         var timelineType by rememberRetained { mutableStateOf(TimelineType.SOCIAL) }
         var homeScreenUiState: HomeScreenUiState by rememberRetained(timelineType) {
             mutableStateOf(HomeScreenUiState())
-        }
-        val resultNavigator = rememberAnsweringNavigator<NoteScreen.Result>(navigator) { result ->
-            homeScreenUiState = homeScreenUiState.copy(
-                isSuccessCreateNote = result.success
-            )
         }
 
         var isRefreshed by remember { mutableStateOf(false) }
@@ -121,16 +116,11 @@ class HomeScreenPresenter @Inject constructor(
         return HomeScreen.State(
             homeScreenUiState = homeScreenUiState,
             timelineUiState = timelineEventPresenter.uiState,
+            isSuccessCreateNote = noteCreateState.isSuccessCreateNote,
             pullToRefreshState = pullRefreshState,
             isRefreshed = isRefreshed,
             drawerUserInfo = drawerEventState.loginUserInfo,
-            noteCreateEventSink = { event ->
-                event.handleNoteCreateEvent(
-                    homeScreenUiState.isSuccessCreateNote,
-                    context,
-                    resultNavigator
-                )
-            },
+            noteCreateEventSink = noteCreateState.eventSink,
             timelineEventSink = timelineEventPresenter.eventSink,
             drawerEventSink = drawerEventState.eventSink,
             bottomAppBarEventSink = bottomAppBarPresenter.eventSink,
