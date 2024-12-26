@@ -171,7 +171,7 @@ fun MainScreenTimelineContentBox(
             )
         }
     },
-    notificationScreenTimelineContent: @Composable () -> Unit
+    timelineContent: @Composable () -> Unit
 ) {
     Box(
         contentAlignment = Alignment.TopCenter,
@@ -203,7 +203,7 @@ fun MainScreenTimelineContentBox(
                     if (isEmptyContent) {
                         ContentLoadingIndicator()
                     } else {
-                        notificationScreenTimelineContent()
+                        timelineContent()
                     }
                 }
             }
