@@ -4,18 +4,19 @@ import androidx.compose.runtime.Composable
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.presenter.Presenter
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Inject
-import me.sanao1006.core.data.compositionLocal.LocalNavigator
 import me.sanao1006.screens.SearchScreen
-import me.sanao1006.screens.event.handleNavigationIconClicked
+import me.sanao1006.screens.event.GlobalIconEventPresenter
+import javax.inject.Inject
 
 @CircuitInject(SearchScreen::class, SingletonComponent::class)
-class SearchScreenPresenter @Inject constructor() : Presenter<SearchScreen.State> {
+class SearchScreenPresenter @Inject constructor(
+    private val globalIconEventPresenter: GlobalIconEventPresenter
+) : Presenter<SearchScreen.State> {
     @Composable
     override fun present(): SearchScreen.State {
-        val navigator = LocalNavigator.current
+        val globalIconEventState = globalIconEventPresenter.present()
         return SearchScreen.State(
-            globalIconEventSink = { event -> event.handleNavigationIconClicked(navigator) },
+            globalIconEventSink = globalIconEventState.eventSink,
             eventSink = { event -> }
         )
     }

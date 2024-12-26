@@ -14,34 +14,28 @@ import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuitx.effects.LaunchedImpressionEffect
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.sanao1006.core.data.compositionLocal.LocalNavigator
-import me.sanao1006.core.domain.favorites.CreateFavoritesUseCase
-import me.sanao1006.core.domain.favorites.DeleteFavoritesUseCase
 import me.sanao1006.core.domain.favorites.GetMyFavoriteUseCase
-import me.sanao1006.core.domain.favorites.GetNoteStateUseCase
-import me.sanao1006.core.domain.home.CreateNotesUseCase
 import me.sanao1006.core.model.uistate.FavoritesScreenUiState
 import me.sanao1006.screens.FavoritesScreen
+import me.sanao1006.screens.event.GlobalIconEventPresenter
 import me.sanao1006.screens.event.TimelineEventPresenter
-import me.sanao1006.screens.event.handleNavigationIconClicked
+import javax.inject.Inject
 
 @CircuitInject(FavoritesScreen::class, SingletonComponent::class)
 class FavoritesScreenPresenter @Inject constructor(
-    private val createNotesUseCase: CreateNotesUseCase,
     private val getMyFavoriteUseCase: GetMyFavoriteUseCase,
-    private val createFavoritesUseCase: CreateFavoritesUseCase,
-    private val deleteFavoritesUseCase: DeleteFavoritesUseCase,
-    private val getNoteStateUseCase: GetNoteStateUseCase,
-    private val timelineEventPresenter: TimelineEventPresenter
+    private val timelineEventPresenter: TimelineEventPresenter,
+    private val globalIconEventPresenter: GlobalIconEventPresenter
 ) : Presenter<FavoritesScreen.State> {
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     override fun present(): FavoritesScreen.State {
         val navigator = LocalNavigator.current
         val timelineEventState = timelineEventPresenter.present()
+        val globalIconEventState = globalIconEventPresenter.present()
 
         var isRefreshed by remember { mutableStateOf(false) }
         var favoritesScreenUiState by rememberRetained {
@@ -95,7 +89,7 @@ class FavoritesScreenPresenter @Inject constructor(
             timelineUiState = timelineEventState.uiState,
             pullToRefreshState = pullRefreshState,
             timelineEventSink = timelineEventState.eventSink,
-            globalIconEventSink = { event -> event.handleNavigationIconClicked(navigator) }
+            globalIconEventSink = globalIconEventState.eventSink
         ) { event ->
             when (event) {
                 FavoritesScreen.Event.OnDismissRequest -> {

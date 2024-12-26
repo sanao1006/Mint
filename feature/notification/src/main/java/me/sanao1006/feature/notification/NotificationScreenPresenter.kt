@@ -15,7 +15,6 @@ import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuitx.effects.LaunchedImpressionEffect
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.sanao1006.core.data.compositionLocal.LocalNavigator
@@ -24,16 +23,18 @@ import me.sanao1006.core.model.uistate.NotificationUiState
 import me.sanao1006.screens.NotificationScreen
 import me.sanao1006.screens.event.BottomAppBarPresenter
 import me.sanao1006.screens.event.DrawerEventPresenter
+import me.sanao1006.screens.event.GlobalIconEventPresenter
 import me.sanao1006.screens.event.TimelineEventPresenter
-import me.sanao1006.screens.event.handleNavigationIconClicked
 import me.sanao1006.screens.event.handleNoteCreateEvent
+import javax.inject.Inject
 
 @CircuitInject(NotificationScreen::class, SingletonComponent::class)
 class NotificationScreenPresenter @Inject constructor(
     private val getNotificationsUseCase: GetNotificationsUseCase,
     private val bottomAppBarPresenter: BottomAppBarPresenter,
     private val timelineEventPresenter: TimelineEventPresenter,
-    private val drawerEventPresenter: DrawerEventPresenter
+    private val drawerEventPresenter: DrawerEventPresenter,
+    private val globalIconEventPresenter: GlobalIconEventPresenter
 ) : Presenter<NotificationScreen.State> {
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
@@ -42,6 +43,8 @@ class NotificationScreenPresenter @Inject constructor(
         val bottomAppBarState = bottomAppBarPresenter.present()
         val timelineEventState = timelineEventPresenter.present()
         val drawerEventState = drawerEventPresenter.present()
+        val globalIconEventState = globalIconEventPresenter.present()
+
         var isSuccessCreateNote: Boolean? by rememberRetained { mutableStateOf(null) }
 
         val context = LocalContext.current
@@ -108,7 +111,7 @@ class NotificationScreenPresenter @Inject constructor(
                 )
             },
             drawerEventSink = drawerEventState.eventSink,
-            globalIconEventSink = { event -> event.handleNavigationIconClicked(navigator) },
+            globalIconEventSink = globalIconEventState.eventSink,
             bottomAppBarEventSink = bottomAppBarState.eventSink,
             eventSink = { event ->
                 when (event) {
