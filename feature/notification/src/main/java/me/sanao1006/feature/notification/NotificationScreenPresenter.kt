@@ -19,6 +19,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.sanao1006.core.domain.notification.GetNotificationsUseCase
 import me.sanao1006.core.model.uistate.NotificationUiState
+import me.sanao1006.core.model.uistate.NotificationUiStateObject
 import me.sanao1006.screens.NotificationScreen
 import me.sanao1006.screens.event.bottomAppBar.BottomAppBarPresenter
 import me.sanao1006.screens.event.drawer.DrawerEventPresenter
@@ -55,18 +56,11 @@ class NotificationScreenPresenter @Inject constructor(
             onRefresh = {
                 scope.launch {
                     isRefreshed = true
-                    val notifications = getNotificationsUseCase.invoke()
-                    if (notifications.notificationUiStateObjects.isEmpty()) {
-                        notificationUiState = notificationUiState.copy(
-                            notificationUiStateObjects = emptyList()
-                        )
-                        timelineEventState.setSuccessLoading(false)
-                    } else {
-                        notificationUiState = notificationUiState.copy(
-                            notificationUiStateObjects = notifications.notificationUiStateObjects
-                        )
-                        timelineEventState.setSuccessLoading(true)
-                    }
+                    notificationUiState = fetchNotificationItems(
+                        uiState = notificationUiState,
+                        getItems = { getNotificationsUseCase.invoke().notificationUiStateObjects },
+                        setSuccessLoading = { timelineEventState.setSuccessLoading(it) }
+                    )
                     delay(1500L)
                     isRefreshed = false
                 }
@@ -76,18 +70,11 @@ class NotificationScreenPresenter @Inject constructor(
         )
 
         LaunchedImpressionEffect(Unit) {
-            val notifications = getNotificationsUseCase.invoke()
-            if (notifications.notificationUiStateObjects.isEmpty()) {
-                notificationUiState = notificationUiState.copy(
-                    notificationUiStateObjects = emptyList()
-                )
-                timelineEventState.setSuccessLoading(false)
-            } else {
-                notificationUiState = notificationUiState.copy(
-                    notificationUiStateObjects = notifications.notificationUiStateObjects
-                )
-                timelineEventState.setSuccessLoading(true)
-            }
+            notificationUiState = fetchNotificationItems(
+                uiState = notificationUiState,
+                getItems = { getNotificationsUseCase.invoke().notificationUiStateObjects },
+                setSuccessLoading = { timelineEventState.setSuccessLoading(it) }
+            )
         }
         return NotificationScreen.State(
             notificationUiState = notificationUiState,
@@ -109,5 +96,20 @@ class NotificationScreenPresenter @Inject constructor(
                 }
             }
         )
+    }
+}
+
+private suspend fun fetchNotificationItems(
+    uiState: NotificationUiState,
+    getItems: suspend () -> List<NotificationUiStateObject>,
+    setSuccessLoading: (Boolean) -> Unit
+): NotificationUiState {
+    val notificationItems: List<NotificationUiStateObject> = getItems()
+    return if (notificationItems.isEmpty()) {
+        setSuccessLoading(false)
+        uiState.copy(notificationUiStateObjects = emptyList())
+    } else {
+        setSuccessLoading(true)
+        uiState.copy(notificationUiStateObjects = notificationItems)
     }
 }

@@ -8,7 +8,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.retained.rememberRetained
@@ -50,9 +49,7 @@ class HomeScreenPresenter @Inject constructor(
         val globalIconEventState = globalIconEventPresenter.present()
         val noteCreateState = noteCreatePresenter.present()
 
-        val context = LocalContext.current
         val scope = rememberCoroutineScope()
-
         var timelineType by rememberRetained { mutableStateOf(TimelineType.SOCIAL) }
         var homeScreenUiState: HomeScreenUiState by rememberRetained(timelineType) {
             mutableStateOf(HomeScreenUiState())
@@ -64,18 +61,12 @@ class HomeScreenPresenter @Inject constructor(
             onRefresh = {
                 scope.launch {
                     isRefreshed = true
-                    val timelineItems: List<TimelineItem> = getNotesTimelineUseCase(timelineType)
-                    if (timelineItems.isEmpty()) {
-                        homeScreenUiState = homeScreenUiState.copy(
-                            timelineItems = emptyList()
-                        )
-                        timelineEventPresenter.setSuccessLoading(false)
-                    } else {
-                        homeScreenUiState = homeScreenUiState.copy(
-                            timelineItems = timelineItems
-                        )
-                        timelineEventPresenter.setSuccessLoading(true)
-                    }
+                    homeScreenUiState = fetchTimelineItems(
+                        timelineType = timelineType,
+                        uiState = homeScreenUiState,
+                        setSuccessLoading = { timelineEventPresenter.setSuccessLoading(it) },
+                        getItems = { getNotesTimelineUseCase(it) }
+                    )
                     delay(1000L)
                     isRefreshed = false
                 }
@@ -84,33 +75,21 @@ class HomeScreenPresenter @Inject constructor(
             refreshingOffset = 50.dp
         )
         LaunchedImpressionEffect {
-            val timelineItems: List<TimelineItem> = getNotesTimelineUseCase(timelineType)
-            if (timelineItems.isEmpty()) {
-                homeScreenUiState = homeScreenUiState.copy(
-                    timelineItems = emptyList()
-                )
-                timelineEventPresenter.setSuccessLoading(false)
-            } else {
-                homeScreenUiState = homeScreenUiState.copy(
-                    timelineItems = timelineItems
-                )
-                timelineEventPresenter.setSuccessLoading(true)
-            }
+            homeScreenUiState = fetchTimelineItems(
+                timelineType = timelineType,
+                uiState = homeScreenUiState,
+                setSuccessLoading = { timelineEventPresenter.setSuccessLoading(it) },
+                getItems = { getNotesTimelineUseCase(it) }
+            )
         }
 
         LaunchedImpressionEffect(timelineType) {
-            val timelineItems: List<TimelineItem> = getNotesTimelineUseCase(timelineType)
-            if (timelineItems.isEmpty()) {
-                homeScreenUiState = homeScreenUiState.copy(
-                    timelineItems = emptyList()
-                )
-                timelineEventPresenter.setSuccessLoading(false)
-            } else {
-                homeScreenUiState = homeScreenUiState.copy(
-                    timelineItems = timelineItems
-                )
-                timelineEventPresenter.setSuccessLoading(true)
-            }
+            homeScreenUiState = fetchTimelineItems(
+                timelineType = timelineType,
+                uiState = homeScreenUiState,
+                setSuccessLoading = { timelineEventPresenter.setSuccessLoading(it) },
+                getItems = { getNotesTimelineUseCase(it) }
+            )
         }
 
         return HomeScreen.State(
@@ -141,5 +120,21 @@ class HomeScreenPresenter @Inject constructor(
                 }
             }
         }
+    }
+}
+
+private suspend fun fetchTimelineItems(
+    timelineType: TimelineType,
+    uiState: HomeScreenUiState,
+    getItems: suspend (TimelineType) -> List<TimelineItem>,
+    setSuccessLoading: (Boolean) -> Unit
+): HomeScreenUiState {
+    val timelineItems: List<TimelineItem> = getItems(timelineType)
+    return if (timelineItems.isEmpty()) {
+        setSuccessLoading(false)
+        uiState.copy(timelineItems = emptyList())
+    } else {
+        setSuccessLoading(true)
+        uiState.copy(timelineItems = timelineItems)
     }
 }
