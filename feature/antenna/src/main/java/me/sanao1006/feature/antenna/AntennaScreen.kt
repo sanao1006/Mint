@@ -24,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
@@ -38,6 +39,7 @@ import me.sanao1006.core.ui.DrawerItemScreenWrapper
 import me.sanao1006.core.ui.common.ContentLoadingIndicator
 import me.sanao1006.core.ui.common.NoContentsPlaceHolder
 import me.sanao1006.screens.AntennaScreen
+import me.snao1006.res_value.ResString
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -218,20 +220,20 @@ private fun ConfirmButton(
     AlertDialog(
         modifier = modifier,
         onDismissRequest = onDismissRequest,
-        title = { Text(text = "Delete antenna") },
-        text = { Text(text = "Are you sure you want to delete this antenna?") },
+        title = { Text(text = stringResource(ResString.delete_antenna)) },
+        text = { Text(text = stringResource(ResString.delete_antenna_confirm)) },
         confirmButton = {
             TextButton(
                 onClick = onConfirmClick
             ) {
-                Text(text = "Delete")
+                Text(text = stringResource(ResString.delete_description))
             }
         },
         dismissButton = {
             TextButton(
                 onClick = onDismissClick
             ) {
-                Text(text = "Cancel")
+                Text(text = stringResource(ResString.cancel_description))
             }
         }
     )

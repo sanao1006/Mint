@@ -59,4 +59,8 @@
     <string name="add_favorite_failed">Failed to add to favorites</string>
     <string name="delete_favorite_success">Removed from favorites</string>
     <string name="delete_favorite_failed">Failed to remove from favorites</string>
+    <string name="delete_antenna">Delete antenna</string>
+    <string name="delete_antenna_confirm">Are you sure you want to delete this antenna?</string>
+    <string name="delete_description">Delete</string>
+    <string name="cancel_description">Cancel</string>
 </resources>
