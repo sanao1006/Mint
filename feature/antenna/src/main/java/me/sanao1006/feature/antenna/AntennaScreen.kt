@@ -12,11 +12,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,7 +38,9 @@ import me.sanao1006.core.ui.DrawerItemScreenWrapper
 import me.sanao1006.core.ui.common.ContentLoadingIndicator
 import me.sanao1006.core.ui.common.NoContentsPlaceHolder
 import me.sanao1006.screens.AntennaScreen
+import timber.log.Timber
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @CircuitInject(AntennaScreen::class, SingletonComponent::class)
 fun AntennaScreen(state: AntennaScreen.State, modifier: Modifier) {
@@ -78,12 +83,25 @@ fun AntennaScreen(state: AntennaScreen.State, modifier: Modifier) {
                                     state.eventSink(AntennaScreen.Event.OnEditClick(antenna))
                                 },
                                 onDeleteClick = { id ->
-                                    state.eventSink(AntennaScreen.Event.OnDeleteClick(id))
+                                    state.eventSink(AntennaScreen.Event.OnDeleteButtonClick(id))
                                 }
                             )
                         }
                     }
                 }
+            }
+            if (state.openDialog) {
+                ConfirmButton(
+                    onDismissRequest = { state.eventSink(AntennaScreen.Event.OnDialogHideClick) },
+                    onConfirmClick = {
+                        state.selectedAntennaId?.let {
+                            state.eventSink(AntennaScreen.Event.OnDeleteClick(it))
+                        }
+                    },
+                    onDismissClick = {
+                        state.eventSink(AntennaScreen.Event.OnDialogHideClick)
+                    }
+                )
             }
         }
     }
@@ -189,6 +207,35 @@ private fun AntennaCreateButton(
             )
         }
     }
+}
+
+@Composable
+private fun ConfirmButton(
+    modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit,
+    onConfirmClick: () -> Unit,
+    onDismissClick: () -> Unit
+) {
+    AlertDialog(
+        modifier = modifier,
+        onDismissRequest = onDismissRequest,
+        title = { Text(text = "Delete antenna") },
+        text = { Text(text = "Are you sure you want to delete this antenna?") },
+        confirmButton = {
+            TextButton(
+                onClick = onConfirmClick
+            ) {
+                Text(text = "Delete")
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = onDismissClick
+            ) {
+                Text(text = "Cancel")
+            }
+        }
+    )
 }
 
 @PreviewLightDark
