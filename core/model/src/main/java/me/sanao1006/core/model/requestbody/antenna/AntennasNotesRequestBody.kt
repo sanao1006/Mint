@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class AntennasNotesRequestBody(
     val antennaId: String,
-    val limit: Int = 10,
+    val limit: Int,
     val sinceId: String? = null,
     val untilId: String? = null,
     val sinceDate: String? = null,

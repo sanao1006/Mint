@@ -12,12 +12,15 @@ import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.presenter.Presenter
+import com.slack.circuitx.effects.LaunchedImpressionEffect
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import me.sanao1006.core.domain.antenna.GetAntennasNotesUseCase
+import me.sanao1006.core.model.notes.TimelineItem
 import me.sanao1006.core.model.uistate.AntennaListUiState
 import me.sanao1006.screens.AntennaListScreen
 import me.sanao1006.screens.event.globalIcon.GlobalIconEventPresenter
@@ -25,6 +28,7 @@ import me.sanao1006.screens.event.timeline.TimelineEventPresenter
 
 class AntennaListScreenPresenter @AssistedInject constructor(
     @Assisted private val screen: AntennaListScreen,
+    private val getAntennasNotesUseCase: GetAntennasNotesUseCase,
     private val timelineEventPresenter: TimelineEventPresenter,
     private val globalIconEventPresenter: GlobalIconEventPresenter
 ) : Presenter<AntennaListScreen.State> {
@@ -33,6 +37,10 @@ class AntennaListScreenPresenter @AssistedInject constructor(
     override fun present(): AntennaListScreen.State {
         val timelineEventState = timelineEventPresenter.present()
         val globalEventState = globalIconEventPresenter.present()
+        
+        var uiState: AntennaListUiState by rememberRetained {
+            mutableStateOf(AntennaListUiState())
+        }
 
         val scope = rememberCoroutineScope()
         var isRefreshed by remember { mutableStateOf(false) }
@@ -41,6 +49,11 @@ class AntennaListScreenPresenter @AssistedInject constructor(
             onRefresh = {
                 scope.launch {
                     isRefreshed = true
+                    uiState = fetchAntennaList(
+                        uiState = uiState,
+                        getItems = { getAntennasNotesUseCase.invoke(screen.antennaId).timelineItems },
+                        setSuccessLoading = { timelineEventState.setSuccessLoading(it) }
+                    )
                     delay(1000L)
                     isRefreshed = false
                 }
@@ -49,8 +62,12 @@ class AntennaListScreenPresenter @AssistedInject constructor(
             refreshingOffset = 50.dp
         )
 
-        var uiState: AntennaListUiState by rememberRetained {
-            mutableStateOf(AntennaListUiState())
+        LaunchedImpressionEffect {
+            uiState = fetchAntennaList(
+                uiState = uiState,
+                getItems = { getAntennasNotesUseCase.invoke(screen.antennaId).timelineItems },
+                setSuccessLoading = { timelineEventState.setSuccessLoading(it) }
+            )
         }
 
         return AntennaListScreen.State(
@@ -67,5 +84,20 @@ class AntennaListScreenPresenter @AssistedInject constructor(
     @CircuitInject(AntennaListScreen::class, SingletonComponent::class)
     fun interface Factory {
         fun create(screen: AntennaListScreen): AntennaListScreenPresenter
+    }
+}
+
+private suspend fun fetchAntennaList(
+    uiState: AntennaListUiState,
+    getItems: suspend () -> List<TimelineItem?>,
+    setSuccessLoading: (Boolean) -> Unit
+): AntennaListUiState {
+    val timelineItems: List<TimelineItem?> = getItems()
+    return if (timelineItems.isEmpty()) {
+        setSuccessLoading(false)
+        uiState.copy(timelineItems = timelineItems)
+    } else {
+        setSuccessLoading(true)
+        uiState.copy(timelineItems = timelineItems)
     }
 }
