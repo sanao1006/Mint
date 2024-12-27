@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
-import me.sanao1006.core.model.antenna.AntennaResponse
+import me.sanao1006.core.model.antenna.Antenna
 import me.sanao1006.core.model.uistate.AntennaScreenUiState
 import me.sanao1006.core.ui.DrawerItem
 import me.sanao1006.core.ui.DrawerItemScreenWrapper
@@ -74,7 +74,7 @@ fun AntennaScreen(state: AntennaScreen.State, modifier: Modifier) {
 
 @Composable
 private fun AntennaScreenUiContent(
-    antennaList: List<AntennaResponse>,
+    antennaList: List<Antenna>,
     modifier: Modifier = Modifier,
     onCardClick: (String) -> Unit,
     onEditClick: () -> Unit,
@@ -101,7 +101,7 @@ private fun AntennaScreenUiContent(
 
 @Composable
 private fun AntennaCard(
-    antenna: AntennaResponse,
+    antenna: Antenna,
     modifier: Modifier = Modifier,
     onCardClick: (String) -> Unit,
     onEditClick: () -> Unit,

@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AntennaResponse(
+data class Antenna(
     @SerialName("caseSensitive")
     val caseSensitive: Boolean,
     @SerialName("createdAt")
