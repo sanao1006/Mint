@@ -8,7 +8,6 @@ import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
 import me.sanao1006.screens.event.AntennaPostScreen
 
-
 @CircuitInject(AntennaPostScreen::class, SingletonComponent::class)
 @Composable
 fun AntennaPostScreen(state: AntennaPostScreen.State, modifier: Modifier) {

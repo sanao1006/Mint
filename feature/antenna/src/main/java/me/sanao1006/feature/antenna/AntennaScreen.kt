@@ -38,7 +38,6 @@ import me.sanao1006.core.ui.DrawerItemScreenWrapper
 import me.sanao1006.core.ui.common.ContentLoadingIndicator
 import me.sanao1006.core.ui.common.NoContentsPlaceHolder
 import me.sanao1006.screens.AntennaScreen
-import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
