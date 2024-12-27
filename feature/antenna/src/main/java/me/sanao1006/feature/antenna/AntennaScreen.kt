@@ -21,10 +21,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
+import me.sanao1006.core.designsystem.MintTheme
 import me.sanao1006.core.model.antenna.Antenna
 import me.sanao1006.core.model.uistate.AntennaScreenUiState
 import me.sanao1006.core.ui.DrawerItem
@@ -153,5 +155,57 @@ private fun AntennaItem(
                 contentDescription = ""
             )
         }
+    }
+}
+
+@PreviewLightDark
+@Composable
+private fun PreviewAntennaScreen() {
+    val antennaList: List<Antenna> = listOf(
+        Antenna(
+            id = "1",
+            createdAt = "2021-01-01T00:00:00Z",
+            caseSensitive = true,
+            excludeBots = true,
+            excludeKeywords = listOf(listOf()),
+            hasUnreadNote = true,
+            isActive = true,
+            keywords = listOf(listOf()),
+            localOnly = true,
+            name = "test antenna",
+            notify = true,
+            src = "test",
+            userListId = null,
+            users = listOf(),
+            withFile = false,
+            withReplies = false,
+        ),
+        Antenna(
+            id = "2",
+            createdAt = "2021-01-01T00:00:00Z",
+            caseSensitive = true,
+            excludeBots = true,
+            excludeKeywords = listOf(listOf()),
+            hasUnreadNote = true,
+            isActive = true,
+            keywords = listOf(listOf()),
+            localOnly = true,
+            name = "test antenna2 test antenna2 test antenna2 test antenna2 test antenna2",
+            notify = true,
+            src = "test",
+            userListId = null,
+            users = listOf(),
+            withFile = false,
+            withReplies = false,
+        )
+    )
+    MintTheme {
+        AntennaScreenUiContent(
+            antennaList = antennaList,
+            modifier = Modifier.fillMaxSize(),
+            onCardClick = { },
+            onEditClick = { },
+            onDeleteClick = { }
+        )
     }
 }
