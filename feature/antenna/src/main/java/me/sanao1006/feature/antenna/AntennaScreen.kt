@@ -71,9 +71,15 @@ fun AntennaScreen(state: AntennaScreen.State, modifier: Modifier) {
                             AntennaScreenUiContent(
                                 antennaList = antennaList,
                                 modifier = Modifier.fillMaxSize(),
-                                onCardClick = { id -> state.eventSink(AntennaScreen.Event.OnAntennaClick(id)) },
-                                onEditClick = { antenna -> state.eventSink(AntennaScreen.Event.OnEditClick(antenna)) },
-                                onDeleteClick = { id -> state.eventSink(AntennaScreen.Event.OnDeleteClick(id)) }
+                                onCardClick = { id ->
+                                    state.eventSink(AntennaScreen.Event.OnAntennaClick(id))
+                                },
+                                onEditClick = { antenna ->
+                                    state.eventSink(AntennaScreen.Event.OnEditClick(antenna))
+                                },
+                                onDeleteClick = { id ->
+                                    state.eventSink(AntennaScreen.Event.OnDeleteClick(id))
+                                }
                             )
                         }
                     }
@@ -171,7 +177,7 @@ private fun AntennaItem(
 private fun AntennaCreateButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
-){
+) {
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
