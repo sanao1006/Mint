@@ -79,8 +79,8 @@ private fun AntennaScreenUiContent(
     antennaList: List<Antenna>,
     modifier: Modifier = Modifier,
     onCardClick: (String) -> Unit,
-    onEditClick: () -> Unit,
-    onDeleteClick: () -> Unit
+    onEditClick: (Antenna) -> Unit,
+    onDeleteClick: (String) -> Unit
 ) {
     Column(modifier = modifier.fillMaxSize()) {
         LazyColumn(
@@ -106,17 +106,17 @@ private fun AntennaCard(
     antenna: Antenna,
     modifier: Modifier = Modifier,
     onCardClick: (String) -> Unit,
-    onEditClick: () -> Unit,
-    onDeleteClick: () -> Unit
+    onEditClick: (Antenna) -> Unit,
+    onDeleteClick: (String) -> Unit
 ) {
     ElevatedCard(
-        onClick = { onCardClick(antenna.name) },
+        onClick = { onCardClick(antenna.id) },
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
     ) {
         AntennaItem(
-            antennaName = antenna.name,
+            antenna = antenna,
             modifier = Modifier.padding(16.dp),
             onEditClick = onEditClick,
             onDeleteClick = onDeleteClick
@@ -126,10 +126,10 @@ private fun AntennaCard(
 
 @Composable
 private fun AntennaItem(
-    antennaName: String,
+    antenna: Antenna,
     modifier: Modifier = Modifier,
-    onEditClick: () -> Unit,
-    onDeleteClick: () -> Unit
+    onEditClick: (Antenna) -> Unit,
+    onDeleteClick: (String) -> Unit
 ) {
     Row(
         modifier = modifier,
@@ -138,19 +138,19 @@ private fun AntennaItem(
         Text(
             modifier = Modifier.weight(1f),
             style = MaterialTheme.typography.bodyMedium,
-            text = antennaName,
+            text = antenna.name,
             maxLines = 3,
             overflow = TextOverflow.Ellipsis
         )
         Row {
             Icon(
-                modifier = Modifier.clickable { onEditClick() },
+                modifier = Modifier.clickable { onEditClick(antenna) },
                 painter = painterResource(TablerIcons.Edit),
                 contentDescription = ""
             )
             Spacer(modifier = Modifier.width(16.dp))
             Icon(
-                modifier = Modifier.clickable { onDeleteClick() },
+                modifier = Modifier.clickable { onDeleteClick(antenna.id) },
                 painter = painterResource(TablerIcons.Trash),
                 contentDescription = ""
             )
@@ -178,7 +178,7 @@ private fun PreviewAntennaScreen() {
             userListId = null,
             users = listOf(),
             withFile = false,
-            withReplies = false,
+            withReplies = false
         ),
         Antenna(
             id = "2",
@@ -196,7 +196,7 @@ private fun PreviewAntennaScreen() {
             userListId = null,
             users = listOf(),
             withFile = false,
-            withReplies = false,
+            withReplies = false
         )
     )
     MintTheme {
