@@ -14,6 +14,7 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Inject
 import kotlinx.coroutines.launch
 import me.sanao1006.core.data.compositionLocal.LocalNavigator
+import me.sanao1006.core.data.util.suspendRunCatching
 import me.sanao1006.core.domain.antenna.DeleteAntennaUseCase
 import me.sanao1006.core.domain.antenna.GetAntennasUseCase
 import me.sanao1006.core.model.uistate.AntennaScreenUiState
@@ -62,7 +63,11 @@ class AntennaScreenPresenter @Inject constructor(
 
                 is AntennaScreen.Event.OnDeleteClick -> {
                     scope.launch {
-                        deleteAntennaUseCase.invoke(event.id)
+                        suspendRunCatching {
+                            deleteAntennaUseCase.invoke(event.id)
+                        }.onSuccess {
+                            uiState = getAntennasUseCase.invoke()
+                        }
                         openDialog = false
                     }
                 }
