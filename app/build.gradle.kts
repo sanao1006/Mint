@@ -34,6 +34,7 @@ android {
         implementation(projects.feature.announcement)
         implementation(projects.feature.notification)
         implementation(projects.feature.favorites)
+        implementation(projects.feature.antenna)
         implementation(projects.core.network)
         implementation(projects.core.dataStore)
         implementation(projects.core.designsystem)

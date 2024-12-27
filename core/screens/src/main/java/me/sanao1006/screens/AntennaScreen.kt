@@ -9,12 +9,14 @@ import me.sanao1006.core.model.uistate.AnnouncementUiState
 @Parcelize
 object AntennaScreen : Screen {
     data class State(
-        val uiState: AnnouncementUiState
+        val uiState: AnnouncementUiState,
+        val eventSink: (Event) -> Unit
     ) : CircuitUiState
 
-    data class Event(
-        val onAntennaClick: (String) -> Unit,
-        val onEditClick: (String) -> Unit,
-        val onCreateClick: () -> Unit
-    ) : CircuitUiEvent
+    sealed class Event : CircuitUiEvent {
+        data class OnAntennaClick(val id: String) : Event()
+        data object OnEditClick : Event()
+        data object OnCreateClick : Event()
+        data object OnBackClick : Event()
+    }
 }

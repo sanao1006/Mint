@@ -5,6 +5,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import de.jensklingenberg.ktorfit.Ktorfit
+import javax.inject.Singleton
 import me.sanao1006.core.data.repository.AccountRepository
 import me.sanao1006.core.data.repository.AntennaRepository
 import me.sanao1006.core.data.repository.MetaRepository
@@ -17,7 +18,6 @@ import me.sanao1006.core.data.repository.createMetaRepository
 import me.sanao1006.core.data.repository.createMiauthRepository
 import me.sanao1006.core.data.repository.createNotesRepository
 import me.sanao1006.core.data.repository.createUsersRepository
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)

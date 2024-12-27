@@ -13,6 +13,7 @@ import me.sanao1006.core.data.compositionLocal.LocalNavigator
 import me.sanao1006.core.domain.home.UpdateAccountUseCase
 import me.sanao1006.core.model.LoginUserInfo
 import me.sanao1006.screens.AnnouncementScreen
+import me.sanao1006.screens.AntennaScreen
 import me.sanao1006.screens.FavoritesScreen
 import me.sanao1006.screens.SearchScreen
 import me.sanao1006.screens.UserScreen
@@ -62,6 +63,10 @@ class DrawerEventPresenter @Inject constructor(
 
                 DrawerEvent.OnDrawerFavoriteClicked -> {
                     navigator.goTo(FavoritesScreen)
+                }
+
+                DrawerEvent.OnDrawerAntennaClicked -> {
+                    navigator.goTo(AntennaScreen)
                 }
 
                 else -> {}
