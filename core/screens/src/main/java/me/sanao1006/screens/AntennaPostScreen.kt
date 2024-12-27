@@ -1,4 +1,4 @@
-package me.sanao1006.screens.event
+package me.sanao1006.screens
 
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.Screen

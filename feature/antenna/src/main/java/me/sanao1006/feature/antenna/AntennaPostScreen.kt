@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
-import me.sanao1006.screens.event.AntennaPostScreen
+import me.sanao1006.screens.AntennaPostScreen
 
 @CircuitInject(AntennaPostScreen::class, SingletonComponent::class)
 @Composable

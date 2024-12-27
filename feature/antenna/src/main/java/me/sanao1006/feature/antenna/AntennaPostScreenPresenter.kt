@@ -7,8 +7,8 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
-import me.sanao1006.screens.event.AntennaPostScreen
-import me.sanao1006.screens.event.AntennaPostScreenType
+import me.sanao1006.screens.AntennaPostScreen
+import me.sanao1006.screens.AntennaPostScreenType
 
 class AntennaPostScreenPresenter @AssistedInject constructor(
     @Assisted private val screen: AntennaPostScreen

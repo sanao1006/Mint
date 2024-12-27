@@ -11,16 +11,16 @@ import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuitx.effects.LaunchedImpressionEffect
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Inject
 import kotlinx.coroutines.launch
 import me.sanao1006.core.data.compositionLocal.LocalNavigator
 import me.sanao1006.core.data.util.suspendRunCatching
 import me.sanao1006.core.domain.antenna.DeleteAntennaUseCase
 import me.sanao1006.core.domain.antenna.GetAntennasUseCase
 import me.sanao1006.core.model.uistate.AntennaScreenUiState
+import me.sanao1006.screens.AntennaPostScreen
 import me.sanao1006.screens.AntennaScreen
-import me.sanao1006.screens.event.AntennaPostScreen
 import me.sanao1006.screens.event.globalIcon.GlobalIconEventPresenter
+import javax.inject.Inject
 
 @CircuitInject(AntennaScreen::class, SingletonComponent::class)
 class AntennaScreenPresenter @Inject constructor(
