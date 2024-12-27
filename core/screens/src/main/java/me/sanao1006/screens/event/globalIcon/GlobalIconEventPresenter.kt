@@ -32,6 +32,10 @@ class GlobalIconEventPresenter @Inject constructor() : Presenter<DrawerEventStat
                 GlobalIconEvent.OnArrowBackIconClicked -> {
                     navigator.popUntil { it is HomeScreen }
                 }
+
+                GlobalIconEvent.OnBackBeforeScreen -> {
+                    navigator.pop()
+                }
             }
         }
     }

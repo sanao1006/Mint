@@ -11,4 +11,6 @@ sealed class GlobalIconEvent : CircuitUiEvent {
     ) : GlobalIconEvent()
 
     data object OnArrowBackIconClicked : GlobalIconEvent()
+
+    data object OnBackBeforeScreen : GlobalIconEvent()
 }
