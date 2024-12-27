@@ -62,10 +62,10 @@ class AntennaListScreenPresenter @AssistedInject constructor(
             isRefreshed = isRefreshed
         )
     }
-}
 
-@AssistedFactory
-@CircuitInject(AntennaListScreen::class, SingletonComponent::class)
-interface Factory {
-    fun create(screen: AntennaListScreen): AntennaListScreenPresenter
+    @AssistedFactory
+    @CircuitInject(AntennaListScreen::class, SingletonComponent::class)
+    fun interface Factory {
+        fun create(screen: AntennaListScreen): AntennaListScreenPresenter
+    }
 }

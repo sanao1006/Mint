@@ -35,10 +35,10 @@ class AntennaPostScreenPresenter @AssistedInject constructor(
             }
         }
     }
-}
 
-@AssistedFactory
-@CircuitInject(AntennaPostScreen::class, SingletonComponent::class)
-fun interface Factory {
-    fun create(screen: AntennaPostScreen): AntennaPostScreenPresenter
+    @AssistedFactory
+    @CircuitInject(AntennaPostScreen::class, SingletonComponent::class)
+    fun interface Factory {
+        fun create(screen: AntennaPostScreen): AntennaPostScreenPresenter
+    }
 }
