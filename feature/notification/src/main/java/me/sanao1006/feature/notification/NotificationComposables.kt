@@ -24,17 +24,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import coil3.compose.rememberAsyncImagePainter
 import ir.alirezaivaz.tablericons.TablerIcons
+import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import me.sanao1006.core.data.util.TimeUtils.getRelativeTimeString
+import me.sanao1006.core.designsystem.MintTheme
 import me.sanao1006.core.model.common.User
 import me.sanao1006.core.model.notes.TimelineItem
 import me.sanao1006.core.model.notes.Visibility
@@ -67,7 +72,7 @@ fun NotificationColumn(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+                    .padding(bottom = 16.dp)
             ) {
                 if (index == 0) {
                     Spacer(modifier = Modifier.height(16.dp))
@@ -86,6 +91,7 @@ fun NotificationColumn(
 
                     else -> {
                         NotificationSectionItem(
+                            modifier = Modifier.padding(horizontal = 16.dp),
                             notificationUiState = it,
                             context = context,
                             onIconClick = onIconClick
@@ -110,8 +116,8 @@ private fun NotificationSectionMessage(
 ) {
     Column(modifier = modifier) {
         Row(modifier = Modifier.fillMaxWidth()) {
+            Spacer(modifier = Modifier.width(16.dp))
             Icon(
-                modifier = Modifier.padding(start = 16.dp),
                 painter = painterResource(
                     when (NotificationType.get(notificationUiState.type)) {
                         NotificationType.REPLY -> TablerIcons.ArrowBackUp
@@ -138,11 +144,6 @@ private fun NotificationSectionMessage(
 
         if (notificationUiState.timelineItem != null) {
             TimelineItemSection(
-                modifier = Modifier
-                    .padding(
-                        start = 16.dp,
-                        end = 16.dp
-                    ),
                 timelineItem = notificationUiState.timelineItem!!,
                 onIconClick = onIconClick,
                 onReplyClick = {
@@ -195,7 +196,7 @@ private fun NotificationSectionItem(
         }
         Spacer(modifier = Modifier.height(4.dp))
         if (notificationUiState.user != null && notificationUiState.timelineItem != null) {
-            UserInfoRow(
+            NoteItem(
                 user = notificationUiState.user!!,
                 timelineItem = notificationUiState.timelineItem!!,
                 context = context,
@@ -203,20 +204,11 @@ private fun NotificationSectionItem(
                 onIconClick = onIconClick
             )
         }
-        Spacer(modifier = Modifier.height(4.dp))
-        notificationUiState.timelineItem?.let {
-            Text(
-                text = it.text,
-                style = MaterialTheme.typography.bodyMedium,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
     }
 }
 
 @Composable
-private fun UserInfoRow(
+private fun NoteItem(
     user: User,
     timelineItem: TimelineItem,
     context: Context,
@@ -227,7 +219,7 @@ private fun UserInfoRow(
     Row(modifier = modifier.fillMaxWidth()) {
         Image(
             modifier = Modifier
-                .size(40.dp)
+                .size(48.dp)
                 .clip(shape = CircleShape)
                 .clickable {
                     onIconClick(
@@ -247,21 +239,45 @@ private fun UserInfoRow(
                 .fillMaxWidth()
                 .weight(1f)
         ) {
-            Text(
-                text = user.name ?: user.username,
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.SemiBold,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+            UserInfoRow(
+                user = user,
+                timelineItem = timelineItem,
+                context = context,
+                createdAt = createdAt,
+                modifier = Modifier.fillMaxWidth()
             )
 
-            val host = if (user.host.isNullOrEmpty()) {
-                null
-            } else {
-                "@${user.host}"
-            }
-            Text(text = "@${user.username}$host")
+            Spacer(modifier = Modifier.height(4.dp))
+
+            Text(
+                text = timelineItem.text,
+                style = MaterialTheme.typography.bodyMedium,
+                maxLines = 3,
+                overflow = TextOverflow.Ellipsis
+            )
         }
+    }
+}
+
+@Composable
+private fun UserInfoRow(
+    user: User,
+    timelineItem: TimelineItem,
+    context: Context,
+    createdAt: String,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.Absolute.SpaceBetween
+    ) {
+        Text(
+            text = user.name ?: user.username,
+            style = MaterialTheme.typography.bodyMedium,
+            fontWeight = FontWeight.SemiBold,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = getRelativeTimeString(context, createdAt),
@@ -338,4 +354,75 @@ private fun NotificationIcon(notificationType: NotificationType) {
         ),
         contentDescription = ""
     )
+}
+
+@Composable
+@PreviewLightDark
+private fun PreviewNotificationColumn() {
+    MintTheme {
+        val notifications = listOf<NotificationUiStateObject>(
+            NotificationUiStateObject(
+                id = "1",
+                type = "reply",
+                createdAt = "2021-09-01T00:00:00Z",
+                user = User(
+                    id = "1",
+                    username = "user1",
+                    name = "User 1",
+                    avatarUrl = "https://example.com/user1.png"
+                ),
+                timelineItem = TimelineItem(
+                    id = "1",
+                    user = User(
+                        id = "2",
+                        username = "user2",
+                        name = "User 2",
+                        avatarUrl = "https://example.com/user2.png"
+                    ),
+                    text = "Hello, World!",
+                    uri = "https://example.com/1",
+                    visibility = Visibility.PUBLIC,
+                    reactions = null,
+                    createdAt = "2021-09-01T00:00:00Z"
+                )
+            ),
+            NotificationUiStateObject(
+                id = "2",
+                type = "reaction",
+                createdAt = "2021-09-01T00:00:00Z",
+                user = User(
+                    id = "1",
+                    username = "user1",
+                    name = "User 1",
+                    avatarUrl = "https://example.com"
+                ),
+                timelineItem = TimelineItem(
+                    id = "2",
+                    user = User(
+                        id = "2",
+                        username = "user2",
+                        name = "User 2",
+                        avatarUrl = "https://example.com"
+                    ),
+                    text = "Hello, World!",
+                    uri = "https://example.com/2",
+                    visibility = Visibility.PUBLIC,
+                    reactions = Json.parseToJsonElement(
+                        """{"👍": 1}"""
+                    ).jsonObject,
+                    createdAt = "2021-09-01T00:00:00Z"
+                )
+            )
+        )
+        val context = LocalContext.current
+        NotificationColumn(
+            context = context,
+            notifications = notifications,
+            onIconClick = { _, _, _ -> },
+            onReplyClick = { _, _, _ -> },
+            onRepostClick = {},
+            onOptionClick = { _, _, _, _, _, _ -> },
+            onReactionClick = {}
+        )
+    }
 }
