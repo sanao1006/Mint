@@ -4,6 +4,7 @@ import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.Screen
 import kotlinx.parcelize.Parcelize
+import me.sanao1006.core.model.antenna.Antenna
 import me.sanao1006.core.model.uistate.AntennaScreenUiState
 import me.sanao1006.screens.event.globalIcon.GlobalIconEvent
 
@@ -17,8 +18,10 @@ object AntennaScreen : Screen {
 
     sealed class Event : CircuitUiEvent {
         data class OnAntennaClick(val id: String) : Event()
-        data object OnEditClick : Event()
+        data class OnEditClick(
+            val antenna: Antenna
+        ) : Event()
+        data class OnDeleteClick(val id: String) : Event()
         data object OnCreateClick : Event()
-        data object OnBackClick : Event()
     }
 }

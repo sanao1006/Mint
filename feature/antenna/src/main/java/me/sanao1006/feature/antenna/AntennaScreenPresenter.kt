@@ -39,8 +39,8 @@ class AntennaScreenPresenter @Inject constructor(
             when (event) {
                 is AntennaScreen.Event.OnAntennaClick -> {}
                 is AntennaScreen.Event.OnEditClick -> {}
+                is AntennaScreen.Event.OnDeleteClick -> {}
                 is AntennaScreen.Event.OnCreateClick -> {}
-                is AntennaScreen.Event.OnBackClick -> {}
             }
         }
     }

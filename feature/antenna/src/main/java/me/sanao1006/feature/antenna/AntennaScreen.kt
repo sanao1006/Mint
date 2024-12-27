@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,7 +42,15 @@ fun AntennaScreen(state: AntennaScreen.State, modifier: Modifier) {
     Box(modifier = modifier.fillMaxSize()) {
         DrawerItemScreenWrapper(
             drawerItem = DrawerItem.ANTENNA,
-            globalIconEventSink = state.globalIconEventSink
+            globalIconEventSink = state.globalIconEventSink,
+            actions = {
+                AntennaCreateButton(
+                    modifier = Modifier.padding(end = 16.dp),
+                    onClick = {
+                        state.eventSink(AntennaScreen.Event.OnCreateClick)
+                    }
+                )
+            }
         ) {
             Column(modifier = it.fillMaxSize()) {
                 when (state.uiState) {
@@ -62,9 +71,9 @@ fun AntennaScreen(state: AntennaScreen.State, modifier: Modifier) {
                             AntennaScreenUiContent(
                                 antennaList = antennaList,
                                 modifier = Modifier.fillMaxSize(),
-                                onCardClick = { _ -> },
-                                onEditClick = { },
-                                onDeleteClick = { }
+                                onCardClick = { id -> state.eventSink(AntennaScreen.Event.OnAntennaClick(id)) },
+                                onEditClick = { antenna -> state.eventSink(AntennaScreen.Event.OnEditClick(antenna)) },
+                                onDeleteClick = { id -> state.eventSink(AntennaScreen.Event.OnDeleteClick(id)) }
                             )
                         }
                     }
@@ -152,6 +161,24 @@ private fun AntennaItem(
             Icon(
                 modifier = Modifier.clickable { onDeleteClick(antenna.id) },
                 painter = painterResource(TablerIcons.Trash),
+                contentDescription = ""
+            )
+        }
+    }
+}
+
+@Composable
+private fun AntennaCreateButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+){
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        IconButton(onClick = onClick) {
+            Icon(
+                painter = painterResource(TablerIcons.CirclePlus),
                 contentDescription = ""
             )
         }
