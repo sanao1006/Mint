@@ -10,7 +10,9 @@ sealed class GlobalIconEvent : CircuitUiEvent {
         val scope: CoroutineScope
     ) : GlobalIconEvent()
 
+    // Go back to the home screen
     data object OnArrowBackIconClicked : GlobalIconEvent()
 
+    // Go back to the previous screen
     data object OnBackBeforeScreen : GlobalIconEvent()
 }

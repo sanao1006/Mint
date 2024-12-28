@@ -44,6 +44,7 @@ import me.sanao1006.core.ui.DrawerItemScreenWrapper
 import me.sanao1006.core.ui.common.ContentLoadingIndicator
 import me.sanao1006.core.ui.common.NoContentsPlaceHolder
 import me.sanao1006.screens.AnnouncementScreen
+import me.sanao1006.screens.event.globalIcon.GlobalIconEvent
 import me.snao1006.res_value.ResString
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -55,7 +56,7 @@ fun AnnouncementScreen(state: AnnouncementScreen.State, modifier: Modifier) {
         DrawerItemScreenWrapper(
             drawerItem = DrawerItem.ANNOUNCEMENT,
             snackbarHostState = snackbarHostState,
-            globalIconEventSink = state.globalIconEventSink
+            onBackIconClick = { state.globalIconEventSink(GlobalIconEvent.OnBackBeforeScreen) }
         ) {
             Column(modifier = it.fillMaxSize()) {
                 when (state.uiState) {

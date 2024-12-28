@@ -14,6 +14,7 @@ import me.sanao1006.core.ui.DrawerItemScreenWrapper
 import me.sanao1006.core.ui.SubScreenTimelineContentBox
 import me.sanao1006.core.ui.TimelineColumn
 import me.sanao1006.screens.FavoritesScreen
+import me.sanao1006.screens.event.globalIcon.GlobalIconEvent
 import me.sanao1006.screens.event.timeline.TimelineItemEvent
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -25,7 +26,9 @@ fun FavoritesScreen(state: FavoritesScreen.State, modifier: Modifier) {
         DrawerItemScreenWrapper(
             drawerItem = DrawerItem.FAVORITE,
             snackbarHostState = snackbarHostState,
-            globalIconEventSink = state.globalIconEventSink
+            onBackIconClick = {
+                state.globalIconEventSink(GlobalIconEvent.OnArrowBackIconClicked)
+            }
         ) {
             SubScreenTimelineContentBox(
                 modifier = it,

@@ -12,6 +12,7 @@ import dagger.hilt.components.SingletonComponent
 import me.sanao1006.core.ui.DrawerItem
 import me.sanao1006.core.ui.DrawerItemScreenWrapper
 import me.sanao1006.screens.SearchScreen
+import me.sanao1006.screens.event.globalIcon.GlobalIconEvent
 
 @CircuitInject(SearchScreen::class, SingletonComponent::class)
 @Composable
@@ -21,7 +22,9 @@ fun SearchScreenUi(state: SearchScreen.State, modifier: Modifier) {
         DrawerItemScreenWrapper(
             drawerItem = DrawerItem.SEARCH,
             snackbarHostState = snackbarHostState,
-            globalIconEventSink = state.globalIconEventSink
+            onBackIconClick = {
+                state.globalIconEventSink(GlobalIconEvent.OnArrowBackIconClicked)
+            }
         ) {
             Text(text = "Search Screen")
         }

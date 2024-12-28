@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import ir.alirezaivaz.tablericons.TablerIcons
-import me.sanao1006.screens.event.globalIcon.GlobalIconEvent
 import me.snao1006.res_value.ResString
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -24,7 +23,7 @@ fun DrawerItemScreenWrapper(
     drawerItem: DrawerItem,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
-    globalIconEventSink: (GlobalIconEvent) -> Unit,
+    onBackIconClick: () -> Unit,
     actions: @Composable RowScope.() -> Unit = { },
     content: @Composable (Modifier) -> Unit
 ) {
@@ -54,7 +53,7 @@ fun DrawerItemScreenWrapper(
                 },
                 navigationIcon = {
                     IconButton(
-                        onClick = { globalIconEventSink(GlobalIconEvent.OnArrowBackIconClicked) }
+                        onClick = onBackIconClick
                     ) {
                         Icon(
                             painter = painterResource(TablerIcons.ArrowLeft),

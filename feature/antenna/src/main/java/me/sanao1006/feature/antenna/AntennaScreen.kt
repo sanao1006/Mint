@@ -41,6 +41,7 @@ import me.sanao1006.core.ui.DrawerItemScreenWrapper
 import me.sanao1006.core.ui.common.ContentLoadingIndicator
 import me.sanao1006.core.ui.common.NoContentsPlaceHolder
 import me.sanao1006.screens.AntennaScreen
+import me.sanao1006.screens.event.globalIcon.GlobalIconEvent
 import me.snao1006.res_value.ResString
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -52,7 +53,9 @@ fun AntennaScreen(state: AntennaScreen.State, modifier: Modifier) {
         DrawerItemScreenWrapper(
             drawerItem = DrawerItem.ANTENNA,
             snackbarHostState = snackbarHostState,
-            globalIconEventSink = state.globalIconEventSink,
+            onBackIconClick = {
+                state.globalIconEventSink(GlobalIconEvent.OnArrowBackIconClicked)
+            },
             actions = {
                 AntennaCreateButton(
                     modifier = Modifier.padding(end = 16.dp),
