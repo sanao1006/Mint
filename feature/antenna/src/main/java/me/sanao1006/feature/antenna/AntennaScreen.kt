@@ -18,9 +18,11 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -46,8 +48,10 @@ import me.snao1006.res_value.ResString
 @CircuitInject(AntennaScreen::class, SingletonComponent::class)
 fun AntennaScreen(state: AntennaScreen.State, modifier: Modifier) {
     Box(modifier = modifier.fillMaxSize()) {
+        val snackbarHostState = remember { SnackbarHostState() }
         DrawerItemScreenWrapper(
             drawerItem = DrawerItem.ANTENNA,
+            snackbarHostState = snackbarHostState,
             globalIconEventSink = state.globalIconEventSink,
             actions = {
                 AntennaCreateButton(

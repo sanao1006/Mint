@@ -24,6 +24,7 @@ fun AntennaListScreen(state: AntennaListScreen.State, modifier: Modifier) {
         val snackbarHostState = remember { SnackbarHostState() }
         DrawerItemScreenWrapper(
             drawerItem = DrawerItem.ANTENNA,
+            snackbarHostState = snackbarHostState,
             globalIconEventSink = state.globalIconEventSink
         ) {
             SubScreenTimelineContentBox(

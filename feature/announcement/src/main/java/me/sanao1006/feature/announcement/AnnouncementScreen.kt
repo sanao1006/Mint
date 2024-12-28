@@ -17,10 +17,12 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -49,8 +51,10 @@ import me.snao1006.res_value.ResString
 @CircuitInject(AnnouncementScreen::class, SingletonComponent::class)
 fun AnnouncementScreen(state: AnnouncementScreen.State, modifier: Modifier) {
     Box(modifier = modifier.fillMaxSize()) {
+        val snackbarHostState = remember { SnackbarHostState() }
         DrawerItemScreenWrapper(
             drawerItem = DrawerItem.ANNOUNCEMENT,
+            snackbarHostState = snackbarHostState,
             globalIconEventSink = state.globalIconEventSink
         ) {
             Column(modifier = it.fillMaxSize()) {

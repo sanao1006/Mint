@@ -24,6 +24,7 @@ fun FavoritesScreen(state: FavoritesScreen.State, modifier: Modifier) {
         val snackbarHostState = remember { SnackbarHostState() }
         DrawerItemScreenWrapper(
             drawerItem = DrawerItem.FAVORITE,
+            snackbarHostState = snackbarHostState,
             globalIconEventSink = state.globalIconEventSink
         ) {
             SubScreenTimelineContentBox(

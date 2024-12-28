@@ -6,6 +6,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -20,6 +22,7 @@ import me.snao1006.res_value.ResString
 @Composable
 fun DrawerItemScreenWrapper(
     drawerItem: DrawerItem,
+    snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
     globalIconEventSink: (GlobalIconEvent) -> Unit,
     actions: @Composable RowScope.() -> Unit = { },
@@ -27,6 +30,7 @@ fun DrawerItemScreenWrapper(
 ) {
     Scaffold(
         modifier = modifier,
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
                 title = {
