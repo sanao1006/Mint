@@ -63,4 +63,8 @@
     <string name="delete_antenna_confirm">本当にこのアンテナを削除しますか？</string>
     <string name="delete_description">削除</string>
     <string name="cancel_description">キャンセル</string>
+    <string name="antenna_source_all">すべて</string>
+    <string name="antenna_source_home">ホーム</string>
+    <string name="antenna_source_user">指定したユーザー</string>
+    <string name="antenna_source_excepted_user">指定したユーザー以外</string>">
 </resources>
