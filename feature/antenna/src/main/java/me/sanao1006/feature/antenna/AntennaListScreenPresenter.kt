@@ -51,7 +51,9 @@ class AntennaListScreenPresenter @AssistedInject constructor(
                     isRefreshed = true
                     uiState = fetchAntennaList(
                         uiState = uiState,
-                        getItems = { getAntennasNotesUseCase.invoke(screen.antennaId).timelineItems },
+                        getItems = {
+                            getAntennasNotesUseCase.invoke(screen.antennaId).timelineItems
+                        },
                         setSuccessLoading = { timelineEventState.setSuccessLoading(it) }
                     )
                     delay(1000L)
