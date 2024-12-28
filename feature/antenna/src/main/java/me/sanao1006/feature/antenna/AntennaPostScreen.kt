@@ -57,6 +57,7 @@ fun AntennaPostScreen(state: AntennaPostScreen.State, modifier: Modifier) {
         ) {
             AntennaPostScreenUiContent(
                 state = state,
+                snackbarHostState = snackbarHostState,
                 modifier = it
                     .fillMaxWidth()
                     .padding(vertical = 16.dp, horizontal = 24.dp)
@@ -69,6 +70,7 @@ fun AntennaPostScreen(state: AntennaPostScreen.State, modifier: Modifier) {
 @Composable
 private fun AntennaPostScreenUiContent(
     state: AntennaPostScreen.State,
+    snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
@@ -140,8 +142,12 @@ private fun AntennaPostScreenUiContent(
         Spacer(modifier = Modifier.height(32.dp))
         AntennaPostButtons(
             isEdit = state.isEdit,
-            onSaveButtonClick = {},
-            onDeleteButtonClick = {}
+            onSaveButtonClick = {
+                state.eventSink(AntennaPostScreen.Event.OnSaveClick(snackbarHostState))
+            },
+            onDeleteButtonClick = {
+                state.eventSink(AntennaPostScreen.Event.OnDeleteClick(snackbarHostState))
+            }
         )
     }
 }

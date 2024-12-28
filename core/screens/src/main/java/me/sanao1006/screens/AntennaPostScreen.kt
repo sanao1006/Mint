@@ -1,6 +1,7 @@
 package me.sanao1006.screens
 
 import androidx.annotation.StringRes
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.slack.circuit.runtime.CircuitUiState
@@ -72,11 +73,11 @@ data class AntennaPostScreen(
         ) : Event()
 
         data class OnSaveClick(
-            val antenna: Antenna
+            val snackbarHostState: SnackbarHostState,
         ) : Event()
 
         data class OnDeleteClick(
-            val id: String
+            val snackbarHostState: SnackbarHostState
         ) : Event()
     }
 }

@@ -78,4 +78,8 @@
     <string name="antenna_case_sensitive">大文字小文字を区別する</string>
     <string name="antenna_only_files">ファイルが添付されたノートのみ</string>
     <string name="save_description">保存</string>
+    <string name="antenna_created_success">アンテナを作成しました</string>
+    <string name="antenna_created_failed">アンテナの作成に失敗しました</string>
+    <string name="antenna_updated_success">アンテナを更新しました</string>
+    <string name="antenna_updated_failed">アンテナの更新に失敗しました</string>
 </resources>
