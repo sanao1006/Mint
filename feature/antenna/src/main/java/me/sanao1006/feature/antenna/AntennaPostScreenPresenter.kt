@@ -57,6 +57,7 @@ class AntennaPostScreenPresenter @AssistedInject constructor(
         return AntennaPostScreen.State(
             uiState = uiState,
             screenType = postScreenType,
+            isEdit = screen.antenna != null,
             globalIconEventSink = globalIconEventState.eventSink
         ) { event ->
             when (event) {

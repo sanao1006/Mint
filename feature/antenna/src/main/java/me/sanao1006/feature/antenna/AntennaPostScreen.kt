@@ -9,6 +9,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -16,6 +21,7 @@ import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -54,6 +60,7 @@ fun AntennaPostScreen(state: AntennaPostScreen.State, modifier: Modifier) {
                 modifier = it
                     .fillMaxWidth()
                     .padding(vertical = 16.dp, horizontal = 24.dp)
+                    .verticalScroll(rememberScrollState())
             )
         }
     }
@@ -129,6 +136,12 @@ private fun AntennaPostScreenUiContent(
             onOnlyFileNoteChange = {
                 state.eventSink(AntennaPostScreen.Event.OnOnlyFileNoteChange(it))
             }
+        )
+        Spacer(modifier = Modifier.height(32.dp))
+        AntennaPostButtons(
+            isEdit = state.isEdit,
+            onSaveButtonClick = {},
+            onDeleteButtonClick = {}
         )
     }
 }
@@ -257,6 +270,43 @@ private fun AntennaPostForm(
             checked = isOnlyFileNote,
             onCheckedChange = onOnlyFileNoteChange
         )
+    }
+}
+
+@Composable
+private fun AntennaPostButtons(
+    isEdit: Boolean,
+    modifier: Modifier = Modifier,
+    onSaveButtonClick: () -> Unit,
+    onDeleteButtonClick: () -> Unit
+) {
+    Row(modifier = modifier) {
+        Button(
+            onClick = onSaveButtonClick
+        ) {
+            Icon(
+                painter = painterResource(TablerIcons.DeviceFloppy),
+                ""
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(text = stringResource(ResString.save_description))
+        }
+        if (isEdit) {
+            Spacer(modifier = Modifier.width(16.dp))
+            Button(
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.error
+                ),
+                onClick = onDeleteButtonClick
+            ) {
+                Icon(
+                    painter = painterResource(TablerIcons.Trash),
+                    ""
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(text = stringResource(ResString.delete_description))
+            }
+        }
     }
 }
 

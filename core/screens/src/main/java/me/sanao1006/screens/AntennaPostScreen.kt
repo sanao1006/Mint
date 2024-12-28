@@ -19,6 +19,7 @@ data class AntennaPostScreen(
 ) : Screen {
     data class State(
         val uiState: AntennaPostScreenUiState,
+        val isEdit: Boolean,
         val screenType: AntennaPostScreenType,
         val globalIconEventSink: (GlobalIconEvent) -> Unit,
         val eventSink: (Event) -> Unit
