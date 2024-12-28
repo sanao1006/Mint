@@ -6,6 +6,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import me.sanao1006.core.model.antenna.Antenna
 import me.sanao1006.core.model.requestbody.antenna.AntennaIdRequestBody
+import me.sanao1006.core.model.requestbody.antenna.AntennaUpdateRequestBody
 import me.sanao1006.core.model.requestbody.antenna.AntennasNotesRequestBody
 import me.sanao1006.core.model.response.notes.NotesTimelineResponse
 
@@ -24,4 +25,14 @@ interface AntennaRepository {
     suspend fun getAntennaNotes(
         @Body body: AntennasNotesRequestBody
     ): List<NotesTimelineResponse>
+
+    @POST("api/antennas/create")
+    suspend fun createAntenna(
+        @Body body: AntennasNotesRequestBody
+    ): Antenna
+
+    @POST("api/antennas/update")
+    suspend fun updateAntenna(
+        @Body body: AntennaUpdateRequestBody
+    ): Antenna
 }
