@@ -67,4 +67,15 @@
     <string name="antenna_source_home">ホーム</string>
     <string name="antenna_source_user">指定したユーザー</string>
     <string name="antenna_source_excepted_user">指定したユーザー以外</string>">
+    <string name="antenna_name">名前</string>
+    <string name="antenna_source">受信ソース</string>
+    <string name="antenna_users">ユーザー</string>
+    <string name="antenna_exclude_bot_accounts">Botアカウントを除外</string>
+    <string name="antenna_include_replies">返信を含む</string>
+    <string name="antenna_keywords">受信キーワード</string>
+    <string name="antenna_keywords_exclude">除外キーワード</string>
+    <string name="antenna_local_only">ローカルのみ</string>
+    <string name="antenna_case_sensitive">大文字小文字を区別する</string>
+    <string name="antenna_only_files">ファイルが添付されたノートのみ</string>
+    <string name="save_description">保存</string>
 </resources>

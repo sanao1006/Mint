@@ -67,4 +67,15 @@
     <string name="antenna_source_home">Home</string>
     <string name="antenna_source_user">User</string>
     <string name="antenna_source_excepted_user">Except for the specified user</string>">
+    <string name="antenna_name">Name</string>
+    <string name="antenna_source">Antenna Source</string>
+    <string name="antenna_users">Users</string>
+    <string name="antenna_exclude_bot_accounts">Exclude bot accounts</string>
+    <string name="antenna_include_replies">Include replies</string>
+    <string name="antenna_keywords">Keywords to listen to</string>
+    <string name="antenna_keywords_exclude">Keywords to exclude</string>
+    <string name="antenna_local_only">Local Only</string>
+    <string name="antenna_case_sensitive">Case sensitive</string>
+    <string name="antenna_only_files">Only notes with files</string>
+    <string name="save_description">Save</string>
 </resources>

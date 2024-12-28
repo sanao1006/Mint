@@ -35,6 +35,7 @@ import me.sanao1006.core.ui.DrawerItemScreenWrapper
 import me.sanao1006.screens.AntennaPostScreen
 import me.sanao1006.screens.AntennaSource
 import me.sanao1006.screens.event.globalIcon.GlobalIconEvent
+import me.snao1006.res_value.ResString
 
 @CircuitInject(AntennaPostScreen::class, SingletonComponent::class)
 @Composable
@@ -159,98 +160,104 @@ private fun AntennaPostForm(
     onCaseSensitiveChange: (Boolean) -> Unit,
     onOnlyFileNoteChange: (Boolean) -> Unit
 ) {
-    val antennaSourceName = AntennaSource.fromBodyToName(antennaSource)
-    Text("Name")
-    TextField(
-        value = antennaName,
-        onValueChange = onAntennaChange
-    )
-    Spacer(modifier = Modifier.height(16.dp))
-
-    Text("受信ソース")
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = onExpandedChange
-    ) {
-        TextField(
-            value = antennaSourceName,
-            modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
-            onValueChange = {},
-            readOnly = true,
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-            colors = ExposedDropdownMenuDefaults.textFieldColors()
+    Column(modifier = modifier) {
+        val antennaSourceName = AntennaSource.fromBodyToName(antennaSource)
+        Text(
+            text = stringResource(ResString.antenna_name)
         )
-        DropdownMenu(
-            modifier = Modifier.fillMaxWidth(),
+        TextField(
+            value = antennaName,
+            onValueChange = onAntennaChange
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+            text = stringResource(ResString.antenna_source)
+        )
+        ExposedDropdownMenuBox(
             expanded = expanded,
-            onDismissRequest = { onExpandedChange(false) }
+            onExpandedChange = onExpandedChange
         ) {
-            AntennaSource.entries.forEach {
-                DropdownMenuItem(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = {
-                        onDropDownItemClick(it.body)
-                    },
-                    text = { Text(stringResource(it.resId)) }
-                )
+            TextField(
+                value = antennaSourceName,
+                modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
+                onValueChange = {},
+                readOnly = true,
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                colors = ExposedDropdownMenuDefaults.textFieldColors()
+            )
+            DropdownMenu(
+                modifier = Modifier.fillMaxWidth(0.8f),
+                expanded = expanded,
+                onDismissRequest = { onExpandedChange(false) }
+            ) {
+                AntennaSource.entries.forEach {
+                    DropdownMenuItem(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                            onDropDownItemClick(it.body)
+                        },
+                        text = { Text(stringResource(it.resId)) }
+                    )
+                }
             }
         }
-    }
-    Spacer(modifier = Modifier.height(16.dp))
-    if (antennaSource == AntennaSource.USERS.body ||
-        antennaSource == AntennaSource.USERS_BLACKLIST.body
-    ) {
-        Text("ユーザー名")
+        Spacer(modifier = Modifier.height(16.dp))
+        if (antennaSource == AntennaSource.USERS.body ||
+            antennaSource == AntennaSource.USERS_BLACKLIST.body
+        ) {
+            Text(text = stringResource(ResString.antenna_users))
+            TextField(
+                value = username,
+                onValueChange = { text ->
+                    onUsernameChange(text, antennaSource)
+                }
+            )
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+        AntennaPostSwitch(
+            label = stringResource(ResString.antenna_exclude_bot_accounts),
+            checked = isBotAccountExcluded,
+            onCheckedChange = onBotAccountExcludedChange
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        AntennaPostSwitch(
+            label = stringResource(ResString.antenna_include_replies),
+            checked = isReplyIncluded,
+            onCheckedChange = onReplyIncludedChange
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(text = stringResource(ResString.antenna_keywords))
         TextField(
-            value = username,
-            onValueChange = { text ->
-                onUsernameChange(text, antennaSource)
-            }
+            value = keywordValue,
+            onValueChange = onKeywordChange
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(text = stringResource(ResString.antenna_keywords_exclude))
+        TextField(
+            value = exceptedKeywordValue,
+            onValueChange = onExceptedKeywordChange
+        )
+
+        AntennaPostSwitch(
+            label = stringResource(ResString.antenna_local_only),
+            checked = isLocalOnly,
+            onCheckedChange = onLocalOnlyChange
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        AntennaPostSwitch(
+            label = stringResource(ResString.antenna_case_sensitive),
+            checked = isCaseSensitive,
+            onCheckedChange = onCaseSensitiveChange
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        AntennaPostSwitch(
+            label = stringResource(ResString.antenna_only_files),
+            checked = isOnlyFileNote,
+            onCheckedChange = onOnlyFileNoteChange
         )
     }
-
-    Spacer(modifier = Modifier.height(8.dp))
-    AntennaPostSwitch(
-        label = "Botアカウントを除外",
-        checked = isBotAccountExcluded,
-        onCheckedChange = onBotAccountExcludedChange
-    )
-    Spacer(modifier = Modifier.height(8.dp))
-    AntennaPostSwitch(
-        label = "返信を含む",
-        checked = isReplyIncluded,
-        onCheckedChange = onReplyIncludedChange
-    )
-    Spacer(modifier = Modifier.height(16.dp))
-    Text("受信キーワード")
-    TextField(
-        value = keywordValue,
-        onValueChange = onKeywordChange
-    )
-    Spacer(modifier = Modifier.height(16.dp))
-    Text("除外キーワード")
-    TextField(
-        value = exceptedKeywordValue,
-        onValueChange = onExceptedKeywordChange
-    )
-
-    AntennaPostSwitch(
-        label = "ローカルのみ",
-        checked = isLocalOnly,
-        onCheckedChange = onLocalOnlyChange
-    )
-    Spacer(modifier = Modifier.height(8.dp))
-    AntennaPostSwitch(
-        label = "大文字と小文字を区別する",
-        checked = isCaseSensitive,
-        onCheckedChange = onCaseSensitiveChange
-    )
-    Spacer(modifier = Modifier.height(8.dp))
-    AntennaPostSwitch(
-        label = "ファイルが添付されたノートのみ",
-        checked = isOnlyFileNote,
-        onCheckedChange = onOnlyFileNoteChange
-    )
 }
 
 @Composable
