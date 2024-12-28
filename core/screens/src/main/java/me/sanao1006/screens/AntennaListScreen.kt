@@ -22,7 +22,8 @@ data class AntennaListScreen(
         override val globalIconEventSink: (GlobalIconEvent) -> Unit,
         override val timelineEventSink: (TimelineItemEvent) -> Unit,
         override val pullToRefreshState: PullRefreshState,
-        override val isRefreshed: Boolean
+        override val isRefreshed: Boolean,
+        val eventSink: (Event) -> Unit
     ) : CircuitUiState, SubScreenState
 
     sealed class Event : CircuitUiEvent {

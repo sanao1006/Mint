@@ -37,7 +37,7 @@ class AntennaListScreenPresenter @AssistedInject constructor(
     override fun present(): AntennaListScreen.State {
         val timelineEventState = timelineEventPresenter.present()
         val globalEventState = globalIconEventPresenter.present()
-        
+
         var uiState: AntennaListUiState by rememberRetained {
             mutableStateOf(AntennaListUiState())
         }
@@ -77,7 +77,13 @@ class AntennaListScreenPresenter @AssistedInject constructor(
             timelineEventSink = timelineEventState.eventSink,
             pullToRefreshState = pullRefreshState,
             isRefreshed = isRefreshed
-        )
+        ) { event ->
+            when (event) {
+                AntennaListScreen.Event.OnDismissRequest -> {
+                    timelineEventState.setShowBottomSheet(false)
+                }
+            }
+        }
     }
 
     @AssistedFactory

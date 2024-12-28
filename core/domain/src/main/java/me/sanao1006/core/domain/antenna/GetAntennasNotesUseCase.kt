@@ -1,9 +1,9 @@
 package me.sanao1006.core.domain.antenna
 
+import javax.inject.Inject
 import me.sanao1006.core.data.repository.AntennaRepository
 import me.sanao1006.core.model.requestbody.antenna.AntennasNotesRequestBody
 import me.sanao1006.core.model.uistate.AntennaListUiState
-import javax.inject.Inject
 
 class GetAntennasNotesUseCase @Inject constructor(
     private val antennaRepository: AntennaRepository
