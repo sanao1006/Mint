@@ -22,6 +22,7 @@ import me.sanao1006.core.domain.home.CreateNotesUseCase
 import me.sanao1006.core.model.notes.Visibility
 import me.sanao1006.core.model.uistate.TimelineItemAction
 import me.sanao1006.core.model.uistate.TimelineUiState
+import me.sanao1006.datastore.DataStoreRepository
 import me.sanao1006.screens.NoteScreen
 
 data class TimelineState(
@@ -35,7 +36,8 @@ class TimelineEventPresenter @Inject constructor(
     private val getNoteStateUseCase: GetNoteStateUseCase,
     private val createNotesUseCase: CreateNotesUseCase,
     private val createFavoritesUseCase: CreateFavoritesUseCase,
-    private val deleteFavoritesUseCase: DeleteFavoritesUseCase
+    private val deleteFavoritesUseCase: DeleteFavoritesUseCase,
+    private val dataStoreRepository: DataStoreRepository
 ) : Presenter<TimelineState> {
     @Composable
     override fun present(): TimelineState {
@@ -69,29 +71,16 @@ class TimelineEventPresenter @Inject constructor(
 
                 is TimelineItemEvent.OnTimelineItemOptionClicked -> {
                     scope.launch {
+                        uiState = uiState.copy(
+                            showBottomSheet = true,
+                            timelineAction = TimelineItemAction.Option,
+                            selectedUserId = event.id,
+                            selectedNoteText = event.text,
+                            selectedNoteLink = event.uri
+                        )
                         getNoteStateUseCase.invoke(event.id)
-                            .onSuccess {
-                                uiState =
-                                    uiState.copy(
-                                        showBottomSheet = true,
-                                        timelineAction = TimelineItemAction.Option,
-                                        isFavorite = it.isFavorited,
-                                        selectedUserId = event.id,
-                                        selectedNoteText = event.text,
-                                        selectedNoteLink = event.uri
-                                    )
-                            }
-                            .onFailure {
-                                uiState =
-                                    uiState.copy(
-                                        showBottomSheet = true,
-                                        timelineAction = TimelineItemAction.Option,
-                                        isFavorite = false,
-                                        selectedUserId = event.id,
-                                        selectedNoteText = event.text,
-                                        selectedNoteLink = event.uri
-                                    )
-                            }
+                            .onSuccess { uiState = uiState.copy(isFavorite = it.isFavorited) }
+                            .onFailure { uiState = uiState.copy(isFavorite = false) }
                     }
                 }
 
@@ -125,19 +114,35 @@ class TimelineEventPresenter @Inject constructor(
                 }
 
                 is TimelineItemEvent.OnCopyLinkClicked -> {
-                    uiState = uiState.copy(showBottomSheet = false)
-                    clipBoardManager.setText(AnnotatedString(event.link))
+                    scope.launch {
+                        uiState = uiState.copy(showBottomSheet = false)
+                        val url = if (event.link.isEmpty()) {
+                            val base = dataStoreRepository.getBaseUrl()
+                            "$base/notes/${event.id}"
+                        } else {
+                            event.link
+                        }
+                        clipBoardManager.setText(AnnotatedString(url))
+                    }
                 }
 
                 is TimelineItemEvent.OnShareClicked -> {
-                    uiState = uiState.copy(showBottomSheet = false)
-                    val sendIntent = Intent().apply {
-                        action = Intent.ACTION_SEND
-                        putExtra(Intent.EXTRA_TEXT, event.link)
-                        type = "text/plain"
+                    scope.launch {
+                        uiState = uiState.copy(showBottomSheet = false)
+                        val url = if (event.link.isEmpty()) {
+                            val base = dataStoreRepository.getBaseUrl()
+                            "$base/notes/${event.id}"
+                        } else {
+                            event.link
+                        }
+                        val sendIntent = Intent().apply {
+                            action = Intent.ACTION_SEND
+                            putExtra(Intent.EXTRA_TEXT, url)
+                            type = "text/plain"
+                        }
+                        Intent.createChooser(sendIntent, null)
+                            .also { context.startActivity(it) }
                     }
-                    Intent.createChooser(sendIntent, null)
-                        .also { context.startActivity(it) }
                 }
 
                 is TimelineItemEvent.OnFavoriteClicked -> {

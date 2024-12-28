@@ -21,6 +21,7 @@ import de.jensklingenberg.ktorfit.converter.ResponseConverterFactory
 import io.ktor.client.HttpClient
 import java.security.MessageDigest
 import javax.inject.Inject
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import me.sanao1006.core.data.repository.createMiauthRepository
 import me.sanao1006.core.data.util.suspendRunCatching
@@ -30,6 +31,7 @@ import me.sanao1006.core.model.auth.PermissionKeys
 import me.sanao1006.core.model.requestbody.auth.AppCreateRequestBody
 import me.sanao1006.core.model.requestbody.auth.AuthSessionGenerateRequestBody
 import me.sanao1006.core.model.requestbody.auth.AuthSessionUserKeyRequestBody
+import me.sanao1006.core.network.di.IODispatcher
 import me.sanao1006.datastore.DataStoreRepository
 import me.sanao1006.screens.AuthStateType
 import me.sanao1006.screens.LoginScreen
@@ -39,7 +41,8 @@ import me.snao1006.res_value.ResString
 class LoginScreenPresenter @Inject constructor(
     @NormalApi
     private val httpClient: HttpClient,
-    private val dataStoreRepository: DataStoreRepository
+    private val dataStoreRepository: DataStoreRepository,
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : Presenter<LoginScreen.State> {
     private val ktorfit = Ktorfit.Builder()
         .httpClient(httpClient)
@@ -73,7 +76,7 @@ class LoginScreenPresenter @Inject constructor(
                 }
 
                 is LoginScreen.Event.OnButtonClicked -> {
-                    event.scope.launch {
+                    scope.launch(ioDispatcher) {
                         suspendRunCatching {
                             ktorfit
                                 .baseUrl("$domain/")
@@ -125,7 +128,7 @@ class LoginScreenPresenter @Inject constructor(
                 }
 
                 is LoginScreen.Event.OnAuthButtonClicked -> {
-                    scope.launch {
+                    scope.launch(ioDispatcher) {
                         suspendRunCatching {
                             ktorfit
                                 .baseUrl("$domain/")
@@ -172,6 +175,7 @@ class LoginScreenPresenter @Inject constructor(
                             }
                     }
                 }
+
                 LoginScreen.Event.OnEnterLoginScreen -> {
                     showIcon = true
                 }

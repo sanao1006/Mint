@@ -30,7 +30,8 @@ include(
     "feature:search",
     "feature:notification",
     "feature:announcement",
-    "feature:favorites"
+    "feature:favorites",
+    "feature:antenna"
 )
 include(
     "core:network",

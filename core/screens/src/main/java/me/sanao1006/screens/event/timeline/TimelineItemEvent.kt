@@ -52,10 +52,12 @@ sealed class TimelineItemEvent : CircuitUiEvent {
     ) : TimelineItemEvent()
 
     data class OnCopyLinkClicked(
+        val id: String,
         val link: String
     ) : TimelineItemEvent()
 
     data class OnShareClicked(
+        val id: String,
         val link: String
     ) : TimelineItemEvent()
 

@@ -7,11 +7,13 @@ import dagger.hilt.components.SingletonComponent
 import de.jensklingenberg.ktorfit.Ktorfit
 import javax.inject.Singleton
 import me.sanao1006.core.data.repository.AccountRepository
+import me.sanao1006.core.data.repository.AntennaRepository
 import me.sanao1006.core.data.repository.MetaRepository
 import me.sanao1006.core.data.repository.MiauthRepository
 import me.sanao1006.core.data.repository.NotesRepository
 import me.sanao1006.core.data.repository.UsersRepository
 import me.sanao1006.core.data.repository.createAccountRepository
+import me.sanao1006.core.data.repository.createAntennaRepository
 import me.sanao1006.core.data.repository.createMetaRepository
 import me.sanao1006.core.data.repository.createMiauthRepository
 import me.sanao1006.core.data.repository.createNotesRepository
@@ -58,5 +60,13 @@ object RepositoryModule {
         ktorfit: Ktorfit
     ): MetaRepository {
         return ktorfit.createMetaRepository()
+    }
+
+    @Provides
+    @Singleton
+    fun provideAntennaRepository(
+        ktorfit: Ktorfit
+    ): AntennaRepository {
+        return ktorfit.createAntennaRepository()
     }
 }

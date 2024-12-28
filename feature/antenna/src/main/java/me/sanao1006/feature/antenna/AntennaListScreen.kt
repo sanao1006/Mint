@@ -1,4 +1,4 @@
-package me.sanao1006.feature.favorites
+package me.sanao1006.feature.antenna
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,34 +13,34 @@ import me.sanao1006.core.ui.DrawerItem
 import me.sanao1006.core.ui.DrawerItemScreenWrapper
 import me.sanao1006.core.ui.SubScreenTimelineContentBox
 import me.sanao1006.core.ui.TimelineColumn
-import me.sanao1006.screens.FavoritesScreen
+import me.sanao1006.screens.AntennaListScreen
 import me.sanao1006.screens.event.globalIcon.GlobalIconEvent
 import me.sanao1006.screens.event.timeline.TimelineItemEvent
 
 @OptIn(ExperimentalMaterialApi::class)
-@CircuitInject(FavoritesScreen::class, SingletonComponent::class)
+@CircuitInject(AntennaListScreen::class, SingletonComponent::class)
 @Composable
-fun FavoritesScreen(state: FavoritesScreen.State, modifier: Modifier) {
+fun AntennaListScreen(state: AntennaListScreen.State, modifier: Modifier) {
     Box(modifier = modifier.fillMaxSize()) {
         val snackbarHostState = remember { SnackbarHostState() }
         DrawerItemScreenWrapper(
-            drawerItem = DrawerItem.FAVORITE,
+            drawerItem = DrawerItem.ANTENNA,
             snackbarHostState = snackbarHostState,
             onBackIconClick = {
-                state.globalIconEventSink(GlobalIconEvent.OnArrowBackIconClicked)
+                state.globalIconEventSink(GlobalIconEvent.OnBackBeforeScreen)
             }
         ) {
             SubScreenTimelineContentBox(
-                modifier = it,
                 state = state,
                 snackbarHostState = snackbarHostState,
+                modifier = it,
                 pullRefreshState = state.pullToRefreshState,
                 isRefreshed = state.isRefreshed,
                 contentLoadingState = state.timelineUiState.isSuccessLoading,
-                isEmptyContent = state.favoritesScreenUiState.timelineItems.isEmpty()
+                isEmptyContent = state.uiState.timelineItems.isEmpty()
             ) {
                 TimelineColumn(
-                    timelineItems = state.favoritesScreenUiState.timelineItems,
+                    timelineItems = state.uiState.timelineItems,
                     onIconClick = { id, username, host ->
                         state.timelineEventSink(
                             TimelineItemEvent.OnTimelineItemIconClicked(

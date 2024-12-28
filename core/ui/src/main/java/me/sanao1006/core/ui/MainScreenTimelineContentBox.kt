@@ -19,6 +19,7 @@ import androidx.compose.ui.zIndex
 import me.sanao1006.core.model.uistate.TimelineItemAction
 import me.sanao1006.core.ui.common.ContentLoadingIndicator
 import me.sanao1006.core.ui.common.NoContentsPlaceHolder
+import me.sanao1006.screens.AntennaListScreen
 import me.sanao1006.screens.FavoritesScreen
 import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.MainScreenState
@@ -116,13 +117,15 @@ fun MainScreenTimelineContentBox(
                 when (state) {
                     is HomeScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnCopyLinkClicked(
-                            state.timelineUiState.selectedNoteLink ?: ""
+                            id = state.timelineUiState.selectedUserId ?: "",
+                            link = state.timelineUiState.selectedNoteLink ?: ""
                         )
                     )
 
                     is NotificationScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnCopyLinkClicked(
-                            state.timelineUiState.selectedNoteLink ?: ""
+                            id = state.timelineUiState.selectedUserId ?: "",
+                            link = state.timelineUiState.selectedNoteLink ?: ""
                         )
                     )
                 }
@@ -132,13 +135,15 @@ fun MainScreenTimelineContentBox(
                 when (state) {
                     is HomeScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnShareClicked(
-                            state.timelineUiState.selectedNoteLink ?: ""
+                            id = state.timelineUiState.selectedUserId ?: "",
+                            link = state.timelineUiState.selectedNoteLink ?: ""
                         )
                     )
 
                     is NotificationScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnShareClicked(
-                            state.timelineUiState.selectedNoteLink ?: ""
+                            id = state.timelineUiState.selectedUserId ?: "",
+                            link = state.timelineUiState.selectedNoteLink ?: ""
                         )
                     )
                 }
@@ -270,6 +275,10 @@ fun SubScreenTimelineContentBox(
                                 state.timelineUiState.selectedUserId
                                     ?: ""
 
+                            is AntennaListScreen.State ->
+                                state.timelineUiState.selectedUserId
+                                    ?: ""
+
                             else -> ""
                         }
                     )
@@ -279,6 +288,12 @@ fun SubScreenTimelineContentBox(
             RenoteActionIcon.Quote -> {
                 when (state) {
                     is FavoritesScreen.State -> state.timelineEventSink(
+                        TimelineItemEvent.OnQuoteClicked(
+                            state.timelineUiState.selectedUserId ?: ""
+                        )
+                    )
+
+                    is AntennaListScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnQuoteClicked(
                             state.timelineUiState.selectedUserId ?: ""
                         )
@@ -298,12 +313,26 @@ fun SubScreenTimelineContentBox(
                             null
                         )
                     )
+
+                    is AntennaListScreen.State -> state.timelineEventSink(
+                        TimelineItemEvent.OnDetailClicked(
+                            state.timelineUiState.selectedUserId ?: "",
+                            null,
+                            null
+                        )
+                    )
                 }
             }
 
             OptionActionIcon.Copy -> {
                 when (state) {
                     is FavoritesScreen.State -> state.timelineEventSink(
+                        TimelineItemEvent.OnCopyClicked(
+                            state.timelineUiState.selectedNoteText ?: ""
+                        )
+                    )
+
+                    is AntennaListScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnCopyClicked(
                             state.timelineUiState.selectedNoteText ?: ""
                         )
@@ -315,7 +344,15 @@ fun SubScreenTimelineContentBox(
                 when (state) {
                     is FavoritesScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnCopyLinkClicked(
-                            state.timelineUiState.selectedNoteLink ?: ""
+                            id = state.timelineUiState.selectedUserId ?: "",
+                            link = state.timelineUiState.selectedNoteLink ?: ""
+                        )
+                    )
+
+                    is AntennaListScreen.State -> state.timelineEventSink(
+                        TimelineItemEvent.OnCopyLinkClicked(
+                            id = state.timelineUiState.selectedUserId ?: "",
+                            link = state.timelineUiState.selectedNoteLink ?: ""
                         )
                     )
                 }
@@ -325,15 +362,32 @@ fun SubScreenTimelineContentBox(
                 when (state) {
                     is FavoritesScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnShareClicked(
-                            state.timelineUiState.selectedNoteLink ?: ""
+                            id = state.timelineUiState.selectedUserId ?: "",
+                            link = state.timelineUiState.selectedNoteLink ?: ""
                         )
                     )
+
+                    is AntennaListScreen.State -> {
+                        state.timelineEventSink(
+                            TimelineItemEvent.OnShareClicked(
+                                id = state.timelineUiState.selectedUserId ?: "",
+                                link = state.timelineUiState.selectedNoteLink ?: ""
+                            )
+                        )
+                    }
                 }
             }
 
             OptionActionIcon.Favorite, OptionActionIcon.UnFavorite -> {
                 when (state) {
                     is FavoritesScreen.State -> state.timelineEventSink(
+                        TimelineItemEvent.OnFavoriteClicked(
+                            state.timelineUiState.selectedUserId ?: "",
+                            snackbarHostState
+                        )
+                    )
+
+                    is AntennaListScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnFavoriteClicked(
                             state.timelineUiState.selectedUserId ?: "",
                             snackbarHostState
@@ -346,6 +400,7 @@ fun SubScreenTimelineContentBox(
     onDismissRequest: () -> Unit = {
         when (state) {
             is FavoritesScreen.State -> state.eventSink(FavoritesScreen.Event.OnDismissRequest)
+            is AntennaListScreen.State -> state.eventSink(AntennaListScreen.Event.OnDismissRequest)
         }
     },
     timelineContent: @Composable () -> Unit
@@ -391,14 +446,20 @@ fun SubScreenTimelineContentBox(
                     state.timelineUiState.showBottomSheet
                 }
 
+                is AntennaListScreen.State -> {
+                    state.timelineUiState.showBottomSheet
+                }
+
                 else -> false
             },
             timelineItemAction = when (state) {
                 is FavoritesScreen.State -> state.timelineUiState.timelineAction
+                is AntennaListScreen.State -> state.timelineUiState.timelineAction
                 else -> TimelineItemAction.None
             },
             isFavorite = when (state) {
                 is FavoritesScreen.State -> state.timelineUiState.isFavorite
+                is AntennaListScreen.State -> state.timelineUiState.isFavorite
                 else -> false
             },
             onDismissRequest = onDismissRequest,
