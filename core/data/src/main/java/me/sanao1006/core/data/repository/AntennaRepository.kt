@@ -5,6 +5,7 @@ import de.jensklingenberg.ktorfit.http.POST
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import me.sanao1006.core.model.antenna.Antenna
+import me.sanao1006.core.model.requestbody.antenna.AntennaCreateRequestBody
 import me.sanao1006.core.model.requestbody.antenna.AntennaIdRequestBody
 import me.sanao1006.core.model.requestbody.antenna.AntennaUpdateRequestBody
 import me.sanao1006.core.model.requestbody.antenna.AntennasNotesRequestBody
@@ -28,7 +29,7 @@ interface AntennaRepository {
 
     @POST("api/antennas/create")
     suspend fun createAntenna(
-        @Body body: AntennasNotesRequestBody
+        @Body body: AntennaCreateRequestBody
     ): Antenna
 
     @POST("api/antennas/update")
