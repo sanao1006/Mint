@@ -15,14 +15,15 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.launch
+import me.sanao1006.core.data.compositionLocal.LocalNavigator
 import me.sanao1006.core.domain.antenna.CreateAntennaUseCase
 import me.sanao1006.core.domain.antenna.DeleteAntennaUseCase
 import me.sanao1006.core.domain.antenna.UpdateAntennaUseCase
 import me.sanao1006.core.model.uistate.AntennaPostScreenUiState
 import me.sanao1006.screens.AntennaPostScreen
 import me.sanao1006.screens.AntennaPostScreenType
+import me.sanao1006.screens.AntennaScreen
 import me.sanao1006.screens.event.globalIcon.GlobalIconEventPresenter
-import me.snao1006.res_value.ResString
 
 class AntennaPostScreenPresenter @AssistedInject constructor(
     @Assisted private val screen: AntennaPostScreen,
@@ -43,6 +44,7 @@ class AntennaPostScreenPresenter @AssistedInject constructor(
         val isEdit = screen.antenna != null
         val scope = rememberCoroutineScope()
         val context = LocalContext.current
+        val navigator = LocalNavigator.current
 
         var uiState: AntennaPostScreenUiState by rememberRetained {
             mutableStateOf(AntennaPostScreenUiState())
@@ -125,7 +127,7 @@ class AntennaPostScreenPresenter @AssistedInject constructor(
                     uiState = uiState.copy(isOnlyFileNote = event.isOnlyFileNote)
                 }
 
-                is AntennaPostScreen.Event.OnSaveClick -> {
+                AntennaPostScreen.Event.OnSaveClick -> {
                     scope.launch {
                         if (isEdit) {
                             screen.antenna?.let {
@@ -143,13 +145,19 @@ class AntennaPostScreenPresenter @AssistedInject constructor(
                                     excludeBots = uiState.isBotAccountExcluded
                                 )
                                     .onSuccess {
-                                        event.snackbarHostState.showSnackbar(
-                                            message = context.getString(ResString.antenna_created_success)
+                                        navigator.pop(
+                                            result = AntennaScreen.Result(
+                                                success = true,
+                                                screenName = "update"
+                                            )
                                         )
                                     }
                                     .onFailure {
-                                        event.snackbarHostState.showSnackbar(
-                                            context.getString(ResString.antenna_created_failed)
+                                        navigator.pop(
+                                            result = AntennaScreen.Result(
+                                                success = false,
+                                                screenName = "update"
+                                            )
                                         )
                                     }
                             }
@@ -167,20 +175,26 @@ class AntennaPostScreenPresenter @AssistedInject constructor(
                                 excludeBots = uiState.isBotAccountExcluded
                             )
                                 .onSuccess {
-                                    event.snackbarHostState.showSnackbar(
-                                        message = context.getString(ResString.antenna_created_success)
+                                    navigator.pop(
+                                        result = AntennaScreen.Result(
+                                            success = true,
+                                            screenName = "create"
+                                        )
                                     )
                                 }
                                 .onFailure {
-                                    event.snackbarHostState.showSnackbar(
-                                        context.getString(ResString.antenna_created_failed)
+                                    navigator.pop(
+                                        result = AntennaScreen.Result(
+                                            success = false,
+                                            screenName = "create"
+                                        )
                                     )
                                 }
                         }
                     }
                 }
 
-                is AntennaPostScreen.Event.OnDeleteClick -> {
+                AntennaPostScreen.Event.OnDeleteClick -> {
                     scope.launch {
                         screen.antenna?.let {
                             deleteAntennaUseCase.invoke(it.id)

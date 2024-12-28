@@ -143,10 +143,10 @@ private fun AntennaPostScreenUiContent(
         AntennaPostButtons(
             isEdit = state.isEdit,
             onSaveButtonClick = {
-                state.eventSink(AntennaPostScreen.Event.OnSaveClick(snackbarHostState))
+                state.eventSink(AntennaPostScreen.Event.OnSaveClick)
             },
             onDeleteButtonClick = {
-                state.eventSink(AntennaPostScreen.Event.OnDeleteClick(snackbarHostState))
+                state.eventSink(AntennaPostScreen.Event.OnDeleteClick)
             }
         )
     }

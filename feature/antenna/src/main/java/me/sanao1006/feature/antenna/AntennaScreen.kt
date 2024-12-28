@@ -31,6 +31,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
+import com.slack.circuitx.effects.LaunchedImpressionEffect
 import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
 import me.sanao1006.core.designsystem.MintTheme
@@ -50,6 +51,9 @@ import me.snao1006.res_value.ResString
 fun AntennaScreen(state: AntennaScreen.State, modifier: Modifier) {
     Box(modifier = modifier.fillMaxSize()) {
         val snackbarHostState = remember { SnackbarHostState() }
+        LaunchedImpressionEffect(state.isSuccessPostAntenna) {
+            state.eventSink(AntennaScreen.Event.OnAntennaPost(snackbarHostState))
+        }
         DrawerItemScreenWrapper(
             drawerItem = DrawerItem.ANTENNA,
             snackbarHostState = snackbarHostState,
