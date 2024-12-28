@@ -11,4 +11,5 @@ dependencies {
     implementation(projects.core.resValues)
     implementation(projects.core.data)
     implementation(projects.core.domain)
+    implementation(projects.core.dataStore)
 }

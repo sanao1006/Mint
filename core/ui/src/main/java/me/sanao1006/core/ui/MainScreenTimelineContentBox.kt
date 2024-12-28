@@ -28,7 +28,6 @@ import me.sanao1006.screens.NotificationScreen
 import me.sanao1006.screens.SubScreenState
 import me.sanao1006.screens.event.notecreate.NoteCreateEvent
 import me.sanao1006.screens.event.timeline.TimelineItemEvent
-import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterialApi::class)
 @Composable
@@ -118,13 +117,15 @@ fun MainScreenTimelineContentBox(
                 when (state) {
                     is HomeScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnCopyLinkClicked(
-                            state.timelineUiState.selectedNoteLink ?: ""
+                            id = state.timelineUiState.selectedUserId ?: "",
+                            link = state.timelineUiState.selectedNoteLink ?: ""
                         )
                     )
 
                     is NotificationScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnCopyLinkClicked(
-                            state.timelineUiState.selectedNoteLink ?: ""
+                            id = state.timelineUiState.selectedUserId ?: "",
+                            link = state.timelineUiState.selectedNoteLink ?: ""
                         )
                     )
                 }
@@ -134,13 +135,15 @@ fun MainScreenTimelineContentBox(
                 when (state) {
                     is HomeScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnShareClicked(
-                            state.timelineUiState.selectedNoteLink ?: ""
+                            id = state.timelineUiState.selectedUserId ?: "",
+                            link = state.timelineUiState.selectedNoteLink ?: ""
                         )
                     )
 
                     is NotificationScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnShareClicked(
-                            state.timelineUiState.selectedNoteLink ?: ""
+                            id = state.timelineUiState.selectedUserId ?: "",
+                            link = state.timelineUiState.selectedNoteLink ?: ""
                         )
                     )
                 }
@@ -341,13 +344,15 @@ fun SubScreenTimelineContentBox(
                 when (state) {
                     is FavoritesScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnCopyLinkClicked(
-                            state.timelineUiState.selectedNoteLink ?: ""
+                            id = state.timelineUiState.selectedUserId ?: "",
+                            link = state.timelineUiState.selectedNoteLink ?: ""
                         )
                     )
 
                     is AntennaListScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnCopyLinkClicked(
-                            state.timelineUiState.selectedNoteLink ?: ""
+                            id = state.timelineUiState.selectedUserId ?: "",
+                            link = state.timelineUiState.selectedNoteLink ?: ""
                         )
                     )
                 }
@@ -357,15 +362,16 @@ fun SubScreenTimelineContentBox(
                 when (state) {
                     is FavoritesScreen.State -> state.timelineEventSink(
                         TimelineItemEvent.OnShareClicked(
-                            state.timelineUiState.selectedNoteLink ?: ""
+                            id = state.timelineUiState.selectedUserId ?: "",
+                            link = state.timelineUiState.selectedNoteLink ?: ""
                         )
                     )
 
                     is AntennaListScreen.State -> {
-                        Timber.tag("ray").d("share ${state.timelineUiState.selectedNoteLink}")
                         state.timelineEventSink(
                             TimelineItemEvent.OnShareClicked(
-                                state.timelineUiState.selectedNoteLink ?: ""
+                                id = state.timelineUiState.selectedUserId ?: "",
+                                link = state.timelineUiState.selectedNoteLink ?: ""
                             )
                         )
                     }
