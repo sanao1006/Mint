@@ -3,6 +3,7 @@ package me.sanao1006.feature.antenna
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.retained.rememberRetained
@@ -12,13 +13,22 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.launch
+import me.sanao1006.core.data.compositionLocal.LocalNavigator
+import me.sanao1006.core.domain.antenna.CreateAntennaUseCase
+import me.sanao1006.core.domain.antenna.DeleteAntennaUseCase
+import me.sanao1006.core.domain.antenna.UpdateAntennaUseCase
 import me.sanao1006.core.model.uistate.AntennaPostScreenUiState
 import me.sanao1006.screens.AntennaPostScreen
 import me.sanao1006.screens.AntennaPostScreenType
+import me.sanao1006.screens.AntennaScreen
 import me.sanao1006.screens.event.globalIcon.GlobalIconEventPresenter
 
 class AntennaPostScreenPresenter @AssistedInject constructor(
     @Assisted private val screen: AntennaPostScreen,
+    private val createAntennaUseCase: CreateAntennaUseCase,
+    private val deleteAntennaUseCase: DeleteAntennaUseCase,
+    private val updateAntennaUseCase: UpdateAntennaUseCase,
     private val globalIconEventPresenter: GlobalIconEventPresenter
 ) : Presenter<AntennaPostScreen.State> {
     @Composable
@@ -30,6 +40,9 @@ class AntennaPostScreenPresenter @AssistedInject constructor(
         } else {
             AntennaPostScreenType.EDIT
         }
+        val isEdit = screen.antenna != null
+        val scope = rememberCoroutineScope()
+        val navigator = LocalNavigator.current
 
         var uiState: AntennaPostScreenUiState by rememberRetained {
             mutableStateOf(AntennaPostScreenUiState())
@@ -57,7 +70,7 @@ class AntennaPostScreenPresenter @AssistedInject constructor(
         return AntennaPostScreen.State(
             uiState = uiState,
             screenType = postScreenType,
-            isEdit = screen.antenna != null,
+            isEdit = isEdit,
             globalIconEventSink = globalIconEventState.eventSink
         ) { event ->
             when (event) {
@@ -78,7 +91,7 @@ class AntennaPostScreenPresenter @AssistedInject constructor(
 
                 is AntennaPostScreen.Event.OnUsersNameChange -> {
                     uiState = if (uiState.antennaSource != event.antennaSource) {
-                        uiState.copy(users = null)
+                        uiState.copy(users = listOf(""))
                     } else {
                         uiState.copy(users = event.users.split("\n"))
                     }
@@ -112,12 +125,98 @@ class AntennaPostScreenPresenter @AssistedInject constructor(
                     uiState = uiState.copy(isOnlyFileNote = event.isOnlyFileNote)
                 }
 
-                is AntennaPostScreen.Event.OnSaveClick -> {
-                    // Save the antenna
+                AntennaPostScreen.Event.OnSaveClick -> {
+                    scope.launch {
+                        if (isEdit) {
+                            screen.antenna?.let {
+                                updateAntennaUseCase.invoke(
+                                    antennaId = it.id,
+                                    name = uiState.antennaName,
+                                    src = uiState.antennaSource,
+                                    userListId = null,
+                                    keywords = uiState.keywordValue.split("\n")
+                                        .map { it.split(" ") },
+                                    caseSensitive = uiState.isCaseSensitive,
+                                    withReplies = uiState.isReplyIncluded,
+                                    withFile = uiState.isOnlyFileNote,
+                                    localOnly = uiState.isLocalOnly,
+                                    excludeBots = uiState.isBotAccountExcluded
+                                )
+                                    .onSuccess {
+                                        navigator.pop(
+                                            result = AntennaScreen.Result(
+                                                success = true,
+                                                screenName = "update"
+                                            )
+                                        )
+                                    }
+                                    .onFailure {
+                                        navigator.pop(
+                                            result = AntennaScreen.Result(
+                                                success = false,
+                                                screenName = "update"
+                                            )
+                                        )
+                                    }
+                            }
+                        } else {
+                            createAntennaUseCase.invoke(
+                                name = uiState.antennaName,
+                                src = uiState.antennaSource,
+                                userListId = null,
+                                keywords = uiState.keywordValue.split("\n")
+                                    .map { it.split(" ") },
+                                users = uiState.users,
+                                excludeKeywords = uiState.exceptedKeywordValue.split("\n")
+                                    .map { it.split(" ") },
+                                caseSensitive = uiState.isCaseSensitive,
+                                withReplies = uiState.isReplyIncluded,
+                                withFile = uiState.isOnlyFileNote,
+                                localOnly = uiState.isLocalOnly,
+                                excludeBots = uiState.isBotAccountExcluded
+                            )
+                                .onSuccess {
+                                    navigator.pop(
+                                        result = AntennaScreen.Result(
+                                            success = true,
+                                            screenName = "create"
+                                        )
+                                    )
+                                }
+                                .onFailure {
+                                    navigator.pop(
+                                        result = AntennaScreen.Result(
+                                            success = false,
+                                            screenName = "create"
+                                        )
+                                    )
+                                }
+                        }
+                    }
                 }
 
-                is AntennaPostScreen.Event.OnDeleteClick -> {
-                    // Delete the antenna
+                AntennaPostScreen.Event.OnDeleteClick -> {
+                    scope.launch {
+                        screen.antenna?.let {
+                            deleteAntennaUseCase.invoke(it.id)
+                                .onSuccess {
+                                    navigator.pop(
+                                        result = AntennaScreen.Result(
+                                            success = true,
+                                            screenName = "delete"
+                                        )
+                                    )
+                                }
+                                .onFailure {
+                                    navigator.pop(
+                                        result = AntennaScreen.Result(
+                                            success = false,
+                                            screenName = "delete"
+                                        )
+                                    )
+                                }
+                        }
+                    }
                 }
             }
         }

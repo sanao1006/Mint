@@ -3,8 +3,8 @@ package me.sanao1006.core.model.uistate
 data class AntennaPostScreenUiState(
     val antennaName: String = "",
     val expanded: Boolean = false,
-    val antennaSource: String = "",
-    val users: List<String>? = null,
+    val antennaSource: String = "all",
+    val users: List<String> = listOf(""),
     val isBotAccountExcluded: Boolean = false,
     val isReplyIncluded: Boolean = false,
     val keywordValue: String = "",

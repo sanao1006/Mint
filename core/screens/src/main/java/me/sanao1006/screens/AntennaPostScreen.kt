@@ -71,13 +71,9 @@ data class AntennaPostScreen(
             val isOnlyFileNote: Boolean
         ) : Event()
 
-        data class OnSaveClick(
-            val antenna: Antenna
-        ) : Event()
+        data object OnSaveClick : Event()
 
-        data class OnDeleteClick(
-            val id: String
-        ) : Event()
+        data object OnDeleteClick : Event()
     }
 }
 
