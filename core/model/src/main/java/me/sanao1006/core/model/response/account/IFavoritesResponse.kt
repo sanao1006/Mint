@@ -2,7 +2,7 @@ package me.sanao1006.core.model.response.account
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import me.sanao1006.core.model.response.notes.NotesTimelineResponse
+import me.sanao1006.core.model.meta.Note
 
 @Serializable
 data class IFavoritesResponse(
@@ -11,7 +11,7 @@ data class IFavoritesResponse(
     @SerialName("id")
     val id: String,
     @SerialName("note")
-    val note: NotesTimelineResponse,
+    val note: Note,
     @SerialName("noteId")
     val noteId: String
 )

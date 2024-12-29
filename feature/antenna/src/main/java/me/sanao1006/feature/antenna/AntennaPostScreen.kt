@@ -23,6 +23,7 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -32,10 +33,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
+import me.sanao1006.core.designsystem.MintTheme
 import me.sanao1006.core.ui.DrawerItem
 import me.sanao1006.core.ui.DrawerItemScreenWrapper
 import me.sanao1006.screens.AntennaPostScreen
@@ -56,12 +59,80 @@ fun AntennaPostScreen(state: AntennaPostScreen.State, modifier: Modifier) {
             }
         ) {
             AntennaPostScreenUiContent(
-                state = state,
-                snackbarHostState = snackbarHostState,
+                antennaName = state.uiState.antennaName,
+                expanded = state.uiState.expanded,
+                isBotAccountExcluded = state.uiState.isBotAccountExcluded,
+                antennaSource = state.uiState.antennaSource,
+                username = state.uiState.users.joinToString("\n"),
+                isReplyIncluded = state.uiState.isReplyIncluded,
+                keywordValue = state.uiState.keywordValue,
+                exceptedKeywordValue = state.uiState.exceptedKeywordValue,
+                isLocalOnly = state.uiState.isLocalOnly,
+                isCaseSensitive = state.uiState.isCaseSensitive,
+                isOnlyFileNote = state.uiState.isOnlyFileNote,
                 modifier = it
                     .fillMaxWidth()
                     .padding(vertical = 16.dp, horizontal = 24.dp)
-                    .verticalScroll(rememberScrollState())
+                    .verticalScroll(rememberScrollState()),
+                onAntennaChange = {
+                    state.eventSink(AntennaPostScreen.Event.OnAntennaNameChange(it))
+                },
+                onExpandedChange = { state.eventSink(AntennaPostScreen.Event.OnExpandClick(it)) },
+                onDropDownItemClick = {
+                    state.eventSink(AntennaPostScreen.Event.OnDropDownItemClick(it))
+                },
+                onUsernameChange = { text, antennaSource ->
+                    state.eventSink(
+                        AntennaPostScreen.Event.OnUsersNameChange(
+                            text,
+                            antennaSource
+                        )
+                    )
+                },
+                onBotAccountExcludedChange = {
+                    state.eventSink(
+                        AntennaPostScreen.Event.OnBotAccountExcludedChange(
+                            it
+                        )
+                    )
+                },
+                onReplyIncludedChange = {
+                    state.eventSink(
+                        AntennaPostScreen.Event.OnReplyIncludedChange(
+                            it
+                        )
+                    )
+                },
+                onKeywordChange = {
+                    state.eventSink(AntennaPostScreen.Event.OnKeywordValueChange(it))
+                },
+                onExceptedKeywordChange = {
+                    state.eventSink(
+                        AntennaPostScreen.Event.OnExceptedKeywordValueChange(
+                            it
+                        )
+                    )
+                },
+                onLocalOnlyChange = {
+                    state.eventSink(AntennaPostScreen.Event.OnLocalOnlyChange(it))
+                },
+                onCaseSensitiveChange = {
+                    state.eventSink(
+                        AntennaPostScreen.Event.OnCaseSensitiveChange(
+                            it
+                        )
+                    )
+                },
+                onOnlyFileNoteChange = {
+                    state.eventSink(AntennaPostScreen.Event.OnOnlyFileNoteChange(it))
+                },
+                isEdit = state.isEdit,
+                onSaveButtonClick = {
+                    state.eventSink(AntennaPostScreen.Event.OnSaveClick)
+                },
+                onDeleteButtonClick = {
+                    state.eventSink(AntennaPostScreen.Event.OnDeleteClick)
+                }
             )
         }
     }
@@ -69,85 +140,63 @@ fun AntennaPostScreen(state: AntennaPostScreen.State, modifier: Modifier) {
 
 @Composable
 private fun AntennaPostScreenUiContent(
-    state: AntennaPostScreen.State,
-    snackbarHostState: SnackbarHostState,
-    modifier: Modifier = Modifier
+    isEdit: Boolean,
+    antennaName: String,
+    expanded: Boolean,
+    isBotAccountExcluded: Boolean,
+    antennaSource: String,
+    username: String,
+    isReplyIncluded: Boolean,
+    keywordValue: String,
+    exceptedKeywordValue: String,
+    isLocalOnly: Boolean,
+    isCaseSensitive: Boolean,
+    isOnlyFileNote: Boolean,
+    modifier: Modifier = Modifier,
+    onAntennaChange: (String) -> Unit,
+    onExpandedChange: (Boolean) -> Unit,
+    onDropDownItemClick: (String) -> Unit,
+    onBotAccountExcludedChange: (Boolean) -> Unit,
+    onUsernameChange: (String, String) -> Unit,
+    onReplyIncludedChange: (Boolean) -> Unit,
+    onKeywordChange: (String) -> Unit,
+    onExceptedKeywordChange: (String) -> Unit,
+    onLocalOnlyChange: (Boolean) -> Unit,
+    onCaseSensitiveChange: (Boolean) -> Unit,
+    onOnlyFileNoteChange: (Boolean) -> Unit,
+    onSaveButtonClick: () -> Unit,
+    onDeleteButtonClick: () -> Unit
 ) {
     Column(modifier = modifier) {
         AntennaPostForm(
-            antennaName = state.uiState.antennaName,
-            expanded = state.uiState.expanded,
-            isBotAccountExcluded = state.uiState.isBotAccountExcluded,
-            antennaSource = state.uiState.antennaSource,
-            username = state.uiState.users?.joinToString("\n") ?: "",
-            isReplyIncluded = state.uiState.isReplyIncluded,
-            keywordValue = state.uiState.keywordValue,
-            exceptedKeywordValue = state.uiState.exceptedKeywordValue,
-            isLocalOnly = state.uiState.isLocalOnly,
-            isCaseSensitive = state.uiState.isCaseSensitive,
-            isOnlyFileNote = state.uiState.isOnlyFileNote,
-            onAntennaChange = {
-                state.eventSink(AntennaPostScreen.Event.OnAntennaNameChange(it))
-            },
-            onExpandedChange = { state.eventSink(AntennaPostScreen.Event.OnExpandClick(it)) },
-            onDropDownItemClick = {
-                state.eventSink(AntennaPostScreen.Event.OnDropDownItemClick(it))
-            },
-            onUsernameChange = { text, antennaSource ->
-                state.eventSink(
-                    AntennaPostScreen.Event.OnUsersNameChange(
-                        text,
-                        antennaSource
-                    )
-                )
-            },
-            onBotAccountExcludedChange = {
-                state.eventSink(
-                    AntennaPostScreen.Event.OnBotAccountExcludedChange(
-                        it
-                    )
-                )
-            },
-            onReplyIncludedChange = {
-                state.eventSink(
-                    AntennaPostScreen.Event.OnReplyIncludedChange(
-                        it
-                    )
-                )
-            },
-            onKeywordChange = {
-                state.eventSink(AntennaPostScreen.Event.OnKeywordValueChange(it))
-            },
-            onExceptedKeywordChange = {
-                state.eventSink(
-                    AntennaPostScreen.Event.OnExceptedKeywordValueChange(
-                        it
-                    )
-                )
-            },
-            onLocalOnlyChange = {
-                state.eventSink(AntennaPostScreen.Event.OnLocalOnlyChange(it))
-            },
-            onCaseSensitiveChange = {
-                state.eventSink(
-                    AntennaPostScreen.Event.OnCaseSensitiveChange(
-                        it
-                    )
-                )
-            },
-            onOnlyFileNoteChange = {
-                state.eventSink(AntennaPostScreen.Event.OnOnlyFileNoteChange(it))
-            }
+            antennaName = antennaName,
+            expanded = expanded,
+            isBotAccountExcluded = isBotAccountExcluded,
+            antennaSource = antennaSource,
+            username = username,
+            isReplyIncluded = isReplyIncluded,
+            keywordValue = keywordValue,
+            exceptedKeywordValue = exceptedKeywordValue,
+            isLocalOnly = isLocalOnly,
+            isCaseSensitive = isCaseSensitive,
+            isOnlyFileNote = isOnlyFileNote,
+            onAntennaChange = onAntennaChange,
+            onExpandedChange = onExpandedChange,
+            onDropDownItemClick = onDropDownItemClick,
+            onUsernameChange = onUsernameChange,
+            onBotAccountExcludedChange = onBotAccountExcludedChange,
+            onReplyIncludedChange = onReplyIncludedChange,
+            onKeywordChange = onKeywordChange,
+            onExceptedKeywordChange = onExceptedKeywordChange,
+            onLocalOnlyChange = onLocalOnlyChange,
+            onCaseSensitiveChange = onCaseSensitiveChange,
+            onOnlyFileNoteChange = onOnlyFileNoteChange
         )
         Spacer(modifier = Modifier.height(32.dp))
         AntennaPostButtons(
-            isEdit = state.isEdit,
-            onSaveButtonClick = {
-                state.eventSink(AntennaPostScreen.Event.OnSaveClick)
-            },
-            onDeleteButtonClick = {
-                state.eventSink(AntennaPostScreen.Event.OnDeleteClick)
-            }
+            isEdit = isEdit,
+            onSaveButtonClick = onSaveButtonClick,
+            onDeleteButtonClick = onDeleteButtonClick
         )
     }
 }
@@ -344,5 +393,41 @@ private fun AntennaPostSwitch(
             },
             onCheckedChange = onCheckedChange
         )
+    }
+}
+
+@PreviewLightDark
+@Composable
+private fun PreviewAntennaPostScreen() {
+    MintTheme {
+        Surface {
+            AntennaPostScreenUiContent(
+                isEdit = true,
+                antennaName = "Antenna Name",
+                expanded = false,
+                isBotAccountExcluded = false,
+                antennaSource = AntennaSource.USERS.body,
+                username = "username",
+                isReplyIncluded = false,
+                keywordValue = "keyword",
+                exceptedKeywordValue = "excepted keyword",
+                isLocalOnly = false,
+                isCaseSensitive = false,
+                isOnlyFileNote = false,
+                onAntennaChange = { },
+                onExpandedChange = { },
+                onDropDownItemClick = { },
+                onBotAccountExcludedChange = { },
+                onUsernameChange = { _, _ -> },
+                onReplyIncludedChange = { },
+                onKeywordChange = { },
+                onExceptedKeywordChange = { },
+                onLocalOnlyChange = { },
+                onCaseSensitiveChange = { },
+                onOnlyFileNoteChange = { },
+                onSaveButtonClick = { },
+                onDeleteButtonClick = { }
+            )
+        }
     }
 }

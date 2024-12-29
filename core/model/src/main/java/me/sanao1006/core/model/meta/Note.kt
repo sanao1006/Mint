@@ -1,4 +1,4 @@
-package me.sanao1006.core.model.response.notes
+package me.sanao1006.core.model.meta
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -13,7 +13,7 @@ import me.sanao1006.core.model.notes.TimelineItem
 import me.sanao1006.core.model.notes.Visibility
 
 @Serializable
-data class NotesTimelineResponse(
+data class Note(
     @SerialName("channel")
     val channel: Channel = Channel(),
     @SerialName("channelId")
@@ -51,7 +51,7 @@ data class NotesTimelineResponse(
     @SerialName("reactionEmojis")
     val reactionEmojis: JsonObject? = null,
     @SerialName("renote")
-    val renote: Renote? = Renote(),
+    val renote: Renote? = null,
     @SerialName("renoteCount")
     val renoteCount: Int = 0,
     @SerialName("renoteId")
@@ -59,7 +59,7 @@ data class NotesTimelineResponse(
     @SerialName("repliesCount")
     val repliesCount: Int = 0,
     @SerialName("reply")
-    val reply: Reply? = Reply(),
+    val reply: Reply? = null,
     @SerialName("replyId")
     val replyId: String? = null,
     @SerialName("tags")
@@ -84,7 +84,7 @@ data class NotesTimelineResponse(
             user = user,
             text = text.orEmpty(),
             id = id,
-            visibility = Visibility.get(visibility),
+            visibility = Visibility.Companion.get(visibility),
             uri = uri,
             createdAt = createdAt,
             reactions = reactions,

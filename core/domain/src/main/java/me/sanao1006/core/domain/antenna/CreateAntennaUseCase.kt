@@ -38,7 +38,8 @@ class CreateAntennaUseCase @Inject constructor(
                     localOnly = localOnly,
                     excludeBots = excludeBots,
                     withReplies = withReplies,
-                    withFile = withFile
+                    withFile = withFile,
+                    notify = false
                 )
             )
         }

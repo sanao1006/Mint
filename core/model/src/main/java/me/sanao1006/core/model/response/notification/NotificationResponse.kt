@@ -3,7 +3,7 @@ package me.sanao1006.core.model.response.notification
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import me.sanao1006.core.model.common.User
-import me.sanao1006.core.model.response.notes.NotesTimelineResponse
+import me.sanao1006.core.model.meta.Note
 import me.sanao1006.core.model.uistate.NotificationUiStateObject
 
 @Serializable
@@ -13,7 +13,7 @@ data class NotificationResponse(
     @SerialName("id")
     val id: String,
     @SerialName("note")
-    val note: NotesTimelineResponse? = null,
+    val note: Note? = null,
     @SerialName("type")
     val type: String,
     @SerialName("user")
