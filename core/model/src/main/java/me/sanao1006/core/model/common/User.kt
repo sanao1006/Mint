@@ -2,9 +2,9 @@ package me.sanao1006.core.model.common
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonObject
 import me.sanao1006.core.model.notes.AvatarDecoration
 import me.sanao1006.core.model.notes.BadgeRole
-import me.sanao1006.core.model.notes.Emojis
 import me.sanao1006.core.model.notes.Instance
 
 @Serializable
@@ -13,7 +13,7 @@ data class User(
     val avatarDecorations: List<AvatarDecoration> = emptyList(),
     val avatarUrl: String? = null,
     val badgeRoles: List<BadgeRole>? = null,
-    val emojis: Emojis = Emojis(),
+    val emojis: JsonObject? = null,
     val host: String? = null,
     val id: String = "",
     val instance: Instance? = null,
