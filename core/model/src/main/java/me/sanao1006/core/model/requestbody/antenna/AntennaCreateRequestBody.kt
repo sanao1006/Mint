@@ -14,5 +14,6 @@ data class AntennaCreateRequestBody(
     val localOnly: Boolean,
     val excludeBots: Boolean,
     val withReplies: Boolean,
-    val withFile: Boolean
+    val withFile: Boolean,
+    val notify: Boolean
 )
