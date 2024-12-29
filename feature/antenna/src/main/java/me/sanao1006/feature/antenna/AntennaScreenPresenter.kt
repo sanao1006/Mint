@@ -41,7 +41,7 @@ class AntennaScreenPresenter @Inject constructor(
         val scope = rememberCoroutineScope()
         val context = LocalContext.current
         val navigator = LocalNavigator.current
-        var isSuccessPostAntenna: Boolean? by rememberRetained { mutableStateOf(null) }
+        var isSuccessPostAntenna: Boolean? by remember { mutableStateOf(null) }
         var screenName: String by rememberRetained { mutableStateOf("") }
 
         var uiState: AntennaScreenUiState by rememberRetained {

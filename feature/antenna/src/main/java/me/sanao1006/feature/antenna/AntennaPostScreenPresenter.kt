@@ -5,7 +5,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.presenter.Presenter
@@ -43,7 +42,6 @@ class AntennaPostScreenPresenter @AssistedInject constructor(
         }
         val isEdit = screen.antenna != null
         val scope = rememberCoroutineScope()
-        val context = LocalContext.current
         val navigator = LocalNavigator.current
 
         var uiState: AntennaPostScreenUiState by rememberRetained {
@@ -93,7 +91,7 @@ class AntennaPostScreenPresenter @AssistedInject constructor(
 
                 is AntennaPostScreen.Event.OnUsersNameChange -> {
                     uiState = if (uiState.antennaSource != event.antennaSource) {
-                        uiState.copy(users = null)
+                        uiState.copy(users = listOf(""))
                     } else {
                         uiState.copy(users = event.users.split("\n"))
                     }
@@ -138,7 +136,7 @@ class AntennaPostScreenPresenter @AssistedInject constructor(
                                     userListId = null,
                                     keywords = uiState.keywordValue.split("\n")
                                         .map { it.split(" ") },
-                                    canSensitive = uiState.isCaseSensitive,
+                                    caseSensitive = uiState.isCaseSensitive,
                                     withReplies = uiState.isReplyIncluded,
                                     withFile = uiState.isOnlyFileNote,
                                     localOnly = uiState.isLocalOnly,
@@ -168,7 +166,10 @@ class AntennaPostScreenPresenter @AssistedInject constructor(
                                 userListId = null,
                                 keywords = uiState.keywordValue.split("\n")
                                     .map { it.split(" ") },
-                                canSensitive = uiState.isCaseSensitive,
+                                users = uiState.users,
+                                excludeKeywords = uiState.exceptedKeywordValue.split("\n")
+                                    .map { it.split(" ") },
+                                caseSensitive = uiState.isCaseSensitive,
                                 withReplies = uiState.isReplyIncluded,
                                 withFile = uiState.isOnlyFileNote,
                                 localOnly = uiState.isLocalOnly,

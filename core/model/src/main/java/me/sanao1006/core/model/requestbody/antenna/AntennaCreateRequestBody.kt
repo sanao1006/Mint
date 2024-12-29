@@ -10,9 +10,9 @@ data class AntennaCreateRequestBody(
     val keywords: List<List<String>> = emptyList(),
     val excludeKeywords: List<List<String>> = emptyList(),
     val users: List<String> = emptyList(),
-    val canSensitive: Boolean,
-    val localOnly: Boolean? = null,
-    val excludeBots: Boolean? = null,
+    val caseSensitive: Boolean,
+    val localOnly: Boolean,
+    val excludeBots: Boolean,
     val withReplies: Boolean,
     val withFile: Boolean
 )

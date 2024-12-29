@@ -20,9 +20,9 @@ class UpdateAntennaUseCase @Inject constructor(
         keywords: List<List<String>> = emptyList(),
         excludeKeywords: List<List<String>> = emptyList(),
         users: List<String> = emptyList(),
-        canSensitive: Boolean,
-        localOnly: Boolean? = null,
-        excludeBots: Boolean? = null,
+        caseSensitive: Boolean,
+        localOnly: Boolean,
+        excludeBots: Boolean,
         withReplies: Boolean,
         withFile: Boolean
     ) = withContext(ioDispatcher) {
@@ -36,7 +36,7 @@ class UpdateAntennaUseCase @Inject constructor(
                     keywords = keywords,
                     excludeKeywords = excludeKeywords,
                     users = users,
-                    canSensitive = canSensitive,
+                    caseSensitive = caseSensitive,
                     localOnly = localOnly,
                     excludeBots = excludeBots,
                     withReplies = withReplies,

@@ -18,12 +18,12 @@ class CreateAntennaUseCase @Inject constructor(
         userListId: String? = null,
         keywords: List<List<String>> = emptyList(),
         excludeKeywords: List<List<String>> = emptyList(),
-        users: List<String> = emptyList(),
-        canSensitive: Boolean,
-        localOnly: Boolean? = null,
-        excludeBots: Boolean? = null,
-        withReplies: Boolean,
-        withFile: Boolean
+        users: List<String> = listOf(""),
+        caseSensitive: Boolean = false,
+        localOnly: Boolean = false,
+        excludeBots: Boolean = false,
+        withReplies: Boolean = false,
+        withFile: Boolean = false
     ) = withContext(ioDispatcher) {
         suspendRunCatching {
             antennaRepository.createAntenna(
@@ -34,7 +34,7 @@ class CreateAntennaUseCase @Inject constructor(
                     keywords = keywords,
                     excludeKeywords = excludeKeywords,
                     users = users,
-                    canSensitive = canSensitive,
+                    caseSensitive = caseSensitive,
                     localOnly = localOnly,
                     excludeBots = excludeBots,
                     withReplies = withReplies,
