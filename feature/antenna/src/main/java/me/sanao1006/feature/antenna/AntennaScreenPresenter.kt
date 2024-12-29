@@ -83,12 +83,19 @@ class AntennaScreenPresenter @Inject constructor(
 
                 is AntennaScreen.Event.OnDeleteClick -> {
                     scope.launch {
+                        openDialog = false
                         suspendRunCatching {
                             deleteAntennaUseCase.invoke(event.id)
                         }.onSuccess {
                             uiState = getAntennasUseCase.invoke()
+                            event.snackbarHostState.showSnackbar(
+                                context.getString(ResString.antenna_deleted_success)
+                            )
+                        }.onFailure {
+                            event.snackbarHostState.showSnackbar(
+                                context.getString(ResString.antenna_deleted_failed)
+                            )
                         }
-                        openDialog = false
                     }
                 }
 
@@ -138,6 +145,12 @@ private suspend fun showSnackbarMessage(
                 )
             }
 
+            "delete" -> {
+                snackbarHostState.showSnackbar(
+                    context.getString(ResString.antenna_deleted_success)
+                )
+            }
+
             else -> { // Do Nothing
             }
         }
@@ -153,6 +166,12 @@ private suspend fun showSnackbarMessage(
         "update" -> {
             snackbarHostState.showSnackbar(
                 context.getString(ResString.antenna_updated_failed)
+            )
+        }
+
+        "delete" -> {
+            snackbarHostState.showSnackbar(
+                context.getString(ResString.antenna_deleted_failed)
             )
         }
 

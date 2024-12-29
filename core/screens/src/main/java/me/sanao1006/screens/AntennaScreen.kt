@@ -29,7 +29,11 @@ object AntennaScreen : Screen {
         ) : Event()
 
         data class OnDeleteButtonClick(val id: String) : Event()
-        data class OnDeleteClick(val id: String) : Event()
+        data class OnDeleteClick(
+            val id: String,
+            val snackbarHostState: SnackbarHostState
+        ) : Event()
+
         data object OnDialogHideClick : Event()
         data object OnCreateClick : Event()
         data class OnAntennaPost(

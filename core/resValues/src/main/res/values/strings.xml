@@ -82,4 +82,6 @@
     <string name="antenna_created_failed">Failed to create antenna</string>
     <string name="antenna_updated_success">Antenna updated</string>
     <string name="antenna_updated_failed">Failed to update antenna</string>
+    <string name="antenna_deleted_success">Antenna deleted</string>
+    <string name="antenna_deleted_failed">Failed to delete antenna</string>
 </resources>

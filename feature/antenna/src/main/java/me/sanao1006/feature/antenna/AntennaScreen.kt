@@ -107,7 +107,12 @@ fun AntennaScreen(state: AntennaScreen.State, modifier: Modifier) {
                     onDismissRequest = { state.eventSink(AntennaScreen.Event.OnDialogHideClick) },
                     onConfirmClick = {
                         state.selectedAntennaId?.let {
-                            state.eventSink(AntennaScreen.Event.OnDeleteClick(it))
+                            state.eventSink(
+                                AntennaScreen.Event.OnDeleteClick(
+                                    it,
+                                    snackbarHostState
+                                )
+                            )
                         }
                     },
                     onDismissClick = {

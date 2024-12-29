@@ -199,8 +199,22 @@ class AntennaPostScreenPresenter @AssistedInject constructor(
                     scope.launch {
                         screen.antenna?.let {
                             deleteAntennaUseCase.invoke(it.id)
-                                .onSuccess {}
-                                .onFailure {}
+                                .onSuccess {
+                                    navigator.pop(
+                                        result = AntennaScreen.Result(
+                                            success = true,
+                                            screenName = "delete"
+                                        )
+                                    )
+                                }
+                                .onFailure {
+                                    navigator.pop(
+                                        result = AntennaScreen.Result(
+                                            success = false,
+                                            screenName = "delete"
+                                        )
+                                    )
+                                }
                         }
                     }
                 }

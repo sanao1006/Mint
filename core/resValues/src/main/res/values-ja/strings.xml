@@ -82,4 +82,6 @@
     <string name="antenna_created_failed">アンテナの作成に失敗しました</string>
     <string name="antenna_updated_success">アンテナを更新しました</string>
     <string name="antenna_updated_failed">アンテナの更新に失敗しました</string>
+    <string name="antenna_deleted_success">アンテナを削除しました</string>
+    <string name="antenna_deleted_failed">アンテナの削除に失敗しました</string>
 </resources>
