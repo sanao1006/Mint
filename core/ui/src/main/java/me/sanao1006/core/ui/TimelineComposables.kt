@@ -222,11 +222,6 @@ private fun ReactionsSection(
     }
 }
 
-private fun removeFirstAndLastChar(input: String): String {
-    if (input.length <= 2) return ""
-    return input.drop(1).dropLast(1)
-}
-
 @Composable
 private fun UserNameRow(
     timelineItem: TimelineItem,
