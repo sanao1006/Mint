@@ -117,7 +117,7 @@ private fun NoteScreenTextField(
         placeholder = {
             Text(
                 text = stringResource(ResString.note_placeholder),
-                style = MaterialTheme.typography.headlineSmall
+                style = MaterialTheme.typography.bodyLarge
             )
         }
     )

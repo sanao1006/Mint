@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="create_post">投稿！</string>
-    <string name="note_placeholder">どうしたんだい？</string>
+    <string name="note_placeholder">今どうしてる？</string>
     <string name="enter_misskey_server_url">MisskeyサーバーのURLを入力</string>
     <string name="login_authentication">認証する！</string>
     <string name="login_re_authentication">再認証する！</string>
