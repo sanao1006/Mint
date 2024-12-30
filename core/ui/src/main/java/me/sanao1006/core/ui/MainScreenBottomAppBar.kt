@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingAppBarScrollBehavior
 import androidx.compose.material3.HorizontalFloatingAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -24,11 +25,13 @@ import me.sanao1006.screens.event.bottomAppBar.BottomAppBarActionEvent
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun MainScreenBottomAppBarWrapper(
+    scrollBehavior: FloatingAppBarScrollBehavior?,
     mainScreenType: MainScreenType,
     modifier: Modifier = Modifier,
     event: (BottomAppBarActionEvent) -> Unit,
     onFabClick: () -> Unit
 ) = MainScreenBottomAppBar(
+    scrollBehavior = scrollBehavior,
     mainSheetType = mainScreenType,
     onHomeClick = { event(BottomAppBarActionEvent.OnHomeIconClicked) },
     onNotificationClick = { event(BottomAppBarActionEvent.OnNotificationIconClicked) },
@@ -40,6 +43,7 @@ fun MainScreenBottomAppBarWrapper(
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun MainScreenBottomAppBar(
+    scrollBehavior: FloatingAppBarScrollBehavior?,
     mainSheetType: MainScreenType,
     onHomeClick: () -> Unit,
     onNotificationClick: () -> Unit,
@@ -99,7 +103,8 @@ private fun MainScreenBottomAppBar(
             ) {
                 Icon(painter = painterResource(TablerIcons.Pencil), "")
             }
-        }
+        },
+        scrollBehavior = scrollBehavior
     )
 }
 

@@ -8,6 +8,9 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.FloatingAppBarDefaults
+import androidx.compose.material3.FloatingAppBarExitDirection.Companion.Bottom
+import androidx.compose.material3.FloatingAppBarScrollBehavior
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -21,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -37,6 +41,7 @@ import me.sanao1006.screens.event.notecreate.NoteCreateEvent
 import me.sanao1006.screens.event.timeline.TimelineItemEvent
 import me.snao1006.res_value.ResString
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @CircuitInject(NotificationScreen::class, SingletonComponent::class)
 @Composable
 fun NotificationScreenUi(state: NotificationScreen.State, modifier: Modifier) {
@@ -44,6 +49,9 @@ fun NotificationScreenUi(state: NotificationScreen.State, modifier: Modifier) {
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
+    val exitAlwaysScrollBehavior =
+        FloatingAppBarDefaults.exitAlwaysScrollBehavior(exitDirection = Bottom)
+
     LaunchedImpressionEffect(state.isSuccessCreateNote) {
         state.noteCreateEventSink(
             NoteCreateEvent.OnNoteCreated(
@@ -61,6 +69,7 @@ fun NotificationScreenUi(state: NotificationScreen.State, modifier: Modifier) {
         ) {
             NotificationScreenContent(
                 state = state,
+                scrollBehavior = exitAlwaysScrollBehavior,
                 context = context,
                 modifier = Modifier,
                 snackbarHostState = snackbarHostState,
@@ -85,13 +94,14 @@ fun NotificationScreenUi(state: NotificationScreen.State, modifier: Modifier) {
 @Composable
 private fun NotificationScreenContent(
     state: NotificationScreen.State,
+    scrollBehavior: FloatingAppBarScrollBehavior,
     context: Context,
     modifier: Modifier = Modifier,
     snackbarHostState: SnackbarHostState,
     onGlobalIconClicked: () -> Unit
 ) {
     Scaffold(
-        modifier = modifier,
+        modifier = modifier.nestedScroll(scrollBehavior),
         topBar = {
             TopAppBar(
                 title = {
@@ -113,6 +123,7 @@ private fun NotificationScreenContent(
         MainScreenTimelineContentBox(
             state = state,
             mainScreenType = MainScreenType.NOTIFICATION,
+            scrollBehavior = scrollBehavior,
             snackbarHostState = snackbarHostState,
             pullRefreshState = state.pullToRefreshState,
             isRefreshed = state.isRefreshed,
