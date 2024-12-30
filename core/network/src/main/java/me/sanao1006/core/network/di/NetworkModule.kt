@@ -9,14 +9,17 @@ import de.jensklingenberg.ktorfit.converter.FlowConverterFactory
 import de.jensklingenberg.ktorfit.converter.ResponseConverterFactory
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.HttpTimeout
+import io.ktor.client.plugins.auth.Auth
+import io.ktor.client.plugins.auth.providers.BearerTokens
+import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
-import io.ktor.client.request.headers
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
@@ -56,14 +59,30 @@ object NetworkModule {
             }
             level = LogLevel.ALL
         }
-        defaultRequest {
-            contentType(ContentType.Application.Json)
-            headers {
-                runBlocking {
-                    val token = dataStoreRepository.getAccessToken() ?: return@runBlocking
-                    append("Authorization", "Bearer $token")
+
+        install(Auth) {
+            bearer {
+                loadTokens {
+                    BearerTokens(
+                        accessToken = dataStoreRepository.getAccessToken() ?: "",
+                        refreshToken = null
+                    )
+                }
+                refreshTokens {
+                    BearerTokens(
+                        accessToken = dataStoreRepository.getAccessToken() ?: "",
+                        refreshToken = null
+                    )
                 }
             }
+        }
+        install(DefaultRequest) {
+            val baseUrl = runBlocking { dataStoreRepository.getBaseUrl() }
+            baseUrl?.let { url(it) }
+        }
+
+        defaultRequest {
+            contentType(ContentType.Application.Json)
         }
     }
 
@@ -71,16 +90,10 @@ object NetworkModule {
     @Singleton
     fun provideKtorfit(
         @NormalApi
-        httpClient: HttpClient,
-        baseUrlModule: BaseUrlModule
+        httpClient: HttpClient
     ): Ktorfit {
         return Ktorfit.Builder()
             .httpClient(httpClient)
-            .let {
-                baseUrlModule.getBaseUrl()?.let { baseUrl ->
-                    it.baseUrl("$baseUrl/")
-                } ?: it
-            }
             .converterFactories(
                 FlowConverterFactory(),
                 ResponseConverterFactory()
