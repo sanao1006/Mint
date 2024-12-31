@@ -9,6 +9,7 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FloatingAppBarDefaults
 import androidx.compose.material3.FloatingAppBarExitDirection.Companion.Bottom
@@ -16,8 +17,9 @@ import androidx.compose.material3.FloatingAppBarScrollBehavior
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberDrawerState
-import androidx.compose.material3.rememberFloatingAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -37,7 +39,7 @@ import me.sanao1006.screens.event.globalIcon.GlobalIconEvent
 import me.sanao1006.screens.event.notecreate.NoteCreateEvent
 import me.sanao1006.screens.event.timeline.TimelineItemEvent
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3Api::class)
 @CircuitInject(HomeScreen::class, SingletonComponent::class)
 @Composable
 fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
@@ -46,9 +48,9 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
         val scope = rememberCoroutineScope()
         val drawerState = rememberDrawerState(DrawerValue.Closed)
         val snackbarHostState = remember { SnackbarHostState() }
+        val topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
         val exitAlwaysScrollBehavior =
             FloatingAppBarDefaults.exitAlwaysScrollBehavior(
-                state = rememberFloatingAppBarState(),
                 exitDirection = Bottom
             )
 
@@ -70,7 +72,8 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
             HomeScreenUiContent(
                 state = state,
                 pagerState = pagerState,
-                scrollBehavior = exitAlwaysScrollBehavior,
+                topAppBarScrollBehavior = topAppBarScrollBehavior,
+                bottomAppBarScrollBehavior = exitAlwaysScrollBehavior,
                 modifier = Modifier,
                 snackbarHostState = snackbarHostState,
                 onGlobalIconClicked = {
@@ -104,12 +107,17 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3ExpressiveApi::class)
+@OptIn(
+    ExperimentalMaterialApi::class,
+    ExperimentalMaterial3ExpressiveApi::class,
+    ExperimentalMaterial3Api::class
+)
 @Composable
 private fun HomeScreenUiContent(
     state: HomeScreen.State,
     pagerState: PagerState,
-    scrollBehavior: FloatingAppBarScrollBehavior,
+    topAppBarScrollBehavior: TopAppBarScrollBehavior,
+    bottomAppBarScrollBehavior: FloatingAppBarScrollBehavior,
     modifier: Modifier = Modifier,
     snackbarHostState: SnackbarHostState,
     onGlobalIconClicked: () -> Unit,
@@ -118,10 +126,13 @@ private fun HomeScreenUiContent(
     onGlobalClick: () -> Unit
 ) {
     Scaffold(
-        modifier = modifier.nestedScroll(scrollBehavior),
+        modifier = modifier
+            .nestedScroll(bottomAppBarScrollBehavior)
+            .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection),
         topBar = {
             HomeScreenTopAppBar(
                 topAppBarTimelineState = TopAppBarTimelineState.get(pagerState.currentPage),
+                scrollBehavior = topAppBarScrollBehavior,
                 onNavigationIconClick = onGlobalIconClicked,
                 onHomeClick = onHomeClick,
                 onSocialClick = onSocialClick,
@@ -133,7 +144,7 @@ private fun HomeScreenUiContent(
         MainScreenTimelineContentBox(
             state = state,
             mainScreenType = MainScreenType.HOME,
-            scrollBehavior = scrollBehavior,
+            scrollBehavior = bottomAppBarScrollBehavior,
             snackbarHostState = snackbarHostState,
             pullRefreshState = state.pullToRefreshState,
             isRefreshed = state.isRefreshed,
