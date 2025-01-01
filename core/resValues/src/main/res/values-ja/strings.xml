@@ -86,4 +86,5 @@
     <string name="antenna_deleted_failed">アンテナの削除に失敗しました</string>
     <string name="log_out_description">ログアウト</string>
     <string name="log_out_confirm">ログアウトしますか？</string>
+    <string name="log_out_failed">ログアウトが失敗しました。再試行してください</string>
 </resources>
