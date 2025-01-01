@@ -17,6 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Mint"
         android:name=".MintApp"
+        android:enableOnBackInvokedCallback="true"
         tools:targetApi="31">
         <activity
             android:name=".MainActivity"
