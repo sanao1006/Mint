@@ -20,6 +20,7 @@ import me.sanao1006.screens.UserScreen
 
 data class DrawerState(
     val loginUserInfo: LoginUserInfo,
+    val expandDialog: Boolean,
     val eventSink: (DrawerEvent) -> Unit
 ) : CircuitUiState
 
@@ -34,12 +35,14 @@ class DrawerEventPresenter @Inject constructor(
                 LoginUserInfo()
             )
         }
+        var expandDialog by rememberRetained { mutableStateOf(false) }
         LaunchedImpressionEffect {
             loginUserInfo = updateAccountUseCase()
         }
 
         return DrawerState(
-            loginUserInfo = loginUserInfo
+            loginUserInfo = loginUserInfo,
+            expandDialog = expandDialog
         ) { event ->
             when (event) {
                 DrawerEvent.OnDrawerIconClicked -> {
@@ -67,6 +70,18 @@ class DrawerEventPresenter @Inject constructor(
 
                 DrawerEvent.OnDrawerAntennaClicked -> {
                     navigator.goTo(AntennaScreen)
+                }
+
+                DrawerEvent.OnLogOutClicked -> {
+                    expandDialog = true
+                }
+
+                DrawerEvent.OnLogOutConfirmClicked -> {
+                    expandDialog = false
+                }
+
+                DrawerEvent.OnDismissRequest -> {
+                    expandDialog = false
                 }
 
                 else -> {}

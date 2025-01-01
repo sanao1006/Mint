@@ -20,6 +20,7 @@ data object HomeScreen : Screen {
     @OptIn(ExperimentalMaterialApi::class)
     data class State(
         val homeScreenUiState: HomeScreenUiState,
+        val expandDialog: Boolean,
         override val timelineUiState: TimelineUiState,
         override val isSuccessCreateNote: Boolean?,
         override val pullToRefreshState: PullRefreshState,

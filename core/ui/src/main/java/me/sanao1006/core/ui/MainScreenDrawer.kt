@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -24,6 +25,7 @@ import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,22 +47,24 @@ import me.snao1006.res_value.ResString
 fun MainScreenDrawerWrapper(
     loginUserInfo: LoginUserInfo,
     drawerState: DrawerState,
+    expandDialog: Boolean,
     scope: CoroutineScope,
     event: (DrawerEvent) -> Unit,
     content: @Composable () -> Unit
 ) = MainScreenDrawer(
     loginUserInfo = loginUserInfo,
     drawerState = drawerState,
+    expandDialog = expandDialog,
     scope = scope,
     onDrawerFavoriteClick = { event(DrawerEvent.OnDrawerFavoriteClicked) },
     onDrawerAnnouncementClick = { event(DrawerEvent.OnDrawerAnnouncementClicked) },
     onDrawerAntennaClick = { event(DrawerEvent.OnDrawerAntennaClicked) },
-    onDrawerExploreClick = { event(DrawerEvent.OnDrawerExploreClicked) },
     onDrawerChannelClick = { event(DrawerEvent.OnDrawerChannelClicked) },
     onDrawerSearchClick = { event(DrawerEvent.OnDrawerSearchClicked) },
-    onDrawerDriveClick = { event(DrawerEvent.OnDrawerDriveClicked) },
-    onDrawerAccountPreferencesClick = { event(DrawerEvent.OnDrawerAccountPreferencesClicked) },
     onDrawerSettingsClick = { event(DrawerEvent.OnDrawerSettingsClicked) },
+    onLogOutClick = { event(DrawerEvent.OnLogOutClicked) },
+    onLogOutConfirmClick = { event(DrawerEvent.OnLogOutConfirmClicked) },
+    onDismissRequest = { event(DrawerEvent.OnDismissRequest) },
     onIconClick = { event(DrawerEvent.OnDrawerIconClicked) },
     onFollowingCountClick = { event(DrawerEvent.OnDrawerFollowingCountClicked) },
     onFollowersCountClick = { event(DrawerEvent.OnDrawerFollowersCountClicked) },
@@ -73,15 +77,16 @@ private fun MainScreenDrawer(
     scope: CoroutineScope,
     modifier: Modifier = Modifier,
     drawerState: DrawerState,
+    expandDialog: Boolean,
     onDrawerFavoriteClick: () -> Unit,
     onDrawerAnnouncementClick: () -> Unit,
     onDrawerAntennaClick: () -> Unit,
-    onDrawerExploreClick: () -> Unit,
     onDrawerChannelClick: () -> Unit,
     onDrawerSearchClick: () -> Unit,
-    onDrawerDriveClick: () -> Unit,
-    onDrawerAccountPreferencesClick: () -> Unit,
     onDrawerSettingsClick: () -> Unit,
+    onLogOutClick: () -> Unit,
+    onLogOutConfirmClick: () -> Unit,
+    onDismissRequest: () -> Unit,
     onIconClick: () -> Unit,
     onFollowingCountClick: () -> Unit,
     onFollowersCountClick: () -> Unit,
@@ -128,22 +133,86 @@ private fun MainScreenDrawer(
                                     DrawerItem.FAVORITE -> onDrawerFavoriteClick()
                                     DrawerItem.ANNOUNCEMENT -> onDrawerAnnouncementClick()
                                     DrawerItem.ANTENNA -> onDrawerAntennaClick()
-                                    DrawerItem.EXPLORE -> onDrawerExploreClick()
                                     DrawerItem.CHANNEL -> onDrawerChannelClick()
                                     DrawerItem.SEARCH -> onDrawerSearchClick()
-                                    DrawerItem.DRIVE -> onDrawerDriveClick()
-                                    DrawerItem.ACCOUNT_PREFERENCES ->
-                                        onDrawerAccountPreferencesClick()
-
                                     DrawerItem.SETTINGS -> onDrawerSettingsClick()
                                 }
+                            }
+                        )
+                    }
+                    item {
+                        Spacer(modifier = Modifier.height(4.dp))
+                        HorizontalDivider(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .align(Alignment.CenterHorizontally)
+                                .padding(horizontal = 16.dp)
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        NavigationDrawerItem(
+                            icon = {
+                                Icon(
+                                    painterResource(TablerIcons.Logout),
+                                    ""
+                                )
+                            },
+                            label = {
+                                Text(stringResource(ResString.log_out_description))
+                            },
+                            selected = false,
+                            onClick = {
+                                scope.launch {
+                                    drawerState.close()
+                                }
+                                onLogOutClick()
                             }
                         )
                     }
                 }
             }
         },
-        content = content
+        content = {
+            content()
+            if (expandDialog) {
+                ConfirmButton(
+                    onDismissRequest = onDismissRequest,
+                    onConfirmClick = onLogOutConfirmClick,
+                    onDismissClick = onDismissRequest
+                )
+            }
+        }
+    )
+}
+
+@Composable
+private fun ConfirmButton(
+    modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit,
+    onConfirmClick: () -> Unit,
+    onDismissClick: () -> Unit
+) {
+    AlertDialog(
+        modifier = modifier,
+        onDismissRequest = onDismissRequest,
+        title = { Text(text = stringResource(ResString.log_out_description)) },
+        text = { Text(text = stringResource(ResString.log_out_confirm)) },
+        confirmButton = {
+            TextButton(
+                onClick = onConfirmClick
+            ) {
+                Text(
+                    text = stringResource(ResString.log_out_description),
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = onDismissClick
+            ) {
+                Text(text = stringResource(ResString.cancel_description))
+            }
+        }
     )
 }
 
@@ -237,10 +306,13 @@ enum class DrawerItem(@DrawableRes val iconId: Int, @StringRes val titleId: Int)
     FAVORITE(TablerIcons.Star, ResString.drawer_item_favorite),
     ANNOUNCEMENT(TablerIcons.Speakerphone, ResString.drawer_item_announcement),
     ANTENNA(TablerIcons.Antenna, ResString.drawer_item_antenna),
-    EXPLORE(TablerIcons.Hash, ResString.drawer_item_explore),
+
+    //    EXPLORE(TablerIcons.Hash, ResString.drawer_item_explore),
     CHANNEL(TablerIcons.DeviceTv, ResString.drawer_item_channel),
+
     SEARCH(TablerIcons.Search, ResString.drawer_item_search),
-    DRIVE(TablerIcons.BrandOnedrive, ResString.drawer_item_drive),
-    ACCOUNT_PREFERENCES(TablerIcons.User, ResString.drawer_item_account_preferences),
+
+    //    DRIVE(TablerIcons.BrandOnedrive, ResString.drawer_item_drive),
+//    ACCOUNT_PREFERENCES(TablerIcons.User, ResString.drawer_item_account_preferences),
     SETTINGS(TablerIcons.Settings, ResString.drawer_item_settings);
 }

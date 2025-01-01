@@ -64,6 +64,7 @@ fun NotificationScreenUi(state: NotificationScreen.State, modifier: Modifier) {
         MainScreenDrawerWrapper(
             loginUserInfo = state.drawerUserInfo,
             drawerState = drawerState,
+            expandDialog = state.expandDialog,
             scope = scope,
             event = state.drawerEventSink
         ) {

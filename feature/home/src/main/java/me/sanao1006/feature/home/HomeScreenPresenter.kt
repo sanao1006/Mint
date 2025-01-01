@@ -93,6 +93,7 @@ class HomeScreenPresenter @Inject constructor(
         return HomeScreen.State(
             homeScreenUiState = homeScreenUiState,
             timelineUiState = timelineEventPresenter.uiState,
+            expandDialog = drawerEventState.expandDialog,
             isSuccessCreateNote = noteCreateState.isSuccessCreateNote,
             pullToRefreshState = pullRefreshState,
             isRefreshed = isRefreshed,

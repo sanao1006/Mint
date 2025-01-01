@@ -78,6 +78,7 @@ class NotificationScreenPresenter @Inject constructor(
         }
         return NotificationScreen.State(
             notificationUiState = notificationUiState,
+            expandDialog = drawerEventState.expandDialog,
             timelineUiState = timelineEventState.uiState,
             isSuccessCreateNote = noteCreateState.isSuccessCreateNote,
             drawerUserInfo = drawerEventState.loginUserInfo,
