@@ -80,7 +80,8 @@ fun AntennaListScreen(state: AntennaListScreen.State, modifier: Modifier) {
                                 uri
                             )
                         )
-                    }
+                    },
+                    onLoadMoreClick = {}
                 )
             }
         }

@@ -41,6 +41,8 @@ data object HomeScreen : Screen {
             data object OnSocialTimelineClicked : TimelineEvent()
             data object OnGlobalTimelineClicked : TimelineEvent()
         }
+
+        data object OnLoadMoreClicked : TimelineEvent()
     }
 }
 

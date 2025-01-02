@@ -34,6 +34,7 @@ import me.sanao1006.core.ui.MainScreenDrawerWrapper
 import me.sanao1006.core.ui.MainScreenTimelineContentBox
 import me.sanao1006.core.ui.TimelineColumn
 import me.sanao1006.screens.HomeScreen
+import me.sanao1006.screens.HomeScreen.Event.OnLoadMoreClicked
 import me.sanao1006.screens.MainScreenType
 import me.sanao1006.screens.event.globalIcon.GlobalIconEvent
 import me.sanao1006.screens.event.notecreate.NoteCreateEvent
@@ -217,6 +218,9 @@ private fun TimelineColumn(
                         uri
                     )
                 )
+            },
+            onLoadMoreClick = {
+                state.eventSink(OnLoadMoreClicked)
             }
         )
     }
