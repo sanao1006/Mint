@@ -39,13 +39,8 @@ fun DrawerItemScreenWrapper(
                                 DrawerItem.FAVORITE -> ResString.drawer_item_favorite
                                 DrawerItem.ANNOUNCEMENT -> ResString.drawer_item_announcement
                                 DrawerItem.ANTENNA -> ResString.drawer_item_antenna
-                                DrawerItem.EXPLORE -> ResString.drawer_item_explore
                                 DrawerItem.CHANNEL -> ResString.drawer_item_channel
                                 DrawerItem.SEARCH -> ResString.drawer_item_search
-                                DrawerItem.DRIVE -> ResString.drawer_item_drive
-                                DrawerItem.ACCOUNT_PREFERENCES ->
-                                    ResString.drawer_item_account_preferences
-
                                 DrawerItem.SETTINGS -> ResString.drawer_item_settings
                             }
                         )

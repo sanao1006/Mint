@@ -19,6 +19,7 @@ data object NotificationScreen : Screen {
     @OptIn(ExperimentalMaterialApi::class)
     data class State(
         val notificationUiState: NotificationUiState,
+        val expandDialog: Boolean,
         override val timelineUiState: TimelineUiState,
         override val isSuccessCreateNote: Boolean?,
         override val drawerUserInfo: LoginUserInfo,
