@@ -80,7 +80,8 @@ fun FavoritesScreen(state: FavoritesScreen.State, modifier: Modifier) {
                                 uri
                             )
                         )
-                    }
+                    },
+                    onLoadMoreClick = {}
                 )
             }
         }

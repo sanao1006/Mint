@@ -25,6 +25,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -66,13 +67,15 @@ fun TimelineColumn(
     onReplyClick: (NoteId, Username, Host?) -> Unit,
     onRepostClick: (NoteId) -> Unit,
     onReactionClick: (NoteId) -> Unit,
-    onOptionClick: (NoteId, UserId?, Username?, Host?, NoteText, NoteUri) -> Unit
+    onOptionClick: (NoteId, UserId?, Username?, Host?, NoteText, NoteUri) -> Unit,
+    onLoadMoreClick: () -> Unit
 ) {
     val context = LocalContext.current
     val vibrator = context.getSystemService<Vibrator>()
 
     LazyColumn(
         modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
         state = listState
     ) {
         itemsIndexed(timelineItems) { index, it ->
@@ -111,6 +114,15 @@ fun TimelineColumn(
                     }
                 )
                 HorizontalDivider()
+            }
+        }
+        item {
+            IconButton(onClick = onLoadMoreClick) {
+                Icon(
+                    modifier = Modifier.size(18.dp),
+                    painter = painterResource(TablerIcons.TriangleInvertedFilled),
+                    contentDescription = ""
+                )
             }
         }
     }
