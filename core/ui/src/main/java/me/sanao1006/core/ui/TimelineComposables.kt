@@ -11,10 +11,12 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
@@ -219,7 +221,6 @@ fun TimelineItemSection(
                         timelineItem = timelineItem,
                         modifier = Modifier
                             .fillMaxWidth()
-
                     )
 
                     val isQuote = timelineItem.text.isNotEmpty() && timelineItem.renote != null
@@ -235,7 +236,10 @@ fun TimelineItemSection(
                                     shape = RoundedCornerShape(8.dp),
                                     brush = SolidColor(MaterialTheme.colorScheme.primary)
                                 ),
-                            note = timelineItem.renote!!
+                            note = timelineItem.renote!!,
+                            onIconClick = { id, username, host ->
+                                onIconClick(id, username, host)
+                            }
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                     }
@@ -318,7 +322,8 @@ private fun ReplySection(
 @Composable
 private fun QuoteSection(
     note: Note,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onIconClick: (String, String?, String?) -> Unit
 ) {
     ListItem(
         modifier = modifier,
@@ -328,6 +333,11 @@ private fun QuoteSection(
                     .size(32.dp)
                     .clip(shape = CircleShape)
                     .clickable {
+                        onIconClick(
+                            note.user?.id ?: "",
+                            note.user?.username,
+                            note.user?.host
+                        )
                     },
                 model = note.user?.avatarUrl,
                 contentDescription = null,
@@ -386,11 +396,25 @@ private fun NoteContent(
     Column(modifier = modifier) {
         Text(text = timelineItem.text)
         if (timelineItem.files.isNotEmpty()) {
+            val size = timelineItem.files.size
             Spacer(modifier = Modifier.height(4.dp))
-            FlowRow(modifier = Modifier.fillMaxWidth()) {
-                timelineItem.files.forEach {
+            FlowRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                timelineItem.files.forEachIndexed { index, it ->
                     AsyncImage(
                         modifier = Modifier
+                            .then(
+                                if (size == 1) {
+                                    Modifier.aspectRatio(1f)
+                                } else {
+                                    Modifier
+                                        .sizeIn(maxHeight = 160.dp, maxWidth = 160.dp)
+                                        .weight(0.5f)
+                                }
+                            )
+                            .padding(bottom = 8.dp)
                             .clip(RoundedCornerShape(8.dp)),
                         model = it.url,
                         contentDescription = null,
