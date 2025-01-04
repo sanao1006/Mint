@@ -84,7 +84,9 @@ fun TimelineColumn(
         itemsIndexed(timelineItems) { index, it ->
             it?.let { timelineItem ->
                 val renoteItem = timelineItem.renote?.toTimelineUiState()
+                val replyItem = timelineItem.reply?.toTimelineUiState()
                 val isRenote = timelineItem.text.isEmpty() && renoteItem != null
+                val isReply = replyItem != null
                 val displayTimelineItem = when {
                     isRenote -> renoteItem
                     else -> timelineItem
@@ -110,6 +112,16 @@ fun TimelineColumn(
                             style = MaterialTheme.typography.bodyMedium
                         )
                     }
+                }
+                if (isReply) {
+                    ReplySection(
+                        replyItem = replyItem,
+                        modifier = Modifier.fillMaxWidth(),
+                        onIconClick = { id, username, host ->
+                            vibrator?.vibrate()
+                            onIconClick(id, username, host)
+                        }
+                    )
                 }
                 TimelineItemSection(
                     modifier = Modifier,
@@ -248,6 +260,54 @@ fun TimelineItemSection(
             }
         )
     }
+}
+
+@Composable
+private fun ReplySection(
+    replyItem: TimelineItem,
+    modifier: Modifier = Modifier,
+    onIconClick: (String, String?, String?) -> Unit
+) {
+    ListItem(
+        modifier = modifier,
+        leadingContent = {
+            AsyncImage(
+                modifier = Modifier
+                    .size(48.dp)
+                    .clip(shape = CircleShape)
+                    .clickable {
+                        onIconClick(
+                            replyItem.user?.id ?: "",
+                            replyItem.user?.username,
+                            replyItem.user?.host
+                        )
+                    },
+                model = replyItem.user?.avatarUrl,
+                contentDescription = null,
+                contentScale = ContentScale.Crop
+            )
+        },
+        headlineContent = {
+            UserNameRow(
+                timelineItem = replyItem,
+                context = LocalContext.current,
+                modifier = Modifier.fillMaxWidth()
+            )
+        },
+        supportingContent = {
+            Text(text = replyItem.text)
+
+            replyItem.reactions?.let {
+                Spacer(modifier = Modifier.height(4.dp))
+                ReactionsSection(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight(),
+                    reactions = it
+                )
+            }
+        }
+    )
 }
 
 @Composable
