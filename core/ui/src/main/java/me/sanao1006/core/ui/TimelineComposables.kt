@@ -215,7 +215,12 @@ fun TimelineItemSection(
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                     }
-                    Text(text = timelineItem.text)
+                    NoteContent(
+                        timelineItem = timelineItem,
+                        modifier = Modifier
+                            .fillMaxWidth()
+
+                    )
 
                     val isQuote = timelineItem.text.isNotEmpty() && timelineItem.renote != null
                     if (isQuote) {
@@ -368,6 +373,32 @@ private fun ReactionsSection(
                 Spacer(modifier = Modifier.width(3.dp))
                 Text(text = count.toString())
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun NoteContent(
+    modifier: Modifier = Modifier,
+    timelineItem: TimelineItem
+) {
+    Column(modifier = modifier) {
+        Text(text = timelineItem.text)
+        if (timelineItem.files.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(4.dp))
+            FlowRow(modifier = Modifier.fillMaxWidth()) {
+                timelineItem.files.forEach {
+                    AsyncImage(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(8.dp)),
+                        model = it.url,
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(4.dp))
         }
     }
 }

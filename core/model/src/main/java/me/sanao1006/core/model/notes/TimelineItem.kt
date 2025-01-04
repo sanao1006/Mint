@@ -16,5 +16,6 @@ data class TimelineItem(
     val renote: Note? = null,
     val renoteCount: Int = 0,
     val repliesCount: Int = 0,
-    val reply: Note? = null
+    val reply: Note? = null,
+    val files: List<File> = listOf()
 )
