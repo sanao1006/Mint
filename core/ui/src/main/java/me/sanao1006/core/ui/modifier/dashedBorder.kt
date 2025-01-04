@@ -77,7 +77,8 @@ fun Modifier.dashedBorder(width: Dp, brush: Brush, shape: Shape, on: Dp, off: Dp
                     if (borderSize > 0 && size.minDimension > 0f) {
                         if (outline is Outline.Rectangle) {
                             stroke = Stroke(
-                                borderSize, pathEffect = PathEffect.dashPathEffect(
+                                borderSize,
+                                pathEffect = PathEffect.dashPathEffect(
                                     floatArrayOf(on.toPx(), off.toPx())
                                 )
                             )
@@ -100,7 +101,8 @@ fun Modifier.dashedBorder(width: Dp, brush: Brush, shape: Shape, on: Dp, off: Dp
                             )
                             insetOutline = shape.createOutline(insetSize, layoutDirection, this)
                             stroke = Stroke(
-                                strokeWidth, pathEffect = PathEffect.dashPathEffect(
+                                strokeWidth,
+                                pathEffect = PathEffect.dashPathEffect(
                                     floatArrayOf(on.toPx(), off.toPx())
                                 )
                             )
@@ -144,7 +146,7 @@ fun Modifier.dashedBorder(width: Dp, brush: Brush, shape: Shape, on: Dp, off: Dp
                         if (stroke != null) {
                             if (insetOutline != null && pathClip != null) {
                                 val isSimpleRoundRect = insetOutline is Outline.Rounded &&
-                                        insetOutline.roundRect.isSimple
+                                    insetOutline.roundRect.isSimple
                                 withTransform({
                                     clipPath(pathClip)
                                     // we are drawing the round rect not as a path so we must
@@ -190,7 +192,10 @@ fun Modifier.dashedBorder(width: Dp, brush: Brush, shape: Shape, on: Dp, off: Dp
                                         )
                                     } else {
                                         drawPath(
-                                            pathClip, alpha = 0f, brush = brush, style = Stroke(
+                                            pathClip,
+                                            alpha = 0f,
+                                            brush = brush,
+                                            style = Stroke(
                                                 Stroke.HairlineWidth,
                                                 pathEffect = PathEffect.dashPathEffect(
                                                     floatArrayOf(on.toPx(), off.toPx())
