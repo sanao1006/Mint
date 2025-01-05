@@ -7,8 +7,6 @@ import me.sanao1006.core.model.common.User
 import me.sanao1006.core.model.notes.Channel
 import me.sanao1006.core.model.notes.File
 import me.sanao1006.core.model.notes.Poll
-import me.sanao1006.core.model.notes.Renote
-import me.sanao1006.core.model.notes.Reply
 import me.sanao1006.core.model.notes.TimelineItem
 import me.sanao1006.core.model.notes.Visibility
 
@@ -51,7 +49,7 @@ data class Note(
     @SerialName("reactionEmojis")
     val reactionEmojis: JsonObject? = null,
     @SerialName("renote")
-    val renote: Renote? = null,
+    val renote: Note? = null,
     @SerialName("renoteCount")
     val renoteCount: Int = 0,
     @SerialName("renoteId")
@@ -59,7 +57,7 @@ data class Note(
     @SerialName("repliesCount")
     val repliesCount: Int = 0,
     @SerialName("reply")
-    val reply: Reply? = null,
+    val reply: Note? = null,
     @SerialName("replyId")
     val replyId: String? = null,
     @SerialName("tags")
@@ -88,7 +86,12 @@ data class Note(
             uri = uri,
             createdAt = createdAt,
             reactions = reactions,
-            reactionsEmojis = reactionEmojis
+            reactionsEmojis = reactionEmojis,
+            renote = renote,
+            renoteCount = renoteCount,
+            repliesCount = repliesCount,
+            reply = reply,
+            files = files
         )
     }
 }

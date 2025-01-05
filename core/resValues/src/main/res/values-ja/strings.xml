@@ -87,4 +87,5 @@
     <string name="log_out_description">ログアウト</string>
     <string name="log_out_confirm">ログアウトしますか？</string>
     <string name="log_out_failed">ログアウトが失敗しました。再試行してください</string>
+    <string name="renote_description">%1$sがリノート</string>
 </resources>

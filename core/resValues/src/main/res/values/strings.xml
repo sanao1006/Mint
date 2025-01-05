@@ -87,4 +87,5 @@
     <string name="log_out_description">Log out</string>
     <string name="log_out_confirm">Are you sure you want to log out?</string>
     <string name="log_out_failed">Log out failed. Please try again.</string>
+    <string name="renote_description">Renoted by %1$s</string>
 </resources>
