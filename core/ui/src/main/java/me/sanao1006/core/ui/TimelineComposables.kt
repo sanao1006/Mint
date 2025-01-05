@@ -164,13 +164,16 @@ fun TimelineColumn(
                 HorizontalDivider()
             }
         }
-        item {
-            IconButton(onClick = onLoadMoreClick) {
-                Icon(
-                    modifier = Modifier.size(18.dp),
-                    painter = painterResource(TablerIcons.TriangleInvertedFilled),
-                    contentDescription = ""
-                )
+
+        if (timelineItems.size % 10 == 0) {
+            item {
+                IconButton(onClick = onLoadMoreClick) {
+                    Icon(
+                        modifier = Modifier.size(18.dp),
+                        painter = painterResource(TablerIcons.TriangleInvertedFilled),
+                        contentDescription = ""
+                    )
+                }
             }
         }
     }
@@ -268,7 +271,7 @@ fun TimelineItemSection(
                     Spacer(modifier = Modifier.height(12.dp))
                     val canRenote =
                         timelineItem.visibility == Visibility.PUBLIC ||
-                            timelineItem.visibility == Visibility.HOME
+                                timelineItem.visibility == Visibility.HOME
                     TimelineActionRow(
                         canRenote = canRenote,
                         modifier = Modifier.fillMaxWidth(),
