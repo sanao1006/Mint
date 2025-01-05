@@ -43,6 +43,7 @@ fun NoteScreenUi(state: NoteScreen.State, modifier: Modifier) {
             Scaffold(
                 topBar = {
                     NoteScreenTopAppBar(
+                        isSubmitEnabled = state.uiState.noteText.isNotBlank(),
                         onBackClicked = { state.eventSink(NoteScreen.Event.OnBackClicked) },
                         onNotePostClicked = {
                             focusManager.clearFocus()

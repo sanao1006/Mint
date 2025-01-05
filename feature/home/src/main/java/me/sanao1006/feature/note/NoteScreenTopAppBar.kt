@@ -18,6 +18,7 @@ import me.snao1006.res_value.ResString
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteScreenTopAppBar(
+    isSubmitEnabled: Boolean,
     modifier: Modifier = Modifier,
     onBackClicked: () -> Unit,
     onNotePostClicked: () -> Unit
@@ -34,6 +35,7 @@ fun NoteScreenTopAppBar(
         },
         actions = {
             FilledTonalButton(
+                enabled = isSubmitEnabled,
                 modifier = Modifier.padding(horizontal = 8.dp),
                 onClick = onNotePostClicked
             ) {
