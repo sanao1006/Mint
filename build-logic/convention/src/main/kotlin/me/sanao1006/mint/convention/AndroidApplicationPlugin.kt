@@ -23,7 +23,7 @@ class AndroidApplicationPlugin : Plugin<Project> {
                         minSdk = libs.version("androidMinSdk").toInt()
                         targetSdk = libs.version("androidTargetSdk").toInt()
                         versionCode = 1
-                        versionName = "1.0"
+                        versionName = "0.0.1"
                         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
                     }
                     packagingOptions {
