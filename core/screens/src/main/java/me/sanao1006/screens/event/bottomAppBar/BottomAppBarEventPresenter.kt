@@ -3,10 +3,10 @@ package me.sanao1006.screens.event.bottomAppBar
 import androidx.compose.runtime.Composable
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.presenter.Presenter
-import javax.inject.Inject
 import me.sanao1006.core.data.compositionLocal.LocalNavigator
 import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.NotificationScreen
+import javax.inject.Inject
 
 data class BottomAppBarState(
     val eventSink: (BottomAppBarActionEvent) -> Unit
@@ -20,11 +20,11 @@ class BottomAppBarPresenter @Inject constructor() : Presenter<BottomAppBarState>
             eventSink = { event ->
                 when (event) {
                     BottomAppBarActionEvent.OnHomeIconClicked -> {
-                        navigator.goTo(HomeScreen)
+                        navigator.resetRoot(HomeScreen, true, true)
                     }
 
                     BottomAppBarActionEvent.OnNotificationIconClicked -> {
-                        navigator.goTo(NotificationScreen)
+                        navigator.resetRoot(NotificationScreen, true, true)
                     }
                 }
             }

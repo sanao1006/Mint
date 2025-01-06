@@ -24,11 +24,11 @@ import com.slack.circuit.runtime.screen.Screen
 import com.slack.circuitx.android.rememberAndroidScreenAwareNavigator
 import com.slack.circuitx.gesturenavigation.GestureNavigationDecoration
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import me.sanao1006.core.data.compositionLocal.LocalNavigator
 import me.sanao1006.core.designsystem.MintTheme
 import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.LoginScreen
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -80,9 +80,7 @@ private fun SetupNavigator(
                         navigator = navigator,
                         backStack = backstack,
                         circuit = circuit,
-                        decoration = GestureNavigationDecoration {
-                            navigator.pop()
-                        }
+                        decoration = GestureNavigationDecoration(onBackInvoked = navigator::pop)
                     )
                 }
             }
