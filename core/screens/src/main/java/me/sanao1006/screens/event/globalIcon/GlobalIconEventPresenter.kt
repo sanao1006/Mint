@@ -3,7 +3,6 @@ package me.sanao1006.screens.event.globalIcon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import com.slack.circuit.runtime.CircuitUiState
-import com.slack.circuit.runtime.popUntil
 import com.slack.circuit.runtime.presenter.Presenter
 import javax.inject.Inject
 import kotlinx.coroutines.launch
@@ -30,7 +29,7 @@ class GlobalIconEventPresenter @Inject constructor() : Presenter<DrawerEventStat
                 }
 
                 GlobalIconEvent.OnArrowBackIconClicked -> {
-                    navigator.popUntil { it is HomeScreen }
+                    navigator.resetRoot(HomeScreen)
                 }
 
                 GlobalIconEvent.OnBackBeforeScreen -> {
