@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -30,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuitx.effects.LaunchedImpressionEffect
 import dagger.hilt.components.SingletonComponent
+import ir.alirezaivaz.tablericons.TablerIcons
 import me.sanao1006.screens.AuthStateType
 import me.sanao1006.screens.LoginScreen
 import me.snao1006.res_value.ResDrawable
@@ -89,6 +91,12 @@ private fun LoginContent(state: LoginScreen.State, modifier: Modifier = Modifier
             modifier = Modifier.fillMaxWidth(),
             value = state.domain,
             maxLines = 1,
+            leadingIcon = {
+                Icon(
+                    painter = painterResource(TablerIcons.World),
+                    contentDescription = ""
+                )
+            },
             placeholder = {
                 Text(
                     text = "https://misskey.io",
