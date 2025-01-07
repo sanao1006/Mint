@@ -18,51 +18,8 @@ categories:
     labels:
       - 'workflow'
       - 'other'
-
-exclude-labels:
-  - 'chore'
-
-autolabeler:
-  - label: enhancement
-    branch:
-      - '/^feat(ure)?[/-].+/'
-  - label: bug
-    branch:
-      - '/^fix[/-].+/'
-      - '/bugfix[/-].+/'
-  - label: emergency
-    branch:
-      - '/^hotfix[/-].+/'
-  - label: test
-    branch:
-      - '/^test[/-].+/'
-  - label: refactor
-    branch:
-      - '/^refactor[/-].+/'
-  - label: documentation
-    branch:
-      - '/^doc[/-].+/'
-  - label: workflow
-    branch:
-      - '/^workflow[/-].+/'
-      - '/^ci[/-].+/'
-      - '/^release[/-].+/'
-  - label: other
-    branch:
-      - '/^.*$/'
 change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
 change-title-escapes: '\<*_&'
-version-resolver:
-  major:
-    labels:
-      - 'major'
-  minor:
-    labels:
-      - 'minor'
-  patch:
-    labels:
-      - 'patch'
-  default: patch
 template: |
   ## What's Changed
   
