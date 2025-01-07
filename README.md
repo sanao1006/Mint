@@ -6,6 +6,9 @@
 <p align="center">🚧 <b>This app is still a work in progress</b> ⚠️</p>
 </p>
 
+## Download
+- [Github Releases](https://github.com/sanao1006/Mint/releases)
+
 ## Tech stack & Open-source libraries
 
 - Minimum SDK level 29
