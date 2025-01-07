@@ -1,6 +1,5 @@
 name-template: 'Draft'
 tag-template: 'Draft'
-
 categories:
   - title: '🚀 Features'
     labels:
@@ -16,7 +15,9 @@ categories:
   - title: '✅ Tests'
     label: 'test'
   - title: 'Other'
-    label: 'workflow', 'other'
+    labels:
+      - 'workflow'
+      - 'other'
 
 exclude-labels:
   - 'chore'
