@@ -11,8 +11,7 @@ categories:
       - 'bugfix'
       - 'bug'
   - title: '🧰 Maintenance'
-    labels:
-      - 'chore'
+    label: 'chore'
 version-resolver:
   major:
     labels:
