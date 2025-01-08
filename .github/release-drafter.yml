@@ -1,25 +1,3 @@
-name-template: 'Draft'
-tag-template: 'Draft'
-categories:
-  - title: '🚀 Features'
-    labels:
-      - 'enhancement'
-  - title: '🐛 Bug Fixes'
-    labels:
-      - 'bug'
-      - 'emergency'
-  - title: '🔧 Refactoring'
-    label: 'refactor'
-  - title: '📖 Documentation'
-    label: 'documentation'
-  - title: '✅ Tests'
-    label: 'test'
-  - title: 'Other'
-    labels:
-      - 'workflow'
-      - 'other'
-change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
-change-title-escapes: '\<*_&'
 template: |
   ## What's Changed
   
