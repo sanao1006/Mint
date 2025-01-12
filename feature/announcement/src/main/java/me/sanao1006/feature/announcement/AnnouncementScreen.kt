@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
@@ -47,7 +46,6 @@ import me.sanao1006.screens.AnnouncementScreen
 import me.sanao1006.screens.event.globalIcon.GlobalIconEvent
 import me.snao1006.res_value.ResString
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 @CircuitInject(AnnouncementScreen::class, SingletonComponent::class)
 fun AnnouncementScreen(state: AnnouncementScreen.State, modifier: Modifier) {

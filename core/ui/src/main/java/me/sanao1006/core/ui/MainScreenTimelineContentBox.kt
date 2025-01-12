@@ -1,27 +1,17 @@
 package me.sanao1006.core.ui
 
-import android.content.Context
-import android.view.accessibility.AccessibilityManager
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.FloatingAppBarDefaults.ScreenOffset
-import androidx.compose.material3.FloatingAppBarScrollBehavior
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.zIndex
 import me.sanao1006.core.model.uistate.TimelineItemAction
 import me.sanao1006.core.ui.common.ContentLoadingIndicator
@@ -30,25 +20,20 @@ import me.sanao1006.screens.AntennaListScreen
 import me.sanao1006.screens.FavoritesScreen
 import me.sanao1006.screens.HomeScreen
 import me.sanao1006.screens.MainScreenState
-import me.sanao1006.screens.MainScreenType
 import me.sanao1006.screens.NotificationScreen
 import me.sanao1006.screens.SubScreenState
-import me.sanao1006.screens.event.notecreate.NoteCreateEvent
 import me.sanao1006.screens.event.timeline.TimelineItemEvent
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreenTimelineContentBox(
     state: MainScreenState,
-    mainScreenType: MainScreenType,
-    scrollBehavior: FloatingAppBarScrollBehavior,
     snackbarHostState: SnackbarHostState,
     pullRefreshState: PullRefreshState,
     isRefreshed: Boolean,
     contentLoadingState: Boolean?,
     isEmptyContent: Boolean,
     modifier: Modifier = Modifier,
-    onFabClick: () -> Unit = { state.noteCreateEventSink(NoteCreateEvent.OnNoteCreateClicked) },
     onRenoteIconClick: (RenoteActionIcon) -> Unit = { event ->
         when (event) {
             RenoteActionIcon.Renote -> {
@@ -184,15 +169,8 @@ fun MainScreenTimelineContentBox(
             )
         }
     },
-    timelineContent: @Composable (LazyListState) -> Unit
+    timelineContent: @Composable () -> Unit
 ) {
-    val context = LocalContext.current
-    val isTouchExplorationEnabled = remember {
-        val am = context.getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
-        am.isEnabled && am.isTouchExplorationEnabled
-    }
-    val listState = rememberLazyListState()
-
     Box(
         contentAlignment = Alignment.TopCenter,
         modifier = modifier
@@ -223,7 +201,7 @@ fun MainScreenTimelineContentBox(
                     if (isEmptyContent) {
                         ContentLoadingIndicator()
                     } else {
-                        timelineContent(listState)
+                        timelineContent()
                     }
                 }
             }
@@ -254,24 +232,10 @@ fun MainScreenTimelineContentBox(
             onRenoteIconCLick = onRenoteIconClick,
             onOptionIconCLick = onOptionIconClick
         )
-        MainScreenBottomAppBarWrapper(
-            scrollBehavior = if (!isTouchExplorationEnabled) scrollBehavior else null,
-            modifier = Modifier
-                .align(BottomCenter)
-                .offset(y = -(ScreenOffset)),
-            mainScreenType = mainScreenType,
-            event = {
-                when (state) {
-                    is HomeScreen.State -> state.bottomAppBarEventSink(it)
-                    is NotificationScreen.State -> state.bottomAppBarEventSink(it)
-                }
-            },
-            onFabClick = onFabClick
-        )
     }
 }
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SubScreenTimelineContentBox(
     state: SubScreenState,

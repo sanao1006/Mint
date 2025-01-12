@@ -5,12 +5,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material3.BottomAppBarDefaults
+import androidx.compose.material3.BottomAppBarScrollBehavior
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.FloatingAppBarDefaults
-import androidx.compose.material3.FloatingAppBarExitDirection.Companion.Bottom
-import androidx.compose.material3.FloatingAppBarScrollBehavior
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -32,6 +30,7 @@ import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuitx.effects.LaunchedImpressionEffect
 import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
+import me.sanao1006.core.ui.MainScreenBottomAppBarWrapper
 import me.sanao1006.core.ui.MainScreenDrawerWrapper
 import me.sanao1006.core.ui.MainScreenTimelineContentBox
 import me.sanao1006.screens.MainScreenType
@@ -41,7 +40,7 @@ import me.sanao1006.screens.event.notecreate.NoteCreateEvent
 import me.sanao1006.screens.event.timeline.TimelineItemEvent
 import me.snao1006.res_value.ResString
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @CircuitInject(NotificationScreen::class, SingletonComponent::class)
 @Composable
 fun NotificationScreenUi(state: NotificationScreen.State, modifier: Modifier) {
@@ -50,7 +49,7 @@ fun NotificationScreenUi(state: NotificationScreen.State, modifier: Modifier) {
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
     val exitAlwaysScrollBehavior =
-        FloatingAppBarDefaults.exitAlwaysScrollBehavior(exitDirection = Bottom)
+        BottomAppBarDefaults.exitAlwaysScrollBehavior()
 
     LaunchedImpressionEffect(state.isSuccessCreateNote) {
         state.noteCreateEventSink(
@@ -89,20 +88,19 @@ fun NotificationScreenUi(state: NotificationScreen.State, modifier: Modifier) {
 
 @OptIn(
     ExperimentalMaterial3Api::class,
-    ExperimentalMaterial3ExpressiveApi::class,
     ExperimentalMaterialApi::class
 )
 @Composable
 private fun NotificationScreenContent(
     state: NotificationScreen.State,
-    scrollBehavior: FloatingAppBarScrollBehavior,
+    scrollBehavior: BottomAppBarScrollBehavior,
     context: Context,
     modifier: Modifier = Modifier,
     snackbarHostState: SnackbarHostState,
     onGlobalIconClicked: () -> Unit
 ) {
     Scaffold(
-        modifier = modifier.nestedScroll(scrollBehavior),
+        modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             TopAppBar(
                 title = {
@@ -119,12 +117,18 @@ private fun NotificationScreenContent(
                 }
             )
         },
+        bottomBar = {
+            MainScreenBottomAppBarWrapper(
+                scrollBehavior = scrollBehavior,
+                mainScreenType = MainScreenType.NOTIFICATION,
+                event = { state.bottomAppBarEventSink(it) },
+                onFabClick = { state.noteCreateEventSink(NoteCreateEvent.OnNoteCreateClicked) }
+            )
+        },
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) {
         MainScreenTimelineContentBox(
             state = state,
-            mainScreenType = MainScreenType.NOTIFICATION,
-            scrollBehavior = scrollBehavior,
             snackbarHostState = snackbarHostState,
             pullRefreshState = state.pullToRefreshState,
             isRefreshed = state.isRefreshed,

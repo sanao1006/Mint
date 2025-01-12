@@ -3,11 +3,10 @@ package me.sanao1006.core.ui
 import android.annotation.SuppressLint
 import android.os.Vibrator
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.BottomAppBarScrollBehavior
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingAppBarScrollBehavior
-import androidx.compose.material3.HorizontalFloatingAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -22,10 +21,10 @@ import me.sanao1006.core.data.util.vibrate
 import me.sanao1006.screens.MainScreenType
 import me.sanao1006.screens.event.bottomAppBar.BottomAppBarActionEvent
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreenBottomAppBarWrapper(
-    scrollBehavior: FloatingAppBarScrollBehavior?,
+    scrollBehavior: BottomAppBarScrollBehavior,
     mainScreenType: MainScreenType,
     modifier: Modifier = Modifier,
     event: (BottomAppBarActionEvent) -> Unit,
@@ -39,11 +38,11 @@ fun MainScreenBottomAppBarWrapper(
     onFabClick = onFabClick
 )
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("MissingPermission")
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun MainScreenBottomAppBar(
-    scrollBehavior: FloatingAppBarScrollBehavior?,
+    scrollBehavior: BottomAppBarScrollBehavior,
     mainSheetType: MainScreenType,
     onHomeClick: () -> Unit,
     onNotificationClick: () -> Unit,
@@ -52,63 +51,55 @@ private fun MainScreenBottomAppBar(
 ) {
     val context = LocalContext.current
     val vibrator = context.getSystemService<Vibrator>()
-    HorizontalFloatingAppBar(
-        expanded = true,
+    BottomAppBar(
+        scrollBehavior = scrollBehavior,
         modifier = modifier,
-        leadingContent = {
-            IconButton(
-                modifier = Modifier.padding(start = 8.dp, end = 16.dp),
-                onClick = {
-                    vibrator?.vibrate()
-                    onHomeClick()
-                }
-            ) {
-                Icon(
-                    painter = painterResource(
-                        if (mainSheetType == MainScreenType.HOME) {
-                            TablerIcons.HomeFilled
-                        } else {
-                            TablerIcons.Home
-                        }
-                    ),
-                    contentDescription = null
-                )
-            }
-        },
-        trailingContent = {
-            IconButton(
-                modifier = Modifier.padding(start = 16.dp, end = 8.dp),
-                onClick = {
-                    vibrator?.vibrate()
-                    onNotificationClick()
-                }
-            ) {
-                Icon(
-                    painter = painterResource(
-                        if (mainSheetType == MainScreenType.NOTIFICATION) {
-                            TablerIcons.BellFilled
-                        } else {
-                            TablerIcons.Bell
-                        }
-                    ),
-                    contentDescription = null
-                )
-            }
-        },
-        content = {
+        containerColor = MaterialTheme.colorScheme.background,
+        floatingActionButton = {
             FloatingActionButton(
                 modifier = Modifier,
-                containerColor = MaterialTheme.colorScheme.primary,
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
                 onClick = onFabClick
             ) {
                 Icon(painter = painterResource(TablerIcons.Pencil), "")
             }
         },
-        scrollBehavior = scrollBehavior
-    )
-}
+        actions = {
+            MainScreenType.entries.forEach {
+                IconButton(
+                    modifier = Modifier.padding(start = 16.dp, end = 8.dp),
+                    onClick = {
+                        vibrator?.vibrate()
+                        when (it) {
+                            MainScreenType.HOME -> onHomeClick()
+                            MainScreenType.NOTIFICATION -> onNotificationClick()
+                        }
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(
+                            when (it) {
+                                MainScreenType.HOME -> {
+                                    if (mainSheetType == MainScreenType.HOME) {
+                                        TablerIcons.HomeFilled
+                                    } else {
+                                        TablerIcons.Home
+                                    }
+                                }
 
-private enum class MainScreenType {
-    HOME,
-    NOTIFICATION
+                                MainScreenType.NOTIFICATION -> {
+                                    if (mainSheetType == MainScreenType.NOTIFICATION) {
+                                        TablerIcons.BellFilled
+                                    } else {
+                                        TablerIcons.Bell
+                                    }
+                                }
+                            }
+                        ),
+                        contentDescription = null
+                    )
+                }
+            }
+        }
+    )
 }

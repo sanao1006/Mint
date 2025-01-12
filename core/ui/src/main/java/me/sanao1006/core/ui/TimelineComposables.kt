@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -19,13 +20,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
@@ -53,6 +54,7 @@ import me.sanao1006.core.data.util.TimeUtils.getRelativeTimeString
 import me.sanao1006.core.data.util.vibrate
 import me.sanao1006.core.model.common.User
 import me.sanao1006.core.model.meta.Note
+import me.sanao1006.core.model.notes.Instance
 import me.sanao1006.core.model.notes.TimelineItem
 import me.sanao1006.core.model.notes.Visibility
 import me.sanao1006.core.ui.modifier.dashedBorder
@@ -68,7 +70,6 @@ typealias NoteUri = String
 @Composable
 fun TimelineColumn(
     modifier: Modifier = Modifier,
-    listState: LazyListState = rememberLazyListState(),
     timelineItems: List<TimelineItem?>,
     onIconClick: (String, String?, String?) -> Unit,
     onReplyClick: (NoteId, Username, Host?) -> Unit,
@@ -80,8 +81,8 @@ fun TimelineColumn(
     val vibrator = context.getSystemService<Vibrator>()
 
     LazyColumn(
-        modifier = modifier,
-        state = listState
+        modifier = modifier.padding(horizontal = 4.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         itemsIndexed(timelineItems) { index, it ->
             it?.let { timelineItem ->
@@ -93,72 +94,85 @@ fun TimelineColumn(
                     isRenote -> renoteItem
                     else -> timelineItem
                 }
-                if (isRenote) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 8.dp, end = 16.dp, start = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(16.dp),
-                            painter = painterResource(TablerIcons.Repeat),
-                            contentDescription = ""
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        val user: String =
-                            timelineItem.user?.name ?: timelineItem.user?.username ?: ""
-                        Text(
-                            textAlign = TextAlign.Start,
-                            text = stringResource(ResString.renote_description, user),
-                            style = MaterialTheme.typography.bodyMedium
+                ElevatedCard(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(4.dp)
+                        .border(
+                            0.6.dp,
+                            MaterialTheme.colorScheme.outlineVariant,
+                            RoundedCornerShape(8.dp)
+                        ),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 1.5.dp)
+                ) {
+                    if (isRenote) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(MaterialTheme.colorScheme.background)
+                                .padding(top = 4.dp, start = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                modifier = Modifier.size(16.dp),
+                                painter = painterResource(TablerIcons.Repeat),
+                                contentDescription = ""
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
+                            val user: String =
+                                timelineItem.user?.name ?: timelineItem.user?.username ?: ""
+                            Text(
+                                textAlign = TextAlign.Start,
+                                text = stringResource(ResString.renote_description, user),
+                                style = MaterialTheme.typography.bodyMedium,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
+                    }
+                    if (isReply) {
+                        ReplySection(
+                            replyItem = replyItem,
+                            modifier = Modifier.fillMaxWidth(),
+                            onIconClick = { id, username, host ->
+                                vibrator?.vibrate()
+                                onIconClick(id, username, host)
+                            }
                         )
                     }
-                }
-                if (isReply) {
-                    ReplySection(
-                        replyItem = replyItem,
-                        modifier = Modifier.fillMaxWidth(),
+                    TimelineItemSection(
+                        modifier = Modifier.fillMaxSize(),
+                        timelineItem = displayTimelineItem,
                         onIconClick = { id, username, host ->
                             vibrator?.vibrate()
                             onIconClick(id, username, host)
+                        },
+                        onReplyClick = {
+                            if (!it.user?.username.isNullOrEmpty()) {
+                                vibrator?.vibrate()
+                                onReplyClick(it.id, it.user?.username.orEmpty(), it.user?.host)
+                            }
+                        },
+                        onRepostClick = {
+                            vibrator?.vibrate()
+                            onRepostClick(it.id)
+                        },
+                        onReactionClick = {
+                            vibrator?.vibrate()
+                            onReactionClick(it.id)
+                        },
+                        onOptionClick = {
+                            vibrator?.vibrate()
+                            onOptionClick(
+                                it.id,
+                                it.user?.id,
+                                it.user?.username,
+                                it.user?.host,
+                                it.text,
+                                it.uri
+                            )
                         }
                     )
                 }
-                TimelineItemSection(
-                    modifier = Modifier,
-                    timelineItem = displayTimelineItem,
-                    onIconClick = { id, username, host ->
-                        vibrator?.vibrate()
-                        onIconClick(id, username, host)
-                    },
-                    onReplyClick = {
-                        if (!it.user?.username.isNullOrEmpty()) {
-                            vibrator?.vibrate()
-                            onReplyClick(it.id, it.user?.username.orEmpty(), it.user?.host)
-                        }
-                    },
-                    onRepostClick = {
-                        vibrator?.vibrate()
-                        onRepostClick(it.id)
-                    },
-                    onReactionClick = {
-                        vibrator?.vibrate()
-                        onReactionClick(it.id)
-                    },
-                    onOptionClick = {
-                        vibrator?.vibrate()
-                        onOptionClick(
-                            it.id,
-                            it.user?.id,
-                            it.user?.username,
-                            it.user?.host,
-                            it.text,
-                            it.uri
-                        )
-                    }
-                )
-                HorizontalDivider()
             }
         }
     }
@@ -176,7 +190,7 @@ fun TimelineItemSection(
 ) {
     Column(
         modifier = modifier
-            .fillMaxWidth()
+            .wrapContentWidth()
     ) {
         ListItem(
             modifier = Modifier
@@ -184,7 +198,7 @@ fun TimelineItemSection(
             leadingContent = {
                 AsyncImage(
                     modifier = Modifier
-                        .size(48.dp)
+                        .size(40.dp)
                         .clip(shape = CircleShape)
                         .clickable {
                             onIconClick(
@@ -208,15 +222,30 @@ fun TimelineItemSection(
             supportingContent = {
                 val instance = timelineItem.user?.instance
                 Column(modifier = Modifier.wrapContentHeight()) {
-                    if (instance != null) {
-                        InstanceInfoRow(
-                            timelineItem = timelineItem,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(RoundedCornerShape(4.dp))
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        val instanceName = timelineItem.user?.host
+                        val name = "@${timelineItem.user?.username}${instanceName?.let {
+                            "@$it"
+                        } ?: ""
+                        }"
+                        Text(
+                            modifier = Modifier.weight(1f),
+                            text = name,
+                            style = MaterialTheme.typography.labelMedium,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
                         )
-                        Spacer(modifier = Modifier.height(4.dp))
+                        if (instance != null) {
+                            InstanceInfoRow(
+                                timelineItem = timelineItem,
+                                modifier = Modifier.clip(CircleShape)
+                            )
+                        }
                     }
+                    Spacer(modifier = Modifier.height(4.dp))
                     NoteContent(
                         timelineItem = timelineItem,
                         modifier = Modifier
@@ -478,6 +507,7 @@ private fun InstanceInfoRow(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
+            .wrapContentWidth()
             .then(
                 if (!timelineItem.user?.instance?.themeColor.isNullOrEmpty()) {
                     Modifier.background(
@@ -495,7 +525,7 @@ private fun InstanceInfoRow(
         Spacer(modifier = Modifier.width(4.dp))
         AsyncImage(
             modifier = Modifier
-                .size(16.dp)
+                .size(12.dp)
                 .clip(RoundedCornerShape(4.dp)),
             model = timelineItem.user?.instance?.faviconUrl,
             contentDescription = null,
@@ -504,11 +534,12 @@ private fun InstanceInfoRow(
         Spacer(modifier = Modifier.width(4.dp))
         Text(
             text = timelineItem.user?.instance?.name ?: "",
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.bodySmall,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             color = Color.Black
         )
+        Spacer(modifier = Modifier.width(4.dp))
     }
 }
 
@@ -571,7 +602,12 @@ fun PreviewTimeLineItem() {
                 username = "sanao1006",
                 name = "sanao1006",
                 avatarUrl = "https://avatars.githubusercontent.com/u/20736526?v=4",
-                host = "misskey.io"
+                host = "misskey.ioおおおおおおおooo",
+                instance = Instance(
+                    name = "さなおすきー",
+                    faviconUrl = "https://misskey.io/favicon.ico",
+                    themeColor = "#808080"
+                )
             ),
             text = "Hello, World!",
             id = "1",
