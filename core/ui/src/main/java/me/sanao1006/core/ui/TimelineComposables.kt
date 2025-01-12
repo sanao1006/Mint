@@ -20,9 +20,7 @@ import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
@@ -68,7 +66,6 @@ typealias NoteUri = String
 @Composable
 fun TimelineColumn(
     modifier: Modifier = Modifier,
-    listState: LazyListState = rememberLazyListState(),
     timelineItems: List<TimelineItem?>,
     onIconClick: (String, String?, String?) -> Unit,
     onReplyClick: (NoteId, Username, Host?) -> Unit,
@@ -80,8 +77,7 @@ fun TimelineColumn(
     val vibrator = context.getSystemService<Vibrator>()
 
     LazyColumn(
-        modifier = modifier,
-        state = listState
+        modifier = modifier
     ) {
         itemsIndexed(timelineItems) { index, it ->
             it?.let { timelineItem ->
