@@ -86,7 +86,7 @@ class HomeScreenPresenter @Inject constructor(
                 timelineType = timelineType,
                 uiState = homeScreenUiState,
                 setSuccessLoading = { timelineEventPresenter.setSuccessLoading(it) },
-                getItems = { getNotesTimelineUseCase(it) }
+                getItems = { getNotesTimelineUseCase.invoke(it) }
             )
         }
 
@@ -117,6 +117,25 @@ class HomeScreenPresenter @Inject constructor(
                 HomeScreen.Event.OnDismissRequest -> {
                     timelineEventPresenter.setShowBottomSheet(false)
                 }
+
+                HomeScreen.Event.OnLoadMoreClicked -> {
+                    scope.launch {
+                        val loadUiState = fetchTimelineItems(
+                            timelineType = timelineType,
+                            uiState = homeScreenUiState,
+                            setSuccessLoading = { timelineEventPresenter.setSuccessLoading(it) },
+                            getItems = {
+                                getNotesTimelineUseCase.invoke(
+                                    it,
+                                    homeScreenUiState.untilId
+                                )
+                            }
+                        )
+                        val updatedTimelineItems = homeScreenUiState.timelineItems.toMutableList()
+                        updatedTimelineItems.addAll(loadUiState.timelineItems)
+                        homeScreenUiState = loadUiState.copy(timelineItems = updatedTimelineItems)
+                    }
+                }
             }
         }
     }
@@ -134,6 +153,6 @@ private suspend fun fetchTimelineItems(
         uiState.copy(timelineItems = emptyList())
     } else {
         setSuccessLoading(true)
-        uiState.copy(timelineItems = timelineItems)
+        uiState.copy(timelineItems = timelineItems, untilId = timelineItems.lastOrNull()?.id ?: "")
     }
 }

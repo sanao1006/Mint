@@ -12,25 +12,31 @@ class GetNotesTimelineUseCase @Inject constructor(
     private val notesRepository: NotesRepository,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
-    suspend operator fun invoke(timelineType: TimelineType): List<TimelineItem> {
+    suspend operator fun invoke(
+        timelineType: TimelineType,
+        untilId: String? = null
+    ): List<TimelineItem> {
         return withContext(ioDispatcher) {
             try {
                 val response = when (timelineType) {
                     TimelineType.HOME -> notesRepository.getNotesHomeTimeline(
                         notesTimeLineRequestBody = NotesTimeLineRequestBody(
-                            limit = LIMIT
+                            limit = LIMIT,
+                            untilId = untilId ?: ""
                         )
                     )
 
                     TimelineType.SOCIAL -> notesRepository.getNotesHybridTimeline(
                         notesTimeLineRequestBody = NotesTimeLineRequestBody(
-                            limit = LIMIT
+                            limit = LIMIT,
+                            untilId = untilId ?: ""
                         )
                     )
 
                     TimelineType.GLOBAL -> notesRepository.getNotesGlobalTimeline(
                         notesTimeLineRequestBody = NotesTimeLineRequestBody(
-                            limit = LIMIT
+                            limit = LIMIT,
+                            untilId = untilId ?: ""
                         )
                     )
                 }
