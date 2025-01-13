@@ -27,6 +27,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -53,6 +54,7 @@ import me.sanao1006.core.ui.NoteUri
 import me.sanao1006.core.ui.TimelineItemSection
 import me.sanao1006.core.ui.UserId
 import me.sanao1006.core.ui.Username
+import me.snao1006.res_value.ResString
 
 @Composable
 fun NotificationColumn(
@@ -360,23 +362,27 @@ private fun NotificationIcon(notificationType: NotificationType) {
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
-            text = when (notificationType) {
-                NotificationType.NOTES -> "Notes"
-                NotificationType.FOLLOWS -> "Follows"
-                NotificationType.RENOTE -> "Renote"
-                NotificationType.POLL_ENDED -> "Poll Ended"
-                NotificationType.RECEIVE_FOLLOW_REQUEST -> "Receive Follow Request"
-                NotificationType.FOLLOW_REQUEST_ACCEPTED -> "Follow Request Accepted"
-                NotificationType.ROLE_ASSIGNED -> "Role Assigned"
-                NotificationType.ACHIEVEMENT_EARNED -> "Achievement Earned"
-                NotificationType.EXPORT_COMPLETED -> "Export Completed"
-                NotificationType.LOGIN -> "Someone logged in"
-                NotificationType.APP -> "App"
-                NotificationType.TEST -> "Test"
-                NotificationType.POLL_VOTE -> "Poll Vote"
-                NotificationType.GROUP_INVITED -> "Group Invited"
-                else -> "Unknown"
-            }
+            text = stringResource(
+                when (notificationType) {
+                    NotificationType.NOTES -> ResString.notification_new_note
+                    NotificationType.FOLLOWS -> ResString.notification_followed
+                    NotificationType.RENOTE -> ResString.notification_renote
+                    NotificationType.POLL_ENDED -> ResString.notification_poll_ended
+                    NotificationType.RECEIVE_FOLLOW_REQUEST -> ResString.notification_follow_request
+                    NotificationType.FOLLOW_REQUEST_ACCEPTED ->
+                        ResString.notification_follow_request_accepted
+
+                    NotificationType.ROLE_ASSIGNED -> ResString.notification_role_assigned
+                    NotificationType.ACHIEVEMENT_EARNED -> ResString.notification_achievement_earned
+                    NotificationType.EXPORT_COMPLETED -> ResString.notification_export_completed
+                    NotificationType.LOGIN -> ResString.notification_login
+                    NotificationType.APP -> ResString.notification_app
+                    NotificationType.TEST -> ResString.notification_test
+                    NotificationType.POLL_VOTE -> ResString.notification_poll_vote
+                    NotificationType.GROUP_INVITED -> ResString.notification_group_invited
+                    else -> ResString.notification_unknown
+                }
+            )
         )
     }
 }

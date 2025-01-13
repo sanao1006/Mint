@@ -88,4 +88,19 @@
     <string name="log_out_confirm">Are you sure you want to log out?</string>
     <string name="log_out_failed">Log out failed. Please try again.</string>
     <string name="renote_description">Renoted by %1$s</string>
+    <string name="notification_new_note">New Note</string>
+    <string name="notification_followed">You are followed</string>
+    <string name="notification_renote">Renoted</string>
+    <string name="notification_poll_ended">Poll results have become available</string>
+    <string name="notification_follow_request">You\'ve received a follow request</string>
+    <string name="notification_follow_request_accepted">Your follow request was accepted</string>
+    <string name="notification_role_assigned">Role given</string>
+    <string name="notification_achievement_earned">Achievement unlocked</string>
+    <string name="notification_export_completed">The export has been completed</string>
+    <string name="notification_login">Sign in</string>
+    <string name="notification_app">Notifications from linked apps</string>
+    <string name="notification_test">Notification test</string>
+    <string name="notification_poll_vote">Poll vote</string>
+    <string name="notification_group_invited">Group Invited</string>
+    <string name="notification_unknown">Unknown</string>
 </resources>
