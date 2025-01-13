@@ -53,6 +53,7 @@ import androidx.core.content.getSystemService
 import coil3.compose.AsyncImage
 import ir.alirezaivaz.tablericons.TablerIcons
 import kotlinx.serialization.json.JsonObject
+import me.sanao1006.core.data.util.LinkifyText
 import me.sanao1006.core.data.util.TimeUtils.getRelativeTimeString
 import me.sanao1006.core.data.util.vibrate
 import me.sanao1006.core.designsystem.MintTheme
@@ -445,10 +446,11 @@ private fun NoteContent(
 ) {
     Column(modifier = modifier) {
         if (timelineItem.text.isNotEmpty()) {
-            Text(
+            LinkifyText(
                 text = timelineItem.text
             )
         }
+
         if (timelineItem.files.isNotEmpty()) {
             // Bug?: When Text is empty and there is a file, insert an empty character between the two.
             // Otherwise, the layout of timeline items will be corrupted for some reason.
