@@ -11,6 +11,7 @@ import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuitx.effects.LaunchedImpressionEffect
+import javax.inject.Inject
 import kotlinx.coroutines.launch
 import me.sanao1006.core.data.compositionLocal.LocalNavigator
 import me.sanao1006.core.data.util.suspendRunCatching
@@ -25,7 +26,6 @@ import me.sanao1006.screens.LoginScreen
 import me.sanao1006.screens.SearchScreen
 import me.sanao1006.screens.UserScreen
 import me.snao1006.res_value.ResString
-import javax.inject.Inject
 
 data class DrawerState(
     val loginUserInfo: LoginUserInfo,
