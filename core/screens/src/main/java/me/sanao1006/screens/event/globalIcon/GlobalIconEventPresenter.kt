@@ -33,7 +33,9 @@ class GlobalIconEventPresenter @Inject constructor() : Presenter<DrawerEventStat
                 }
 
                 GlobalIconEvent.OnBackBeforeScreen -> {
-                    navigator.pop()
+                    navigator.peek()?.let { navigator.pop() } ?: run {
+                        navigator.resetRoot(HomeScreen)
+                    }
                 }
             }
         }

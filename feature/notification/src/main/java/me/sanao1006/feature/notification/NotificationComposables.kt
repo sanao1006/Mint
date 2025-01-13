@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,6 +27,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -52,6 +54,7 @@ import me.sanao1006.core.ui.NoteUri
 import me.sanao1006.core.ui.TimelineItemSection
 import me.sanao1006.core.ui.UserId
 import me.sanao1006.core.ui.Username
+import me.snao1006.res_value.ResString
 
 @Composable
 fun NotificationColumn(
@@ -72,7 +75,6 @@ fun NotificationColumn(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp)
             ) {
                 if (index == 0) {
                     Spacer(modifier = Modifier.height(16.dp))
@@ -96,6 +98,7 @@ fun NotificationColumn(
                             context = context,
                             onIconClick = onIconClick
                         )
+                        Spacer(modifier = Modifier.height(16.dp))
                     }
                 }
             }
@@ -115,7 +118,10 @@ private fun NotificationSectionMessage(
     onOptionClick: (NoteId, UserId?, Username?, Host?, NoteText, NoteUri) -> Unit
 ) {
     Column(modifier = modifier) {
-        Row(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Spacer(modifier = Modifier.width(16.dp))
             Icon(
                 painter = painterResource(
@@ -127,7 +133,7 @@ private fun NotificationSectionMessage(
                 ),
                 contentDescription = ""
             )
-            Spacer(modifier = Modifier.width(4.dp))
+            Spacer(modifier = Modifier.width(8.dp))
 
             notificationUiState.user?.let {
                 Text(
@@ -140,7 +146,6 @@ private fun NotificationSectionMessage(
                 )
             }
         }
-        Spacer(modifier = Modifier.height(4.dp))
 
         if (notificationUiState.timelineItem != null) {
             TimelineItemSection(
@@ -332,28 +337,54 @@ private fun ReactionItem(reactions: JsonObject?, reactionsEmojis: JsonObject?) {
 
 @Composable
 private fun NotificationIcon(notificationType: NotificationType) {
-    Icon(
-        painter = painterResource(
-            when (notificationType) {
-                NotificationType.NOTES -> TablerIcons.FileText
-                NotificationType.FOLLOWS -> TablerIcons.UserPlus
-                NotificationType.RENOTE -> TablerIcons.Repeat
-                NotificationType.POLL_ENDED -> TablerIcons.ChartInfographic
-                NotificationType.RECEIVE_FOLLOW_REQUEST -> TablerIcons.UserCheck
-                NotificationType.FOLLOW_REQUEST_ACCEPTED -> TablerIcons.UserCheck
-                NotificationType.ROLE_ASSIGNED -> TablerIcons.UserCheck
-                NotificationType.ACHIEVEMENT_EARNED -> TablerIcons.Trophy
-                NotificationType.EXPORT_COMPLETED -> TablerIcons.Download
-                NotificationType.LOGIN -> TablerIcons.Login
-                NotificationType.APP -> TablerIcons.Apps
-                NotificationType.TEST -> TablerIcons.TestPipe
-                NotificationType.POLL_VOTE -> TablerIcons.ChartBar
-                NotificationType.GROUP_INVITED -> TablerIcons.UserPlus
-                else -> TablerIcons.ExclamationMark
-            }
-        ),
-        contentDescription = ""
-    )
+    Row {
+        Icon(
+            painter = painterResource(
+                when (notificationType) {
+                    NotificationType.NOTES -> TablerIcons.FileText
+                    NotificationType.FOLLOWS -> TablerIcons.UserPlus
+                    NotificationType.RENOTE -> TablerIcons.Repeat
+                    NotificationType.POLL_ENDED -> TablerIcons.ChartInfographic
+                    NotificationType.RECEIVE_FOLLOW_REQUEST -> TablerIcons.UserCheck
+                    NotificationType.FOLLOW_REQUEST_ACCEPTED -> TablerIcons.UserCheck
+                    NotificationType.ROLE_ASSIGNED -> TablerIcons.UserCheck
+                    NotificationType.ACHIEVEMENT_EARNED -> TablerIcons.Trophy
+                    NotificationType.EXPORT_COMPLETED -> TablerIcons.Download
+                    NotificationType.LOGIN -> TablerIcons.Login
+                    NotificationType.APP -> TablerIcons.Apps
+                    NotificationType.TEST -> TablerIcons.TestPipe
+                    NotificationType.POLL_VOTE -> TablerIcons.ChartBar
+                    NotificationType.GROUP_INVITED -> TablerIcons.UserPlus
+                    else -> TablerIcons.ExclamationMark
+                }
+            ),
+            contentDescription = ""
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(
+            text = stringResource(
+                when (notificationType) {
+                    NotificationType.NOTES -> ResString.notification_new_note
+                    NotificationType.FOLLOWS -> ResString.notification_followed
+                    NotificationType.RENOTE -> ResString.notification_renote
+                    NotificationType.POLL_ENDED -> ResString.notification_poll_ended
+                    NotificationType.RECEIVE_FOLLOW_REQUEST -> ResString.notification_follow_request
+                    NotificationType.FOLLOW_REQUEST_ACCEPTED ->
+                        ResString.notification_follow_request_accepted
+
+                    NotificationType.ROLE_ASSIGNED -> ResString.notification_role_assigned
+                    NotificationType.ACHIEVEMENT_EARNED -> ResString.notification_achievement_earned
+                    NotificationType.EXPORT_COMPLETED -> ResString.notification_export_completed
+                    NotificationType.LOGIN -> ResString.notification_login
+                    NotificationType.APP -> ResString.notification_app
+                    NotificationType.TEST -> ResString.notification_test
+                    NotificationType.POLL_VOTE -> ResString.notification_poll_vote
+                    NotificationType.GROUP_INVITED -> ResString.notification_group_invited
+                    else -> ResString.notification_unknown
+                }
+            )
+        )
+    }
 }
 
 @Composable
@@ -412,17 +443,43 @@ private fun PreviewNotificationColumn() {
                     ).jsonObject,
                     createdAt = "2021-09-01T00:00:00Z"
                 )
+            ),
+            NotificationUiStateObject(
+                id = "3",
+                type = "login",
+                createdAt = "2021-09-01T00:00:00Z",
+                user = User(
+                    id = "1",
+                    username = "user1",
+                    name = "User 1",
+                    avatarUrl = "https://example.com"
+                ),
+                timelineItem = TimelineItem(
+                    id = "3",
+                    user = User(
+                        id = "2",
+                        username = "user3",
+                        name = "User 3",
+                        avatarUrl = "https://example.com"
+                    ),
+                    text = "Hello, World!",
+                    uri = "https://example.com/2",
+                    visibility = Visibility.PUBLIC,
+                    createdAt = "2021-09-01T00:00:00Z"
+                )
             )
         )
         val context = LocalContext.current
-        NotificationColumn(
-            context = context,
-            notifications = notifications,
-            onIconClick = { _, _, _ -> },
-            onReplyClick = { _, _, _ -> },
-            onRepostClick = {},
-            onOptionClick = { _, _, _, _, _, _ -> },
-            onReactionClick = {}
-        )
+        Surface {
+            NotificationColumn(
+                context = context,
+                notifications = notifications,
+                onIconClick = { _, _, _ -> },
+                onReplyClick = { _, _, _ -> },
+                onRepostClick = {},
+                onOptionClick = { _, _, _, _, _, _ -> },
+                onReactionClick = {}
+            )
+        }
     }
 }

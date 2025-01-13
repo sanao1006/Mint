@@ -88,4 +88,19 @@
     <string name="log_out_confirm">ログアウトしますか？</string>
     <string name="log_out_failed">ログアウトが失敗しました。再試行してください</string>
     <string name="renote_description">%1$sがリノート</string>
+    <string name="notification_new_note">新しい投稿</string>
+    <string name="notification_followed">フォローされました</string>
+    <string name="notification_renote">リノートされました</string>
+    <string name="notification_poll_ended">アンケートの結果が出ました</string>
+    <string name="notification_follow_request">フォローリクエストが来ました</string>
+    <string name="notification_follow_request_accepted">フォローリクエストが承認されました</string>
+    <string name="notification_role_assigned">ロールが付与されました</string>
+    <string name="notification_achievement_earned">実績解除</string>
+    <string name="notification_export_completed">エクスポートが完了しました</string>
+    <string name="notification_login">ログインがありました</string>
+    <string name="notification_app">連携アプリからの通知</string>
+    <string name="notification_test">通知のテスト</string>
+    <string name="notification_poll_vote">投票しました</string>
+    <string name="notification_group_invited">グループに招待されました</string>
+    <string name="notification_unknown">不明な通知</string>
 </resources>
