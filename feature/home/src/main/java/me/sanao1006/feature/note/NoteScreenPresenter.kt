@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.presenter.Presenter
+import com.slack.circuitx.effects.LaunchedImpressionEffect
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -15,12 +16,17 @@ import kotlinx.coroutines.launch
 import me.sanao1006.core.data.compositionLocal.LocalNavigator
 import me.sanao1006.core.data.util.suspendRunCatching
 import me.sanao1006.core.domain.home.CreateNotesUseCase
+import me.sanao1006.core.domain.user.GetUserShowUserCase
+import me.sanao1006.core.model.requestbody.users.UsersShowRequestBody
 import me.sanao1006.core.model.uistate.NoteScreenUiState
+import me.sanao1006.core.model.uistate.NoteTargetState
+import me.sanao1006.core.model.uistate.UserScreenUiState
 import me.sanao1006.screens.NoteScreen
 
 class NoteScreenPresenter @AssistedInject constructor(
     @Assisted private val screen: NoteScreen,
-    private val createNotesUseCase: CreateNotesUseCase
+    private val createNotesUseCase: CreateNotesUseCase,
+    private val getUserShowUserCase: GetUserShowUserCase
 ) : Presenter<NoteScreen.State> {
     @Composable
     override fun present(): NoteScreen.State {
@@ -34,6 +40,33 @@ class NoteScreenPresenter @AssistedInject constructor(
                 )
             )
         }
+
+        screen.replyObject?.let {
+            LaunchedImpressionEffect(Unit) {
+                val user = getUserShowUserCase
+                    .invoke(
+                        isFromDrawer = false,
+                        usersShowRequestBody = UsersShowRequestBody(userId = it.userId)
+                    )
+                when (user) {
+                    is UserScreenUiState.Success -> {
+                        uiState = uiState.copy(
+                            noteTarget = NoteTargetState(
+                                userName = user.username,
+                                name = user.name,
+                                avatarUrl = user.avatarUrl,
+                                instance = user.instance,
+                                text = it.text,
+                                host = user.host
+                            )
+                        )
+                    }
+
+                    else -> {}
+                }
+            }
+        }
+
         return NoteScreen.State(
             uiState = uiState
         ) {

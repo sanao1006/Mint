@@ -46,5 +46,7 @@ data class NoteScreen(
 @Parcelize
 data class ReplyObject(
     val id: String,
+    val userId: String,
+    val text: String,
     val user: String
 ) : Parcelable

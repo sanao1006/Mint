@@ -1,5 +1,6 @@
 package me.sanao1006.core.model.uistate
 
+import me.sanao1006.core.model.notes.Instance
 import me.sanao1006.core.model.notes.ReactionAcceptance
 import me.sanao1006.core.model.notes.Visibility
 
@@ -11,7 +12,8 @@ data class NoteScreenUiState(
     val isShowBottomSheet: Boolean = false,
     val noteOptionContent: NoteOptionContent = NoteOptionContent.VISIBILITY,
     val replyId: String? = null,
-    val renoteId: String? = null
+    val renoteId: String? = null,
+    val noteTarget: NoteTargetState? = null
 )
 
 enum class NoteOptionContent {
@@ -19,3 +21,13 @@ enum class NoteOptionContent {
     LOCAL_ONLY,
     REACTION_ACCEPTANCE
 }
+
+// reply or quote
+data class NoteTargetState(
+    val userName: String,
+    val name: String?,
+    val avatarUrl: String?,
+    val instance: Instance?,
+    val text: String,
+    val host: String?
+)

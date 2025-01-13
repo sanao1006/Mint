@@ -5,7 +5,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -13,17 +17,24 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.retained.rememberRetained
 import com.slack.circuitx.effects.LaunchedImpressionEffect
 import dagger.hilt.components.SingletonComponent
 import me.sanao1006.core.designsystem.MintTheme
 import me.sanao1006.core.model.uistate.NoteOptionContent
+import me.sanao1006.core.model.uistate.NoteTargetState
 import me.sanao1006.screens.NoteScreen
 import me.snao1006.res_value.ResString
 
@@ -76,6 +87,11 @@ private fun NoteScreenContent(
     Column(
         modifier = modifier
     ) {
+        // reply or quote target
+        state.uiState.noteTarget?.let {
+            ReplyTargetNote(it)
+        }
+
         NoteScreenTextField(
             modifier = Modifier
                 .fillMaxSize()
@@ -122,6 +138,40 @@ private fun NoteScreenTextField(
             )
         }
     )
+}
+
+@Composable
+private fun ReplyTargetNote(noteTargetState: NoteTargetState) {
+    ElevatedCard {
+        ListItem(
+            leadingContent = {
+                AsyncImage(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(shape = CircleShape),
+                    model = noteTargetState.avatarUrl,
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop
+                )
+            },
+            headlineContent = {
+                Text(
+                    text = noteTargetState.name ?: noteTargetState.userName,
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            },
+            supportingContent = {
+                Text(
+                    text = noteTargetState.text,
+                    maxLines = 5,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

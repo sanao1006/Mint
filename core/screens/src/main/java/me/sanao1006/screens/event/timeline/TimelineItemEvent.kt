@@ -19,6 +19,8 @@ sealed class TimelineItemEvent : CircuitUiEvent {
     data class OnTimelineItemReplyClicked(
         val id: String,
         val user: String,
+        val userId: String?,
+        val text: String,
         val host: String?
     ) : TimelineItemEvent()
 
@@ -92,7 +94,9 @@ fun TimelineItemEvent.OnTimelineItemReplyClicked.handleTimelineItemReplyClicked(
         NoteScreen(
             replyObject = ReplyObject(
                 id = this.id,
-                user = user
+                user = user,
+                text = this.text,
+                userId = this.userId ?: ""
             )
         )
     )
