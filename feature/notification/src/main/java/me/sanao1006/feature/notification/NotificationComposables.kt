@@ -62,8 +62,8 @@ fun NotificationColumn(
     context: Context,
     notifications: List<NotificationUiStateObject>,
     onIconClick: (String, String?, String?) -> Unit,
-    onReplyClick: (NoteId, Username, Host?) -> Unit,
-    onRepostClick: (NoteId) -> Unit,
+    onReplyClick: (NoteId, Username, UserId, NoteText, Host?) -> Unit,
+    onRepostClick: (NoteId, UserId, NoteText) -> Unit,
     onReactionClick: (NoteId) -> Unit,
     onOptionClick: (NoteId, UserId?, Username?, Host?, NoteText, NoteUri) -> Unit
 ) {
@@ -112,8 +112,8 @@ private fun NotificationSectionMessage(
     notificationUiState: NotificationUiStateObject,
     modifier: Modifier = Modifier,
     onIconClick: (String, String?, String?) -> Unit,
-    onReplyClick: (NoteId, Username, Host?) -> Unit,
-    onRepostClick: (NoteId) -> Unit,
+    onReplyClick: (NoteId, Username, UserId, NoteText, Host?) -> Unit,
+    onRepostClick: (NoteId, UserId, NoteText) -> Unit,
     onReactionClick: (NoteId) -> Unit,
     onOptionClick: (NoteId, UserId?, Username?, Host?, NoteText, NoteUri) -> Unit
 ) {
@@ -156,11 +156,19 @@ private fun NotificationSectionMessage(
                         onReplyClick(
                             notificationUiState.timelineItem!!.id,
                             notificationUiState.timelineItem!!.user!!.username,
+                            notificationUiState.timelineItem!!.user!!.id,
+                            notificationUiState.timelineItem!!.text,
                             notificationUiState.user?.host
                         )
                     }
                 },
-                onRepostClick = { onRepostClick(notificationUiState.id) },
+                onRepostClick = {
+                    onRepostClick(
+                        notificationUiState.id,
+                        notificationUiState.user?.id.orEmpty(),
+                        notificationUiState.timelineItem!!.text
+                    )
+                },
                 onReactionClick = { onReactionClick(notificationUiState.id) },
                 onOptionClick = {
                     onOptionClick(
@@ -475,8 +483,8 @@ private fun PreviewNotificationColumn() {
                 context = context,
                 notifications = notifications,
                 onIconClick = { _, _, _ -> },
-                onReplyClick = { _, _, _ -> },
-                onRepostClick = {},
+                onReplyClick = { _, _, _, _, _ -> },
+                onRepostClick = { _, _, _ -> },
                 onOptionClick = { _, _, _, _, _, _ -> },
                 onReactionClick = {}
             )

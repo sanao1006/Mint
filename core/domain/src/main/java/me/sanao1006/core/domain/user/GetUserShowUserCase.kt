@@ -23,8 +23,8 @@ class GetUserShowUserCase @Inject constructor(
         usersShowRequestBody: UsersShowRequestBody
     ): UserScreenUiState = withContext(ioDispatcher) {
         try {
-            val response = accountRepository.i()
             if (isFromDrawer) {
+                val response = accountRepository.i()
                 response.toUserScreenUiState()
             } else {
                 val user = usersRepository.getUsersShow(usersShowRequestBody)

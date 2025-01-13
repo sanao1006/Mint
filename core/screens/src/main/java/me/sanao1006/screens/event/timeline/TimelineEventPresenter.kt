@@ -24,6 +24,7 @@ import me.sanao1006.core.model.uistate.TimelineItemAction
 import me.sanao1006.core.model.uistate.TimelineUiState
 import me.sanao1006.datastore.DataStoreRepository
 import me.sanao1006.screens.NoteScreen
+import me.sanao1006.screens.NoteTargetObject
 
 data class TimelineState(
     var uiState: TimelineUiState,
@@ -63,7 +64,9 @@ class TimelineEventPresenter @Inject constructor(
                         uiState.copy(
                             showBottomSheet = true,
                             timelineAction = TimelineItemAction.Renote,
-                            selectedUserId = event.id
+                            selectedNoteId = event.id,
+                            selectedNoteUserId = event.userId,
+                            selectedNoteText = event.text
                         )
                 }
 
@@ -74,7 +77,7 @@ class TimelineEventPresenter @Inject constructor(
                         uiState = uiState.copy(
                             showBottomSheet = true,
                             timelineAction = TimelineItemAction.Option,
-                            selectedUserId = event.id,
+                            selectedNoteId = event.id,
                             selectedNoteText = event.text,
                             selectedNoteLink = event.uri
                         )
@@ -99,7 +102,16 @@ class TimelineEventPresenter @Inject constructor(
 
                 is TimelineItemEvent.OnQuoteClicked -> {
                     uiState = uiState.copy(showBottomSheet = false)
-                    navigator.goTo(NoteScreen(idForQuote = event.id))
+                    navigator.goTo(
+                        NoteScreen(
+                            quoteObject = NoteTargetObject(
+                                id = event.id,
+                                userId = event.userId,
+                                text = event.text,
+                                user = ""
+                            )
+                        )
+                    )
                 }
 
                 is TimelineItemEvent.OnDetailClicked -> {

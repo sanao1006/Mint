@@ -2,6 +2,7 @@ package me.sanao1006.core.model.uistate
 
 import me.sanao1006.core.model.common.Field
 import me.sanao1006.core.model.common.User
+import me.sanao1006.core.model.notes.Instance
 
 sealed interface UserScreenUiState {
     data object Loading : UserScreenUiState
@@ -17,7 +18,8 @@ sealed interface UserScreenUiState {
         val followersCount: Int = 0,
         val description: String? = null,
         val fields: List<Field>? = null,
-        val notesCount: Int = 0
+        val notesCount: Int = 0,
+        val instance: Instance? = null
     ) : UserScreenUiState
 }
 
@@ -31,5 +33,6 @@ fun User.toUserScreenUiState() = UserScreenUiState.Success(
     followersCount = followersCount ?: 0,
     description = description,
     fields = fields,
-    notesCount = notesCount ?: 0
+    notesCount = notesCount ?: 0,
+    instance = instance
 )

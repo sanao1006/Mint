@@ -5,7 +5,8 @@ data class TimelineUiState(
     val isFavorite: Boolean = false,
     val showBottomSheet: Boolean = false,
     val timelineAction: TimelineItemAction = TimelineItemAction.Renote,
-    val selectedUserId: String? = null,
+    val selectedNoteId: String? = null,
+    val selectedNoteUserId: String? = null,
     val selectedNoteText: String? = null,
     val selectedNoteLink: String? = null
 )

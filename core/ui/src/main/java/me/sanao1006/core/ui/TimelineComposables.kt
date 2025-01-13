@@ -72,8 +72,8 @@ fun TimelineColumn(
     modifier: Modifier = Modifier,
     timelineItems: List<TimelineItem?>,
     onIconClick: (String, String?, String?) -> Unit,
-    onReplyClick: (NoteId, Username, Host?) -> Unit,
-    onRepostClick: (NoteId) -> Unit,
+    onReplyClick: (NoteId, Username, UserId?, NoteText, Host?) -> Unit,
+    onRepostClick: (NoteId, UserId, NoteText) -> Unit,
     onReactionClick: (NoteId) -> Unit,
     onOptionClick: (NoteId, UserId?, Username?, Host?, NoteText, NoteUri) -> Unit
 ) {
@@ -149,12 +149,18 @@ fun TimelineColumn(
                         onReplyClick = {
                             if (!it.user?.username.isNullOrEmpty()) {
                                 vibrator?.vibrate()
-                                onReplyClick(it.id, it.user?.username.orEmpty(), it.user?.host)
+                                onReplyClick(
+                                    it.id,
+                                    it.user?.username.orEmpty(),
+                                    it.user?.id,
+                                    it.text,
+                                    it.user?.host
+                                )
                             }
                         },
                         onRepostClick = {
                             vibrator?.vibrate()
-                            onRepostClick(it.id)
+                            onRepostClick(it.id, it.user?.id.orEmpty(), it.text)
                         },
                         onReactionClick = {
                             vibrator?.vibrate()
@@ -227,7 +233,8 @@ fun TimelineItemSection(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         val instanceName = timelineItem.user?.host
-                        val name = "@${timelineItem.user?.username}${instanceName?.let {
+                        val name = "@${timelineItem.user?.username}${
+                        instanceName?.let {
                             "@$it"
                         } ?: ""
                         }"
@@ -311,7 +318,7 @@ private fun ReplySection(
         leadingContent = {
             AsyncImage(
                 modifier = Modifier
-                    .size(48.dp)
+                    .size(40.dp)
                     .clip(shape = CircleShape)
                     .clickable {
                         onIconClick(
