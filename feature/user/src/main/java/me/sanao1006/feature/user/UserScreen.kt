@@ -64,7 +64,7 @@ fun UserScreenUi(state: UserScreen.State, modifier: Modifier) {
                     navigationIcon = {
                         IconButton(
                             onClick = {
-                                state.globalIconEventSink(GlobalIconEvent.OnArrowBackIconClicked)
+                                state.globalIconEventSink(GlobalIconEvent.OnBackBeforeScreen)
                             }
                         ) {
                             Icon(painter = painterResource(TablerIcons.ArrowLeft), "")
