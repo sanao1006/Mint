@@ -34,14 +34,40 @@ class NoteScreenPresenter @AssistedInject constructor(
         var uiState by rememberRetained {
             mutableStateOf(
                 NoteScreenUiState(
-                    noteText = screen.replyObject?.user ?: "",
-                    replyId = screen.replyObject?.id,
-                    renoteId = screen.idForQuote
+                    noteText = screen.replyTargetObject?.user ?: "",
+                    replyId = screen.replyTargetObject?.id,
+                    renoteId = screen.quoteObject?.id
                 )
             )
         }
 
-        screen.replyObject?.let {
+        screen.replyTargetObject?.let {
+            LaunchedImpressionEffect(Unit) {
+                val user = getUserShowUserCase
+                    .invoke(
+                        isFromDrawer = false,
+                        usersShowRequestBody = UsersShowRequestBody(userId = it.userId)
+                    )
+                when (user) {
+                    is UserScreenUiState.Success -> {
+                        uiState = uiState.copy(
+                            noteTarget = NoteTargetState(
+                                userName = user.username,
+                                name = user.name,
+                                avatarUrl = user.avatarUrl,
+                                instance = user.instance,
+                                text = it.text,
+                                host = user.host
+                            )
+                        )
+                    }
+
+                    else -> {}
+                }
+            }
+        }
+
+        screen.quoteObject?.let {
             LaunchedImpressionEffect(Unit) {
                 val user = getUserShowUserCase
                     .invoke(

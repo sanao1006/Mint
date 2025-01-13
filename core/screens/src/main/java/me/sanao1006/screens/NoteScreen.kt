@@ -11,8 +11,8 @@ import me.sanao1006.core.model.uistate.NoteScreenUiState
 
 @Parcelize
 data class NoteScreen(
-    val replyObject: ReplyObject? = null,
-    val idForQuote: String? = null
+    val replyTargetObject: NoteTargetObject? = null,
+    val quoteObject: NoteTargetObject? = null
 ) : Screen {
     data class State(
         val uiState: NoteScreenUiState,
@@ -44,7 +44,7 @@ data class NoteScreen(
 }
 
 @Parcelize
-data class ReplyObject(
+data class NoteTargetObject(
     val id: String,
     val userId: String,
     val text: String,

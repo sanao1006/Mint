@@ -156,10 +156,12 @@ private fun NotificationScreenContent(
                         TimelineItemEvent.OnTimelineItemReplyClicked(id, user, userId, text, host)
                     )
                 },
-                onRepostClick = { userId ->
+                onRepostClick = { noteId, userId, text ->
                     state.timelineEventSink(
                         TimelineItemEvent.OnTimelineItemRepostClicked(
-                            userId
+                            id = noteId,
+                            userId = userId,
+                            text = text
                         )
                     )
                 },

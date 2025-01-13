@@ -5,7 +5,7 @@ import androidx.compose.material3.SnackbarHostState
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.GoToNavigator
 import me.sanao1006.screens.NoteScreen
-import me.sanao1006.screens.ReplyObject
+import me.sanao1006.screens.NoteTargetObject
 import me.sanao1006.screens.UserScreen
 import me.snao1006.res_value.ResString
 
@@ -24,7 +24,12 @@ sealed class TimelineItemEvent : CircuitUiEvent {
         val host: String?
     ) : TimelineItemEvent()
 
-    data class OnTimelineItemRepostClicked(val id: String) : TimelineItemEvent()
+    data class OnTimelineItemRepostClicked(
+        val id: String,
+        val userId: String,
+        val text: String
+    ) : TimelineItemEvent()
+
     data class OnTimelineItemReactionClicked(val id: String) : TimelineItemEvent()
     data class OnTimelineItemOptionClicked(
         val id: String,
@@ -40,7 +45,9 @@ sealed class TimelineItemEvent : CircuitUiEvent {
     ) : TimelineItemEvent()
 
     data class OnQuoteClicked(
-        val id: String
+        val id: String,
+        val userId: String,
+        val text: String
     ) : TimelineItemEvent()
 
     data class OnDetailClicked(
@@ -92,7 +99,7 @@ fun TimelineItemEvent.OnTimelineItemReplyClicked.handleTimelineItemReplyClicked(
     }
     navigator.goTo(
         NoteScreen(
-            replyObject = ReplyObject(
+            replyTargetObject = NoteTargetObject(
                 id = this.id,
                 user = user,
                 text = this.text,

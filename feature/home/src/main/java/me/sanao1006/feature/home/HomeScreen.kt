@@ -191,10 +191,12 @@ private fun TimelineColumn(
                     TimelineItemEvent.OnTimelineItemReplyClicked(id, user, userId, noteText, host)
                 )
             },
-            onRepostClick = { userId ->
+            onRepostClick = { noteId, userId, text ->
                 state.timelineEventSink(
                     TimelineItemEvent.OnTimelineItemRepostClicked(
-                        userId
+                        noteId,
+                        userId,
+                        text
                     )
                 )
             },

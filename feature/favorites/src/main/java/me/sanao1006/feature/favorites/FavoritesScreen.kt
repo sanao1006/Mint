@@ -61,10 +61,12 @@ fun FavoritesScreen(state: FavoritesScreen.State, modifier: Modifier) {
                             )
                         )
                     },
-                    onRepostClick = { userId ->
+                    onRepostClick = { noteId, userId, text ->
                         state.timelineEventSink(
                             TimelineItemEvent.OnTimelineItemRepostClicked(
-                                userId
+                                noteId,
+                                userId,
+                                text
                             )
                         )
                     },

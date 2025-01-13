@@ -73,7 +73,7 @@ fun TimelineColumn(
     timelineItems: List<TimelineItem?>,
     onIconClick: (String, String?, String?) -> Unit,
     onReplyClick: (NoteId, Username, UserId?, NoteText, Host?) -> Unit,
-    onRepostClick: (NoteId) -> Unit,
+    onRepostClick: (NoteId, UserId, NoteText) -> Unit,
     onReactionClick: (NoteId) -> Unit,
     onOptionClick: (NoteId, UserId?, Username?, Host?, NoteText, NoteUri) -> Unit
 ) {
@@ -160,7 +160,7 @@ fun TimelineColumn(
                         },
                         onRepostClick = {
                             vibrator?.vibrate()
-                            onRepostClick(it.id)
+                            onRepostClick(it.id, it.user?.id.orEmpty(), it.text)
                         },
                         onReactionClick = {
                             vibrator?.vibrate()

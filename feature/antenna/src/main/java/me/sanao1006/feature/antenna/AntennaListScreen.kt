@@ -61,10 +61,12 @@ fun AntennaListScreen(state: AntennaListScreen.State, modifier: Modifier) {
                             )
                         )
                     },
-                    onRepostClick = { userId ->
+                    onRepostClick = { noteId, userId, text ->
                         state.timelineEventSink(
                             TimelineItemEvent.OnTimelineItemRepostClicked(
-                                userId
+                                noteId,
+                                userId,
+                                text
                             )
                         )
                     },
