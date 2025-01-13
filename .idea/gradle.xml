@@ -38,6 +38,7 @@
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/announcement" />
             <option value="$PROJECT_DIR$/feature/antenna" />
+            <option value="$PROJECT_DIR$/feature/channel" />
             <option value="$PROJECT_DIR$/feature/favorites" />
             <option value="$PROJECT_DIR$/feature/home" />
             <option value="$PROJECT_DIR$/feature/login" />
