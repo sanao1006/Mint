@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,6 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.slack.circuit.overlay.OverlayEffect
+import com.slack.circuitx.overlays.BottomSheetOverlay
 import ir.alirezaivaz.tablericons.TablerIcons
 import me.sanao1006.core.model.notes.ReactionAcceptance
 import me.sanao1006.core.model.notes.Visibility
@@ -125,42 +126,51 @@ internal fun NoteOptionRow(
     onLocalOnlyClicked: (Boolean) -> Unit,
     onReactionAcceptanceClicked: (ReactionAcceptance?) -> Unit
 ) {
-    if (isShowBottomSheet) {
-        ModalBottomSheet(
-            onDismissRequest = onBottomSheetOuterClicked
-        ) {
+    OverlayEffect(
+        isShowBottomSheet
+    ) {
+        if (isShowBottomSheet) {
             val model = when (noteOptionContent) {
                 NoteOptionContent.VISIBILITY -> VisibilityItemIcon.getAllItems()
                 NoteOptionContent.LOCAL_ONLY -> LocalOnlyItemIcon.getAllItems()
                 NoteOptionContent.REACTION_ACCEPTANCE -> ReactionAcceptanceItemIcon.getAllItems()
             }
-            Column(
-                modifier = Modifier.padding(
-                    vertical = 24.dp,
-                    horizontal = 16.dp
-                ),
-                verticalArrangement = Arrangement.spacedBy(24.dp)
-            ) {
-                model.forEach {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                when (it) {
-                                    is VisibilityItemIcon -> onVisibilityClicked(it.value)
-                                    is LocalOnlyItemIcon -> onLocalOnlyClicked(it.value)
-                                    is ReactionAcceptanceItemIcon -> onReactionAcceptanceClicked(
-                                        it.value
-                                    )
+            show(
+                BottomSheetOverlay(
+                    model = model,
+                    onDismiss = onBottomSheetOuterClicked,
+                    content = { modelItems, _ ->
+                        Column(
+                            modifier = Modifier.padding(
+                                vertical = 24.dp,
+                                horizontal = 16.dp
+                            ),
+                            verticalArrangement = Arrangement.spacedBy(24.dp)
+                        ) {
+                            model.forEach {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clickable {
+                                            when (it) {
+                                                is VisibilityItemIcon -> onVisibilityClicked(
+                                                    it.value
+                                                )
+                                                is LocalOnlyItemIcon -> onLocalOnlyClicked(it.value)
+                                                is ReactionAcceptanceItemIcon ->
+                                                    onReactionAcceptanceClicked(it.value)
+                                            }
+                                        }
+                                ) {
+                                    Icon(painter = painterResource(it.resId), "")
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Text(text = stringResource(it.description))
                                 }
                             }
-                    ) {
-                        Icon(painter = painterResource(it.resId), "")
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(text = stringResource(it.description))
+                        }
                     }
-                }
-            }
+                )
+            )
         }
     }
 
