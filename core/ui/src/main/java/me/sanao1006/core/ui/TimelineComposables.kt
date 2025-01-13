@@ -48,11 +48,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.getSystemService
 import coil3.compose.AsyncImage
 import ir.alirezaivaz.tablericons.TablerIcons
 import kotlinx.serialization.json.JsonObject
-import me.sanao1006.core.data.util.LinkifyText
 import me.sanao1006.core.data.util.TimeUtils.getRelativeTimeString
 import me.sanao1006.core.data.util.vibrate
 import me.sanao1006.core.designsystem.MintTheme
@@ -219,6 +219,7 @@ fun TimelineItemSection(
                         },
                     model = timelineItem.user?.avatarUrl,
                     contentDescription = null,
+                    alignment = Alignment.TopStart,
                     contentScale = ContentScale.Crop
                 )
             },
@@ -238,9 +239,9 @@ fun TimelineItemSection(
                     ) {
                         val instanceName = timelineItem.user?.host
                         val name = "@${timelineItem.user?.username}${
-                        instanceName?.let {
-                            "@$it"
-                        } ?: ""
+                            instanceName?.let {
+                                "@$it"
+                            } ?: ""
                         }"
                         Text(
                             modifier = Modifier.weight(1f),
@@ -296,7 +297,7 @@ fun TimelineItemSection(
                     Spacer(modifier = Modifier.height(12.dp))
                     val canRenote =
                         timelineItem.visibility == Visibility.PUBLIC ||
-                            timelineItem.visibility == Visibility.HOME
+                                timelineItem.visibility == Visibility.HOME
                     TimelineActionRow(
                         canRenote = canRenote,
                         modifier = Modifier.fillMaxWidth(),
@@ -444,11 +445,20 @@ private fun NoteContent(
 ) {
     Column(modifier = modifier) {
         if (timelineItem.text.isNotEmpty()) {
-            LinkifyText(
+            Text(
                 text = timelineItem.text
             )
         }
         if (timelineItem.files.isNotEmpty()) {
+            // Bug?: When Text is empty and there is a file, insert an empty character between the two.
+            // Otherwise, the layout of timeline items will be corrupted for some reason.
+            if (timelineItem.text.isEmpty()) {
+                Text(
+                    text = "",
+                    fontSize = 0.sp,
+                    lineHeight = 0.sp
+                )
+            }
             val size = timelineItem.files.size
             Spacer(modifier = Modifier.height(4.dp))
             FlowRow(
