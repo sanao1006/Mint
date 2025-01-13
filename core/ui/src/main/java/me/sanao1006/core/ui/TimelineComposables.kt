@@ -376,7 +376,6 @@ private fun QuoteSection(
                     .padding(0.dp),
                 verticalArrangement = Arrangement.Top
             ) {
-                Text("hello")
                 AsyncImage(
                     modifier = Modifier
                         .size(32.dp)
