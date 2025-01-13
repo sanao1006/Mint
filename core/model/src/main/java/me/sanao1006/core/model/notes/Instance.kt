@@ -6,15 +6,15 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Instance(
     @SerialName("faviconUrl")
-    val faviconUrl: String = "",
+    val faviconUrl: String? = null,
     @SerialName("iconUrl")
-    val iconUrl: String = "",
+    val iconUrl: String? = null,
     @SerialName("name")
-    val name: String = "",
+    val name: String? = null,
     @SerialName("softwareName")
-    val softwareName: String = "",
+    val softwareName: String? = null,
     @SerialName("softwareVersion")
-    val softwareVersion: String = "",
+    val softwareVersion: String? = null,
     @SerialName("themeColor")
-    val themeColor: String = ""
+    val themeColor: String? = null
 )
