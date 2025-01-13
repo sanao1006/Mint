@@ -11,13 +11,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.slack.circuit.overlay.OverlayEffect
+import com.slack.circuitx.overlays.BottomSheetOverlay
 import ir.alirezaivaz.tablericons.TablerIcons
 import me.sanao1006.core.model.uistate.TimelineItemAction
 import me.snao1006.res_value.ResString
@@ -97,48 +98,58 @@ fun TimelineBottomSheet(
     onRenoteIconCLick: (RenoteActionIcon) -> Unit,
     onOptionIconCLick: (OptionActionIcon) -> Unit
 ) {
-    if (isShowBottomSheet) {
-        val model = when (timelineItemAction) {
-            TimelineItemAction.Renote -> RenoteActionIcon.getAllItems()
-            TimelineItemAction.Option -> OptionActionIcon.getAllItems(isFavorite)
-            TimelineItemAction.None -> emptyList()
-        }
-        ModalBottomSheet(
-            modifier = modifier,
-            onDismissRequest = onDismissRequest
-        ) {
-            Column(
-                modifier = Modifier.padding(
-                    vertical = 24.dp,
-                    horizontal = 16.dp
-                ),
-                verticalArrangement = Arrangement.spacedBy(24.dp)
-            ) {
-                model.forEach {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                when (timelineItemAction) {
-                                    TimelineItemAction.Renote -> onRenoteIconCLick(
-                                        it as RenoteActionIcon
-                                    )
+    OverlayEffect(
+        isShowBottomSheet
+    ) {
+        if (isShowBottomSheet) {
+            val model = when (timelineItemAction) {
+                TimelineItemAction.Renote -> RenoteActionIcon.getAllItems()
+                TimelineItemAction.Option -> OptionActionIcon.getAllItems(isFavorite)
+                TimelineItemAction.None -> emptyList()
+            }
+            show(
+                BottomSheetOverlay(
+                    model = model,
+                    onDismiss = onDismissRequest,
+                    content = { modelItems, overlayNavigator ->
+                        Column(
+                            modifier = Modifier.padding(
+                                vertical = 24.dp,
+                                horizontal = 16.dp
+                            ),
+                            verticalArrangement = Arrangement.spacedBy(24.dp)
+                        ) {
+                            model.forEach {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clickable {
+                                            when (timelineItemAction) {
+                                                TimelineItemAction.Renote -> {
+                                                    overlayNavigator.finish(Unit)
+                                                    onRenoteIconCLick(
+                                                        it as RenoteActionIcon
+                                                    )
+                                                }
 
-                                    TimelineItemAction.Option -> onOptionIconCLick(
-                                        it as OptionActionIcon
-                                    )
+                                                TimelineItemAction.Option -> onOptionIconCLick(
+                                                    it as OptionActionIcon
+                                                )
 
-                                    TimelineItemAction.None -> {
-                                    }
+                                                TimelineItemAction.None -> {
+                                                }
+                                            }
+                                        }
+                                ) {
+                                    Icon(painter = painterResource(it.resId), "")
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Text(text = stringResource(it.description))
                                 }
                             }
-                    ) {
-                        Icon(painter = painterResource(it.resId), "")
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(text = stringResource(it.description))
+                        }
                     }
-                }
-            }
+                )
+            )
         }
     }
 }
