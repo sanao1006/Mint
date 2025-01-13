@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -30,6 +31,7 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -50,8 +52,10 @@ import androidx.core.content.getSystemService
 import coil3.compose.AsyncImage
 import ir.alirezaivaz.tablericons.TablerIcons
 import kotlinx.serialization.json.JsonObject
+import me.sanao1006.core.data.util.LinkifyText
 import me.sanao1006.core.data.util.TimeUtils.getRelativeTimeString
 import me.sanao1006.core.data.util.vibrate
+import me.sanao1006.core.designsystem.MintTheme
 import me.sanao1006.core.model.common.User
 import me.sanao1006.core.model.meta.Note
 import me.sanao1006.core.model.notes.Instance
@@ -364,21 +368,30 @@ private fun QuoteSection(
     ListItem(
         modifier = modifier,
         leadingContent = {
-            AsyncImage(
+            Column(
                 modifier = Modifier
-                    .size(32.dp)
-                    .clip(shape = CircleShape)
-                    .clickable {
-                        onIconClick(
-                            note.user?.id ?: "",
-                            note.user?.username,
-                            note.user?.host
-                        )
-                    },
-                model = note.user?.avatarUrl,
-                contentDescription = null,
-                contentScale = ContentScale.Crop
-            )
+                    .fillMaxHeight()
+                    .padding(0.dp),
+                verticalArrangement = Arrangement.Top
+            ) {
+                Text("hello")
+                AsyncImage(
+                    modifier = Modifier
+                        .size(32.dp)
+                        .clip(shape = CircleShape)
+                        .clickable {
+                            onIconClick(
+                                note.user?.id ?: "",
+                                note.user?.username,
+                                note.user?.host
+                            )
+                        },
+                    model = note.user?.avatarUrl,
+                    contentDescription = null,
+                    alignment = Alignment.TopCenter,
+                    contentScale = ContentScale.Crop
+                )
+            }
         },
         headlineContent = {
             UserNameRow(
@@ -430,7 +443,11 @@ private fun NoteContent(
     timelineItem: TimelineItem
 ) {
     Column(modifier = modifier) {
-        Text(text = timelineItem.text)
+        if (timelineItem.text.isNotEmpty()) {
+            LinkifyText(
+                text = timelineItem.text
+            )
+        }
         if (timelineItem.files.isNotEmpty()) {
             val size = timelineItem.files.size
             Spacer(modifier = Modifier.height(4.dp))
@@ -602,30 +619,34 @@ private fun TimelineActionRow(
 @PreviewLightDark
 @Composable
 fun PreviewTimeLineItem() {
-    TimelineItemSection(
-        timelineItem = TimelineItem(
-            user = User(
-                id = "1",
-                username = "sanao1006",
-                name = "sanao1006",
-                avatarUrl = "https://avatars.githubusercontent.com/u/20736526?v=4",
-                host = "misskey.ioおおおおおおおooo",
-                instance = Instance(
-                    name = "さなおすきー",
-                    faviconUrl = "https://misskey.io/favicon.ico",
-                    themeColor = "#808080"
-                )
-            ),
-            text = "Hello, World!",
-            id = "1",
-            visibility = Visibility.get("public"),
-            "",
-            "2024-12-14T08:58:55.689Z"
-        ),
-        onIconClick = { _, _, _ -> },
-        onReplyClick = {},
-        onRepostClick = {},
-        onReactionClick = {},
-        onOptionClick = {}
-    )
+    MintTheme {
+        Surface {
+            TimelineItemSection(
+                timelineItem = TimelineItem(
+                    user = User(
+                        id = "1",
+                        username = "sanao1006",
+                        name = "sanao1006",
+                        avatarUrl = "https://avatars.githubusercontent.com/u/20736526?v=4",
+                        host = "misskey.ioおおおおおおおooo",
+                        instance = Instance(
+                            name = "さなおすきー",
+                            faviconUrl = "https://misskey.io/favicon.ico",
+                            themeColor = "#808080"
+                        )
+                    ),
+                    text = "Hello, World!",
+                    id = "1",
+                    visibility = Visibility.get("public"),
+                    "",
+                    "2024-12-14T08:58:55.689Z"
+                ),
+                onIconClick = { _, _, _ -> },
+                onReplyClick = {},
+                onRepostClick = {},
+                onReactionClick = {},
+                onOptionClick = {}
+            )
+        }
+    }
 }

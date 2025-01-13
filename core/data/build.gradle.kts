@@ -4,6 +4,7 @@ plugins {
     id("mint.convention.hilt")
     id("mint.convention.circuit")
     id("mint.convention.spotless")
+    id("mint.convention.library.compose")
 }
 
 dependencies {
