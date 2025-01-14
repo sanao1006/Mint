@@ -36,7 +36,7 @@ fun LinkifyText(
         linksList.forEach {
             addStyle(
                 style = SpanStyle(
-                    color = Color.Blue,
+                    color = Color(0xFF1DA1F2),
                     textDecoration = TextDecoration.Underline
                 ),
                 start = it.start,
