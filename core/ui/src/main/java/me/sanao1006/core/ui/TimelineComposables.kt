@@ -52,6 +52,7 @@ import androidx.core.content.getSystemService
 import coil3.compose.AsyncImage
 import ir.alirezaivaz.tablericons.TablerIcons
 import kotlinx.serialization.json.JsonObject
+import me.sanao1006.core.data.compositionLocal.LocalLazyListStateProvider
 import me.sanao1006.core.data.util.LinkifyText
 import me.sanao1006.core.data.util.TimeUtils.getRelativeTimeString
 import me.sanao1006.core.data.util.vibrate
@@ -83,9 +84,11 @@ fun TimelineColumn(
 ) {
     val context = LocalContext.current
     val vibrator = context.getSystemService<Vibrator>()
+    val lazyListState = LocalLazyListStateProvider.current
 
     LazyColumn(
         modifier = modifier.padding(horizontal = 4.dp),
+        state = lazyListState,
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         itemsIndexed(timelineItems) { index, it ->

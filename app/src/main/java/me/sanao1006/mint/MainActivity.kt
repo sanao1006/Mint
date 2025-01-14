@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -25,6 +26,7 @@ import com.slack.circuitx.android.rememberAndroidScreenAwareNavigator
 import com.slack.circuitx.gesturenavigation.GestureNavigationDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import me.sanao1006.core.data.compositionLocal.LocalLazyListStateProvider
 import me.sanao1006.core.data.compositionLocal.LocalNavigator
 import me.sanao1006.core.designsystem.MintTheme
 import me.sanao1006.screens.HomeScreen
@@ -68,10 +70,11 @@ private fun SetupNavigator(
     val backstack = rememberSaveableBackStack(screen)
     val circuitNavigator = rememberCircuitNavigator(backstack)
     val navigator = rememberAndroidScreenAwareNavigator(circuitNavigator, context)
-
+    val lazyListState = rememberLazyListState()
     CompositionLocalProvider(
         LocalContext provides context,
-        LocalNavigator provides navigator
+        LocalNavigator provides navigator,
+        LocalLazyListStateProvider provides lazyListState
     ) {
         CircuitCompositionLocals(circuit) {
             ContentWithOverlays {
