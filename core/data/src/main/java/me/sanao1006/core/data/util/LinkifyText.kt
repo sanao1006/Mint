@@ -1,6 +1,5 @@
 package me.sanao1006.core.data.util
 
-import android.util.Patterns
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,6 +16,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
+import java.util.regex.Pattern
 
 @Composable
 fun LinkifyText(
@@ -78,8 +78,15 @@ private data class LinkInfo(
     val end: Int
 )
 
+private val urlPattern: Pattern = Pattern.compile(
+    "(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)" +
+        "(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*" +
+        "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*$~@!:/{};']*)",
+    Pattern.CASE_INSENSITIVE or Pattern.MULTILINE or Pattern.DOTALL
+)
+
 private fun extractUrls(text: String): List<LinkInfo> = buildList {
-    val matcher = Patterns.WEB_URL.matcher(text)
+    val matcher = urlPattern.matcher(text)
     while (matcher.find()) {
         val matchStart = matcher.start(1)
         val matchEnd = matcher.end()
