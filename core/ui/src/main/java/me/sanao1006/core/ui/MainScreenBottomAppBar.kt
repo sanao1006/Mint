@@ -106,7 +106,12 @@ private fun MainScreenBottomAppBar(
                                 }
                             }
                         ),
-                        contentDescription = null
+                        contentDescription = null,
+                        tint = if (mainSheetType == it) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            MaterialTheme.colorScheme.onSurface
+                        }
                     )
                 }
             }
