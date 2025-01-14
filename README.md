@@ -7,7 +7,8 @@
 </p>
 
 ## Download
-- [Github Releases](https://github.com/sanao1006/Mint/releases)
+### Github
+[<img src="https://censorship.no/img/github-badge.png" alt="Get it on Github" height="80">](https://github.com/sanao1006/Mint/releases)
 
 ## Tech stack & Open-source libraries
 
