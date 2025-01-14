@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -370,29 +369,22 @@ private fun QuoteSection(
     ListItem(
         modifier = modifier,
         leadingContent = {
-            Column(
+            AsyncImage(
                 modifier = Modifier
-                    .fillMaxHeight()
-                    .padding(0.dp),
-                verticalArrangement = Arrangement.Top
-            ) {
-                AsyncImage(
-                    modifier = Modifier
-                        .size(32.dp)
-                        .clip(shape = CircleShape)
-                        .clickable {
-                            onIconClick(
-                                note.user?.id ?: "",
-                                note.user?.username,
-                                note.user?.host
-                            )
-                        },
-                    model = note.user?.avatarUrl,
-                    contentDescription = null,
-                    alignment = Alignment.TopCenter,
-                    contentScale = ContentScale.Crop
-                )
-            }
+                    .size(32.dp)
+                    .clip(shape = CircleShape)
+                    .clickable {
+                        onIconClick(
+                            note.user?.id ?: "",
+                            note.user?.username,
+                            note.user?.host
+                        )
+                    },
+                model = note.user?.avatarUrl,
+                contentDescription = null,
+                alignment = Alignment.TopCenter,
+                contentScale = ContentScale.Crop
+            )
         },
         headlineContent = {
             UserNameRow(
