@@ -512,8 +512,13 @@ private fun CollapsibleText(cw: String, text: String) {
     var expand by rememberSaveable { mutableStateOf(false) }
     Text(text = cw)
     Spacer(modifier = Modifier.height(2.dp))
+    val textLength = text.length.toString()
     Text(
-        text = if (expand) "隠す" else "もっと見る",
+        text = if (expand) {
+            stringResource(ResString.cw_hide)
+        } else {
+            stringResource(ResString.cw_show_more, textLength)
+        },
         style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.primary,
         fontSize = 12.sp,
