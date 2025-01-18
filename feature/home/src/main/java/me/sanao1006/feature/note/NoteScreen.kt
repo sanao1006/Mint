@@ -55,6 +55,20 @@ fun NoteScreenUi(state: NoteScreen.State, modifier: Modifier) {
                 topBar = {
                     NoteScreenTopAppBar(
                         isSubmitEnabled = state.uiState.noteText.isNotBlank(),
+                        isShowBottomSheet = state.uiState.isShowBottomSheet,
+                        noteOptionContent = state.uiState.noteOptionContent,
+                        noteOptionState = NoteOptionState(
+                            visibility = state.uiState.visibility,
+                            localOnly = state.uiState.localOnly,
+                            reactionAcceptance = state.uiState.reactionAcceptance
+                        ),
+                        onBottomSheetOuterClicked = { state.eventSink(NoteScreen.Event.OnHideBottomSheet) },
+                        onIconClicked = { state.eventSink(NoteScreen.Event.OnShowBottomSheet(it)) },
+                        onVisibilityClicked = { state.eventSink(NoteScreen.Event.OnVisibilityChanged(it)) },
+                        onLocalOnlyClicked = { state.eventSink(NoteScreen.Event.OnLocalOnlyChanged(it)) },
+                        onReactionAcceptanceClicked = {
+                            state.eventSink(NoteScreen.Event.OnReactionAcceptanceChanged(it))
+                        },
                         onBackClicked = { state.eventSink(NoteScreen.Event.OnBackClicked) },
                         onNotePostClicked = {
                             focusManager.clearFocus()
@@ -100,24 +114,6 @@ private fun NoteScreenContent(
         ) { note ->
             state.eventSink(NoteScreen.Event.OnNoteTextChanged(note))
         }
-
-        NoteOptionRow(
-            isShowBottomSheet = state.uiState.isShowBottomSheet,
-            noteOptionContent = state.uiState.noteOptionContent,
-            noteOptionState = NoteOptionState(
-                visibility = state.uiState.visibility,
-                localOnly = state.uiState.localOnly,
-                reactionAcceptance = state.uiState.reactionAcceptance
-            ),
-            modifier = Modifier.imePadding(),
-            onBottomSheetOuterClicked = { state.eventSink(NoteScreen.Event.OnHideBottomSheet) },
-            onIconClicked = { state.eventSink(NoteScreen.Event.OnShowBottomSheet(it)) },
-            onVisibilityClicked = { state.eventSink(NoteScreen.Event.OnVisibilityChanged(it)) },
-            onLocalOnlyClicked = { state.eventSink(NoteScreen.Event.OnLocalOnlyChanged(it)) },
-            onReactionAcceptanceClicked = {
-                state.eventSink(NoteScreen.Event.OnReactionAcceptanceChanged(it))
-            }
-        )
     }
 }
 
