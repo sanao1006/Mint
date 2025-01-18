@@ -2,12 +2,17 @@ package me.sanao1006.feature.note
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -15,12 +20,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -31,6 +38,7 @@ import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.retained.rememberRetained
 import com.slack.circuitx.effects.LaunchedImpressionEffect
 import dagger.hilt.components.SingletonComponent
+import ir.alirezaivaz.tablericons.TablerIcons
 import me.sanao1006.core.designsystem.MintTheme
 import me.sanao1006.core.model.uistate.NoteOptionContent
 import me.sanao1006.core.model.uistate.NoteTargetState
@@ -53,7 +61,8 @@ fun NoteScreenUi(state: NoteScreen.State, modifier: Modifier) {
             Scaffold(
                 topBar = {
                     NoteScreenTopAppBar(
-                        isSubmitEnabled = state.uiState.noteText.isNotBlank(),
+                        isSubmitEnabled = state.uiState.noteText.isNotBlank() &&
+                            (state.uiState.expandCw && !state.uiState.cw.isNullOrBlank()),
                         isShowBottomSheet = state.uiState.isShowBottomSheet,
                         noteOptionContent = state.uiState.noteOptionContent,
                         noteOptionState = NoteOptionState(
@@ -114,10 +123,14 @@ private fun NoteScreenContent(
         }
 
         NoteScreenTextField(
+            expandCw = state.uiState.expandCw,
+            text = state.uiState.noteText,
+            cwText = state.uiState.cw,
             modifier = Modifier
                 .fillMaxSize()
                 .weight(1f),
-            text = state.uiState.noteText
+            onCwValueChange = { state.eventSink(NoteScreen.Event.OnCwTextChanged(it)) },
+            onCwClick = { state.eventSink(NoteScreen.Event.OnCwEnabledChanged) }
         ) { note ->
             state.eventSink(NoteScreen.Event.OnNoteTextChanged(note))
         }
@@ -126,10 +139,25 @@ private fun NoteScreenContent(
 
 @Composable
 private fun NoteScreenTextField(
-    modifier: Modifier = Modifier,
     text: String,
+    cwText: String?,
+    expandCw: Boolean,
+    modifier: Modifier = Modifier,
+    onCwClick: () -> Unit,
+    onCwValueChange: (String) -> Unit,
     onValueChange: (String) -> Unit
 ) {
+    if (expandCw) {
+        TextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = cwText ?: "",
+            placeholder = {
+                Text("注釈")
+            },
+            maxLines = 1,
+            onValueChange = onCwValueChange
+        )
+    }
     TextField(
         modifier = modifier,
         value = text,
@@ -141,6 +169,38 @@ private fun NoteScreenTextField(
             )
         }
     )
+    NoteActionRow(
+        expandCw = expandCw,
+        modifier = Modifier
+            .imePadding()
+            .fillMaxWidth()
+            .padding(horizontal = 4.dp),
+        onCwClick = onCwClick
+    )
+}
+
+@Composable
+private fun NoteActionRow(
+    expandCw: Boolean,
+    modifier: Modifier = Modifier,
+    onCwClick: () -> Unit
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        IconButton(onClick = onCwClick) {
+            Icon(
+                painter = painterResource(TablerIcons.EyeOff),
+                contentDescription = "",
+                tint = if (expandCw) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    MaterialTheme.colorScheme.onSurface
+                }
+            )
+        }
+    }
 }
 
 @Composable

@@ -101,6 +101,14 @@ class NoteScreenPresenter @AssistedInject constructor(
                     uiState = uiState.copy(noteText = it.text)
                 }
 
+                is NoteScreen.Event.OnCwTextChanged -> {
+                    uiState = uiState.copy(cw = it.text)
+                }
+
+                NoteScreen.Event.OnCwEnabledChanged -> {
+                    uiState = uiState.copy(expandCw = !uiState.expandCw)
+                }
+
                 is NoteScreen.Event.OnBackClicked -> {
                     navigator.pop()
                 }

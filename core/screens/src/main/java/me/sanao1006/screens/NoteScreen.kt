@@ -22,6 +22,8 @@ data class NoteScreen(
     sealed class Event : CircuitUiState {
         data object OnBackClicked : Event()
         data class OnNoteTextChanged(val text: String) : Event()
+        data class OnCwTextChanged(val text: String) : Event()
+        data object OnCwEnabledChanged : Event()
         data class OnNotePostClicked(val scope: CoroutineScope) : Event()
         data class OnShowBottomSheet(
             val optionContent: NoteOptionContent

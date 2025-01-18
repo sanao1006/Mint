@@ -13,7 +13,9 @@ data class NoteScreenUiState(
     val noteOptionContent: NoteOptionContent = NoteOptionContent.VISIBILITY,
     val replyId: String? = null,
     val renoteId: String? = null,
-    val noteTarget: NoteTargetState? = null
+    val noteTarget: NoteTargetState? = null,
+    val cw: String? = null,
+    val expandCw: Boolean = false
 )
 
 enum class NoteOptionContent {
