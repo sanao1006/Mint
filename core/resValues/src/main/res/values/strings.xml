@@ -105,4 +105,5 @@
     <string name="notification_unknown">Unknown</string>
     <string name="cw_show_more">Show content (%1$s characters)</string>
     <string name="cw_hide">Hide</string>
+    <string name="cw_comments">Comments</string>
 </resources>

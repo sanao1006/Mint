@@ -104,5 +104,6 @@
     <string name="notification_group_invited">グループに招待されました</string>
     <string name="notification_unknown">不明な通知</string>
     <string name="cw_show_more">もっと見る (%1$s文字)</string>
-    <string name="cw_hide">Hide</string>
+    <string name="cw_hide">隠す</string>
+    <string name="cw_comments">注釈</string>
 </resources>

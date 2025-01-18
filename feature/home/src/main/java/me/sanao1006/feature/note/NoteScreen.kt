@@ -62,7 +62,7 @@ fun NoteScreenUi(state: NoteScreen.State, modifier: Modifier) {
                 topBar = {
                     NoteScreenTopAppBar(
                         isSubmitEnabled = state.uiState.noteText.isNotBlank() &&
-                            (state.uiState.expandCw && !state.uiState.cw.isNullOrBlank()),
+                                (state.uiState.expandCw && !state.uiState.cw.isNullOrBlank()),
                         isShowBottomSheet = state.uiState.isShowBottomSheet,
                         noteOptionContent = state.uiState.noteOptionContent,
                         noteOptionState = NoteOptionState(
@@ -152,7 +152,7 @@ private fun NoteScreenTextField(
             modifier = Modifier.fillMaxWidth(),
             value = cwText ?: "",
             placeholder = {
-                Text("注釈")
+                Text(stringResource(ResString.cw_comments))
             },
             maxLines = 1,
             onValueChange = onCwValueChange
