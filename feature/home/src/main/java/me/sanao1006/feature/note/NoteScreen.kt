@@ -3,7 +3,6 @@ package me.sanao1006.feature.note
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -62,10 +61,18 @@ fun NoteScreenUi(state: NoteScreen.State, modifier: Modifier) {
                             localOnly = state.uiState.localOnly,
                             reactionAcceptance = state.uiState.reactionAcceptance
                         ),
-                        onBottomSheetOuterClicked = { state.eventSink(NoteScreen.Event.OnHideBottomSheet) },
-                        onIconClicked = { state.eventSink(NoteScreen.Event.OnShowBottomSheet(it)) },
-                        onVisibilityClicked = { state.eventSink(NoteScreen.Event.OnVisibilityChanged(it)) },
-                        onLocalOnlyClicked = { state.eventSink(NoteScreen.Event.OnLocalOnlyChanged(it)) },
+                        onBottomSheetOuterClicked = {
+                            state.eventSink(NoteScreen.Event.OnHideBottomSheet)
+                        },
+                        onIconClicked = {
+                            state.eventSink(NoteScreen.Event.OnShowBottomSheet(it))
+                        },
+                        onVisibilityClicked = {
+                            state.eventSink(NoteScreen.Event.OnVisibilityChanged(it))
+                        },
+                        onLocalOnlyClicked = {
+                            state.eventSink(NoteScreen.Event.OnLocalOnlyChanged(it))
+                        },
                         onReactionAcceptanceClicked = {
                             state.eventSink(NoteScreen.Event.OnReactionAcceptanceChanged(it))
                         },
