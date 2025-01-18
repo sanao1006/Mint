@@ -33,6 +33,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -440,8 +444,10 @@ private fun NoteContent(
 ) {
     Column(modifier = modifier) {
         if (timelineItem.text.isNotEmpty()) {
-            LinkifyText(
-                text = timelineItem.text
+            NoteText(
+                text = timelineItem.text,
+                cw = timelineItem.cw,
+                modifier = Modifier.fillMaxWidth()
             )
         }
 
@@ -483,6 +489,44 @@ private fun NoteContent(
             }
             Spacer(modifier = Modifier.height(4.dp))
         }
+    }
+}
+
+@Composable
+private fun NoteText(
+    text: String,
+    cw: String?,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier) {
+        if (cw != null) {
+            CollapsibleText(cw, text)
+        } else {
+            LinkifyText(text = text)
+        }
+    }
+}
+
+@Composable
+private fun CollapsibleText(cw: String, text: String) {
+    var expand by rememberSaveable { mutableStateOf(false) }
+    Text(text = cw)
+    Spacer(modifier = Modifier.height(2.dp))
+    val textLength = text.length.toString()
+    Text(
+        text = if (expand) {
+            stringResource(ResString.cw_hide)
+        } else {
+            stringResource(ResString.cw_show_more, textLength)
+        },
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.primary,
+        fontSize = 12.sp,
+        modifier = Modifier.clickable { expand = !expand }
+    )
+    Spacer(modifier = Modifier.height(2.dp))
+    if (expand) {
+        LinkifyText(text = text)
     }
 }
 
@@ -644,8 +688,9 @@ fun PreviewTimeLineItem() {
                     text = "Hello, World!",
                     id = "1",
                     visibility = Visibility.get("public"),
-                    "",
-                    "2024-12-14T08:58:55.689Z"
+                    cw = "あいうえお",
+                    uri = "",
+                    createdAt = "2024-12-14T08:58:55.689Z"
                 ),
                 onIconClick = { _, _, _ -> },
                 onReplyClick = {},
