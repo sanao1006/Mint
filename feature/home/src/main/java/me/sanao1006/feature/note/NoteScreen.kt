@@ -62,7 +62,7 @@ fun NoteScreenUi(state: NoteScreen.State, modifier: Modifier) {
                 topBar = {
                     NoteScreenTopAppBar(
                         isSubmitEnabled = state.uiState.noteText.isNotBlank() &&
-                                (state.uiState.expandCw && !state.uiState.cw.isNullOrBlank()),
+                            (state.uiState.expandCw && !state.uiState.cw.isNullOrBlank()),
                         isShowBottomSheet = state.uiState.isShowBottomSheet,
                         noteOptionContent = state.uiState.noteOptionContent,
                         noteOptionState = NoteOptionState(
