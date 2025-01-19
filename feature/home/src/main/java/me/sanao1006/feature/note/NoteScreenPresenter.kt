@@ -93,8 +93,12 @@ class NoteScreenPresenter @AssistedInject constructor(
             }
         }
 
+        val isTextFilled = uiState.noteText.isNotEmpty()
+        // If CW is enabled, the text and cw text must be filled
+        val isTextFilledWhenCwEnabled = !uiState.expandCw || !uiState.cw.isNullOrEmpty()
         return NoteScreen.State(
-            uiState = uiState
+            uiState = uiState,
+            isSubmitEnabled = isTextFilled && isTextFilledWhenCwEnabled
         ) {
             when (it) {
                 is NoteScreen.Event.OnNoteTextChanged -> {

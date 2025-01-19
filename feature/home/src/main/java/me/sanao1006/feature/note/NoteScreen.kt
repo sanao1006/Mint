@@ -60,11 +60,8 @@ fun NoteScreenUi(state: NoteScreen.State, modifier: Modifier) {
         ) {
             Scaffold(
                 topBar = {
-                    val isSubmitEnabled =
-                        state.uiState.noteText.isNotEmpty() &&
-                            (!state.uiState.expandCw || !state.uiState.cw.isNullOrEmpty())
                     NoteScreenTopAppBar(
-                        isSubmitEnabled = isSubmitEnabled,
+                        isSubmitEnabled = state.isSubmitEnabled,
                         isShowBottomSheet = state.uiState.isShowBottomSheet,
                         noteOptionContent = state.uiState.noteOptionContent,
                         noteOptionState = NoteOptionState(
