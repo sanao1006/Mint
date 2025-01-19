@@ -16,6 +16,7 @@ data class NoteScreen(
 ) : Screen {
     data class State(
         val uiState: NoteScreenUiState,
+        val isSubmitEnabled: Boolean,
         val eventSink: (Event) -> Unit
     ) : CircuitUiState
 
