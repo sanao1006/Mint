@@ -16,5 +16,10 @@ data object ChannelListScreen : Screen {
 
     sealed class Event : CircuitUiEvent {
         data class OnChannelClick(val id: String) : Event()
+
+        data object OnSearchClick : Event()
+        data object OnTrendClick : Event()
+        data object OnFavoriteClick : Event()
+        data class OnPageChange(val page: Int) : Event()
     }
 }

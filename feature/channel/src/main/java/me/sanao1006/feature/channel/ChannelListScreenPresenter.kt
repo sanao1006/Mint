@@ -3,6 +3,7 @@ package me.sanao1006.feature.channel
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.setValue
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.presenter.Presenter
@@ -19,7 +20,7 @@ class ChannelListScreenPresenter @Inject constructor(
     override fun present(): ChannelListScreen.State {
         val globalIconEventState = globalIconEventPresenter.present()
 
-        val selectedTabIndex by rememberRetained { mutableIntStateOf(0) }
+        var selectedTabIndex by rememberRetained { mutableIntStateOf(0) }
 
         return ChannelListScreen.State(
             selectTabIndex = selectedTabIndex,
@@ -27,6 +28,22 @@ class ChannelListScreenPresenter @Inject constructor(
         ) { event ->
             when (event) {
                 is ChannelListScreen.Event.OnChannelClick -> {}
+
+                ChannelListScreen.Event.OnSearchClick -> {
+                    selectedTabIndex = 0
+                }
+
+                ChannelListScreen.Event.OnTrendClick -> {
+                    selectedTabIndex = 1
+                }
+
+                ChannelListScreen.Event.OnFavoriteClick -> {
+                    selectedTabIndex = 2
+                }
+
+                is ChannelListScreen.Event.OnPageChange -> {
+                    selectedTabIndex = event.page
+                }
             }
         }
     }
