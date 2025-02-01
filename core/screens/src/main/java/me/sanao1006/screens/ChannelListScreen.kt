@@ -9,6 +9,7 @@ import me.sanao1006.screens.event.globalIcon.GlobalIconEvent
 @Parcelize
 data object ChannelListScreen : Screen {
     data class State(
+        val selectTabIndex: Int,
         val globalIconEventSink: (GlobalIconEvent) -> Unit,
         val eventSink: (Event) -> Unit
     ) : CircuitUiState
