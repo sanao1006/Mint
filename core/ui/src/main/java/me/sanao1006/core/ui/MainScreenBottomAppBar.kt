@@ -17,6 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
 import ir.alirezaivaz.tablericons.TablerIcons
+import me.sanao1006.core.data.compositionLocal.LocalLazyListStateProvider
 import me.sanao1006.core.data.util.vibrate
 import me.sanao1006.screens.MainScreenType
 import me.sanao1006.screens.event.bottomAppBar.BottomAppBarActionEvent
@@ -29,14 +30,23 @@ fun MainScreenBottomAppBarWrapper(
     modifier: Modifier = Modifier,
     event: (BottomAppBarActionEvent) -> Unit,
     onFabClick: () -> Unit
-) = MainScreenBottomAppBar(
-    scrollBehavior = scrollBehavior,
-    mainSheetType = mainScreenType,
-    onHomeClick = { event(BottomAppBarActionEvent.OnHomeIconClicked) },
-    onNotificationClick = { event(BottomAppBarActionEvent.OnNotificationIconClicked) },
-    modifier = modifier,
-    onFabClick = onFabClick
-)
+) {
+    val lazyListState = LocalLazyListStateProvider.current
+    MainScreenBottomAppBar(
+        scrollBehavior = scrollBehavior,
+        mainSheetType = mainScreenType,
+        onHomeClick = { event(BottomAppBarActionEvent.OnHomeIconClicked(lazyListState)) },
+        onNotificationClick = {
+            event(
+                BottomAppBarActionEvent.OnNotificationIconClicked(
+                    lazyListState
+                )
+            )
+        },
+        modifier = modifier,
+        onFabClick = onFabClick
+    )
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("MissingPermission")
@@ -96,7 +106,12 @@ private fun MainScreenBottomAppBar(
                                 }
                             }
                         ),
-                        contentDescription = null
+                        contentDescription = null,
+                        tint = if (mainSheetType == it) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            MaterialTheme.colorScheme.onSurface
+                        }
                     )
                 }
             }

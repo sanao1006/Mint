@@ -1,5 +1,6 @@
 package me.sanao1006.feature.note
 
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
@@ -13,13 +14,24 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ir.alirezaivaz.tablericons.TablerIcons
+import me.sanao1006.core.model.notes.ReactionAcceptance
+import me.sanao1006.core.model.notes.Visibility
+import me.sanao1006.core.model.uistate.NoteOptionContent
 import me.snao1006.res_value.ResString
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteScreenTopAppBar(
     isSubmitEnabled: Boolean,
+    isShowBottomSheet: Boolean,
+    noteOptionContent: NoteOptionContent,
+    noteOptionState: NoteOptionState,
     modifier: Modifier = Modifier,
+    onBottomSheetOuterClicked: () -> Unit,
+    onIconClicked: (NoteOptionContent) -> Unit,
+    onVisibilityClicked: (Visibility) -> Unit,
+    onLocalOnlyClicked: (Boolean) -> Unit,
+    onReactionAcceptanceClicked: (ReactionAcceptance?) -> Unit,
     onBackClicked: () -> Unit,
     onNotePostClicked: () -> Unit
 ) {
@@ -34,12 +46,25 @@ fun NoteScreenTopAppBar(
             }
         },
         actions = {
-            FilledTonalButton(
-                enabled = isSubmitEnabled,
-                modifier = Modifier.padding(horizontal = 8.dp),
-                onClick = onNotePostClicked
-            ) {
-                Text(stringResource(ResString.create_post))
+            Row {
+                NoteOptionRow(
+                    isShowBottomSheet = isShowBottomSheet,
+                    noteOptionContent = noteOptionContent,
+                    noteOptionState = noteOptionState,
+
+                    onBottomSheetOuterClicked = onBottomSheetOuterClicked,
+                    onIconClicked = onIconClicked,
+                    onVisibilityClicked = onVisibilityClicked,
+                    onLocalOnlyClicked = onLocalOnlyClicked,
+                    onReactionAcceptanceClicked = onReactionAcceptanceClicked
+                )
+                FilledTonalButton(
+                    enabled = isSubmitEnabled,
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    onClick = onNotePostClicked
+                ) {
+                    Text(stringResource(ResString.create_post))
+                }
             }
         },
         title = {}

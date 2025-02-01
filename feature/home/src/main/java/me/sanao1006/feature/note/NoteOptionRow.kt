@@ -156,6 +156,7 @@ internal fun NoteOptionRow(
                                                 is VisibilityItemIcon -> onVisibilityClicked(
                                                     it.value
                                                 )
+
                                                 is LocalOnlyItemIcon -> onLocalOnlyClicked(it.value)
                                                 is ReactionAcceptanceItemIcon ->
                                                     onReactionAcceptanceClicked(it.value)
@@ -175,7 +176,7 @@ internal fun NoteOptionRow(
     }
 
     Row(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier,
         horizontalArrangement = Arrangement.End,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -197,14 +198,14 @@ internal fun NoteOptionRow(
         IconButton(onClick = { onIconClicked(NoteOptionContent.VISIBILITY) }) {
             Icon(painter = painterResource(visibilityIcon), "")
         }
-        Spacer(modifier = Modifier.width(4.dp))
+        Spacer(modifier = Modifier.width(2.dp))
         IconButton(onClick = { onIconClicked(NoteOptionContent.LOCAL_ONLY) }) {
             Icon(painter = painterResource(localOnlyIcon), "")
         }
-        Spacer(modifier = Modifier.width(4.dp))
+        Spacer(modifier = Modifier.width(2.dp))
         IconButton(onClick = { onIconClicked(NoteOptionContent.REACTION_ACCEPTANCE) }) {
             Icon(painter = painterResource(reactionAcceptanceIcon), "")
         }
-        Spacer(modifier = Modifier.width(8.dp))
+        Spacer(modifier = Modifier.width(4.dp))
     }
 }

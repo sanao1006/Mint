@@ -93,12 +93,24 @@ class NoteScreenPresenter @AssistedInject constructor(
             }
         }
 
+        val isTextFilled = uiState.noteText.isNotEmpty()
+        // If CW is enabled, the text and cw text must be filled
+        val isTextFilledWhenCwEnabled = !uiState.expandCw || !uiState.cw.isNullOrEmpty()
         return NoteScreen.State(
-            uiState = uiState
+            uiState = uiState,
+            isSubmitEnabled = isTextFilled && isTextFilledWhenCwEnabled
         ) {
             when (it) {
                 is NoteScreen.Event.OnNoteTextChanged -> {
                     uiState = uiState.copy(noteText = it.text)
+                }
+
+                is NoteScreen.Event.OnCwTextChanged -> {
+                    uiState = uiState.copy(cw = it.text)
+                }
+
+                NoteScreen.Event.OnCwEnabledChanged -> {
+                    uiState = uiState.copy(expandCw = !uiState.expandCw)
                 }
 
                 is NoteScreen.Event.OnBackClicked -> {
@@ -111,6 +123,7 @@ class NoteScreenPresenter @AssistedInject constructor(
                             if (!uiState.replyId.isNullOrEmpty()) {
                                 createNotesUseCase(
                                     text = uiState.noteText,
+                                    cw = uiState.cw,
                                     visibility = uiState.visibility,
                                     localOnly = uiState.localOnly,
                                     reactionAcceptance = uiState.reactionAcceptance,
@@ -119,6 +132,7 @@ class NoteScreenPresenter @AssistedInject constructor(
                             } else if (!uiState.renoteId.isNullOrEmpty()) {
                                 createNotesUseCase(
                                     text = uiState.noteText,
+                                    cw = uiState.cw,
                                     visibility = uiState.visibility,
                                     localOnly = uiState.localOnly,
                                     reactionAcceptance = null,
@@ -127,6 +141,7 @@ class NoteScreenPresenter @AssistedInject constructor(
                             } else {
                                 createNotesUseCase(
                                     text = uiState.noteText,
+                                    cw = uiState.cw,
                                     visibility = uiState.visibility,
                                     localOnly = uiState.localOnly,
                                     reactionAcceptance = uiState.reactionAcceptance

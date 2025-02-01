@@ -30,8 +30,13 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -46,12 +51,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.getSystemService
 import coil3.compose.AsyncImage
 import ir.alirezaivaz.tablericons.TablerIcons
 import kotlinx.serialization.json.JsonObject
+import me.sanao1006.core.data.compositionLocal.LocalLazyListStateProvider
+import me.sanao1006.core.data.util.LinkifyText
 import me.sanao1006.core.data.util.TimeUtils.getRelativeTimeString
 import me.sanao1006.core.data.util.vibrate
+import me.sanao1006.core.designsystem.MintTheme
 import me.sanao1006.core.model.common.User
 import me.sanao1006.core.model.meta.Note
 import me.sanao1006.core.model.notes.Instance
@@ -79,9 +88,11 @@ fun TimelineColumn(
 ) {
     val context = LocalContext.current
     val vibrator = context.getSystemService<Vibrator>()
+    val lazyListState = LocalLazyListStateProvider.current
 
     LazyColumn(
         modifier = modifier.padding(horizontal = 4.dp),
+        state = lazyListState,
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         itemsIndexed(timelineItems) { index, it ->
@@ -215,6 +226,7 @@ fun TimelineItemSection(
                         },
                     model = timelineItem.user?.avatarUrl,
                     contentDescription = null,
+                    alignment = Alignment.TopStart,
                     contentScale = ContentScale.Crop
                 )
             },
@@ -377,6 +389,7 @@ private fun QuoteSection(
                     },
                 model = note.user?.avatarUrl,
                 contentDescription = null,
+                alignment = Alignment.TopCenter,
                 contentScale = ContentScale.Crop
             )
         },
@@ -430,8 +443,24 @@ private fun NoteContent(
     timelineItem: TimelineItem
 ) {
     Column(modifier = modifier) {
-        Text(text = timelineItem.text)
+        if (timelineItem.text.isNotEmpty()) {
+            NoteText(
+                text = timelineItem.text,
+                cw = timelineItem.cw,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+
         if (timelineItem.files.isNotEmpty()) {
+            // Bug?: When Text is empty and there is a file, insert an empty character between the two.
+            // Otherwise, the layout of timeline items will be corrupted for some reason.
+            if (timelineItem.text.isEmpty()) {
+                Text(
+                    text = "",
+                    fontSize = 0.sp,
+                    lineHeight = 0.sp
+                )
+            }
             val size = timelineItem.files.size
             Spacer(modifier = Modifier.height(4.dp))
             FlowRow(
@@ -460,6 +489,44 @@ private fun NoteContent(
             }
             Spacer(modifier = Modifier.height(4.dp))
         }
+    }
+}
+
+@Composable
+private fun NoteText(
+    text: String,
+    cw: String?,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier) {
+        if (cw != null) {
+            CollapsibleText(cw, text)
+        } else {
+            LinkifyText(text = text)
+        }
+    }
+}
+
+@Composable
+private fun CollapsibleText(cw: String, text: String) {
+    var expand by rememberSaveable { mutableStateOf(false) }
+    Text(text = cw)
+    Spacer(modifier = Modifier.height(2.dp))
+    val textLength = text.length.toString()
+    Text(
+        text = if (expand) {
+            stringResource(ResString.cw_hide)
+        } else {
+            stringResource(ResString.cw_show_more, textLength)
+        },
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.primary,
+        fontSize = 12.sp,
+        modifier = Modifier.clickable { expand = !expand }
+    )
+    Spacer(modifier = Modifier.height(2.dp))
+    if (expand) {
+        LinkifyText(text = text)
     }
 }
 
@@ -602,30 +669,35 @@ private fun TimelineActionRow(
 @PreviewLightDark
 @Composable
 fun PreviewTimeLineItem() {
-    TimelineItemSection(
-        timelineItem = TimelineItem(
-            user = User(
-                id = "1",
-                username = "sanao1006",
-                name = "sanao1006",
-                avatarUrl = "https://avatars.githubusercontent.com/u/20736526?v=4",
-                host = "misskey.ioおおおおおおおooo",
-                instance = Instance(
-                    name = "さなおすきー",
-                    faviconUrl = "https://misskey.io/favicon.ico",
-                    themeColor = "#808080"
-                )
-            ),
-            text = "Hello, World!",
-            id = "1",
-            visibility = Visibility.get("public"),
-            "",
-            "2024-12-14T08:58:55.689Z"
-        ),
-        onIconClick = { _, _, _ -> },
-        onReplyClick = {},
-        onRepostClick = {},
-        onReactionClick = {},
-        onOptionClick = {}
-    )
+    MintTheme {
+        Surface {
+            TimelineItemSection(
+                timelineItem = TimelineItem(
+                    user = User(
+                        id = "1",
+                        username = "sanao1006",
+                        name = "sanao1006",
+                        avatarUrl = "https://avatars.githubusercontent.com/u/20736526?v=4",
+                        host = "misskey.ioおおおおおおおooo",
+                        instance = Instance(
+                            name = "さなおすきー",
+                            faviconUrl = "https://misskey.io/favicon.ico",
+                            themeColor = "#808080"
+                        )
+                    ),
+                    text = "Hello, World!",
+                    id = "1",
+                    visibility = Visibility.get("public"),
+                    cw = "あいうえお",
+                    uri = "",
+                    createdAt = "2024-12-14T08:58:55.689Z"
+                ),
+                onIconClick = { _, _, _ -> },
+                onReplyClick = {},
+                onRepostClick = {},
+                onReactionClick = {},
+                onOptionClick = {}
+            )
+        }
+    }
 }

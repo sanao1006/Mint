@@ -11,6 +11,7 @@ class CreateNotesUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(
         text: String? = null,
+        cw: String? = null,
         visibility: me.sanao1006.core.model.notes.Visibility,
         localOnly: Boolean,
         reactionAcceptance: me.sanao1006.core.model.notes.ReactionAcceptance?,
@@ -20,6 +21,7 @@ class CreateNotesUseCase @Inject constructor(
         notesRepository.createNotes(
             notesCreateRequestBody = NotesCreateRequestBody(
                 text = text,
+                cw = cw,
                 visibility = visibility,
                 localOnly = localOnly,
                 reactionAcceptance = reactionAcceptance,

@@ -45,6 +45,7 @@ import coil3.gif.GifDecoder
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
+import me.sanao1006.core.data.util.LinkifyText
 import me.sanao1006.core.model.common.Field
 import me.sanao1006.core.model.uistate.UserScreenUiState
 import me.sanao1006.core.ui.common.ContentLoadingIndicator
@@ -228,7 +229,8 @@ private fun BioContent(
                         textAlign = TextAlign.Start
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text(
+
+                    LinkifyText(
                         text = it.value,
                         modifier = Modifier
                             .weight(1f)

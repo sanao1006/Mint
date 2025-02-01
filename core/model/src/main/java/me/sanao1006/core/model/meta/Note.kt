@@ -91,7 +91,8 @@ data class Note(
             renoteCount = renoteCount,
             repliesCount = repliesCount,
             reply = reply,
-            files = files
+            files = files,
+            cw = cw
         )
     }
 }

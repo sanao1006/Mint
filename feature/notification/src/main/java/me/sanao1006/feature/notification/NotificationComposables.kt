@@ -40,6 +40,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
+import me.sanao1006.core.data.compositionLocal.LocalLazyListStateProvider
 import me.sanao1006.core.data.util.TimeUtils.getRelativeTimeString
 import me.sanao1006.core.designsystem.MintTheme
 import me.sanao1006.core.model.common.User
@@ -67,8 +68,10 @@ fun NotificationColumn(
     onReactionClick: (NoteId) -> Unit,
     onOptionClick: (NoteId, UserId?, Username?, Host?, NoteText, NoteUri) -> Unit
 ) {
+    val lazyListState = LocalLazyListStateProvider.current
     LazyColumn(
         modifier = modifier,
+        state = lazyListState,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         itemsIndexed(notifications) { index, it ->
