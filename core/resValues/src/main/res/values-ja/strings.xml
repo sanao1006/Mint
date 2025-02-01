@@ -106,4 +106,7 @@
     <string name="cw_show_more">もっと見る (%1$s文字)</string>
     <string name="cw_hide">隠す</string>
     <string name="cw_comments">注釈</string>
+    <string name="favorite_description">お気に入り</string>
+    <string name="trend_description">トレンド</string>
+    <string name="search_description">検索</string>
 </resources>

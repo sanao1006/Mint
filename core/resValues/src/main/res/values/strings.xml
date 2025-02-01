@@ -106,4 +106,7 @@
     <string name="cw_show_more">Show content (%1$s characters)</string>
     <string name="cw_hide">Hide</string>
     <string name="cw_comments">Comments</string>
+    <string name="favorite_description">Favorite</string>
+    <string name="trend_description">Trend</string>
+    <string name="search_description">Search</string>
 </resources>
