@@ -13,7 +13,7 @@ import me.sanao1006.core.model.notes.Visibility
 @Serializable
 data class Note(
     @SerialName("channel")
-    val channel: Channel = Channel(),
+    val channel: Channel? = null,
     @SerialName("channelId")
     val channelId: String = "",
     @SerialName("clippedCount")
