@@ -252,82 +252,89 @@ private fun ChannelCard(
     ) {
         Column {
             Box(modifier = Modifier.fillMaxSize()) {
-                channel.bannerUrl?.let {
+                if (channel.bannerUrl != null) {
                     AsyncImage(
-                        model = it,
+                        model = channel.bannerUrl,
                         contentDescription = "",
                         modifier = Modifier
                             .height(160.dp)
                             .fillMaxWidth(),
                         contentScale = ContentScale.Crop
                     )
-                    Button(
+                } else {
+                    Box(
                         modifier = Modifier
-                            .align(Alignment.TopStart)
-                            .padding(8.dp),
-                        onClick = onFollowButtonClick
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(18.dp),
-                            painter = painterResource(
-                                if (channel.isFollowing) {
-                                    TablerIcons.CircleMinus
-                                } else {
-                                    TablerIcons.CirclePlus
-                                }
-                            ),
-                            contentDescription = ""
+                            .height(160.dp)
+                            .fillMaxWidth()
+                            .background(MaterialTheme.colorScheme.outline)
+                    )
+                }
+                Button(
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .padding(8.dp),
+                    onClick = onFollowButtonClick
+                ) {
+                    Icon(
+                        modifier = Modifier.size(18.dp),
+                        painter = painterResource(
+                            if (channel.isFollowing) {
+                                TablerIcons.CircleMinus
+                            } else {
+                                TablerIcons.CirclePlus
+                            }
+                        ),
+                        contentDescription = ""
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = stringResource(
+                            if (channel.isFollowing) {
+                                ResString.unfollow_description
+                            } else {
+                                ResString.follow_description
+                            }
+                        )
+                    )
+                }
+                Column(
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(8.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(
+                            MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.9f)
+                        )
+                        .padding(4.dp)
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Image(
+                            painter = painterResource(TablerIcons.Users),
+                            contentDescription = "",
+                            modifier = Modifier.size(16.dp)
                         )
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
                             text = stringResource(
-                                if (channel.isFollowing) {
-                                    ResString.unfollow_description
-                                } else {
-                                    ResString.follow_description
-                                }
+                                ResString.count_participants,
+                                channel.usersCount.toString()
                             )
                         )
                     }
-                    Column(
-                        modifier = Modifier
-                            .align(Alignment.BottomEnd)
-                            .padding(8.dp)
-                            .clip(RoundedCornerShape(8.dp))
-                            .background(
-                                MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.9f)
+                    Spacer(modifier = Modifier.height(2.dp))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Image(
+                            painter = painterResource(TablerIcons.Pencil),
+                            contentDescription = "",
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = stringResource(
+                                ResString.count_notes,
+                                channel.notesCount.toString()
                             )
-                            .padding(4.dp)
-                    ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Image(
-                                painter = painterResource(TablerIcons.Users),
-                                contentDescription = "",
-                                modifier = Modifier.size(16.dp)
-                            )
-                            Spacer(modifier = Modifier.width(4.dp))
-                            Text(
-                                text = stringResource(
-                                    ResString.count_participants,
-                                    channel.usersCount.toString()
-                                )
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(2.dp))
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Image(
-                                painter = painterResource(TablerIcons.Pencil),
-                                contentDescription = "",
-                                modifier = Modifier.size(16.dp)
-                            )
-                            Spacer(modifier = Modifier.width(4.dp))
-                            Text(
-                                text = stringResource(
-                                    ResString.count_notes,
-                                    channel.notesCount.toString()
-                                )
-                            )
-                        }
+                        )
                     }
                 }
             }
@@ -335,7 +342,7 @@ private fun ChannelCard(
                 Text(
                     text = channel.name,
                     style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Medium
+                    fontWeight = FontWeight.SemiBold
                 )
                 Spacer(modifier = Modifier.height(3.dp))
                 Text(
