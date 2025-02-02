@@ -20,6 +20,7 @@ import me.sanao1006.core.domain.home.UpdateAccountUseCase
 import me.sanao1006.core.model.LoginUserInfo
 import me.sanao1006.screens.AnnouncementScreen
 import me.sanao1006.screens.AntennaScreen
+import me.sanao1006.screens.ChannelListScreen
 import me.sanao1006.screens.FavoritesScreen
 import me.sanao1006.screens.LoginScreen
 import me.sanao1006.screens.SearchScreen
@@ -108,6 +109,10 @@ class DrawerEventPresenter @Inject constructor(
 
                 DrawerEvent.OnDismissRequest -> {
                     expandDialog = false
+                }
+
+                DrawerEvent.OnDrawerChannelClicked -> {
+                    navigator.goTo(ChannelListScreen)
                 }
 
                 else -> {}

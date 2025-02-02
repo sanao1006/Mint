@@ -45,3 +45,4 @@ include(
     "core:domain"
 )
 include(":misskey-streaming")
+include(":feature:channel")
