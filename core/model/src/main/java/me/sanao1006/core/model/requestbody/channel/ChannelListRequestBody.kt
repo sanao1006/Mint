@@ -4,5 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ChannelListRequestBody(
-    val query: String
+    val query: String,
+    val limit: Int
 )
