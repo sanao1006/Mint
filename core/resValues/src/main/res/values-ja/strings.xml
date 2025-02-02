@@ -109,4 +109,8 @@
     <string name="favorite_description">お気に入り</string>
     <string name="trend_description">トレンド</string>
     <string name="search_description">検索</string>
+    <string name="count_participants">%1$s人が参加中</string>
+    <string name="count_notes">%1$s投稿があります</string>
+    <string name="follow_description">フォロー</string>
+    <string name="unfollow_description">フォロー解除</string>
 </resources>

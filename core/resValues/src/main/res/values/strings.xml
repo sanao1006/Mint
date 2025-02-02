@@ -109,4 +109,8 @@
     <string name="favorite_description">Favorite</string>
     <string name="trend_description">Trend</string>
     <string name="search_description">Search</string>
+    <string name="count_participants">%1$s Participants</string>
+    <string name="count_notes">%1$s Notes</string>
+    <string name="follow_description">Follow</string>
+    <string name="unfollow_description">Unfollow</string>
 </resources>
