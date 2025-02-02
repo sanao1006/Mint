@@ -1,5 +1,7 @@
 package me.sanao1006.feature.channel
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,12 +13,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -35,17 +41,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
 import ir.alirezaivaz.tablericons.TablerIcons
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import me.sanao1006.core.designsystem.MintTheme
+import me.sanao1006.core.model.notes.Channel
 import me.sanao1006.core.model.uistate.ChannelListUiState
 import me.sanao1006.core.ui.DrawerItem
 import me.sanao1006.core.ui.DrawerItemScreenWrapper
@@ -160,8 +171,11 @@ private fun ChannelListScreenUiContent(
             state = pagerState
         ) { page ->
             ChannelListView(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                channelList = uiState.channelList,
                 channelText = uiState.channelName,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
                 isSearchTab = page == 0,
                 onEnterClick = onEnterClick,
                 onValueChange = onValueChange
@@ -172,6 +186,7 @@ private fun ChannelListScreenUiContent(
 
 @Composable
 private fun ChannelListView(
+    channelList: List<Channel>,
     channelText: String,
     isSearchTab: Boolean,
     modifier: Modifier = Modifier,
@@ -204,6 +219,131 @@ private fun ChannelListView(
                 )
             )
             Spacer(modifier = Modifier.height(8.dp))
+        }
+        ChannelListColumn(
+            channelList = channelList,
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
+}
+
+@Composable
+private fun ChannelListColumn(
+    channelList: List<Channel>,
+    modifier: Modifier = Modifier
+) {
+    LazyColumn(modifier = modifier) {
+        items(channelList) {
+            ChannelCard(channel = it)
+        }
+    }
+}
+
+@Composable
+private fun ChannelCard(
+    channel: Channel,
+    modifier: Modifier = Modifier,
+    onFollowButtonClick: () -> Unit = {},
+    onCardClick: () -> Unit = {}
+) {
+    ElevatedCard(
+        modifier = modifier,
+        onClick = onCardClick
+    ) {
+        Column {
+            Box(modifier = Modifier.fillMaxSize()) {
+                channel.bannerUrl?.let {
+                    AsyncImage(
+                        model = it,
+                        contentDescription = "",
+                        modifier = Modifier
+                            .height(160.dp)
+                            .fillMaxWidth(),
+                        contentScale = ContentScale.Crop
+                    )
+                    Button(
+                        modifier = Modifier
+                            .align(Alignment.TopStart)
+                            .padding(8.dp),
+                        onClick = onFollowButtonClick
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(18.dp),
+                            painter = painterResource(
+                                if (channel.isFollowing) {
+                                    TablerIcons.CircleMinus
+                                } else {
+                                    TablerIcons.CirclePlus
+                                }
+                            ),
+                            contentDescription = ""
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = stringResource(
+                                if (channel.isFollowing) {
+                                    ResString.unfollow_description
+                                } else {
+                                    ResString.follow_description
+                                }
+                            )
+                        )
+                    }
+                    Column(
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .padding(8.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(
+                                MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.9f)
+                            )
+                            .padding(4.dp)
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Image(
+                                painter = painterResource(TablerIcons.Users),
+                                contentDescription = "",
+                                modifier = Modifier.size(16.dp)
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text(
+                                text = stringResource(
+                                    ResString.count_participants,
+                                    channel.usersCount.toString()
+                                )
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(2.dp))
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Image(
+                                painter = painterResource(TablerIcons.Pencil),
+                                contentDescription = "",
+                                modifier = Modifier.size(16.dp)
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text(
+                                text = stringResource(
+                                    ResString.count_notes,
+                                    channel.notesCount.toString()
+                                )
+                            )
+                        }
+                    }
+                }
+            }
+            Column(modifier = Modifier.padding(8.dp)) {
+                Text(
+                    text = channel.name,
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Medium
+                )
+                Spacer(modifier = Modifier.height(3.dp))
+                Text(
+                    text = channel.description ?: "",
+                    maxLines = 5,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
         }
     }
 }
