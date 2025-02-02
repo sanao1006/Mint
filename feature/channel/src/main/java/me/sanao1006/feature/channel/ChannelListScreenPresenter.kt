@@ -9,12 +9,12 @@ import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.presenter.Presenter
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Inject
 import kotlinx.coroutines.launch
 import me.sanao1006.core.domain.channel.GetChannelListUseCase
 import me.sanao1006.core.model.uistate.ChannelListUiState
 import me.sanao1006.screens.ChannelListScreen
 import me.sanao1006.screens.event.globalIcon.GlobalIconEventPresenter
-import javax.inject.Inject
 
 @CircuitInject(ChannelListScreen::class, SingletonComponent::class)
 class ChannelListScreenPresenter @Inject constructor(
