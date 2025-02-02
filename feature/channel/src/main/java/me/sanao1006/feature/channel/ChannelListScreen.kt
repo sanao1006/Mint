@@ -27,6 +27,7 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
@@ -70,7 +71,7 @@ import me.snao1006.res_value.ResString
 fun ChannelListScreen(state: ChannelListScreen.State, modifier: Modifier) {
     Box(modifier = modifier.fillMaxSize()) {
         val snackbarHostState = remember { SnackbarHostState() }
-        val pagerState = rememberPagerState(initialPage = 0) { 3 }
+        val pagerState = rememberPagerState(initialPage = 0) { 4 }
         val scope = rememberCoroutineScope()
         LaunchedEffect(pagerState) {
             snapshotFlow { pagerState.currentPage }.collectLatest { page ->
@@ -90,22 +91,28 @@ fun ChannelListScreen(state: ChannelListScreen.State, modifier: Modifier) {
                     uiState = state.channelListUiState,
                     pagerState = pagerState,
                     modifier = Modifier.fillMaxWidth(),
-                    onSearchClick = {
+                    onSearchTabClick = {
                         scope.launch {
                             pagerState.animateScrollToPage(0)
                             state.eventSink(ChannelListScreen.Event.OnSearchClick)
                         }
                     },
-                    onTrendClick = {
+                    onTrendTabClick = {
                         scope.launch {
                             pagerState.animateScrollToPage(1)
                             state.eventSink(ChannelListScreen.Event.OnTrendClick)
                         }
                     },
-                    onFavoriteClick = {
+                    onFavoriteTabClick = {
                         scope.launch {
                             pagerState.animateScrollToPage(2)
                             state.eventSink(ChannelListScreen.Event.OnFavoriteClick)
+                        }
+                    },
+                    onFollowTabClick = {
+                        scope.launch {
+                            pagerState.animateScrollToPage(3)
+                            state.eventSink(ChannelListScreen.Event.OnFollowTabClick)
                         }
                     },
                     onEnterClick = {
@@ -125,17 +132,18 @@ private fun ChannelListScreenUiContent(
     uiState: ChannelListUiState,
     pagerState: PagerState,
     modifier: Modifier = Modifier,
-    onSearchClick: () -> Unit,
-    onTrendClick: () -> Unit,
-    onFavoriteClick: () -> Unit,
+    onSearchTabClick: () -> Unit,
+    onTrendTabClick: () -> Unit,
+    onFavoriteTabClick: () -> Unit,
+    onFollowTabClick: () -> Unit,
     onEnterClick: () -> Unit,
     onValueChange: (String) -> Unit
 ) {
     Column(modifier = modifier) {
-        TabRow(selectedTabIndex = uiState.selectedTabIndex) {
+        ScrollableTabRow(selectedTabIndex = uiState.selectedTabIndex) {
             Tab(
                 selected = uiState.selectedTabIndex == 0,
-                onClick = onSearchClick,
+                onClick = onSearchTabClick,
                 text = {
                     TabIcon(
                         icon = TablerIcons.Search,
@@ -146,7 +154,7 @@ private fun ChannelListScreenUiContent(
             )
             Tab(
                 selected = uiState.selectedTabIndex == 1,
-                onClick = onTrendClick,
+                onClick = onTrendTabClick,
                 text = {
                     TabIcon(
                         icon = TablerIcons.Comet,
@@ -157,12 +165,23 @@ private fun ChannelListScreenUiContent(
             )
             Tab(
                 selected = uiState.selectedTabIndex == 2,
-                onClick = onFavoriteClick,
+                onClick = onFavoriteTabClick,
                 text = {
                     TabIcon(
                         icon = TablerIcons.Star,
                         text = stringResource(ResString.favorite_description),
                         isSelected = uiState.selectedTabIndex == 2
+                    )
+                }
+            )
+            Tab(
+                selected = uiState.selectedTabIndex == 3,
+                onClick = onFollowTabClick,
+                text = {
+                    TabIcon(
+                        icon = TablerIcons.Eye,
+                        text = stringResource(ResString.follow_description),
+                        isSelected = uiState.selectedTabIndex == 3
                     )
                 }
             )
@@ -399,9 +418,10 @@ fun ChannelListScreenPreview() {
             ChannelListScreenUiContent(
                 uiState = ChannelListUiState(),
                 pagerState = rememberPagerState(initialPage = 0) { 3 },
-                onSearchClick = {},
-                onTrendClick = {},
-                onFavoriteClick = {},
+                onSearchTabClick = {},
+                onTrendTabClick = {},
+                onFavoriteTabClick = {},
+                onFollowTabClick = {},
                 onEnterClick = {},
                 onValueChange = {}
             )

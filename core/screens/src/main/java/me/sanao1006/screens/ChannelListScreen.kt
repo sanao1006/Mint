@@ -23,6 +23,7 @@ data object ChannelListScreen : Screen {
         data object OnSearchClick : Event()
         data object OnTrendClick : Event()
         data object OnFavoriteClick : Event()
+        data object OnFollowTabClick : Event()
         data class OnPageChange(val page: Int) : Event()
     }
 }

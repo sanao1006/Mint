@@ -60,6 +60,10 @@ class ChannelListScreenPresenter @Inject constructor(
                     channelListUiState = channelListUiState.copy(selectedTabIndex = 2)
                 }
 
+                ChannelListScreen.Event.OnFollowTabClick -> {
+                    channelListUiState = channelListUiState.copy(selectedTabIndex = 3)
+                }
+
                 is ChannelListScreen.Event.OnPageChange -> {
                     channelListUiState = channelListUiState.copy(selectedTabIndex = event.page)
                 }
