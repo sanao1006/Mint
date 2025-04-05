@@ -23,7 +23,7 @@ import com.slack.circuit.foundation.rememberCircuitNavigator
 import com.slack.circuit.overlay.ContentWithOverlays
 import com.slack.circuit.runtime.screen.Screen
 import com.slack.circuitx.android.rememberAndroidScreenAwareNavigator
-import com.slack.circuitx.gesturenavigation.GestureNavigationDecoration
+import com.slack.circuitx.gesturenavigation.GestureNavigationDecorationFactory
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import me.sanao1006.core.data.compositionLocal.LocalLazyListStateProvider
@@ -83,7 +83,9 @@ private fun SetupNavigator(
                         navigator = navigator,
                         backStack = backstack,
                         circuit = circuit,
-                        decoration = GestureNavigationDecoration(onBackInvoked = navigator::pop)
+                        decoratorFactory = GestureNavigationDecorationFactory(
+                            onBackInvoked = navigator::pop
+                        )
                     )
                 }
             }
