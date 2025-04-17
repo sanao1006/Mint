@@ -20,6 +20,8 @@ import de.jensklingenberg.ktorfit.Ktorfit
 import de.jensklingenberg.ktorfit.converter.FlowConverterFactory
 import de.jensklingenberg.ktorfit.converter.ResponseConverterFactory
 import io.ktor.client.HttpClient
+import java.security.MessageDigest
+import javax.inject.Inject
 import kotlinx.coroutines.launch
 import me.sanao1006.core.data.repository.createMiauthRepository
 import me.sanao1006.core.data.util.suspendRunCatching
@@ -33,8 +35,6 @@ import me.sanao1006.datastore.DataStoreRepository
 import me.sanao1006.screens.AuthStateType
 import me.sanao1006.screens.LoginScreen
 import me.snao1006.res_value.ResString
-import java.security.MessageDigest
-import javax.inject.Inject
 
 @CircuitInject(LoginScreen::class, SingletonComponent::class)
 class LoginScreenPresenter @Inject constructor(
@@ -68,7 +68,7 @@ class LoginScreenPresenter @Inject constructor(
             when (event) {
                 is LoginScreen.Event.OnTextChanged -> {
                     buttonEnabled = event.text.isNotBlank() &&
-                            Patterns.WEB_URL.matcher(event.text).matches()
+                        Patterns.WEB_URL.matcher(event.text).matches()
                     domain = event.text
                 }
 
@@ -94,9 +94,9 @@ class LoginScreenPresenter @Inject constructor(
                                     secret = appCreate.secret
                                     val sessionResponse = ktorfitClient.authSessionGenerate(
                                         authSessionGenerateRequestBody =
-                                            AuthSessionGenerateRequestBody(
-                                                appSecret = appCreate.secret
-                                            )
+                                        AuthSessionGenerateRequestBody(
+                                            appSecret = appCreate.secret
+                                        )
                                     )
                                     token = sessionResponse.token
                                     openUrlInChrome(
@@ -136,10 +136,10 @@ class LoginScreenPresenter @Inject constructor(
                                 suspendRunCatching {
                                     ktorfitClient.authSessionUserKey(
                                         authSessionUserKeyRequestBody =
-                                            AuthSessionUserKeyRequestBody(
-                                                appSecret = secret,
-                                                token = token
-                                            )
+                                        AuthSessionUserKeyRequestBody(
+                                            appSecret = secret,
+                                            token = token
+                                        )
                                     )
                                 }.onSuccess { authSessionResponse ->
                                     val accessToken =
