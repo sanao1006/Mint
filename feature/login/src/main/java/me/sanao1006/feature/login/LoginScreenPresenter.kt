@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -67,8 +68,7 @@ class LoginScreenPresenter @Inject constructor(
             when (event) {
                 is LoginScreen.Event.OnTextChanged -> {
                     buttonEnabled = event.text.isNotBlank() &&
-                        event.text
-                            .matches(Regex("^https?://[a-zA-Z0-9]+(\\.[a-zA-Z0-9]+)+\$"))
+                        Patterns.WEB_URL.matcher(event.text).matches()
                     domain = event.text
                 }
 
