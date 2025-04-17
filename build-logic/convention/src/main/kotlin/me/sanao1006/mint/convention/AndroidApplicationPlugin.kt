@@ -58,6 +58,10 @@ class AndroidApplicationPlugin : Plugin<Project> {
                     buildFeatures {
                         buildConfig = true
                     }
+                    dependenciesInfo {
+                        includeInApk = false
+                        includeInBundle = false
+                    }
                 }
             }
         }
