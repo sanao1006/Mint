@@ -22,8 +22,8 @@ class AndroidApplicationPlugin : Plugin<Project> {
                         applicationId = "me.sanao1006.mint"
                         minSdk = libs.version("androidMinSdk").toInt()
                         targetSdk = libs.version("androidTargetSdk").toInt()
-                        versionCode = 1
-                        versionName = "0.0.8"
+                        versionCode = 2
+                        versionName = "0.1.0"
                         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
                     }
                     packagingOptions {
@@ -57,6 +57,10 @@ class AndroidApplicationPlugin : Plugin<Project> {
                     }
                     buildFeatures {
                         buildConfig = true
+                    }
+                    dependenciesInfo {
+                        includeInApk = false
+                        includeInBundle = false
                     }
                 }
             }
