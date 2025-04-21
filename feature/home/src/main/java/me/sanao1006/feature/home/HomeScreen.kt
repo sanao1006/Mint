@@ -107,7 +107,6 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
 }
 
 @OptIn(
-
     ExperimentalMaterial3Api::class,
     ExperimentalMaterialApi::class
 )
@@ -130,7 +129,6 @@ private fun HomeScreenUiContent(
                 TopAppBarTimelineState.HOME -> onHomeClick()
 
                 TopAppBarTimelineState.SOCIAL -> onSocialClick()
-
 
                 TopAppBarTimelineState.GLOBAL -> onGlobalClick()
             }
