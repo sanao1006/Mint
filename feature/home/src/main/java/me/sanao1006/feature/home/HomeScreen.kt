@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.BottomAppBarScrollBehavior
 import androidx.compose.material3.DrawerValue
@@ -106,10 +105,7 @@ fun HomeScreenUi(state: HomeScreen.State, modifier: Modifier) {
     }
 }
 
-@OptIn(
-    ExperimentalMaterial3Api::class,
-    ExperimentalMaterialApi::class
-)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HomeScreenUiContent(
     state: HomeScreen.State,

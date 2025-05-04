@@ -26,6 +26,7 @@ data object HomeScreen : Screen {
         override val pullToRefreshState: PullToRefreshState,
         override val isRefreshed: Boolean = false,
         override val drawerUserInfo: LoginUserInfo,
+        override val onRefresh: () -> Unit,
         override val timelineEventSink: (TimelineItemEvent) -> Unit,
         override val noteCreateEventSink: (NoteCreateEvent) -> Unit,
         override val drawerEventSink: (DrawerEvent) -> Unit,
@@ -51,6 +52,7 @@ interface MainScreenState {
     val pullToRefreshState: PullToRefreshState
     val isRefreshed: Boolean
     val drawerUserInfo: LoginUserInfo
+    val onRefresh: () -> Unit
     val timelineEventSink: (TimelineItemEvent) -> Unit
     val noteCreateEventSink: (NoteCreateEvent) -> Unit
     val drawerEventSink: (DrawerEvent) -> Unit

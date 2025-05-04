@@ -3,12 +3,11 @@ package me.sanao1006.core.ui
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.PullRefreshState
-import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.pulltorefresh.PullToRefreshState
+import androidx.compose.material3.pulltorefresh.pullToRefresh
+import androidx.compose.material3.pulltorefresh.pullToRefreshIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,12 +23,12 @@ import me.sanao1006.screens.NotificationScreen
 import me.sanao1006.screens.SubScreenState
 import me.sanao1006.screens.event.timeline.TimelineItemEvent
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreenTimelineContentBox(
     state: MainScreenState,
     snackbarHostState: SnackbarHostState,
-    pullRefreshState: PullRefreshState,
+    pullRefreshState: PullToRefreshState,
     isRefreshed: Boolean,
     contentLoadingState: Boolean?,
     isEmptyContent: Boolean,
@@ -178,16 +177,18 @@ fun MainScreenTimelineContentBox(
     Box(
         contentAlignment = Alignment.TopCenter,
         modifier = modifier
-            .pullRefresh(state = pullRefreshState)
+            .pullToRefresh(
+                isRefreshing = state.isRefreshed,
+                state = state.pullToRefreshState,
+                onRefresh = state.onRefresh
+            )
+            .pullToRefreshIndicator(
+                state = pullRefreshState,
+                isRefreshing = state.isRefreshed,
+            )
+            .zIndex(1f)
     ) {
-        PullRefreshIndicator(
-            refreshing = isRefreshed,
-            state = pullRefreshState,
-            modifier = Modifier
-                .zIndex(1f)
-                .align(Alignment.TopCenter),
-            scale = true
-        )
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -239,12 +240,12 @@ fun MainScreenTimelineContentBox(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SubScreenTimelineContentBox(
     state: SubScreenState,
     snackbarHostState: SnackbarHostState,
-    pullRefreshState: PullRefreshState,
+    pullRefreshState: PullToRefreshState,
     isRefreshed: Boolean,
     contentLoadingState: Boolean?,
     isEmptyContent: Boolean,
@@ -396,16 +397,17 @@ fun SubScreenTimelineContentBox(
     Box(
         contentAlignment = Alignment.TopCenter,
         modifier = modifier
-            .pullRefresh(state = pullRefreshState)
+            .pullToRefresh(
+                isRefreshing = state.isRefreshed,
+                state = state.pullToRefreshState,
+                onRefresh = state.onRefresh
+            )
+            .pullToRefreshIndicator(
+                state = pullRefreshState,
+                isRefreshing = state.isRefreshed,
+            )
+            .zIndex(1f)
     ) {
-        PullRefreshIndicator(
-            refreshing = isRefreshed,
-            state = pullRefreshState,
-            modifier = Modifier
-                .zIndex(1f)
-                .align(Alignment.TopCenter),
-            scale = true
-        )
         Column(
             modifier = Modifier
                 .fillMaxSize()
