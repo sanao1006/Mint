@@ -1,7 +1,7 @@
 package me.sanao1006.screens
 
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.pullrefresh.PullRefreshState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.Screen
@@ -17,13 +17,13 @@ import me.sanao1006.screens.event.timeline.TimelineItemEvent
 
 @Parcelize
 data object HomeScreen : Screen {
-    @OptIn(ExperimentalMaterialApi::class)
+    @OptIn(ExperimentalMaterial3Api::class)
     data class State(
         val homeScreenUiState: HomeScreenUiState,
         val expandDialog: Boolean,
         override val timelineUiState: TimelineUiState,
         override val isSuccessCreateNote: Boolean?,
-        override val pullToRefreshState: PullRefreshState,
+        override val pullToRefreshState: PullToRefreshState,
         override val isRefreshed: Boolean = false,
         override val drawerUserInfo: LoginUserInfo,
         override val timelineEventSink: (TimelineItemEvent) -> Unit,
@@ -44,11 +44,11 @@ data object HomeScreen : Screen {
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 interface MainScreenState {
     val timelineUiState: TimelineUiState
     val isSuccessCreateNote: Boolean?
-    val pullToRefreshState: PullRefreshState
+    val pullToRefreshState: PullToRefreshState
     val isRefreshed: Boolean
     val drawerUserInfo: LoginUserInfo
     val timelineEventSink: (TimelineItemEvent) -> Unit
@@ -58,10 +58,11 @@ interface MainScreenState {
     val bottomAppBarEventSink: (BottomAppBarActionEvent) -> Unit
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 interface SubScreenState {
-    val pullToRefreshState: PullRefreshState
+    val pullToRefreshState: PullToRefreshState
     val isRefreshed: Boolean
+    val onRefresh: () -> Unit
     val timelineEventSink: (TimelineItemEvent) -> Unit
     val globalIconEventSink: (GlobalIconEvent) -> Unit
 }
