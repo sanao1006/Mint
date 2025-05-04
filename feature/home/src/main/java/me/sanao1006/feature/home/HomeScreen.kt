@@ -22,7 +22,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.zIndex
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuitx.effects.LaunchedImpressionEffect
@@ -132,9 +131,7 @@ private fun HomeScreenUiContent(
     }
 
     Scaffold(
-        modifier = modifier
-            .nestedScroll(bottomAppBarScrollBehavior.nestedScrollConnection)
-            .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection),
+        modifier = modifier,
         topBar = {
             HomeScreenTopAppBar(
                 topAppBarTimelineState = TopAppBarTimelineState.get(pagerState.currentPage),
@@ -158,7 +155,6 @@ private fun HomeScreenUiContent(
         MainScreenTimelineContentBox(
             state = state,
             snackbarHostState = snackbarHostState,
-            pullRefreshState = state.pullToRefreshState,
             isRefreshed = state.isRefreshed,
             modifier = Modifier.padding(it),
             contentLoadingState = state.timelineUiState.isSuccessLoading,
@@ -173,6 +169,7 @@ private fun HomeScreenUiContent(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TimelineColumn(
     state: HomeScreen.State,
@@ -183,6 +180,7 @@ private fun TimelineColumn(
         modifier = modifier,
         state = pagerState
     ) { page ->
+
         TimelineColumn(
             timelineItems = state.homeScreenUiState.timelineItems,
             modifier = Modifier.fillMaxSize(),
@@ -197,7 +195,13 @@ private fun TimelineColumn(
             },
             onReplyClick = { id, user, userId, noteText, host ->
                 state.timelineEventSink(
-                    TimelineItemEvent.OnTimelineItemReplyClicked(id, user, userId, noteText, host)
+                    TimelineItemEvent.OnTimelineItemReplyClicked(
+                        id,
+                        user,
+                        userId,
+                        noteText,
+                        host
+                    )
                 )
             },
             onRepostClick = { noteId, userId, text ->

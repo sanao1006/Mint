@@ -41,23 +41,7 @@ class FavoritesScreenPresenter @Inject constructor(
         var favoritesScreenUiState by rememberRetained {
             mutableStateOf(FavoritesScreenUiState())
         }
-        val pullRefreshState = rememberPullToRefreshState(
-//            refreshing = isRefreshed,
-//            onRefresh = {
-//                scope.launch {
-//                    isRefreshed = true
-//                    favoritesScreenUiState = fetchFavoriteItems(
-//                        uiState = favoritesScreenUiState,
-//                        getItems = { getMyFavoriteUseCase.invoke().timelineItems },
-//                        setSuccessLoading = { timelineEventState.setSuccessLoading(it) }
-//                    )
-//                    delay(1000L)
-//                    isRefreshed = false
-//                }
-//            },
-//            refreshThreshold = 50.dp,
-//            refreshingOffset = 50.dp
-        )
+        val pullRefreshState = rememberPullToRefreshState()
 
         LaunchedImpressionEffect(Unit) {
             favoritesScreenUiState = fetchFavoriteItems(
@@ -74,6 +58,7 @@ class FavoritesScreenPresenter @Inject constructor(
             isRefreshed = isRefreshed,
             onRefresh = {
                 scope.launch {
+                    isRefreshed = true
                     favoritesScreenUiState = fetchFavoriteItems(
                         uiState = favoritesScreenUiState,
                         getItems = { getMyFavoriteUseCase.invoke().timelineItems },

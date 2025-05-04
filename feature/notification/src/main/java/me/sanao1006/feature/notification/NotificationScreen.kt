@@ -126,7 +126,6 @@ private fun NotificationScreenContent(
         MainScreenTimelineContentBox(
             state = state,
             snackbarHostState = snackbarHostState,
-            pullRefreshState = state.pullToRefreshState,
             isRefreshed = state.isRefreshed,
             contentLoadingState = state.timelineUiState.isSuccessLoading,
             modifier = Modifier.padding(it),
