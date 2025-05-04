@@ -16,7 +16,7 @@ data class AntennaListScreen(
     val antennaId: String
 ) : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
-    data class State (
+    data class State(
         val uiState: AntennaListUiState,
         val timelineUiState: TimelineUiState,
         override val globalIconEventSink: (GlobalIconEvent) -> Unit,

@@ -13,6 +13,7 @@ import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuitx.effects.LaunchedImpressionEffect
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import me.sanao1006.core.domain.home.GetNotesTimelineUseCase
@@ -25,7 +26,6 @@ import me.sanao1006.screens.event.drawer.DrawerEventPresenter
 import me.sanao1006.screens.event.globalIcon.GlobalIconEventPresenter
 import me.sanao1006.screens.event.notecreate.NoteCreatePresenter
 import me.sanao1006.screens.event.timeline.TimelineEventPresenter
-import javax.inject.Inject
 
 @CircuitInject(HomeScreen::class, SingletonComponent::class)
 class HomeScreenPresenter @Inject constructor(
@@ -105,7 +105,7 @@ class HomeScreenPresenter @Inject constructor(
                     timelineType = TimelineType.HOME
 
                 HomeScreen.Event.TimelineEvent.OnSocialTimelineClicked
-                    -> timelineType = TimelineType.SOCIAL
+                -> timelineType = TimelineType.SOCIAL
 
                 HomeScreen.Event.TimelineEvent.OnGlobalTimelineClicked ->
                     timelineType = TimelineType.GLOBAL
