@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.BottomAppBarScrollBehavior
 import androidx.compose.material3.DrawerValue
@@ -86,10 +85,7 @@ fun NotificationScreenUi(state: NotificationScreen.State, modifier: Modifier) {
     }
 }
 
-@OptIn(
-    ExperimentalMaterial3Api::class,
-    ExperimentalMaterialApi::class
-)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun NotificationScreenContent(
     state: NotificationScreen.State,
@@ -130,7 +126,6 @@ private fun NotificationScreenContent(
         MainScreenTimelineContentBox(
             state = state,
             snackbarHostState = snackbarHostState,
-            pullRefreshState = state.pullToRefreshState,
             isRefreshed = state.isRefreshed,
             contentLoadingState = state.timelineUiState.isSuccessLoading,
             modifier = Modifier.padding(it),

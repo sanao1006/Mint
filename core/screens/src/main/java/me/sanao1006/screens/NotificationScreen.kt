@@ -1,7 +1,7 @@
 package me.sanao1006.screens
 
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.pullrefresh.PullRefreshState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.Screen
 import kotlinx.parcelize.Parcelize
@@ -16,15 +16,16 @@ import me.sanao1006.screens.event.timeline.TimelineItemEvent
 
 @Parcelize
 data object NotificationScreen : Screen {
-    @OptIn(ExperimentalMaterialApi::class)
+    @OptIn(ExperimentalMaterial3Api::class)
     data class State(
         val notificationUiState: NotificationUiState,
         val expandDialog: Boolean,
         override val timelineUiState: TimelineUiState,
         override val isSuccessCreateNote: Boolean?,
         override val drawerUserInfo: LoginUserInfo,
-        override val pullToRefreshState: PullRefreshState,
+        override val pullToRefreshState: PullToRefreshState,
         override val isRefreshed: Boolean,
+        override val onRefresh: () -> Unit,
         override val timelineEventSink: (TimelineItemEvent) -> Unit,
         override val noteCreateEventSink: (NoteCreateEvent) -> Unit,
         override val drawerEventSink: (DrawerEvent) -> Unit,

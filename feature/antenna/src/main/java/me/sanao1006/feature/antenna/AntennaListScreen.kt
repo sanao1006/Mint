@@ -2,7 +2,7 @@ package me.sanao1006.feature.antenna
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -17,7 +17,7 @@ import me.sanao1006.screens.AntennaListScreen
 import me.sanao1006.screens.event.globalIcon.GlobalIconEvent
 import me.sanao1006.screens.event.timeline.TimelineItemEvent
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @CircuitInject(AntennaListScreen::class, SingletonComponent::class)
 @Composable
 fun AntennaListScreen(state: AntennaListScreen.State, modifier: Modifier) {
@@ -34,7 +34,6 @@ fun AntennaListScreen(state: AntennaListScreen.State, modifier: Modifier) {
                 state = state,
                 snackbarHostState = snackbarHostState,
                 modifier = it,
-                pullRefreshState = state.pullToRefreshState,
                 isRefreshed = state.isRefreshed,
                 contentLoadingState = state.timelineUiState.isSuccessLoading,
                 isEmptyContent = state.uiState.timelineItems.isEmpty()
