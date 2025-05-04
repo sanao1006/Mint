@@ -2,8 +2,9 @@ package me.sanao1006.feature.antenna
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -17,7 +18,7 @@ import me.sanao1006.screens.AntennaListScreen
 import me.sanao1006.screens.event.globalIcon.GlobalIconEvent
 import me.sanao1006.screens.event.timeline.TimelineItemEvent
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @CircuitInject(AntennaListScreen::class, SingletonComponent::class)
 @Composable
 fun AntennaListScreen(state: AntennaListScreen.State, modifier: Modifier) {
@@ -39,57 +40,62 @@ fun AntennaListScreen(state: AntennaListScreen.State, modifier: Modifier) {
                 contentLoadingState = state.timelineUiState.isSuccessLoading,
                 isEmptyContent = state.uiState.timelineItems.isEmpty()
             ) {
-                TimelineColumn(
-                    timelineItems = state.uiState.timelineItems,
-                    onIconClick = { id, username, host ->
-                        state.timelineEventSink(
-                            TimelineItemEvent.OnTimelineItemIconClicked(
-                                id,
-                                username,
-                                host
+                PullToRefreshBox(
+                    isRefreshing = state.isRefreshed,
+                    onRefresh = state.onRefresh
+                ) {
+                    TimelineColumn(
+                        timelineItems = state.uiState.timelineItems,
+                        onIconClick = { id, username, host ->
+                            state.timelineEventSink(
+                                TimelineItemEvent.OnTimelineItemIconClicked(
+                                    id,
+                                    username,
+                                    host
+                                )
                             )
-                        )
-                    },
-                    onReplyClick = { id, user, userId, text, host ->
-                        state.timelineEventSink(
-                            TimelineItemEvent.OnTimelineItemReplyClicked(
-                                id,
-                                user,
-                                userId,
-                                text,
-                                host
+                        },
+                        onReplyClick = { id, user, userId, text, host ->
+                            state.timelineEventSink(
+                                TimelineItemEvent.OnTimelineItemReplyClicked(
+                                    id,
+                                    user,
+                                    userId,
+                                    text,
+                                    host
+                                )
                             )
-                        )
-                    },
-                    onRepostClick = { noteId, userId, text ->
-                        state.timelineEventSink(
-                            TimelineItemEvent.OnTimelineItemRepostClicked(
-                                noteId,
-                                userId,
-                                text
+                        },
+                        onRepostClick = { noteId, userId, text ->
+                            state.timelineEventSink(
+                                TimelineItemEvent.OnTimelineItemRepostClicked(
+                                    noteId,
+                                    userId,
+                                    text
+                                )
                             )
-                        )
-                    },
-                    onReactionClick = { userId ->
-                        state.timelineEventSink(
-                            TimelineItemEvent.OnTimelineItemReactionClicked(
-                                userId
+                        },
+                        onReactionClick = { userId ->
+                            state.timelineEventSink(
+                                TimelineItemEvent.OnTimelineItemReactionClicked(
+                                    userId
+                                )
                             )
-                        )
-                    },
-                    onOptionClick = { noteId, userId, host, username, text, uri ->
-                        state.timelineEventSink(
-                            TimelineItemEvent.OnTimelineItemOptionClicked(
-                                noteId,
-                                userId,
-                                host,
-                                username,
-                                text,
-                                uri
+                        },
+                        onOptionClick = { noteId, userId, host, username, text, uri ->
+                            state.timelineEventSink(
+                                TimelineItemEvent.OnTimelineItemOptionClicked(
+                                    noteId,
+                                    userId,
+                                    host,
+                                    username,
+                                    text,
+                                    uri
+                                )
                             )
-                        )
-                    }
-                )
+                        }
+                    )
+                }
             }
         }
     }
