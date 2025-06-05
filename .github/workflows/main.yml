@@ -35,15 +35,65 @@ jobs:
       - name: Make Gradle executable
         run: chmod +x ./gradlew
 
-      - name: Build with Gradle
+      - name: Determine artifact name
+        id: determine-artifact-name
         run: |
-          ./gradlew --scan --stacktrace :app:assembleDebug
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            echo "artifact_name=screenshots-pr-${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+          else
+            BRANCH_NAME="${GITHUB_REF#refs/heads/}"
+            echo "artifact_name=screenshots-${BRANCH_NAME}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Check if artifact exists
+        id: check_artifact
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const artifactName = "${{ steps.determine-artifact-name.outputs.artifact_name }}";
+            const artifacts = await github.rest.actions.listArtifactsForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+            const artifactExists = artifacts.data.artifacts.some(a => a.name === artifactName);
+            console.log(`Checking for artifact: ${artifactName}, exists: ${artifactExists}`);
+            return artifactExists;
+          result-encoding: string
+
+      - name: Download previous screenshots
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: dawidd6/action-download-artifact@v8
+        id: download_artifact
+        continue-on-error: true
+        with:
+          name: ${{ steps.determine-artifact-name.outputs.artifact_name }}
+          workflow: main.yml
+          search_artifacts: true
+          path: screenshots_output
+
+      - name: Check if previous screenshots exist
+        id: check-downloaded-files
+        run: |
+          if [ -d "screenshots_output" ] && [ "$(ls -A screenshots_output 2>/dev/null)" ]; then
+            echo "previous_screenshot_found=true" >> $GITHUB_OUTPUT
+            echo "Previous screenshots found"
+          else
+            echo "previous_screenshot_found=false" >> $GITHUB_OUTPUT
+            echo "No previous screenshots found"
+          fi
 
       - name: Record screenshot
-        if: steps.check_artifact.outputs.artifact_exists == 'false' # ... 他の条件も含む ...
+        if: steps.check_artifact.outputs.result == 'false'
         run: ./gradlew recordRoborazziDebug --stacktrace --rerun-tasks --quiet
 
       - name: Compare screenshot test
         if: steps.check-downloaded-files.outputs.previous_screenshot_found == 'true'
         run: ./gradlew compareRoborazziDebug --stacktrace
 
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.determine-artifact-name.outputs.artifact_name }}
+          path: screenshots_output
+          retention-days: 90
+          overwrite: true
