@@ -78,5 +78,9 @@ gradlePlugin {
             id = "mint.convention.spotless"
             implementationClass = "me.sanao1006.mint.convention.SpotlessPlugin"
         }
+        register("roborazzi") {
+            id = "mint.convention.roborazzi"
+            implementationClass = "me.sanao1006.mint.convention.AndroidRoborazziPlugin"
+        }
     }
 }

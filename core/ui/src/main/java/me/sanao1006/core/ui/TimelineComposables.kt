@@ -49,7 +49,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.getSystemService
@@ -246,9 +246,9 @@ fun TimelineItemSection(
                     ) {
                         val instanceName = timelineItem.user?.host
                         val name = "@${timelineItem.user?.username}${
-                        instanceName?.let {
-                            "@$it"
-                        } ?: ""
+                            instanceName?.let {
+                                "@$it"
+                            } ?: ""
                         }"
                         Text(
                             modifier = Modifier.weight(1f),
@@ -304,7 +304,7 @@ fun TimelineItemSection(
                     Spacer(modifier = Modifier.height(12.dp))
                     val canRenote =
                         timelineItem.visibility == Visibility.PUBLIC ||
-                            timelineItem.visibility == Visibility.HOME
+                                timelineItem.visibility == Visibility.HOME
                     TimelineActionRow(
                         canRenote = canRenote,
                         modifier = Modifier.fillMaxWidth(),
@@ -666,7 +666,7 @@ private fun TimelineActionRow(
     }
 }
 
-@PreviewLightDark
+@Preview
 @Composable
 fun PreviewTimeLineItem() {
     MintTheme {

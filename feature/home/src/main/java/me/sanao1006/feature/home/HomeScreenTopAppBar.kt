@@ -25,13 +25,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
 import ir.alirezaivaz.tablericons.TablerIcons
 import me.sanao1006.core.data.util.vibrate
 import me.sanao1006.core.designsystem.MintTheme
-import me.sanao1006.feature.home.TopAppBarTimelineState.values
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -126,7 +125,7 @@ internal enum class TopAppBarTimelineState(val index: Int) {
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@PreviewLightDark
+@Preview
 @Composable
 private fun PreviewHomeScreenTopAppBar() {
     MintTheme {

@@ -38,3 +38,12 @@ jobs:
       - name: Build with Gradle
         run: |
           ./gradlew --scan --stacktrace :app:assembleDebug
+
+      - name: Record screenshot
+        if: steps.check_artifact.outputs.artifact_exists == 'false' # ... 他の条件も含む ...
+        run: ./gradlew recordRoborazziDebug --stacktrace --rerun-tasks --quiet
+
+      - name: Compare screenshot test
+        if: steps.check-downloaded-files.outputs.previous_screenshot_found == 'true'
+        run: ./gradlew compareRoborazziDebug --stacktrace
+

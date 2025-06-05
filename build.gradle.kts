@@ -11,4 +11,5 @@ plugins {
     alias(libs.plugins.ktorfitPlugin) apply false
     alias(libs.plugins.kotlinxSerializationGradlePlugin) apply false
     alias(libs.plugins.spotless) apply false
+    alias(libs.plugins.roborazzi) apply false
 }
