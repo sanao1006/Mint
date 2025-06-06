@@ -46,4 +46,3 @@ include(
 )
 include(":misskey-streaming")
 include(":feature:channel")
-include(":core:screenshot")

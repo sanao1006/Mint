@@ -30,7 +30,7 @@ class ComposePreviewTest(
     fun snapshot() {
         val fileName = AndroidPreviewScreenshotIdBuilder(preview).ignoreClassName().build()
         val filePath =
-            "${DEFAULT_ROBORAZZI_OUTPUT_DIR_PATH}/$fileName.png" // Preview function name.png
+            "$DEFAULT_ROBORAZZI_OUTPUT_DIR_PATH/$fileName.png" // Preview function name.png
 
         composeTestRule.apply {
             setContent { preview() }
