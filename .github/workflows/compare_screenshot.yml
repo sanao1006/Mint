@@ -32,6 +32,9 @@ jobs:
         with:
           gradle-version: wrapper
 
+      - name: Determine artifact name
+        id: determine-artifact-name
+        run: echo "artifact_name=screenshot_${{ github.run_id }}" >> $GITHUB_OUTPUT
 
       - uses: dawidd6/action-download-artifact@v3
         continue-on-error: true
