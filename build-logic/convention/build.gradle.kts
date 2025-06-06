@@ -19,7 +19,7 @@ repositories {
 }
 
 val compileKotlin: KotlinCompile by tasks
-compileKotlin.kotlinOptions.jvmTarget = "17"
+compileKotlin.kotlinOptions.jvmTarget = "21"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
