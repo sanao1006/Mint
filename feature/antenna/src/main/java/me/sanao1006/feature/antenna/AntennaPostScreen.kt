@@ -236,7 +236,7 @@ private fun AntennaPostForm(
             value = antennaName,
             onValueChange = onAntennaChange
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(40.dp))
 
         Text(
             text = stringResource(ResString.antenna_source)
