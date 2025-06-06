@@ -1,0 +1,88 @@
+name: CompareScreenshot
+
+on:
+  push:
+    branches:
+      - 'milestone/**'
+  pull_request:
+    branches:
+      - 'main'
+
+permissions: { }
+
+jobs:
+  compare-screenshot-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    permissions:
+      contents: read # for clone
+      actions: write # for upload-artifact
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@ac2d340dc04d9e1113182899e983b5400c17cda1 # v3.5.0
+        with:
+          gradle-version: wrapper
+
+      - name: Determine artifact name
+        id: determine-artifact-name
+        run: echo "artifact_name=screenshot_${{ github.run_id }}" >> $GITHUB_OUTPUT
+
+      - uses: dawidd6/action-download-artifact@v3
+        continue-on-error: true
+        id: check-downloaded-files
+        with:
+          name: ${{ steps.determine-artifact-name.outputs.artifact_name }}
+          workflow: store_screenshot.yml
+          branch: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.ref || github.event.repository.default_branch }}
+          search-artifact: true
+
+      - name: compare screenshot test
+        id: compare-screenshot-test
+        if: steps.check-downloaded-files.outputs.artifact_exists == 'true'
+        run: |
+          ./gradlew compareRoborazziDebug --stacktrace
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: screenshot-diff
+          path: |
+            **/build/outputs/roborazzi
+          retention-days: 30
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: screenshot-diff-reports
+          path: |
+            **/build/reports
+          retention-days: 30
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: screenshot-diff-test-results
+          path: |
+            **/build/test-results
+          retention-days: 30
+
+      - name: Save PR number
+        if: ${{ github.event_name == 'pull_request' }}
+        run: |
+          mkdir -p ./pr
+          echo ${{ github.event.number }} > ./pr/NR
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pr
+          path: pr/
