@@ -35,17 +35,19 @@ jobs:
 
       - name: record screenshot
         id: record-test
+        if: steps.check_artifacts.outputs.artifact_exists == 'false'
         run: |
           # Use --rerun-tasks to disable cache for test task
-          ./gradlew recordRoborazziDebug --stacktrace --rerun-tasks
+          ./gradlew recordRoborazziDebug --stacktrace --rerun-tasks --quiet
 
       - uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
-          name: screenshot
+          name: ${{ steps.determine-artifact-name.outputs.artifact_name }}
           path: |
             **/build/outputs/roborazzi
-          retention-days: 30
+          retention-days: 90
+          overwrite: true
 
       - uses: actions/upload-artifact@v4
         if: ${{ always() }}
