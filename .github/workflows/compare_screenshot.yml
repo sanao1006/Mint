@@ -5,6 +5,8 @@ on:
     branches:
       - 'milestone/**'
   pull_request:
+    branches:
+      - 'main'
 
 permissions: { }
 
