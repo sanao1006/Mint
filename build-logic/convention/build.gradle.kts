@@ -19,7 +19,7 @@ repositories {
 }
 
 val compileKotlin: KotlinCompile by tasks
-compileKotlin.kotlinOptions.jvmTarget = "17"
+compileKotlin.kotlinOptions.jvmTarget = "21"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -77,6 +77,10 @@ gradlePlugin {
         register("spotless") {
             id = "mint.convention.spotless"
             implementationClass = "me.sanao1006.mint.convention.SpotlessPlugin"
+        }
+        register("roborazzi") {
+            id = "mint.convention.roborazzi"
+            implementationClass = "me.sanao1006.mint.convention.AndroidRoborazziPlugin"
         }
     }
 }

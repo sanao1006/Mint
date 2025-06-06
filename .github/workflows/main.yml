@@ -34,7 +34,3 @@ jobs:
       - uses: gradle/gradle-build-action@v3.5.0
       - name: Make Gradle executable
         run: chmod +x ./gradlew
-
-      - name: Build with Gradle
-        run: |
-          ./gradlew --scan --stacktrace :app:assembleDebug

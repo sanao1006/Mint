@@ -39,6 +39,11 @@ spotless = "6.7.0"
 splashscreen = "1.0.1"
 appcompat = "1.7.0"
 material = "1.12.0"
+roborazzi = "1.44.0"
+robolectric = "4.14.1"
+composablePreviewScanner = "0.6.1"
+uiTestJunit4Android = "1.8.2"
+junitVintageEngine = "5.11.2"
 
 [libraries]
 androidGradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
@@ -49,6 +54,7 @@ kotlinxSerializationGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-seria
 ksp = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
 ktorfitGradlePlugin = { module = "de.jensklingenberg.ktorfit:ktorfit-gradle-plugin", version.ref = "ktorfit" }
 spotlessGradlePlugin = { group = "com.diffplug.spotless", name = "spotless-plugin-gradle", version.ref = "spotless" }
+roborazziGradlePlugin = { group = "io.github.takahirom.roborazzi", name = "roborazzi-gradle-plugin", version.ref = "roborazzi" }
 
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -124,6 +130,16 @@ kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+roborazzi = { module = "io.github.takahirom.roborazzi:roborazzi", version.ref = "roborazzi" }
+roborazziCompose = { module = "io.github.takahirom.roborazzi:roborazzi-compose", version.ref = "roborazzi" }
+roborazziRule = { module = "io.github.takahirom.roborazzi:roborazzi-junit-rule", version.ref = "roborazzi" }
+roborazziPreviewScannerSupport = { module = "io.github.takahirom.roborazzi:roborazzi-compose-preview-scanner-support", version.ref = "roborazzi" }
+composablePreviewScanner = { module = "com.github.sergio-sastre.ComposablePreviewScanner:android", version.ref = "composablePreviewScanner" }
+composablePreviewScannerJvm = { module = "com.github.sergio-sastre.ComposablePreviewScanner:jvm", version.ref = "composablePreviewScanner" }
+androidx-ui-test-junit4-android = { group = "androidx.compose.ui", name = "ui-test-junit4-android", version.ref = "uiTestJunit4Android" }
+junit-vintage-engine = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "junitVintageEngine" }
+
 [plugins]
 androidApplicationGradlePlugin = { id = "com.android.application", version.ref = "agp" }
 androidGradleLibraryPlugin = { id = "com.android.library", version.ref = "agp" }
@@ -137,6 +153,7 @@ kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ktorfitPlugin = { id = "de.jensklingenberg.ktorfit", version.ref = "ktorfit" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 
 [bundles]
 plugins = [
@@ -146,7 +163,8 @@ plugins = [
     "kspGradlePlugin",
     "kotlinxSerializationGradlePlugin",
     "ktorfitGradlePlugin",
-    "spotlessGradlePlugin"
+    "spotlessGradlePlugin",
+    "roborazziGradlePlugin"
 ]
 
 circuit = [

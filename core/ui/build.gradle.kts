@@ -3,6 +3,7 @@ plugins {
     id("mint.convention.library.compose")
     id("mint.convention.circuit")
     id("mint.convention.spotless")
+    id("mint.convention.roborazzi")
 }
 
 dependencies {
