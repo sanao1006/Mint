@@ -6,7 +6,7 @@ on:
       - 'milestone/**'
   pull_request:
     branches:
-      - 'main'
+      - 'milestone/**'
 
 permissions: { }
 
