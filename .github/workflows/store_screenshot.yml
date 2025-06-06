@@ -35,7 +35,7 @@ jobs:
 
       - name: record screenshot
         id: record-test
-        if: steps.check_artifacts.outputs.artifact_exists == 'false'
+        if: steps.record-test.outputs.artifact_exists == 'false'
         run: |
           # Use --rerun-tasks to disable cache for test task
           ./gradlew recordRoborazziDebug --stacktrace --rerun-tasks --quiet
