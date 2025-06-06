@@ -3,7 +3,7 @@ name: StoreScreenshot
 on:
   push:
     branches:
-      - main
+      - 'milestone/**'
   pull_request:
 
 permissions: { }
