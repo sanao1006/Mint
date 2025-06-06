@@ -13,6 +13,7 @@ permissions: { }
 
 jobs:
   store-screenshot-test:
+    if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
