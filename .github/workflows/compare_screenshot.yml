@@ -32,16 +32,22 @@ jobs:
         with:
           gradle-version: wrapper
 
+      - name: Determine artifact name
+        id: determine-artifact-name
+        run: echo "artifact_name=screenshot_${{ github.run_id }}" >> $GITHUB_OUTPUT
 
       - uses: dawidd6/action-download-artifact@v3
         continue-on-error: true
+        id: check-downloaded-files
         with:
-          name: screenshot
+          name: ${{ steps.determine-artifact-name.outputs.artifact_name }}
           workflow: store_screenshot.yml
           branch: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.ref || github.event.repository.default_branch }}
+          search-artifact: true
 
       - name: compare screenshot test
         id: compare-screenshot-test
+        if: steps.check-downloaded-files.outputs.artifact_exists == 'true'
         run: |
           ./gradlew compareRoborazziDebug --stacktrace
 
