@@ -3,9 +3,9 @@ name: StoreScreenshot
 on:
   push:
     branches:
-      - 'milestone/**'
+      - 'main'
   pull_request:
-    types: [ opened ]
+    types: [ opened, synchronize ]
     branches:
       - 'milestone/**'
 
