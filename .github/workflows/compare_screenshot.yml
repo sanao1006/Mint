@@ -42,7 +42,7 @@ jobs:
           name: screenshot
           workflow: store_screenshot.yml
           branch: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.ref || github.event.repository.default_branch }}
-          search-artifact: true
+
 
       - name: compare screenshot test
         id: compare-screenshot-test
