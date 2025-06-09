@@ -1,4 +1,4 @@
-name: StoreScreenshot
+name: store_screenshot
 
 on:
   push:
