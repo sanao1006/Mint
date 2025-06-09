@@ -39,6 +39,7 @@ class AndroidRoborazziPlugin : Plugin<Project> {
                 testImplementation(libs.library("roborazziPreviewScannerSupport"))
                 testImplementation(libs.library("junit.vintage.engine"))
                 testImplementation(libs.library("androidx.ui.test.junit4.android"))
+                testImplementation(libs.library("webp.imageio"))
             }
 
         }
