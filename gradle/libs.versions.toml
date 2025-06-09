@@ -44,6 +44,7 @@ robolectric = "4.14.1"
 composablePreviewScanner = "0.6.1"
 uiTestJunit4Android = "1.8.2"
 junitVintageEngine = "5.11.2"
+webp-imageio = "0.3.3"
 
 [libraries]
 androidGradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
@@ -139,6 +140,7 @@ composablePreviewScanner = { module = "com.github.sergio-sastre.ComposablePrevie
 composablePreviewScannerJvm = { module = "com.github.sergio-sastre.ComposablePreviewScanner:jvm", version.ref = "composablePreviewScanner" }
 androidx-ui-test-junit4-android = { group = "androidx.compose.ui", name = "ui-test-junit4-android", version.ref = "uiTestJunit4Android" }
 junit-vintage-engine = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "junitVintageEngine" }
+webp-imageio = { module = "io.github.darkxanter:webp-imageio", version.ref = "webp-imageio" }
 
 [plugins]
 androidApplicationGradlePlugin = { id = "com.android.application", version.ref = "agp" }
