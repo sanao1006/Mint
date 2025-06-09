@@ -142,7 +142,7 @@ internal fun NoteOptionRow(
                     content = { modelItems, _ ->
                         Column(
                             modifier = Modifier.padding(
-                                vertical = 24.dp,
+                                vertical = 32.dp,
                                 horizontal = 16.dp
                             ),
                             verticalArrangement = Arrangement.spacedBy(24.dp)

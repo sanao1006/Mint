@@ -1,4 +1,4 @@
-name: CompareScreenshot
+name: compare_screenshot
 
 on:
   push:

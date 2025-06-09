@@ -80,7 +80,7 @@ fun NotificationColumn(
                     .fillMaxWidth()
             ) {
                 if (index == 0) {
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
                 }
                 when (NotificationType.get(it.type)) {
                     NotificationType.REPLY, NotificationType.MENTION, NotificationType.QUOTE -> {
